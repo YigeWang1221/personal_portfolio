@@ -1,0 +1,215 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-1179 -472 2637 1705" width="2637" height="1705"><rect x="-1179" y="-472" width="2637" height="1705" fill="#ffffff"/><rect x="-1179" y="-472" width="2637" height="129" fill="#f3f1ea"/><text x="-1141" y="-421" font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="38" font-weight="700" fill="#5b4a1f">HISTORICAL · Early ER sketch (2026-06)</text><text x="-1141" y="-373" font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="27" fill="#5f5b52">Source: owner&#x27;s design notes (Obsidian). Core entities carried into the implemented 15-table PostgreSQL schema.</text>
+<rect x="-1179" y="-343" width="2637" height="1576" fill="#ffffff"/>
+<rect x="-501.4" y="-243.1" width="210.1" height="289.5" rx="25.2" fill="none" stroke="#1e1e1e" stroke-width="2" opacity="1.0"/>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="-449.6" y="-253.6">user_profile</tspan>
+</text>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="-475.3" y="-202.8">uuid</tspan>
+<tspan x="-475.3" y="-177.8">name</tspan>
+<tspan x="-475.3" y="-152.8">email</tspan>
+<tspan x="-475.3" y="-127.8">pwd(secreted)</tspan>
+<tspan x="-475.3" y="-102.8">plan</tspan>
+<tspan x="-475.3" y="-77.8">create_time</tspan>
+<tspan x="-475.3" y="-52.8">update_time</tspan>
+<tspan x="-475.3" y="-27.8"></tspan>
+<tspan x="-475.3" y="-2.8"></tspan>
+</text>
+<rect x="-85.0" y="-256.7" width="284.3" height="176.7" rx="21.2" fill="none" stroke="#1e1e1e" stroke-width="2" opacity="1.0"/>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="-38.5" y="-283.8">work_space sets</tspan>
+</text>
+<rect x="-496.0" y="140.1" width="190.5" height="149.6" rx="18.0" fill="none" stroke="#1e1e1e" stroke-width="2" opacity="1.0"/>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="-469.3" y="128.0">voice/lora sets</tspan>
+</text>
+<g stroke="#1e1e1e" stroke-width="2" opacity="1.0" stroke-linecap="round" stroke-linejoin="round"><polyline points="-396.3,52.4 -396.1,103.0" fill="none"/>
+<polyline points="-391.0,92.2 -396.1,103.0 -401.4,92.3" fill="none"/>
+</g>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="-380.1" y="76.1">1:n</tspan>
+</text>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="-458.1" y="181.9">uid_set</tspan>
+<tspan x="-458.1" y="206.9">set_name</tspan>
+<tspan x="-458.1" y="231.9">set_status</tspan>
+<tspan x="-458.1" y="256.9">uuid(FK)</tspan>
+<tspan x="-458.1" y="281.9"></tspan>
+</text>
+<rect x="-515.0" y="502.7" width="231.4" height="372.8" rx="27.8" fill="none" stroke="#1e1e1e" stroke-width="2" opacity="1.0"/>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="-433.3" y="498.4"> loras</tspan>
+</text>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="-490.6" y="544.4">uid_lora</tspan>
+<tspan x="-490.6" y="569.4">uid_set(FK)</tspan>
+<tspan x="-490.6" y="594.4">uid_file_list(FK)</tspan>
+<tspan x="-490.6" y="619.4">base_model_name</tspan>
+<tspan x="-490.6" y="644.4">uid_base_model</tspan>
+<tspan x="-490.6" y="669.4">version</tspan>
+<tspan x="-490.6" y="694.4">lora_name</tspan>
+<tspan x="-490.6" y="719.4">lora_status</tspan>
+<tspan x="-490.6" y="744.4">desc</tspan>
+<tspan x="-490.6" y="769.4">save_path</tspan>
+<tspan x="-490.6" y="794.4">create_time</tspan>
+<tspan x="-490.6" y="819.4">update_time</tspan>
+</text>
+<g stroke="#1e1e1e" stroke-width="2" opacity="1.0" stroke-linecap="round" stroke-linejoin="round"><polyline points="-400.9,295.7 -406.0,473.4" fill="none"/>
+<polyline points="-400.5,462.8 -406.0,473.4 -410.9,462.5" fill="none"/>
+</g>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="-443.9" y="351.0">1:n</tspan>
+</text>
+<g stroke="#1e1e1e" stroke-width="2" opacity="1.0" stroke-linecap="round" stroke-linejoin="round"><polyline points="-285.3,-100.4 -91.0,-166.2" fill="none"/>
+<polyline points="-102.9,-167.7 -91.0,-166.2 -99.6,-157.8" fill="none"/>
+</g>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="-54.6" y="-223.0">uid_workspace</tspan>
+<tspan x="-54.6" y="-198.0">uuid(FK)</tspan>
+<tspan x="-54.6" y="-173.0">workspace_name</tspan>
+<tspan x="-54.6" y="-148.0">desc</tspan>
+<tspan x="-54.6" y="-123.0">create_time</tspan>
+<tspan x="-54.6" y="-98.0"></tspan>
+<tspan x="-54.6" y="-73.0"></tspan>
+</text>
+<rect x="69.6" y="15.8" width="508.7" height="295.2" rx="35.4" fill="none" stroke="#1e1e1e" stroke-width="2" opacity="1.0"/>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="273.1" y="-12.5">chats/session</tspan>
+<tspan x="273.1" y="12.5"></tspan>
+</text>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="-213.9" y="-165.7">1:n</tspan>
+</text>
+<g stroke="#1e1e1e" stroke-width="2" opacity="1.0" stroke-linecap="round" stroke-linejoin="round"><polyline points="-397.1,473.4 63.6,167.5" fill="none"/>
+<polyline points="51.7,169.1 63.6,167.5 57.5,177.8" fill="none"/>
+</g>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="-80.2" y="245.5">1:1</tspan>
+</text>
+<g stroke="#1e1e1e" stroke-width="2" opacity="1.0" stroke-linecap="round" stroke-linejoin="round"><polyline points="205.3,-162.5 335.3,-37.5" fill="none"/>
+<polyline points="331.1,-48.8 335.3,-37.5 323.9,-41.3" fill="none"/>
+</g>
+<rect x="295.6" y="478.5" width="459.1" height="325.4" rx="39.0" fill="none" stroke="#1e1e1e" stroke-width="2" opacity="1.0"/>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="437.2" y="456.2">messages</tspan>
+</text>
+<g stroke="#1e1e1e" stroke-width="2" opacity="1.0" stroke-linecap="round" stroke-linejoin="round"><polyline points="331.5,317.1 474.6,431.2" fill="none"/>
+<polyline points="469.4,420.4 474.6,431.2 462.9,428.6" fill="none"/>
+</g>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="440.3" y="359.4">1:n</tspan>
+</text>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="108.8" y="55.9">uid_chat</tspan>
+<tspan x="108.8" y="80.9">uid_workspace(FK)</tspan>
+<tspan x="108.8" y="105.9">tittle</tspan>
+<tspan x="108.8" y="130.9">uid_model</tspan>
+<tspan x="108.8" y="155.9">uid_lora</tspan>
+<tspan x="108.8" y="180.9">summary_text</tspan>
+<tspan x="108.8" y="205.9">create_time</tspan>
+<tspan x="108.8" y="230.9"></tspan>
+</text>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="280.0" y="-131.6">1:n</tspan>
+</text>
+<rect x="-58.8" y="565.9" width="215.5" height="188.6" rx="22.6" fill="none" stroke="#1e1e1e" stroke-width="2" opacity="1.0"/>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="16.5" y="561.8">models</tspan>
+</text>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="-16.2" y="611.3">uid_model</tspan>
+<tspan x="-16.2" y="636.3">model_name</tspan>
+<tspan x="-16.2" y="661.3">max_content</tspan>
+<tspan x="-16.2" y="686.3">max_output</tspan>
+</text>
+<g stroke="#1e1e1e" stroke-width="2" opacity="1.0" stroke-linecap="round" stroke-linejoin="round"><polyline points="-56.9,660.6 -277.6,688.4" fill="none"/>
+<polyline points="-266.2,692.2 -277.6,688.4 -267.5,681.9" fill="none"/>
+</g>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="-246.7" y="632.5">1model：n loras</tspan>
+</text>
+<g stroke="#1e1e1e" stroke-width="2" opacity="1.0" stroke-linecap="round" stroke-linejoin="round"><polyline points="48.5,536.8 63.6,269.9" fill="none"/>
+<polyline points="57.8,280.4 63.6,269.9 68.2,281.0" fill="none"/>
+</g>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="-8.4" y="403.8">1:1</tspan>
+</text>
+<rect x="-818.0" y="504.0" width="199.4" height="321.3" rx="23.9" fill="none" stroke="#1e1e1e" stroke-width="2" opacity="1.0"/>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="-793.6" y="496.5">sourceFiles list</tspan>
+</text>
+<g stroke="#1e1e1e" stroke-width="2" opacity="1.0" stroke-linecap="round" stroke-linejoin="round"><polyline points="-521.0,687.8 -612.6,666.1" fill="none"/>
+<polyline points="-603.3,673.7 -612.6,666.1 -600.9,663.5" fill="none"/>
+</g>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="-574.7" y="643.5">1:1</tspan>
+</text>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="-786.9" y="538.1">uid_file_list</tspan>
+<tspan x="-786.9" y="563.1">uid_lora(FK)</tspan>
+<tspan x="-786.9" y="588.1">upload_time</tspan>
+<tspan x="-786.9" y="613.1">counts</tspan>
+<tspan x="-786.9" y="638.1"></tspan>
+</text>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="325.6" y="519.9">id_message(P, auto_growth)</tspan>
+<tspan x="325.6" y="544.9">uid_session(FK)</tspan>
+<tspan x="325.6" y="569.9">seq(in order)</tspan>
+<tspan x="325.6" y="594.9">role: user/AI</tspan>
+<tspan x="325.6" y="619.9">content</tspan>
+<tspan x="325.6" y="644.9">token_count</tspan>
+<tspan x="325.6" y="669.9">create_time</tspan>
+<tspan x="325.6" y="694.9"></tspan>
+<tspan x="325.6" y="719.9"></tspan>
+</text>
+<g stroke="#1e1e1e" stroke-width="2" opacity="1.0" stroke-linecap="round" stroke-linejoin="round"><polyline points="840.8,-260.4 848.3,936.1" fill="none"/>
+</g>
+<rect x="1032.3" y="154.2" width="385.6" height="570.9" rx="46.3" fill="none" stroke="#1e1e1e" stroke-width="2" opacity="1.0"/>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="1176.6" y="129.1">s3 bucket</tspan>
+</text>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="1024.5" y="797.6">later may put content into s3 bucket</tspan>
+</text>
+<g stroke="#1e1e1e" stroke-width="2" opacity="1.0" stroke-linecap="round" stroke-linejoin="round"><polyline points="760.7,644.6 1018.5,787.8" fill="none"/>
+<polyline points="1011.6,778.0 1018.5,787.8 1006.5,787.1" fill="none"/>
+</g>
+<rect x="-1138.9" y="504.8" width="199.4" height="321.3" rx="23.9" fill="none" stroke="#1e1e1e" stroke-width="2" opacity="1.0"/>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="-1114.6" y="497.2">sourceFiles</tspan>
+</text>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="-1107.9" y="538.4">uid_file</tspan>
+<tspan x="-1107.9" y="563.4">uid_file_list(FK)</tspan>
+<tspan x="-1107.9" y="588.4">file_name</tspan>
+<tspan x="-1107.9" y="613.4">file_path_local</tspan>
+<tspan x="-1107.9" y="638.4">file_path_sever</tspan>
+<tspan x="-1107.9" y="663.4">file_size</tspan>
+<tspan x="-1107.9" y="688.4">upload_time</tspan>
+<tspan x="-1107.9" y="713.4">files</tspan>
+</text>
+<g stroke="#1e1e1e" stroke-width="2" opacity="1.0" stroke-linecap="round" stroke-linejoin="round"><polyline points="-824.0,664.8 -933.6,665.5" fill="none"/>
+<polyline points="-922.7,670.6 -933.6,665.5 -922.8,660.2" fill="none"/>
+</g>
+<rect x="-164.7" y="906.0" width="446.0" height="287.5" rx="34.5" fill="none" stroke="#1e1e1e" stroke-width="2" opacity="1.0"/>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="-16.2" y="899.8">training </tspan>
+</text>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="-119.7" y="942.4">uid_training(P)</tspan>
+<tspan x="-119.7" y="967.4">uid_lora(FK)</tspan>
+<tspan x="-119.7" y="992.4">uid_model</tspan>
+<tspan x="-119.7" y="1017.4">gpu_job</tspan>
+<tspan x="-119.7" y="1042.4">training_log_path</tspan>
+<tspan x="-119.7" y="1067.4">create_time</tspan>
+<tspan x="-119.7" y="1092.4">end_time</tspan>
+<tspan x="-119.7" y="1117.4">training_cost</tspan>
+<tspan x="-119.7" y="1142.4">status: succeed/training/error</tspan>
+</text>
+<g stroke="#1e1e1e" stroke-width="2" opacity="1.0" stroke-linecap="round" stroke-linejoin="round"><polyline points="-391.2,881.6 -164.1,1050.0" fill="none"/>
+<polyline points="-169.7,1039.4 -164.1,1050.0 -175.9,1047.7" fill="none"/>
+</g>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="-279.4" y="898.6">1:1 or 1:0</tspan>
+</text>
+</svg>

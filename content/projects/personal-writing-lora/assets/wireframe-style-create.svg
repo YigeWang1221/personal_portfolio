@@ -1,0 +1,344 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-525 -104 2156 2228" width="2156" height="2228"><rect x="-525" y="-104" width="2156" height="2228" fill="#ffffff"/><rect x="-525" y="-104" width="2156" height="105" fill="#f3f1ea"/><text x="-494" y="-63" font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="31" font-weight="700" fill="#5b4a1f">HISTORICAL · Early wireframe: styles, versions and training (2026-06 → 08)</text><text x="-494" y="-24" font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="22" fill="#5f5b52">Source: owner&#x27;s design notes (Obsidian). Status colours and version rules match the implemented style-version states.</text>
+<rect x="-525" y="1" width="2156" height="2123" fill="#ffffff"/>
+<rect x="227.0" y="122.0" width="825.8" height="418.0" rx="50.2" fill="none" stroke="#1e1e1e" stroke-width="2" opacity="1.0"/>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="496.2" y="60.4">this is mainPage as baseline</tspan>
+</text>
+<g stroke="#1e1e1e" stroke-width="2" opacity="1.0" stroke-linecap="round" stroke-linejoin="round"><polyline points="365.5,131.5 367.7,529.7" fill="none"/>
+</g>
+<g stroke="#1e1e1e" stroke-width="2" opacity="1.0" stroke-linecap="round" stroke-linejoin="round"><polyline points="233.2,177.5 361.8,174.2" fill="none"/>
+</g>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="245.5" y="154.4">logo area</tspan>
+</text>
+<g stroke="#1e1e1e" stroke-width="2" opacity="1.0" stroke-linecap="round" stroke-linejoin="round"><polyline points="195.8,204.8 193.3,519.2" fill="none"/>
+<polyline points="198.6,508.4 193.3,519.2 188.2,508.3" fill="none"/>
+</g>
+<rect x="236.5" y="185.8" width="120.0" height="28.8" rx="3.5" fill="none" stroke="#1e1e1e" stroke-width="2" opacity="1.0"/>
+<rect x="237.7" y="229.7" width="120.0" height="28.8" rx="3.5" fill="none" stroke="#1e1e1e" stroke-width="2" opacity="1.0"/>
+<rect x="238.2" y="275.3" width="120.0" height="28.8" rx="3.5" fill="none" stroke="#1e1e1e" stroke-width="2" opacity="1.0"/>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="257.4" y="296.7">add style</tspan>
+</text>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="476.3" y="95.9">shows in click manage style btn </tspan>
+</text>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="30.1" y="274.5">all style(lora) </tspan>
+<tspan x="30.1" y="299.5">sort in timeline</tspan>
+</text>
+<rect x="383.1" y="134.3" width="99.4" height="17.3" rx="2.1" fill="none" stroke="#1e1e1e" stroke-width="2" opacity="1.0"/>
+<g stroke="#1e1e1e" stroke-width="2" opacity="1.0" stroke-linecap="round" stroke-linejoin="round"><polyline points="366.0,53.7 427.9,128.3" fill="none"/>
+<polyline points="425.0,116.6 427.9,128.3 417.0,123.3" fill="none"/>
+</g>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="262.6" y="60.2">back to mainPage</tspan>
+<tspan x="262.6" y="85.2">        Btn</tspan>
+</text>
+<g stroke="#1e1e1e" stroke-width="2" opacity="1.0" stroke-linecap="round" stroke-linejoin="round"><polyline points="370.9,160.0 1040.6,156.2" fill="none"/>
+</g>
+<g stroke="#1e1e1e" stroke-width="2" opacity="1.0" stroke-linecap="round" stroke-linejoin="round"><polyline points="240.8,487.3 358.9,487.8" fill="none"/>
+</g>
+<g stroke="#1e1e1e" stroke-width="2" opacity="1.0" stroke-linecap="round" stroke-linejoin="round"><polyline points="176.8,585.6 291.0,509.4" fill="none"/>
+<polyline points="279.1,511.1 291.0,509.4 284.9,519.8" fill="none"/>
+</g>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="113.8" y="624.3">personal area</tspan>
+</text>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="603.0" y="327.1">first view here is empty</tspan>
+</text>
+<rect x="387.8" y="179.3" width="648.5" height="330.3" rx="39.6" fill="none" stroke="#1e1e1e" stroke-width="2" opacity="1.0"/>
+<rect x="295.9" y="686.4" width="825.8" height="418.0" rx="50.2" fill="none" stroke="#1e1e1e" stroke-width="2" opacity="1.0"/>
+<g stroke="#1e1e1e" stroke-width="2" opacity="1.0" stroke-linecap="round" stroke-linejoin="round"><polyline points="434.4,695.8 436.6,1094.1" fill="none"/>
+</g>
+<g stroke="#1e1e1e" stroke-width="2" opacity="1.0" stroke-linecap="round" stroke-linejoin="round"><polyline points="302.1,741.9 430.7,738.6" fill="none"/>
+</g>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="314.4" y="718.7">logo area</tspan>
+</text>
+<rect x="305.4" y="750.1" width="120.0" height="28.8" rx="3.5" fill="none" stroke="#1e1e1e" stroke-width="2" opacity="1.0"/>
+<rect x="306.6" y="794.1" width="120.0" height="28.8" rx="3.5" fill="none" stroke="#1e1e1e" stroke-width="2" opacity="1.0"/>
+<rect x="307.1" y="839.6" width="120.0" height="28.8" rx="3.5" fill="none" stroke="#1e1e1e" stroke-width="2" opacity="1.0"/>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="326.3" y="861.0">add style</tspan>
+</text>
+<rect x="452.0" y="698.6" width="99.4" height="17.3" rx="2.1" fill="none" stroke="#1e1e1e" stroke-width="2" opacity="1.0"/>
+<g stroke="#1e1e1e" stroke-width="2" opacity="1.0" stroke-linecap="round" stroke-linejoin="round"><polyline points="439.8,724.3 1109.5,720.5" fill="none"/>
+</g>
+<g stroke="#1e1e1e" stroke-width="2" opacity="1.0" stroke-linecap="round" stroke-linejoin="round"><polyline points="309.7,1051.6 427.8,1052.1" fill="none"/>
+</g>
+<rect x="456.7" y="743.7" width="648.5" height="330.3" rx="39.6" fill="none" stroke="#1e1e1e" stroke-width="2" opacity="1.0"/>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="594.5" y="636.2">if you click/choose a style </tspan>
+<tspan x="594.5" y="661.2">    it will show basic info </tspan>
+</text>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="462.8" y="715.4">back btn</tspan>
+</text>
+<rect x="502.2" y="767.2" width="199.0" height="20.7" rx="2.5" fill="none" stroke="#1e1e1e" stroke-width="2" opacity="1.0"/>
+<rect x="782.3" y="767.1" width="226.3" height="19.4" rx="2.3" fill="none" stroke="#1e1e1e" stroke-width="2" opacity="1.0"/>
+<rect x="483.3" y="847.6" width="232.7" height="195.0" rx="23.4" fill="none" stroke="#1e1e1e" stroke-width="2" opacity="1.0"/>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="523.2" y="785.0">name</tspan>
+</text>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="833.7" y="822.6">&amp; create time</tspan>
+</text>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="829.1" y="783.9">base model</tspan>
+</text>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="510.8" y="921.4">training file list and</tspan>
+<tspan x="510.8" y="946.4">training source</tspan>
+</text>
+<g stroke="#1e1e1e" stroke-width="2" opacity="1.0" stroke-linecap="round" stroke-linejoin="round"><polyline points="583.4,984.0 694.7,1157.0" fill="none"/>
+<polyline points="693.2,1145.1 694.7,1157.0 684.5,1150.7" fill="none"/>
+</g>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="548.1" y="1209.1">our web/app will not save the </tspan>
+<tspan x="548.1" y="1234.1">training data on server area </tspan>
+</text>
+<rect x="775.3" y="851.0" width="258.0" height="132.9" rx="15.9" fill="none" stroke="#1e1e1e" stroke-width="2" opacity="1.0"/>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="813.7" y="890.1">personal remark info</tspan>
+</text>
+<rect x="772.2" y="1001.5" width="125.7" height="42.1" rx="5.1" fill="none" stroke="#1e1e1e" stroke-width="2" opacity="1.0"/>
+<rect x="934.5" y="1000.4" width="126.9" height="40.7" rx="4.9" fill="none" stroke="#1e1e1e" stroke-width="2" opacity="1.0"/>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="middle" opacity="1.0">
+<tspan x="998.0" y="1027.2">delete</tspan>
+</text>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="796.5" y="1029.7">re-train</tspan>
+</text>
+<g stroke="#1e1e1e" stroke-width="2" opacity="1.0" stroke-linecap="round" stroke-linejoin="round"><polyline points="1004.3,1047.1 1143.2,1178.3" fill="none"/>
+<polyline points="1138.9,1167.1 1143.2,1178.3 1131.8,1174.7" fill="none"/>
+</g>
+<g stroke="#1e1e1e" stroke-width="2" opacity="1.0" stroke-linecap="round" stroke-linejoin="round"><polyline points="844.6,1041.7 1137.0,1187.9" fill="none"/>
+<polyline points="1129.7,1178.4 1137.0,1187.9 1125.0,1187.7" fill="none"/>
+</g>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="1157.4" y="1192.3">check twice if someone want to</tspan>
+<tspan x="1157.4" y="1217.3">        re-train or del</tspan>
+<tspan x="1157.4" y="1242.3">ps: you can change a base model to re-train </tspan>
+</text>
+<g stroke="#1e1e1e" stroke-width="2" opacity="1.0" stroke-linecap="round" stroke-linejoin="round"><polyline points="397.0,765.6 488.8,794.9" fill="none"/>
+<polyline points="480.1,786.7 488.8,794.9 477.0,796.6" fill="none"/>
+</g>
+<rect x="223.1" y="1423.4" width="825.8" height="418.0" rx="50.2" fill="none" stroke="#1e1e1e" stroke-width="2" opacity="1.0"/>
+<g stroke="#1e1e1e" stroke-width="2" opacity="1.0" stroke-linecap="round" stroke-linejoin="round"><polyline points="361.6,1433.0 363.8,1831.2" fill="none"/>
+</g>
+<g stroke="#1e1e1e" stroke-width="2" opacity="1.0" stroke-linecap="round" stroke-linejoin="round"><polyline points="229.3,1478.9 357.9,1475.6" fill="none"/>
+</g>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="241.6" y="1455.8">logo area</tspan>
+</text>
+<rect x="232.6" y="1487.1" width="120.0" height="28.8" rx="3.5" fill="none" stroke="#1e1e1e" stroke-width="2" opacity="1.0"/>
+<rect x="233.8" y="1531.1" width="120.0" height="28.8" rx="3.5" fill="none" stroke="#1e1e1e" stroke-width="2" opacity="1.0"/>
+<rect x="234.3" y="1576.6" width="120.0" height="28.8" rx="3.5" fill="none" stroke="#1e1e1e" stroke-width="2" opacity="1.0"/>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="241.2" y="1598.1">add style</tspan>
+</text>
+<rect x="379.2" y="1435.7" width="99.4" height="17.3" rx="2.1" fill="none" stroke="#1e1e1e" stroke-width="2" opacity="1.0"/>
+<g stroke="#1e1e1e" stroke-width="2" opacity="1.0" stroke-linecap="round" stroke-linejoin="round"><polyline points="367.0,1461.3 1036.7,1457.5" fill="none"/>
+</g>
+<g stroke="#1e1e1e" stroke-width="2" opacity="1.0" stroke-linecap="round" stroke-linejoin="round"><polyline points="236.9,1788.7 355.0,1789.1" fill="none"/>
+</g>
+<rect x="383.9" y="1480.7" width="648.5" height="330.3" rx="39.6" fill="none" stroke="#1e1e1e" stroke-width="2" opacity="1.0"/>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="389.9" y="1452.4">back btn</tspan>
+</text>
+<rect x="429.4" y="1504.2" width="199.0" height="20.7" rx="2.5" fill="none" stroke="#1e1e1e" stroke-width="2" opacity="1.0"/>
+<rect x="709.5" y="1504.1" width="226.3" height="19.4" rx="2.3" fill="none" stroke="#1e1e1e" stroke-width="2" opacity="1.0"/>
+<rect x="416.9" y="1545.1" width="232.7" height="251.8" rx="27.9" fill="none" stroke="#1e1e1e" stroke-width="2" opacity="1.0"/>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="450.4" y="1522.0">name</tspan>
+</text>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="506.6" y="1522.4">&amp; create time</tspan>
+</text>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="756.3" y="1520.9">chosen model</tspan>
+</text>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="439.7" y="1627.0">training file list and</tspan>
+<tspan x="439.7" y="1652.0">local address</tspan>
+</text>
+<rect x="698.5" y="1559.0" width="258.0" height="132.9" rx="15.9" fill="none" stroke="#1e1e1e" stroke-width="2" opacity="1.0"/>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="736.9" y="1598.0">personal remark info</tspan>
+</text>
+<rect x="861.7" y="1737.7" width="126.9" height="40.7" rx="4.9" fill="none" stroke="#1e1e1e" stroke-width="2" opacity="1.0"/>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="middle" opacity="1.0">
+<tspan x="925.2" y="1764.5">start-train</tspan>
+</text>
+<g stroke="#1e1e1e" stroke-width="2" opacity="1.0" stroke-linecap="round" stroke-linejoin="round"><polyline points="338.7,1587.4 416.0,1531.9" fill="none"/>
+<polyline points="404.2,1534.0 416.0,1531.9 410.3,1542.5" fill="none"/>
+</g>
+<g stroke="#1e1e1e" stroke-width="2" opacity="1.0" stroke-linecap="round" stroke-linejoin="round"><polyline points="963.4,1408.9 907.2,1515.4" fill="none"/>
+<polyline points="916.9,1508.2 907.2,1515.4 907.7,1503.4" fill="none"/>
+</g>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="918.4" y="1394.6">you can choose a base model </tspan>
+<tspan x="918.4" y="1419.6">from list</tspan>
+</text>
+<g stroke="#1e1e1e" stroke-width="2" opacity="1.0" stroke-linecap="round" stroke-linejoin="round"><polyline points="406.0,1901.6 488.9,1733.8" fill="none"/>
+<polyline points="479.4,1741.2 488.9,1733.8 488.8,1745.8" fill="none"/>
+</g>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="372.1" y="1910.4">drop or choose file from local pc </tspan>
+</text>
+<rect x="1097.0" y="1543.3" width="141.2" height="361.0" rx="16.9" fill="none" stroke="#1e1e1e" stroke-width="2" opacity="1.0"/>
+<g stroke="#1e1e1e" stroke-width="2" opacity="1.0" stroke-linecap="round" stroke-linejoin="round"><polyline points="1111.2,1595.9 1228.8,1596.2" fill="none"/>
+</g>
+<g stroke="#1e1e1e" stroke-width="2" opacity="1.0" stroke-linecap="round" stroke-linejoin="round"><polyline points="1110.4,1857.1 1227.5,1854.6" fill="none"/>
+</g>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="1112.0" y="1574.4">   logo</tspan>
+</text>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="1131.4" y="1888.8">personal</tspan>
+</text>
+<rect x="1114.2" y="1614.2" width="106.7" height="27.5" rx="3.3" fill="none" stroke="#1e1e1e" stroke-width="2" opacity="1.0"/>
+<rect x="1114.0" y="1661.5" width="106.7" height="27.5" rx="3.3" fill="none" stroke="#1e1e1e" stroke-width="2" opacity="1.0"/>
+<rect x="1114.9" y="1706.1" width="106.7" height="27.5" rx="3.3" fill="none" stroke="#1e1e1e" stroke-width="2" opacity="1.0"/>
+<g stroke="#1e1e1e" stroke-width="2" opacity="1.0" stroke-linecap="round" stroke-linejoin="round"><polyline points="994.6,1756.2 1108.9,1721.6" fill="none"/>
+<polyline points="1097.1,1719.8 1108.9,1721.6 1100.1,1729.7" fill="none"/>
+</g>
+<rect x="1115.8" y="1757.0" width="106.7" height="27.5" rx="3.3" fill="none" stroke="#1e1e1e" stroke-width="2" opacity="1.0"/>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="1135.6" y="1774.0">add btn</tspan>
+</text>
+<g stroke="#1e1e1e" stroke-width="2" opacity="1.0" stroke-linecap="round" stroke-linejoin="round"><polyline points="1324.8,1669.1 1215.2,1719.8" fill="none"/>
+<polyline points="1227.2,1720.0 1215.2,1719.8 1222.8,1710.6" fill="none"/>
+</g>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="1276.1" y="1641.0">once the train starts</tspan>
+<tspan x="1276.1" y="1666.0">create a new tab, and</tspan>
+<tspan x="1276.1" y="1691.0">show train stats(ing/done)</tspan>
+<tspan x="1276.1" y="1716.0">so dose the re-trained style</tspan>
+</text>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="1264.1" y="1574.6">the left-side bar changes</tspan>
+</text>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="532.3" y="979.2">Source Corpus</tspan>
+</text>
+<g stroke="#1e1e1e" stroke-width="2" opacity="1.0" stroke-linecap="round" stroke-linejoin="round"><polyline points="1170.9,1721.6 995.0,1974.6" fill="none"/>
+<polyline points="1005.4,1968.7 995.0,1974.6 996.9,1962.8" fill="none"/>
+</g>
+<rect x="894.7" y="1986.1" width="152.3" height="44.5" rx="5.3" fill="none" stroke="#1e1e1e" stroke-width="2" opacity="1.0"/>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="881.5" y="1927.8">tab looks like</tspan>
+</text>
+<ellipse cx="1022.6" cy="2007.4" rx="10.8" ry="10.6" fill="none" stroke="#1e1e1e" stroke-width="2" opacity="1.0"/>
+<g stroke="#1e1e1e" stroke-width="2" opacity="1.0" stroke-linecap="round" stroke-linejoin="round"><polyline points="991.1,1994.0 990.8,2024.8" fill="none"/>
+</g>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="916.6" y="2013.8">name</tspan>
+</text>
+<ellipse cx="1100.2" cy="1982.3" rx="11.2" ry="11.6" fill="none" stroke="#1e1e1e" stroke-width="2" opacity="1.0"/>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="1119.6" y="1986.5">green： ready</tspan>
+</text>
+<ellipse cx="1100.2" cy="2027.6" rx="11.2" ry="11.6" fill="none" stroke="#1e1e1e" stroke-width="2" opacity="1.0"/>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="1119.7" y="2031.7">yellow：training/pending</tspan>
+</text>
+<ellipse cx="1104.0" cy="2072.8" rx="11.2" ry="11.6" fill="none" stroke="#1e1e1e" stroke-width="2" opacity="1.0"/>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="1123.4" y="2077.1">red：wrong/warmning </tspan>
+</text>
+<ellipse cx="1216.0" cy="1834.8" rx="12.4" ry="12.7" fill="none" stroke="#1e1e1e" stroke-width="2" opacity="1.0"/>
+<g stroke="#1e1e1e" stroke-width="2" opacity="1.0" stroke-linecap="round" stroke-linejoin="round"><polyline points="1224.4,1834.8 1268.9,1845.0" fill="none"/>
+<polyline points="1259.5,1837.5 1268.9,1845.0 1257.2,1847.7" fill="none"/>
+</g>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="1278.3" y="1858.4">a floating window</tspan>
+<tspan x="1278.3" y="1883.4">to explain color meanings</tspan>
+</text>
+<ellipse cx="410.3" cy="767.8" rx="9.5" ry="9.5" fill="none" stroke="#1e1e1e" stroke-width="2" opacity="1.0"/>
+<ellipse cx="411.9" cy="811.5" rx="7.5" ry="7.2" fill="none" stroke="#1e1e1e" stroke-width="2" opacity="1.0"/>
+<ellipse cx="337.7" cy="201.1" rx="7.0" ry="7.5" fill="none" stroke="#1e1e1e" stroke-width="2" opacity="1.0"/>
+<ellipse cx="338.2" cy="245.4" rx="8.0" ry="7.1" fill="none" stroke="#1e1e1e" stroke-width="2" opacity="1.0"/>
+<g stroke="#1e1e1e" stroke-width="2" opacity="1.0" stroke-linecap="round" stroke-linejoin="round"><polyline points="914.6,1244.7 837.2,1041.7" fill="none"/>
+<polyline points="836.2,1053.7 837.2,1041.7 845.9,1050.0" fill="none"/>
+</g>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="828.3" y="1290.6">if the style is training/pending </tspan>
+<tspan x="828.3" y="1315.6">the Btn should be &quot;cancel&quot; and no</tspan>
+<tspan x="828.3" y="1340.6">&#x27;&#x27;Del Btn&#x27;&#x27; in the tab</tspan>
+</text>
+<rect x="800.2" y="803.6" width="183.2" height="26.0" rx="3.1" fill="none" stroke="#1e1e1e" stroke-width="2" opacity="1.0"/>
+<rect x="505.2" y="805.2" width="192.3" height="20.4" rx="2.5" fill="none" stroke="#1e1e1e" stroke-width="2" opacity="1.0"/>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="555.2" y="823.4">verson</tspan>
+</text>
+<rect x="-462.2" y="768.6" width="253.3" height="530.1" rx="30.4" fill="none" stroke="#1e1e1e" stroke-width="2" opacity="1.0"/>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="-485.5" y="724.6">multi-layer side bar</tspan>
+</text>
+<g stroke="#1e1e1e" stroke-width="2" opacity="1.0" stroke-linecap="round" stroke-linejoin="round"><polyline points="-437.9,848.4 -223.8,848.8" fill="none"/>
+</g>
+<g stroke="#1e1e1e" stroke-width="2" opacity="1.0" stroke-linecap="round" stroke-linejoin="round"><polyline points="-438.2,1218.3 -226.7,1216.7" fill="none"/>
+</g>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="-435.6" y="889.3">styleName1</tspan>
+</text>
+<g stroke="#1e1e1e" stroke-width="2" opacity="1.0" stroke-linecap="round" stroke-linejoin="round"><polyline points="-257.1,872.3 -230.8,871.8" fill="none"/>
+</g>
+<g stroke="#1e1e1e" stroke-width="2" opacity="1.0" stroke-linecap="round" stroke-linejoin="round"><polyline points="-249.3,879.1 -233.4,878.2" fill="none"/>
+</g>
+<g stroke="#1e1e1e" stroke-width="2" opacity="1.0" stroke-linecap="round" stroke-linejoin="round"><polyline points="-247.6,886.3 -234.9,885.9" fill="none"/>
+</g>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="-411.7" y="921.2">subName1 -V </tspan>
+</text>
+<ellipse cx="-240.0" cy="918.5" rx="9.1" ry="7.9" fill="none" stroke="#1e1e1e" stroke-width="2" opacity="1.0"/>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="-434.7" y="975.3">styleName2</tspan>
+</text>
+<g stroke="#1e1e1e" stroke-width="2" opacity="1.0" stroke-linecap="round" stroke-linejoin="round"><polyline points="-256.3,958.2 -230.0,957.7" fill="none"/>
+</g>
+<g stroke="#1e1e1e" stroke-width="2" opacity="1.0" stroke-linecap="round" stroke-linejoin="round"><polyline points="-248.5,965.0 -232.6,964.1" fill="none"/>
+</g>
+<g stroke="#1e1e1e" stroke-width="2" opacity="1.0" stroke-linecap="round" stroke-linejoin="round"><polyline points="-246.8,972.1 -234.1,971.8" fill="none"/>
+</g>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="-410.9" y="1007.1">subName2 -V </tspan>
+</text>
+<ellipse cx="-239.1" cy="1004.4" rx="9.1" ry="7.9" fill="none" stroke="#1e1e1e" stroke-width="2" opacity="1.0"/>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="-408.3" y="1040.8">subName2 -V2 </tspan>
+</text>
+<ellipse cx="-236.6" cy="1038.1" rx="9.1" ry="7.9" fill="none" stroke="#1e1e1e" stroke-width="2" opacity="1.0"/>
+<rect x="-435.4" y="1168.0" width="201.8" height="30.6" rx="3.7" fill="none" stroke="#1e1e1e" stroke-width="2" opacity="1.0"/>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="-419.2" y="1186.5">create style</tspan>
+</text>
+<rect x="-294.0" y="874.3" width="22.4" height="15.4" rx="1.8" fill="none" stroke="#1e1e1e" stroke-width="2" opacity="1.0"/>
+<g stroke="#1e1e1e" stroke-width="2" opacity="1.0" stroke-linecap="round" stroke-linejoin="round"><polyline points="-171.5,825.6 -278.1,881.8" fill="none"/>
+<polyline points="-266.1,881.4 -278.1,881.8 -271.0,872.1" fill="none"/>
+</g>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="-159.1" y="836.4">create sub style</tspan>
+</text>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="-420.3" y="811.5">logo area</tspan>
+</text>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="-410.0" y="1261.7">personal profile</tspan>
+</text>
+<g stroke="#1e1e1e" stroke-width="2" opacity="1.0" stroke-linecap="round" stroke-linejoin="round"><polyline points="-226.8,918.1 -127.1,953.9" fill="none"/>
+<polyline points="-135.5,945.3 -127.1,953.9 -139.0,955.1" fill="none"/>
+</g>
+<g stroke="#1e1e1e" stroke-width="2" opacity="1.0" stroke-linecap="round" stroke-linejoin="round"><polyline points="-224.3,1001.8 -134.6,960.2" fill="none"/>
+<polyline points="-146.6,960.0 -134.6,960.2 -142.2,969.4" fill="none"/>
+</g>
+<g stroke="#1e1e1e" stroke-width="2" opacity="1.0" stroke-linecap="round" stroke-linejoin="round"><polyline points="-222.2,1033.8 -132.4,962.0" fill="none"/>
+<polyline points="-144.1,964.7 -132.4,962.0 -137.6,972.8" fill="none"/>
+</g>
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="20" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<tspan x="-105.0" y="960.7">stats color point</tspan>
+</text>
+</svg>

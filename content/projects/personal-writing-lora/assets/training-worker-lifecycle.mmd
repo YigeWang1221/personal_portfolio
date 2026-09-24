@@ -1,0 +1,26 @@
+%% CURRENT — training-worker lifecycle as implemented in the worker code (tested against local fakes; never run on AWS).
+%% Design source: the owner's "Terraform & project structure" design notes (training-instance shutdown control flow),
+%% cross-checked against the worker's AWS adapters (receive / claim / protection / visibility / delete order).
+sequenceDiagram
+    autonumber
+    participant Q as SQS training queue
+    participant W as Training worker (GPU instance)
+    participant S3 as S3 (datasets · adapters)
+    participant ASG as Auto Scaling group
+    participant API as FastAPI backend
+
+    W->>Q: ReceiveMessage (long poll, one job)
+    W->>S3: Claim the job (conditional write)
+    W->>ASG: SetInstanceProtection(true)
+    loop While training (QLoRA)
+        W->>Q: ChangeMessageVisibility (lease heartbeat; stop work if the lease is lost)
+        W->>S3: Write checkpoint
+    end
+    W->>W: Reload and evaluate the adapter
+    W->>S3: Publish adapter files + manifest (SHA-256), then the READY marker
+    W->>API: Result callback (token-authenticated)
+    API-->>W: 200 OK (state persisted)
+    W->>Q: DeleteMessage (only after the backend confirms)
+    W->>ASG: SetInstanceProtection(false)
+    Note over ASG: Queue empty and no protected instances, so the ASG scales in to zero
+    Note over W,Q: On failure the message is not deleted: it becomes visible again (retry) or moves to the DLQ
