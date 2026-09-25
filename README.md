@@ -8,13 +8,15 @@ Source repository for **Yige Wang's bilingual engineering portfolio** (English /
   - Which decisions and trade-offs were made, and why.
   - How the work was tested and operated.
   - Projects that are not on the resume.
-- Groups projects into three tracks: **SDE**, **Cloud & LLM**, and **Data Science & Finance**.
+- Leads with four case studies — business modeling, backend and cloud delivery, system planning, iteration — and
+  lists every project in a catalog filterable by capability (ADR-016).
 
 ## Status
 
 **Phase: build.** The discovery gate (ADR-009) was cleared on 2026-09-24.
 - The site is an Astro 7 static build, hosted as Cloudflare Workers static assets (ADR-014, ADR-015).
 - All pages exist in English and Chinese. The build fails if a page, string or fact exists in only one language.
+- Live at <https://portfolio.wangyige1221.website>.
 - Pages are `noindex` until the public URL is configured and indexing is switched on (see Deploy).
 
 ## Develop
@@ -32,7 +34,8 @@ npm run preview    # serve the built site
 - a page, UI string, section or fact exists in one language but not the other;
 - a measurement appears in a narrative outside a `{{fact:…}}` reference;
 - `dist/` contains private data (local paths, private IPs, keys, emails, internal claim IDs), inline scripts or
-  styles, third-party resources, or broken internal links and anchors.
+  styles, any script other than `/js/site.js`, third-party resources, broken internal links and anchors, or a
+  redirect in `_redirects` whose target is missing.
 
 **Diagrams.** Mermaid sources (`content/**/assets/*.mmd`) are rendered to SVG by `npm run diagrams`, using the locally
 installed Chrome; the rendered SVGs are committed, so the hosted build never needs a browser. Re-run it after
@@ -74,7 +77,7 @@ response headers: [`public/_headers`](public/_headers).
 |---|---|
 | [`AGENTS.md`](AGENTS.md) | Rules for AI coding agents (Codex, Cursor, Claude Code) and human contributors |
 | [`CLAUDE.md`](CLAUDE.md) | Imports `AGENTS.md` for Claude Code |
-| [`PROJECT_CONTEXT.md`](PROJECT_CONTEXT.md) | Purpose, audiences, tracks, languages, domain, naming, repository map |
+| [`PROJECT_CONTEXT.md`](PROJECT_CONTEXT.md) | Purpose, audiences, position and capabilities, languages, domain, naming, repository map |
 | [`ARCHITECTURE.md`](ARCHITECTURE.md) | Repository layout, content model, site map and build requirements |
 | [`DECISIONS.md`](DECISIONS.md) | Architecture decision records |
 | [`docs/style/BILINGUAL_STYLE.md`](docs/style/BILINGUAL_STYLE.md) | Writing rules for English and Chinese content |

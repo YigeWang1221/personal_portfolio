@@ -1,9 +1,11 @@
 // Post-build gate (ARCHITECTURE.md "Content safety", ADR-015). Fails the build when dist/ contains:
 //   - private data: local paths, private IPv4 ranges, AWS account IDs or keys, private keys, email addresses,
 //     internal ledger claim IDs, internal/ references, private working names, workers.dev / pages.dev URLs;
-//   - inline code: <script>, <style>, style="…" or on*="…" attributes (the CSP has no 'unsafe-inline');
+//   - inline code: <style>, style="…" or on*="…" attributes, and any <script> other than the one first-party
+//     enhancement file /js/site.js (ADR-016; the CSP has no 'unsafe-inline');
 //   - resources loaded from third-party origins;
-//   - broken internal links or #anchors, a wrong <html lang>, a missing CSP <meta>, missing 404 pages.
+//   - broken internal links or #anchors, a wrong <html lang>, a missing CSP <meta>, missing 404 pages;
+//   - _redirects entries whose target does not exist, or that point at another redirect (a chain).
 // Usage: node scripts/check-dist.mjs [--dir dist]
 import { readdirSync, readFileSync, statSync, existsSync } from 'node:fs';
 import { join, relative, extname, sep } from 'node:path';
@@ -15,6 +17,8 @@ const ALLOWED_EMAILS = new Set([]);
 /** Internal names that must never appear on the site. */
 const PRIVATE_NAMES = [/KK Boost/i, /KKnock-Boost/i, /KKKnockBoost/i, /codex_dev/, /cursor_dev/, /AI_prompts_Recording/, /ObsidianWorkSpace/];
 const CLAIM_ID = /\b(?:KK|HPC|CN|LORA|F1|QA|EQ|FS|SB|DS|PSA)-\d{2}\b/;
+/** The only script the site ships (ADR-016): progressive enhancement, loaded from its own origin. */
+const SITE_SCRIPT = '/js/site.js';
 
 const problems = [];
 const report = (file, msg) => problems.push(`${file}: ${msg}`);
@@ -69,7 +73,7 @@ for (const f of files) {
   for (const m of text.matchAll(/[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,}/g)) {
     if (!ALLOWED_EMAILS.has(m[0].toLowerCase())) report(r, `email address: ${m[0]}`);
   }
-  if (ext === '.js' || ext === '.mjs') report(r, 'JavaScript file in the output (the site ships no client-side JS)');
+  if ((ext === '.js' || ext === '.mjs') && '/' + r !== SITE_SCRIPT) report(r, `JavaScript file in the output (only ${SITE_SCRIPT} is allowed)`);
   if (ext === '.css' && /url\(\s*["']?(https?:)?\/\//i.test(text)) report(r, 'CSS loads a remote URL');
 }
 
@@ -97,7 +101,7 @@ for (const [r, html] of htmlCache) {
     if (a.id) ids.add(a.id);
     if ('style' in a) report(r, `style="" attribute on <${tag}>`);
     for (const name of Object.keys(a)) if (/^on[a-z]+$/.test(name)) report(r, `inline event handler ${name} on <${tag}>`);
-    if (tag === 'script') report(r, `<script> element${a.src ? ` (src=${a.src})` : ' (inline)'}`);
+    if (tag === 'script' && (a.src ?? '').split('?')[0] !== SITE_SCRIPT) report(r, `<script> element${a.src ? ` (src=${a.src})` : ' (inline)'}`);
     if (tag === 'html') htmlLang = a.lang ?? null;
     if (tag === 'meta' && (a['http-equiv'] ?? '').toLowerCase() === 'content-security-policy') sawCspMeta = true;
     const resource = [];
@@ -154,8 +158,28 @@ for (const [from, href] of links) {
   if (hash && target.endsWith('.html') && !idsByFile.get(target)?.has(hash)) report(from, `broken anchor ${href}`);
 }
 
-// 4. Required files ------------------------------------------------------------------------------------
-for (const required of ['404.html', 'zh/404.html', 'index.html', 'zh/index.html', '_headers', 'robots.txt']) {
+// 4. Redirects -----------------------------------------------------------------------------------------
+const redirectsFile = join(DIST, '_redirects');
+if (existsSync(redirectsFile)) {
+  const rules = readFileSync(redirectsFile, 'utf8')
+    .split('\n')
+    .map((l) => l.trim())
+    .filter((l) => l && !l.startsWith('#'))
+    .map((l) => l.split(/\s+/));
+  const sources = new Set(rules.map(([from]) => from));
+  for (const [from, to, status] of rules) {
+    if (!to || !['301', '308'].includes(status)) report('_redirects', `${from}: expected "<from> <to> 301"`);
+    if (!to) continue;
+    const toPath = to.split('?')[0].split('#')[0];
+    if (sources.has(toPath)) report('_redirects', `${from} → ${to} points at another redirect (chain)`);
+    const target = targetFile(toPath);
+    if (!target || !existsSync(join(DIST, target))) report('_redirects', `${from} → ${to}: target does not exist`);
+    if (existsSync(join(DIST, from.replace(/^\//, ''), 'index.html'))) report('_redirects', `${from} is redirected but still built`);
+  }
+}
+
+// 5. Required files ------------------------------------------------------------------------------------
+for (const required of ['404.html', 'zh/404.html', 'index.html', 'zh/index.html', '_headers', '_redirects', 'robots.txt', 'js/site.js']) {
   if (!existsSync(join(DIST, required))) report(required, 'required file is missing');
 }
 

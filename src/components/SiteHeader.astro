@@ -1,48 +1,59 @@
 ---
+// Header: name → home; Projects / Background / Résumé; language switch to the same page.
+// On narrow screens public/js/site.js turns the link row into a Menu disclosure. Without the script the
+// links stay visible and wrap onto a second row (never a hidden horizontal scroll).
 import { HTML_LANG, localePath, otherLocale, type Locale } from '../lib/i18n';
 import { getContent, t } from '../lib/content/load';
+
+export type NavKey = 'projects' | 'background' | 'resume';
 
 interface Props {
   locale: Locale;
   path: string;
-  current?: 'home' | 'tracks' | 'resume' | 'plan' | 'about';
+  current?: NavKey;
 }
 
-const { locale, path } = Astro.props;
-const { tracks, profile } = getContent();
+const { locale, path, current } = Astro.props;
+const { profile } = getContent();
 const other = otherLocale(locale);
 
-const items = [
-  ...tracks.map((tr) => ({ href: `/tracks/${tr.id}/`, label: tr.title[locale] })),
-  { href: '/resume/', label: t(locale, 'nav.resume') },
-  { href: '/plan-and-design/', label: t(locale, 'nav.plan') },
-  { href: '/about/', label: t(locale, 'nav.about') },
+const items: { key: NavKey; href: string }[] = [
+  { key: 'projects', href: '/projects/' },
+  { key: 'background', href: '/background/' },
+  { key: 'resume', href: '/resume/' },
 ];
-const isCurrent = (href: string) => path === href;
 ---
 
 <header class="site-header">
-  <div class="container">
-    <a class="brand" href={localePath(locale, '/')}>
-      {profile.name.en}<span> · {profile.name.zh}</span>
-    </a>
-    <nav class="site-nav" aria-label={t(locale, 'nav.label')}>
-      {items.map((item) => (
-        <a href={localePath(locale, item.href)} aria-current={isCurrent(item.href) ? 'page' : undefined}>
-          {item.label}
-        </a>
-      ))}
-    </nav>
+  <div class="container header-bar">
+    <a class="brand" href={localePath(locale, '/')}>{profile.name[locale]}</a>
     <span class="lang-switch" role="group" aria-label={t(locale, 'nav.language')}>
-        {(['en', 'zh'] as Locale[]).map((loc) =>
-          loc === locale ? (
-            <span aria-current="true" lang={HTML_LANG[loc]}>{t(loc, 'nav.language_name')}</span>
-          ) : (
-            <a href={localePath(other, path)} hreflang={HTML_LANG[loc]} lang={HTML_LANG[loc]} title={t(loc, 'nav.language_switch_title')}>
-              {t(loc, 'nav.language_name')}
-            </a>
-          ),
-        )}
+      {(['en', 'zh'] as Locale[]).map((loc) =>
+        loc === locale ? (
+          <span aria-current="true" lang={HTML_LANG[loc]}>{t(loc, 'nav.language_name')}</span>
+        ) : (
+          <a href={localePath(other, path)} hreflang={HTML_LANG[loc]} lang={HTML_LANG[loc]} title={t(loc, 'nav.language_switch_title')}>
+            {t(loc, 'nav.language_name')}
+          </a>
+        ),
+      )}
     </span>
+    <button class="menu-button" type="button" aria-expanded="false" aria-controls="site-nav-list" hidden>
+      {t(locale, 'nav.menu')}
+    </button>
+    <nav class="site-nav" aria-label={t(locale, 'nav.label')}>
+      <ul id="site-nav-list" class="nav-list">
+        {items.map((item) => (
+          <li>
+            <a
+              href={localePath(locale, item.href)}
+              aria-current={path === item.href ? 'page' : current === item.key ? 'true' : undefined}
+            >
+              {t(locale, `nav.${item.key}`)}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
   </div>
 </header>

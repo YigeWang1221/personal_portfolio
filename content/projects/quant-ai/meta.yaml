@@ -6,7 +6,7 @@ subtitle:
 summary:
   en: A Transformer that attends over time and across stocks ranks US equities by their predicted short-horizon residual return, evaluated with walk-forward folds and a cost-aware long/short backtest. It is a research prototype; this page covers how it is built, not how it performed.
   zh: 一个同时在时间维度和股票截面上做注意力的 Transformer，按预测的短期残差收益给美股排序，并用滚动前推折和计入交易成本的多空回测来评估。它是研究原型；本页介绍它如何构建，而不是表现如何。
-tracks: { primary: ds-finance, also: [] }
+focus: { primary: ai-research, also: [] }
 status: research-prototype
 team: { size: 1 }
 role:

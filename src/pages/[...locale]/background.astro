@@ -1,0 +1,68 @@
+---
+// Background: short introduction → education → experience → how I work (linked to case studies) →
+// how this site is written → contact. Education and experience come from content/profile.yaml.
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { localePaths, type Locale } from '../../lib/i18n';
+import { getContent, t } from '../../lib/content/load';
+import { formatPeriod } from '../../lib/format';
+
+export function getStaticPaths() {
+  return localePaths();
+}
+
+const { locale } = Astro.props as { locale: Locale };
+const { pages, profile } = getContent();
+const sections = pages.background.sections[locale];
+---
+
+<BaseLayout locale={locale} path="/background/" title={t(locale, 'background.title')} description={t(locale, 'background.description')} nav="background">
+  <div class="container">
+    <header class="page-head">
+      <h1>{t(locale, 'background.title')}</h1>
+      <p class="lede">{t(locale, 'background.lede')}</p>
+    </header>
+    <div class="narrative measure">
+      <section id="education" aria-labelledby="education-title">
+        <h2 id="education-title">{t(locale, 'background.education')}</h2>
+        <ol class="cv-list">
+          {profile.education.map((e) => (
+            <li class="cv-item">
+              <div class="cv-when">{formatPeriod(e.period, locale)}</div>
+              <div class="cv-what">
+                <h3>{e.school[locale]}</h3>
+                <p class="cv-sub">{e.degree[locale]} · {e.location[locale]}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </section>
+      <section id="experience" aria-labelledby="experience-title">
+        <h2 id="experience-title">{t(locale, 'background.experience')}</h2>
+        <ol class="cv-list">
+          {profile.experience.map((x) => (
+            <li class="cv-item">
+              <div class="cv-when">{formatPeriod(x.period, locale)}</div>
+              <div class="cv-what">
+                <h3>{x.org[locale]}</h3>
+                <p class="cv-sub">{x.role[locale]} · {x.location[locale]}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </section>
+      {sections.map((s) => (
+        <section id={s.id} aria-labelledby={`${s.id}-title`}>
+          <h2 id={`${s.id}-title`}>{s.title}</h2>
+          <div class="prose" set:html={s.html} />
+        </section>
+      ))}
+      <section id="contact" aria-labelledby="contact-title">
+        <h2 id="contact-title">{t(locale, 'background.contact')}</h2>
+        <p>{t(locale, 'background.contact_body')}</p>
+        <ul class="link-list">
+          {profile.links.map((l) => <li><a href={l.url}>{l.label[locale]}</a></li>)}
+        </ul>
+      </section>
+    </div>
+  </div>
+</BaseLayout>

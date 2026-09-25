@@ -15,7 +15,8 @@ const { profile } = getContent();
     <p>{t(locale, 'footer.note')}</p>
     <nav aria-label={t(locale, 'footer.label')}>
       {profile.links.map((l) => <a href={l.url}>{l.label[locale]}</a>)}
-      <a href={localePath(locale, '/about/')}>{t(locale, 'nav.about')}</a>
+      <a href={localePath(locale, '/background/')}>{t(locale, 'nav.background')}</a>
+      <a href={localePath(locale, '/plan-and-design/')}>{t(locale, 'nav.plan')}</a>
     </nav>
   </div>
 </footer>

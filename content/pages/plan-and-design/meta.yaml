@@ -3,11 +3,11 @@
 roadmaps: [kk-knock, personal-writing-lora, cloud-native]
 records:
   - { id: kk-self-hosting, project: kk-knock, anchor: operations }
-  - { id: kk-idempotency, project: kk-knock, anchor: capture }
+  - { id: kk-idempotency, project: kk-knock, anchor: reliability }
   - { id: kk-cpu-asr, project: kk-knock, anchor: asr }
   - { id: lora-scale-from-zero, project: personal-writing-lora, anchor: scale-from-zero }
   - { id: lora-adapter-cache, project: personal-writing-lora, anchor: serving }
-  - { id: cloud-immutable, project: cloud-native, anchor: pipeline }
+  - { id: cloud-immutable, project: cloud-native, anchor: delivery }
   - { id: hpc-token-budget, project: distributed-llm, anchor: time-to-quality }
 thumbnails:
   - { project: kk-knock, figure: architecture }

@@ -1,0 +1,29 @@
+---
+// A featured card's schematic: the implemented path in a few steps, as real text instead of a shrunken
+// diagram. Labeled CURRENT / PROPOSED like any diagram (ADR-008); the full figures live on the case study.
+import type { Locale } from '../lib/i18n';
+import type { ProjectMeta } from '../lib/content/schema';
+import { t, termText } from '../lib/content/load';
+
+interface Props {
+  steps: NonNullable<NonNullable<ProjectMeta['card']>['steps']>;
+  locale: Locale;
+  label: string;
+}
+const { steps, locale, label } = Astro.props;
+---
+
+<figure class="card-figure card-steps">
+  <ol aria-label={label}>
+    {steps.items.map((s) => (
+      <li>
+        <span class="step-title">{s.title[locale]}</span>
+        <code class="step-detail">{termText(s.detail, locale)}</code>
+      </li>
+    ))}
+  </ol>
+  <figcaption>
+    <span class={`asset-label label-${steps.label}`} title={t(locale, `labels.${steps.label}`)}>{steps.label}</span>
+    {steps.note && <span>{steps.note[locale]}</span>}
+  </figcaption>
+</figure>

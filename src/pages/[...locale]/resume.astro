@@ -24,6 +24,7 @@ const highlights = profile.highlights.map((h) => ({ project: projects.get(h.proj
         <p class="eyebrow">{t(locale, 'resume.eyebrow')}</p>
         <h1>{profile.name[locale]}</h1>
         <p class="headline">{profile.headline[locale]}</p>
+        <p class="muted small resume-updated">{t(locale, 'resume.updated', { date: profile.updated })}</p>
       </div>
       <ul class="resume-links">
         {profile.links.map((l) => <li><a href={l.url}>{l.label[locale]}</a></li>)}

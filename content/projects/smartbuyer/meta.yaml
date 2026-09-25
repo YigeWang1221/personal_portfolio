@@ -6,7 +6,7 @@ subtitle:
 summary:
   en: In a team of five, we built an online store with category browsing, search, a cart, simulated checkout and refund review. I led the backend — the data models, the REST API and its restructuring into controller and route layers.
   zh: 我们五人团队开发了一个网上商城，支持分类浏览、搜索、购物车、模拟结账和退款审核。我主导后端开发，包括数据模型、REST API，以及把 API 重构为 controller 与 route 分层。
-tracks: { primary: sde, also: [] }
+focus: { primary: backend-cloud, also: [] }
 status: course-project
 team: { size: 5 }
 role:

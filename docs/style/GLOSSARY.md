@@ -7,11 +7,17 @@ a Chinese gloss on first use.
 
 | English | 中文 | Keep EN | Notes |
 |---|---|---|---|
-| Track | 方向 | — | Top-level grouping of projects |
-| SDE | 软件开发 | yes | Track title: "软件开发（SDE）" |
-| Cloud & LLM | 云计算与大模型 | — | |
-| Data Science & Finance | 数据科学与金融 | — | |
+| Capability | 能力 | — | Catalog filter (ADR-016); replaces the retired "Track / 方向" |
+| Business modeling | 业务建模 | — | Capability |
+| Backend & Cloud | 后端与云 | — | Capability |
+| Planning & Delivery | 规划与交付 | — | Capability |
+| AI & Research | AI 与研究 | — | Capability |
+| Selected work | 精选案例 | — | Home section with the four featured case studies |
 | Featured project | 精选项目 | — | |
+| Key question | 关键问题 | — | Card field |
+| My contribution / My part | 我的贡献 / 我的部分 | — | Overview and card fields |
+| Outcome and validation | 结果与验证 | — | Overview field |
+| Source / Demo | 源码 / 演示 | — | Link kinds; the case study itself is always the site's own page |
 | Case study | 项目详解 | — | Avoid "案例研究" on project pages |
 | Decision record | 决策记录 | — | Pattern: Context → Options → Decision → Trade-off |
 | Roadmap / milestones | 路线图 / 里程碑 | — | |

@@ -6,8 +6,11 @@ subtitle:
 summary:
   en: A Spring Boot REST API that runs on Packer-built images in an auto-scaled EC2 group behind an HTTPS load balancer. Terraform defines the network, data stores, keys and alarms; GitHub Actions tests every pull request and rolls each merge out as a new machine image.
   zh: 一个 Spring Boot REST API，运行在 HTTPS 负载均衡器后、自动伸缩的 EC2 组中，机器镜像由 Packer 构建。网络、数据存储、密钥和告警由 Terraform 定义；GitHub Actions 测试每个 PR，并把每次合并以新镜像的方式滚动上线。
-tracks: { primary: cloud-llm, also: [sde] }
+focus: { primary: backend-cloud, also: [] }
 status: course-project
+status_note:
+  en: Deployed and released repeatedly during the course; scaling never load-tested
+  zh: 课程期间已部署并多次发布；自动伸缩从未做过压测
 team: { size: 1 }
 role:
   en: Built it alone — the API, the Terraform infrastructure, the image pipeline and the serverless email flow
@@ -31,7 +34,42 @@ stack:
   - CloudWatch
 links: []
 highlights: [deploy_median, azs, kms_keys]
-deep_dive_from: pipeline
+deep_dive_from: observability
+# Section ids retired in the 2026-09 redesign.
+anchor_aliases: { pipeline: delivery, security: boundaries, decisions: boundaries }
+related: kk-knock
+
+overview:
+  problem:
+    en: A course series asks for a web service on AWS that can be released again and again, observed and maintained. The engineering questions are how a merged change reaches running instances safely, and what each component is allowed to reach.
+    zh: 一系列课程作业要求在 AWS 上构建一个能反复发布、可观测、可维护的 Web 服务。真正的工程问题是：一次合并如何安全地到达正在运行的实例，以及每个组件被允许访问什么。
+  contributions:
+    - en: Wrote the Spring Boot API, the Terraform for the network, data stores, keys and alarms, the Packer image and the GitHub Actions workflows.
+      zh: 编写 Spring Boot API、定义网络/数据存储/密钥/告警的 Terraform、Packer 镜像，以及 GitHub Actions 工作流。
+    - en: Wired the release path — an image built in a dev account, shared with a demo account and rolled out by an instance refresh that waits for healthy capacity.
+      zh: 打通发布链路：在 dev 账号构建镜像，共享给 demo 账号，再通过等待健康容量的实例刷新滚动上线。
+  outcome:
+    en: Individual coursework that was deployed and released repeatedly during the course. Auto scaling is configured but was never tested under load, and the health check accepts some error responses. Whether any environment still runs is unknown.
+    zh: 个人课程作业，课程期间已部署并多次发布。自动伸缩已配置，但从未做过压测；健康检查也会把部分错误响应视为健康。目前是否还有环境在运行未知。
+
+card:
+  question:
+    en: How does a merged pull request become a new, health-checked release without anyone logging in to a server?
+    zh: 一次合并的 PR，如何在没人登录服务器的情况下变成一次通过健康检查的新发布？
+  contribution:
+    en: Built it alone as individual coursework — API, Terraform, image pipeline and serverless email.
+    zh: 个人课程作业，独立完成 API、Terraform、镜像流水线与无服务器邮件。
+  tech: [Spring Boot, Terraform, Packer]
+  cta: { en: Follow code to deployment, zh: 跟随代码走到部署 }
+  anchor: delivery
+  steps:
+    label: CURRENT
+    items:
+      - { title: { en: "Pull request: tests and Packer validate", zh: PR：运行测试并校验 Packer }, detail: "JDK 21 + MySQL" }
+      - { title: { en: "Merge: bake an image in the dev account", zh: 合并：在 dev 账号构建镜像 }, detail: "Packer AMI" }
+      - { title: { en: Share it to a new launch-template version, zh: 共享并生成新的启动模板版本 }, detail: { en: demo account, zh: demo 账号 } }
+      - { title: { en: Replace instances gradually, zh: 逐步替换实例 }, detail: { en: instance refresh, zh: 实例刷新 } }
+      - { title: { en: Admit only healthy instances, zh: 只接纳健康的实例 }, detail: { en: "/actuator/health · accepts 200–499", zh: "/actuator/health · 接受 200—499" } }
 
 facts:
   deploy_median:
@@ -58,7 +96,7 @@ facts:
 figures:
   - kind: diagram
     id: aws-architecture
-    section: overview
+    section: boundaries
     file: assets/aws-architecture.svg
     source: assets/aws-architecture.mmd
     label: CURRENT
@@ -70,7 +108,7 @@ figures:
       zh: 依据 Terraform 配置绘制。应用层跨三个可用区；数据库和 NAT 网关为单可用区，以控制成本。
   - kind: diagram
     id: cicd
-    section: pipeline
+    section: delivery
     file: assets/cicd.svg
     source: assets/cicd.mmd
     label: CURRENT

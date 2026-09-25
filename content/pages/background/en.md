@@ -1,8 +1,8 @@
-## About me {#me}
+## How I work {#work}
 
-I am a software engineer finishing a Master of Science in Software Engineering Systems at Northeastern University in Boston, graduating in December 2026. Before that I earned a Bachelor of Engineering in Computer Science and Technology at Zhejiang Gongshang University, and interned as a backend developer at Vendream and as a software tester at the Industrial and Commercial Bank of China's Software Development Center.
-
-I like building systems end to end and then measuring them: a mobile app with its backend, cloud infrastructure with its release pipeline, a training job with its scaling curve. I am looking for roles in backend and full-stack engineering, AI infrastructure, cloud and platform engineering, and quantitative engineering, in the United States or in China.
+- **Contracts and milestones before code.** On the writing-style platform I froze the interfaces between the backend, the training worker and the serving layer before implementing any of them, so each could be built and tested alone. See [how that plan was built](/projects/personal-writing-lora/#planning).
+- **Failure paths are part of acceptance.** On KK Knock, a capture pipeline only counts as done when every failure ends up visible and retryable — and when real use showed it did not, that became the next iteration. See [that iteration](/projects/kk-knock/#iteration).
+- **Say what has not run.** Every project page separates what is designed, implemented, tested and deployed, and states the conditions of every number.
 
 ## How this site is written {#principles}
 
@@ -18,4 +18,4 @@ I build with AI coding agents — mostly Codex and Claude Code — and treat the
 
 ## How the site is built {#site}
 
-The site is a static Astro build with no client-side JavaScript, no trackers and no requests to third-party servers. English and Chinese pages come from the same data, and the build fails if a page, a string or a number exists in one language but not the other. It is hosted on Cloudflare.
+The site is a static Astro build with no trackers and no requests to third-party servers. One small script of its own adds the mobile menu and the project filter; every page works without it. English and Chinese pages come from the same data, and the build fails if a page, a string or a number exists in one language but not the other. It is hosted on Cloudflare. Planning artifacts from several projects are collected on [How I plan & design](/plan-and-design/).

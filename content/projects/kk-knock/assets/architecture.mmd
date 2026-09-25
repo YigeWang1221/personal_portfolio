@@ -7,7 +7,7 @@ flowchart TB
   end
   subgraph Host["Self-hosted Mac mini · Docker Compose"]
     direction LR
-    EDGE["Nginx + React admin console<br/>only published port"] --> API["FastAPI backend<br/>auth · metering · quotas"] --> PG[("PostgreSQL 16<br/>accounts · usage · prompts<br/>response-only idempotency cache")]
+    EDGE["Nginx + React admin console<br/>only published port"] --> API["FastAPI backend<br/>auth · metering · quotas"] --> PG[("PostgreSQL 16<br/>accounts · usage · prompts<br/>idempotency cache of responses")]
   end
   subgraph LLM["LLM providers — receive text only"]
     direction LR

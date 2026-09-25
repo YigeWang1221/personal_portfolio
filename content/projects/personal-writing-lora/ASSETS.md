@@ -1,6 +1,7 @@
 # Personal Writing LoRA Platform — staged assets
 
 **Staged:** 2026-09-24 (ADR-011). Two diagrams were added in the build phase; `.mmd` sources are rendered to `.svg` with `npm run diagrams`.
+**Redesign (2026-09-25):** the profile-settings wireframe was removed from the page and deleted; the wireframes and the ER sketch now sit in "From sketches to a plan". The home-page card uses an HTML step list (`card.steps` in `meta.yaml`).
 **Source:** the owner's design notes for this project, written in Obsidian between 2026-06 and 2026-08.
 - The notes cover UI wireframes, an ER sketch, an API contract, an IAM design, and a Terraform / project-structure
   design.
@@ -15,7 +16,6 @@
 |---|---|---|---|---|
 | `assets/wireframe-main-page.svg` | HISTORICAL | Main workspace wireframe: project and chat sidebar, chat box, Markdown answer area with a drafts side panel, "create project" dialog (name, base model, chosen LoRA) | Project page → "How it was planned": wireframe → final UI. Also a candidate for the "How I plan & design" gallery | Working name "QVoice" (later YourVoice). Show next to the final UI designs, not instead of them |
 | `assets/wireframe-style-create.svg` | HISTORICAL | Style list with versions and status colours (ready / training / error); style detail (base model, versions, source corpus, remarks, re-train / delete with confirmation; "cancel" instead of delete while training); new-style flow | Same section. Pair it with the version-state rules from the API contract | The annotation "will not save the training data on server" predates the implementation. Caption it: sources are stored temporarily for training and deleted by a cleanup job afterwards |
-| `assets/wireframe-profile-settings.svg` | HISTORICAL | Profile menu (email, settings, logout); settings page (read-only email, editable name, subscription plans planned as a static mock) | Same section (optional) | Plans are a mock; don't imply billing exists |
 | `assets/er-sketch.svg` | HISTORICAL | Early ER sketch: user profiles, workspaces, chats, messages, models, voice/LoRA sets, LoRAs, source-file lists and files, training | Deep dive → data model: early sketch → the implemented 15-table PostgreSQL schema (Alembic) | Field names differ in places. The implementation adds sessions, upload batches and two outbox tables |
 | `assets/training-worker-lifecycle.mmd` | CURRENT (code) | Sequence: receive job → conditional-write claim → scale-in protection → lease heartbeats and checkpoints → publish adapter + manifest (SHA-256) → READY → callback → delete message → release protection | Deep dive → reliability. Render with the site's Mermaid pipeline | Implemented in the worker and tested against local fakes; never run on AWS. Say so in the caption |
 | `assets/current-architecture.mmd` → `.svg` | CURRENT (code) | Product, training hand-off and serving as implemented and run locally | Project page → "Current architecture" | Added in the build phase (2026-09-24). Run locally against fakes only; the caption says so |

@@ -6,7 +6,7 @@ subtitle:
 summary:
   en: In a team of two, we modeled the 2025 Formula 1 season with a hierarchical Bayesian model and simulated complete finishing orders from the posterior. A pre-race forecast of the season finale named all three podium finishers and the final championship order.
   zh: 我们两人团队用分层贝叶斯模型为 2025 赛季 F1 建模，并从后验分布模拟完整的完赛名次。对赛季收官战的赛前预测命中了全部三位领奖台车手，以及最终的年度排名顺序。
-tracks: { primary: ds-finance, also: [] }
+focus: { primary: ai-research, also: [] }
 status: course-project
 team: { size: 2 }
 role:

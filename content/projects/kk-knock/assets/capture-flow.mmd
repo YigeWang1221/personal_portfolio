@@ -16,7 +16,7 @@ sequenceDiagram
   else New capture
     B->>L: Judge TODO / THOUGHT / IGNORED, research a THOUGHT
     L-->>B: Result
-    B->>B: Meter the call, cache the response (no content)
+    B->>B: Meter the call, cache the response for replay (not the transcript)
     B-->>Q: Result
   end
   Q->>P: Save the todo or thought under a stable local ID

@@ -6,55 +6,55 @@ Four rules shape the product:
 
 - **Transcribed on the phone.** Speech-to-text runs on the device with Whisper; audio is never uploaded.
 - **Only text goes out.** To classify and research a capture, only its transcript is sent to the backend and the LLM providers.
-- **Results live on the phone.** Todos and thoughts are stored locally, not in an online notebook.
+- **Notes live on the phone.** Todos and thoughts are stored locally, not in an online notebook. The server keeps a copy of each response only to answer retries (see below).
 - **Editing stays local.** Changing, organizing or searching notes never calls an LLM.
 
 It is deliberately not a chatbot, a project-management suite or a document editor.
+
+## What I owned {#ownership}
+
+Everything, alone: the product definition, the Android app, the backend, the admin console, the deployment and the test suites. Every commit in its five repositories is mine.
+
+I built it with AI coding agents, and the split of work matters. I wrote the product specifications and the phase documents, made each decision and recorded it in the decision log, and reviewed what the agents produced. The agents wrote much of the code, working under instructions and a shared project memory that I maintain. There is no team to manage; the agents are tools.
 
 ## Architecture {#architecture}
 
 The system has two halves with a strict data-ownership line between them.
 
-- **The Android app** (Kotlin Multiplatform, Jetpack Compose) owns all content. One foreground service is the only component allowed to record. whisper.cpp, compiled with the NDK, transcribes on the device. Captures move through a job queue in Room driven by WorkManager, and results are written to Room and shown in home-screen widgets.
-- **The backend** (FastAPI, async SQLAlchemy, PostgreSQL 16) owns accounts, profiles, prompts, usage metering and announcements, and nothing else. It stores no transcripts and no results; its only capture-related table is a response-only idempotency cache.
+- **The Android app** (Kotlin Multiplatform, Jetpack Compose) owns the notes. One foreground service is the only component allowed to record. whisper.cpp, compiled with the NDK, transcribes on the device. Captures move through a job queue in Room driven by WorkManager, and results are written to Room and shown in home-screen widgets.
+- **The backend** (FastAPI, async SQLAlchemy, PostgreSQL 16) owns accounts, profiles, prompts, usage metering and announcements. It stores no transcripts and has no notes table. Its one capture-related table is an idempotency cache that keeps the response it returned for each capture, so a retry can be answered without calling the LLM again.
 - **The LLM layer** is provider-neutral. A DeepSeek model, called through an OpenAI-compatible API, is the judge that files a capture as TODO, THOUGHT or IGNORED. Gemini with Google Search grounding researches thoughts. Each slot picks its protocol from the configured URL.
 - **A React admin console** (TypeScript, Vite) manages users, usage, announcements and system settings, behind its own admin authentication.
 
-Sign-in exchanges a Google ID token for the app's own JWT, keyed by an internal account ID. Accounts are never merged by email.
+## When a capture fails {#reliability}
 
-## How it was planned {#planning}
+A voice note has to survive a killed app, a flaky network and a failed LLM call without being lost or filed twice. Each capture is a job with explicit states on the phone, and the design rule is that a retry never redoes work that is already saved.
 
-The project runs on written decisions. Every repository carries instructions for AI coding agents, and a shared project memory — context, architecture, current state and a decision log — keeps me and the agents aligned. The decision log reached {{fact:adrs}} records in about four weeks. Each record states its context, the decision and its consequences, and superseded decisions say so explicitly.
+- **Saved before the next step.** Audio is deleted only after its transcript is stored, so a crash during transcription can be retried from the audio. Once the transcript is stored, the job is queued and the microphone is free for the next capture.
+- **One worker per job.** A background worker claims a queued job with a lease in Room, so two workers never process the same capture.
+- **Retries by stage.** A failed transcription retries from the saved audio; a failed classification or research retries from the saved transcript. Automatic retries for temporary network errors are capped, honor `429 Retry-After`, and never loop on `401`.
+- **One ID for the whole life of a capture.** A client capture ID is created when recording starts and is never regenerated. Local records use stable IDs derived from the account and that capture ID, so a replayed result overwrites instead of duplicating.
+- **Replay instead of re-running.** The server keeps the response for each account and capture ID; within {{fact:idempotency_window}}, a retry after a lost response gets the same result back without a second LLM call or a second charge.
+
+**What the server keeps, exactly.** The server does not store transcripts. The idempotency cache does hold the response it returned — the generated todo or thought, including a researched article and its sources — keyed by account and capture ID. An entry is treated as expired after {{fact:idempotency_window}} and is dropped when that capture ID is looked up again. On the phone, transcripts and job metadata are cleared on their own retention schedule.
+
+**Known gap.** The cache only holds completed responses. A retry that reaches the server while the first request is still running — for example after a dropped connection during a long research call — runs the pipeline again and can be charged twice. A server-side "in progress" marker would close this; it is not built yet.
+
+## One iteration: making the queue visible {#iteration}
+
+The asynchronous queue above was itself an iteration, and using it exposed the next one.
+
+1. **The change.** Capture used to wait for the backend before the next recording could start. I made it asynchronous: the interactive part ends when the transcript is saved, and classification runs from the job queue in the background. Host tests passed; acceptance on the phone was still open.
+2. **What real use showed.** In practice I never recorded while an earlier job was still processing. The widget used the same artwork for "transcribing, taps ignored" and "processing in the background, taps start a new recording"; the app computed the number of waiting jobs but never showed it; and a network, server or rate-limit failure could leave a job in processing forever — the automatic retry was sent without the retry flag, and the controller only handled success.
+3. **Scope.** Keep the queue's semantics; change only what the user sees and how failures end. The widget shows the ready artwork plus a count while jobs run in the background. The app gets one Recent Captures page — failed, in progress and recently finished — reachable from a permanent icon, with Retry, Play and Delete on each row.
+4. **Fixes behind it.** The pipeline always submits as a retry, because the queue owns re-submission and the capture ID makes it idempotent. Any result other than success becomes a visible failure. Jobs whose lease expired are re-queued. Backoff wake-ups get their own work name, so WorkManager no longer drops them.
+5. **Acceptance.** Every failure should end up listed and retryable, and the next capture should start as soon as the transcript is saved. This work is decided and in progress on the phone; it is not committed or accepted yet, and the in-flight duplicate gap above is recorded as out of scope.
+
+## How the work is planned {#planning}
+
+Every repository carries instructions for AI coding agents, and a shared project memory — context, architecture, current state and a decision log — keeps me and the agents aligned. The decision log reached {{fact:adrs}} records in about four weeks. Each record states its context, the decision and its consequences, and superseded decisions say so explicitly; the iteration above is two such records.
 
 Work is cut into phases, each with its own document. The on-device transcription work has a requirements document that fixes hard phase boundaries and the incremental-window design. A feature audit in September 2026 reviewed the scope and set the backlog for the next phases.
-
-## Key decisions {#decisions}
-
-| Decision | Options | Chosen | Trade-off |
-|---|---|---|---|
-| Where content lives | Server database, or the phone only | The phone only; the server stores no content | No cross-device sync; stronger privacy and a smaller server |
-| Where speech is transcribed | Cloud ASR, or on the device | whisper.cpp on the device | Slower on weak phones and needs a model download; no audio leaves the phone and there is no per-minute cost |
-| How to speed up ASR | GPU (Vulkan), NPU, Flash Attention, or CPU kernels | CPU, with ARM64 kernels chosen at runtime | Gives up possible GPU gains; behaves the same across chips |
-| Streaming or windows | Token streaming, or incremental windows | Incremental windows with a whole-file fallback | Higher latency than streaming; simpler and more robust |
-| Hosting | AWS EC2 (built and tested), or an owned Mac mini | Mac mini with Docker Compose | One host on a home network; no hosting bill and full control |
-| Duplicate protection | None, a client key, or a server marker | A client capture ID plus a server response cache | A duplicate that arrives mid-request can still be charged; no content is stored |
-| LLM provider | One vendor, or provider-neutral slots | Neutral slots chosen by URL | More configuration; the judge and the researcher can use different vendors |
-
-## What I owned {#ownership}
-
-Everything: the product definition, the Android app, the backend, the admin console, the deployment and the test suites. It is a solo project — every commit in its five repositories is mine. I built it with AI coding agents that work under the decision log and project memory described above. I wrote the specifications, made the decisions and reviewed the results.
-
-## Near-exactly-once capture {#capture}
-
-A capture has to survive a killed app, a flaky network and repeated retries without losing speech or filing it twice. The phone keeps three durable layers:
-
-1. **Transcript receipts.** Audio is deleted only after its transcript receipt is safely stored.
-2. **Submission receipts** that record each HTTP submission and its response.
-3. **A job queue in Room** with a SQL claim lease, so only one worker handles a capture at a time.
-
-A client capture ID is created when recording starts and is never regenerated. Local records use stable IDs derived from the account and that capture ID, and the server caches each response by account and capture ID for {{fact:idempotency_window}}. A retry after a lost response replays the cached result instead of calling the LLM again. Retries are stage-aware, honor `429 Retry-After`, and use backoff with retention caps.
-
-**Known gap.** A duplicate that arrives while the first request is still running is not caught by the response cache, so it can be charged twice. A server-side "in progress" marker is planned.
 
 ## On-device speech recognition {#asr}
 
@@ -63,7 +63,7 @@ Transcription runs in incremental {{fact:asr_window}} windows, with a whole-file
 The performance work was measured on one test phone with short synthetic clips and no thermal control, so the numbers show a direction rather than a general benchmark:
 
 - **Runtime ARM64 kernel selection** brought the Small model from {{fact:asr_before}} to {{fact:asr_after}} per clip.
-- **Rejected after testing:** Flash Attention made transcription slower, six threads were unstable, and Vulkan on the phone's GPU failed with `DeviceLost`. The app stays CPU-only, so it behaves the same across chips.
+- **Rejected after testing:** Flash Attention made transcription slower, six threads were unstable, and Vulkan on the phone's GPU failed with `DeviceLost`. The app stays CPU-only; the tests ran on one phone, so this is not a claim about other chips.
 - **Instant cancellation.** A native abort patch cut the time to cancel a transcription that had not started from {{fact:cancel_before}} to {{fact:cancel_after}}. A cancel issued mid-run returns in {{fact:cancel_mid_run}}.
 
 The abort patch is applied at build time as an overlay that verifies its anchor before patching, so the vendored whisper.cpp stays pinned and hash-checked. Speech models are downloaded with SHA verification and swapped in atomically.
@@ -92,4 +92,4 @@ A free consumer app that calls LLMs needs hard limits. Every provider call is me
 - **Not yet publicly released.** The product page is live; the first public Android release is still being prepared.
 - **Public HTTPS pending.** A Cloudflare Tunnel in front of the Mac mini is configured, but its public acceptance has not been recorded yet.
 - **iOS** exists only as a scaffold, and store billing is deferred.
-- **Next:** measure latency distributions (stop → transcript, transcript → result) and the cost per capture, add a second test device, record a short demo, and close the in-flight duplicate gap with a server-side marker.
+- **Next:** finish and accept the visible queue, measure latency distributions (stop → transcript, transcript → result) and the cost per capture, add a second test device, record a short demo, and close the in-flight duplicate gap with a server-side marker.

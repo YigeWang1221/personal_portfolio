@@ -16,9 +16,10 @@ export const term = z.union([z.string().trim().min(1), localized]);
 export type Term = z.infer<typeof term>;
 
 export const slug = z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'kebab-case slug');
-export const TRACK_IDS = ['sde', 'cloud-llm', 'ds-finance'] as const;
-export const trackId = z.enum(TRACK_IDS);
-export type TrackId = z.infer<typeof trackId>;
+/** Capability views of the project catalog (ADR-016). They replace the three tracks of ADR-006. */
+export const FOCUS_IDS = ['business-modeling', 'backend-cloud', 'planning-delivery', 'ai-research'] as const;
+export const focusId = z.enum(FOCUS_IDS);
+export type FocusId = z.infer<typeof focusId>;
 
 /** Status labels from docs/style/GLOSSARY.md. */
 export const STATUS_KEYS = [
@@ -103,7 +104,8 @@ export const figure = z.discriminatedUnion('kind', [diagramFigure, imageFigure, 
 export type Figure = z.infer<typeof figure>;
 
 export const link = z.strictObject({
-  kind: z.enum(['code', 'product']),
+  /** code → "Source", product / demo → "Demo". Case studies are always the site's own project page. */
+  kind: z.enum(['code', 'product', 'demo']),
   url: z.url({ protocol: /^https$/ }),
   label: localized,
 });
@@ -125,15 +127,51 @@ export const roadmap = z.strictObject({
 });
 export type Roadmap = z.infer<typeof roadmap>;
 
+/** The three-part overview at the top of a case study (brief: Problem / My contribution / Outcome). */
+export const overview = z.strictObject({
+  problem: localized,
+  /** One to three concrete contributions; team projects separate own and shared work. */
+  contributions: z.array(localized).min(1).max(3),
+  /** What exists, how it was validated, and where it stops. */
+  outcome: localized,
+});
+
+/** Editor-written card copy for the home page and the catalog. Nothing here is derived automatically. */
+export const card = z.strictObject({
+  /** The one design question the case study answers. */
+  question: localized,
+  /** One line on what I did. */
+  contribution: localized,
+  /** At most three technologies, chosen by the editor (not the first items of `stack`). */
+  tech: z.array(z.string().min(1)).min(1).max(3),
+  /** Label of the main link into the case study, e.g. "Explore the domain model". */
+  cta: localized.optional(),
+  /** Section or sub-heading of the case study the main link opens. */
+  anchor: slug.optional(),
+  /** Figure of the page shown next to a featured card… */
+  figure: slug.optional(),
+  /** …or a short step list drawn as HTML (a schematic of the implementation, labeled like a diagram). */
+  steps: z
+    .strictObject({
+      label: assetLabel,
+      items: z.array(z.strictObject({ title: localized, detail: term })).min(3).max(6),
+      note: localized.optional(),
+    })
+    .optional(),
+});
+
 export const projectMeta = z.strictObject({
   slug,
   title: localized,
+  /** One line on what the project does. */
   subtitle: localized,
-  /** One-line problem for the 30-second scan. */
+  /** Two or three sentences for the catalog and the page description. */
   summary: localized,
-  /** Track membership (ADR-006). Order lives in content/tracks.yaml. */
-  tracks: z.strictObject({ primary: trackId, also: z.array(trackId).default([]) }),
+  /** Capability membership (ADR-016). Order lives in content/catalog.yaml. */
+  focus: z.strictObject({ primary: focusId, also: z.array(focusId).default([]) }),
   status: statusKey,
+  /** Plain-language qualifier shown next to the status, e.g. what has not been validated. */
+  status_note: localized.optional(),
   /** size = people on the team; mixed = coursework done partly alone and partly in pairs. */
   team: z.strictObject({ size: z.number().int().min(1), mixed: z.boolean().optional() }),
   role: localized,
@@ -141,8 +179,14 @@ export const projectMeta = z.strictObject({
   period,
   stack: z.array(z.string().min(1)).min(1),
   links: z.array(link).default([]),
-  /** Fact keys shown in the scan layer. */
+  /** Fact keys shown under the overview. */
   highlights: z.array(z.string()).max(4).default([]),
+  overview: overview.optional(),
+  card: card.optional(),
+  /** One related case study, linked at the end of the page. */
+  related: slug.optional(),
+  /** Retired section ids → the section that replaced them, so old #anchors keep landing in the right place. */
+  anchor_aliases: z.record(slug, slug).default({}),
   facts: z.record(z.string().regex(/^[a-z0-9_]+$/), fact).default({}),
   figures: z.array(figure).default([]),
   roadmap: roadmap.optional(),
@@ -151,26 +195,41 @@ export const projectMeta = z.strictObject({
 });
 export type ProjectMeta = z.infer<typeof projectMeta>;
 
-export const tracksFile = z.strictObject({
-  tracks: z
+/** A link into a section of a case study. */
+const caseLink = z.strictObject({ project: slug, anchor: slug, label: localized });
+
+export const catalogFile = z.strictObject({
+  /** Filters of the project catalog, in display order. */
+  focus: z
+    .array(z.strictObject({ id: focusId, title: localized, description: localized }))
+    .length(FOCUS_IDS.length),
+  /** Home page: the selected case studies, in order. */
+  featured: z.array(slug).min(1).max(4),
+  /** Home page: the compact "More to explore" list. */
+  more: z.array(slug).max(4).default([]),
+  /** Catalog order of every published project; the only place ordering lives (ADR-006, ADR-016). */
+  order: z.array(slug).min(1),
+  /** Home page capability entries: each opens a section of a case study in one click. */
+  entries: z
     .array(
       z.strictObject({
-        id: trackId,
+        id: slug,
         title: localized,
-        positioning: localized,
-        /** Display order; the only place ordering lives (ADR-006). */
-        projects: z.array(slug).min(1),
+        body: localized,
+        link: caseLink,
+        also: caseLink.optional(),
       }),
     )
-    .length(TRACK_IDS.length),
-  featured: z.array(slug).min(1).max(6),
+    .min(1)
+    .max(3),
 });
-export type TracksFile = z.infer<typeof tracksFile>;
+export type CatalogFile = z.infer<typeof catalogFile>;
 
 export const profileFile = z.strictObject({
   name: localized,
   headline: localized,
-  target_roles: z.array(localized).min(1),
+  /** Date the résumé data was last checked, YYYY-MM-DD. */
+  updated: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
   links: z.array(z.strictObject({ label: localized, url: z.url({ protocol: /^https$/ }) })).min(1),
   education: z
     .array(

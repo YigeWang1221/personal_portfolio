@@ -1,0 +1,34 @@
+---
+// The evidence image next to a featured card: one diagram or image, or up to three screens. Decorative
+// duplication is avoided — the alt text is the figure's own, and the full figure lives on the case study.
+import { Image } from 'astro:assets';
+import type { Locale } from '../lib/i18n';
+import type { ResolvedFigure } from '../lib/content/load';
+
+interface Props {
+  figure: ResolvedFigure;
+  locale: Locale;
+  /** The first featured card is above the fold on large screens; the others load lazily. */
+  eager?: boolean;
+}
+const { figure, locale, eager = false } = Astro.props;
+const loading = eager ? 'eager' : 'lazy';
+const label = figure.kind !== 'screens' ? figure.label : undefined;
+---
+
+<figure class={`card-figure kind-${figure.kind}`}>
+  {figure.kind === 'screens' ? (
+    <ul class="card-screens">
+      {figure.items.slice(0, 3).map((item) => (
+        <li>
+          <Image src={item.image[locale]} alt={item.alt[locale]} widths={[240, 360]} sizes="(max-width: 48rem) 28vw, 8.5rem" format="webp" loading={loading} decoding="async" />
+        </li>
+      ))}
+    </ul>
+  ) : figure.svg ? (
+    <img src={figure.svg.url} width={figure.svg.width} height={figure.svg.height} alt={figure.alt[locale]} loading={loading} decoding="async" />
+  ) : (
+    figure.raster && <Image src={figure.raster} alt={figure.alt[locale]} widths={[480, 800]} sizes="(max-width: 48rem) 100vw, 26rem" format="webp" loading={loading} decoding="async" />
+  )}
+  {label && <figcaption><span class={`asset-label label-${label}`}>{label}</span></figcaption>}
+</figure>

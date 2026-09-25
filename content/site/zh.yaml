@@ -6,9 +6,11 @@ nav:
   label: 主导航
   skip: 跳到正文
   home: 首页
+  projects: 项目
+  background: 背景
   resume: 简历
-  plan: 规划与设计
-  about: 关于
+  plan: 我如何规划与设计
+  menu: 菜单
   breadcrumb: 面包屑导航
   language: 语言
   language_name: 中文
@@ -16,7 +18,7 @@ nav:
 
 footer:
   note: 本站为静态网站，没有追踪脚本，也不向第三方发起请求。站内每个数字都注明条件，并可追溯到代码仓库、日志或设计文档。
-  label: 个人主页
+  label: 个人主页与页面
 
 common:
   present: 至今
@@ -53,44 +55,73 @@ roadmap:
   planned: 计划中
 
 home:
-  title: 王一格 · 工程作品集
-  description: 王一格的中英双语工程作品集：后端与移动端开发、云基础设施、分布式训练与贝叶斯建模的项目详解，以及每个项目背后的规划与设计。
-  eyebrow: 工程作品集
-  intro: 我在美国东北大学（Northeastern University）攻读软件工程系统硕士，2026 年 12 月毕业。这里补充一页简历写不下的内容：每个系统如何规划、做了哪些取舍、测了什么，以及哪些没有成功。
-  roles_label: 目标岗位
+  title: 王一格 · 软件工程师（后端与系统）
+  description: 王一格，软件工程师（后端与系统方向）。中英双语的项目案例：业务建模、后端与云端交付、系统规划。
+  intro: 我关注业务流程如何落到软件系统中，重点是面向对象设计、后端开发与云端交付。
+  background_line: 美国东北大学（Northeastern University）· 软件工程系统硕士 · 预计 2026 年 12 月毕业
+  cta_work: 查看精选案例
   cta_resume: 查看简历
-  cta_plan: 我如何规划与设计
-  featured: 精选项目
-  featured_note: 每个项目页都可以 30 秒速览、3 分钟细读，或深入阅读。
-  tracks: 方向
-  tracks_note: 项目按对应的岗位方向分组，部分项目同时出现在多个方向。
-  track_count: "{n} 个项目"
-  evidence_title: 本站内容的依据
-  evidence_body: 站内每个数字都来自代码仓库、日志或设计文档，并注明测量条件。状态标签如实说明哪些已部署、哪些没有。团队项目写明团队人数和我负责的部分。
-  evidence_link: 本站的写作原则
+  links_label: 个人主页
+  entries_title: 按能力查看
+  selected: 精选案例
+  selected_note: 四个案例分别展示工作的不同侧面。每张卡片都写明我做了什么，以及这个案例回答的问题。
+  tech: 主要技术
+  steps: "{title} 的实现步骤"
+  kind: 项目详解
+  my_part: 我的部分
+  question: 关键问题
+  more: 更多项目
+  all_projects: 全部项目
+  background_title: 背景
+  background_body: 我即将在美国东北大学（波士顿）完成软件工程系统硕士学业，本科毕业于浙江工商大学计算机科学与技术专业。曾在 Vendream（万郡绿建）担任后端开发实习生，在中国工商银行软件开发中心担任软件测试实习生。目前在开发 KK Knock，一款后端托管在我自己硬件上的语音速记 App。
+  background_link: 了解更多背景
 
-tracks:
-  eyebrow: 方向
-  note: 项目按证据的充分程度排序，而不是按规模。出现在多个方向的项目只有一个页面。
+projects:
+  title: 项目
+  description: 王一格的全部项目：精选案例与其他项目，可按能力筛选——业务建模、后端与云、规划与交付、AI 与研究。
+  lede: 先列精选案例，再列其他项目。可以按想看的能力筛选；一个项目可能同时体现多种能力。
+  filter_label: 按能力筛选
+  all: 全部
+  count: "{n} 个项目"
+  count_one: 1 个项目
+  featured: 精选案例
+  role: 我的部分
 
 project:
   role: 我的角色
   team: 团队
   period: 时间
   context: 背景
-  stack: 技术栈
+  stack: 完整技术栈
   links: 链接
+  source: 源码
+  demo: 演示
   no_public_code: 未提供公开代码链接。
-  at_a_glance: 速览
+  overview: 概要
+  problem: 问题
+  contribution: 我的贡献
+  outcome: 结果与验证
+  facts: 关键数据
   contents: 本页内容
   deep_dive: 深入
-  related: "{track}方向的其他项目"
-  all_in_track: 查看该方向全部项目
+  related: 相关案例
+  all_projects: 全部项目
+
+background:
+  title: 背景
+  description: 王一格的背景：教育、经历、工作方式，以及本作品集的写作原则。
+  eyebrow: 背景
+  lede: 专注后端与系统方向的软件工程师，将于 2026 年 12 月在美国东北大学完成硕士学业。
+  education: 教育经历
+  experience: 实习经历
+  contact: 联系方式
+  contact_body: 通过 GitHub 或 LinkedIn 联系我最方便。
 
 resume:
   title: 简历
-  description: 王一格的可视化简历：教育、实习、项目与技能，每项技能都链接到能证明它的项目。
+  description: 王一格的简历：教育、实习、项目与技能，每项技能都链接到能证明它的项目。
   eyebrow: 简历
+  updated: 最近核对：{date}
   highlights: 亮点
   education: 教育经历
   experience: 实习经历
@@ -110,12 +141,6 @@ plan:
   records_note: 背景 → 备选方案 → 决策 → 取舍 → 证据
   architecture: 架构图
   architecture_note: 每张图都依据实现绘制，并标注 CURRENT（当前）、PROPOSED（规划）或 HISTORICAL（早期草图）。
-
-about:
-  title: 关于
-  description: 关于王一格，以及本作品集的写作原则：证据规则、状态标签、团队署名与 AI 辅助开发。
-  eyebrow: 关于
-  contact: 联系方式
 
 notfound:
   title: 页面不存在

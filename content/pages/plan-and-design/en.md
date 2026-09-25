@@ -26,9 +26,9 @@ The projects on this site are very different — a mobile product, a training be
 
 **Options.** No protection, a client-generated key, or a server-side "in progress" marker.
 
-**Decision.** A client capture ID created when recording starts and never regenerated, three durable layers on the phone, and a response-only server cache kept for {{fact:kk-knock.idempotency_window}}.
+**Decision.** A client capture ID created when recording starts and never regenerated, three durable layers on the phone, and a server cache of each returned response, valid for {{fact:kk-knock.idempotency_window}}, so a retry is replayed instead of re-run.
 
-**Trade-off.** A duplicate that arrives while the first request is still running can still be charged. In exchange, the server stores no content at all.
+**Trade-off.** A duplicate that arrives while the first request is still running can still be charged. In exchange, the server never stores a transcript; the cache keeps only the response it already returned.
 
 **Evidence and status.** Implemented across the capture service, the phone's capture repository and an idempotency migration. The server-side marker is planned.
 
@@ -72,7 +72,7 @@ The projects on this site are very different — a mobile product, a training be
 
 **Context.** A Spring Boot service in an Auto Scaling group has to be deployed often and rolled back safely.
 
-**Options.** Update the running servers in place, or bake a new machine image for every release.
+**Options.** Update the running servers in place, or bake a new machine image for every release. This was coursework: the assignments defined much of what had to be built, so this record describes how the release path works rather than a free product choice.
 
 **Decision.** A Packer AMI per merge, built in a dev account, shared with a demo account and rolled out through a new launch-template version and an instance refresh.
 

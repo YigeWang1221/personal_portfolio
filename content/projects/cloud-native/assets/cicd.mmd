@@ -10,6 +10,6 @@ flowchart TB
   end
   subgraph Demo["Rollout · demo account"]
     direction LR
-    LT["New launch-template version<br/>set as default"] --> IR["Instance refresh<br/>50–150% healthy · 180 s warm-up"] --> W["Wait until the refresh completes"]
+    LT["New launch-template version<br/>set as default"] --> IR["Instance refresh<br/>50–150% healthy · 180 s warm-up"] --> HC["New instances must pass the<br/>load balancer health check"] --> W["Wait until the refresh completes"]
   end
   PR --> Merge --> Demo

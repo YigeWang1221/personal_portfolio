@@ -3,8 +3,11 @@
 import '../styles/global.css';
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
+import type { NavKey } from '../components/SiteHeader.astro';
 import { HTML_LANG, OG_LOCALE, absoluteUrl, otherLocale, type Locale } from '../lib/i18n';
 import { siteConfig } from '../lib/site-config.mjs';
+import { readFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 import { t } from '../lib/content/load';
 
 interface Props {
@@ -14,7 +17,7 @@ interface Props {
   title: string;
   description: string;
   /** Section of the header navigation to mark as current. */
-  nav?: 'home' | 'tracks' | 'resume' | 'plan' | 'about';
+  nav?: NavKey;
   /** 404 pages are never indexed and have no canonical URL. */
   notFound?: boolean;
 }
@@ -35,6 +38,8 @@ const alternates = notFound
       ['x-default', absoluteUrl('en', path)],
     ].filter(([, href]) => href) as [string, string][]);
 const indexable = siteConfig.indexable && !notFound;
+// The script is served from public/ without a content hash; a version query makes each release fetch it anew.
+const scriptVersion = createHash('sha256').update(readFileSync('public/js/site.js')).digest('hex').slice(0, 10);
 const fullTitle = path === '/' ? title : `${title} · ${t(locale, 'site.name')}`;
 ---
 
@@ -58,6 +63,9 @@ const fullTitle = path === '/' ? title : `${title} · ${t(locale, 'site.name')}`
     <meta property="og:locale:alternate" content={OG_LOCALE[otherLocale(locale)]} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="preload" href="/fonts/SourceSerif4-Semibold.ttf" as="font" type="font/ttf" crossorigin />
+    {/* Progressive enhancement only (ADR-016): the mobile menu and the project filter. Every page works without it.
+        is:inline keeps Astro from bundling it; the file is served as is from public/. */}
+    <script is:inline src={`/js/site.js?v=${scriptVersion}`} defer></script>
   </head>
   <body>
     <a class="skip-link" href="#main">{t(locale, 'nav.skip')}</a>
