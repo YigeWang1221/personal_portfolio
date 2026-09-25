@@ -1,0 +1,116 @@
+# Résumé data (ARCHITECTURE.md content model). Education and experience restate the owner-confirmed résumé
+# (internal RESUME_POLISHED, decisions of 2026-09-24). Skills list only what a project on this site shows.
+name: { en: Yige Wang, zh: 王一格 }
+headline:
+  en: Software engineer who designs, builds and measures systems end to end.
+  zh: 端到端设计、实现并度量系统的软件工程师。
+
+target_roles:
+  - { en: Software engineer (backend / full-stack), zh: 软件工程师（后端 / 全栈） }
+  - { en: AI infrastructure and LLM training, zh: AI 基础设施与大模型训练 }
+  - { en: Cloud and platform engineering, zh: 云计算与平台工程 }
+  - { en: Quantitative and trading engineering, zh: 量化与交易工程 }
+
+links:
+  - { label: { en: GitHub, zh: GitHub }, url: "https://github.com/YigeWang1221" }
+  - { label: { en: LinkedIn, zh: LinkedIn }, url: "https://www.linkedin.com/in/yigewang1221/" }
+
+education:
+  - school: { en: Northeastern University, zh: 美国东北大学（Northeastern University） }
+    degree: { en: Master of Science in Software Engineering Systems, zh: 软件工程系统硕士 }
+    location: { en: "Boston, MA", zh: 美国波士顿 }
+    period: { start: "2025-01", end: "2026-12", expected: true }
+    details:
+      - en: "Coursework: Network Structures & Cloud Computing; High-Performance Computing; Data Science Engineering Methods; Application Engineering & Development."
+        zh: 核心课程：网络架构与云计算、高性能并行计算、数据科学工程方法、应用工程与开发。
+  - school: { en: Zhejiang Gongshang University, zh: 浙江工商大学 }
+    degree: { en: Bachelor of Engineering in Computer Science and Technology, zh: 计算机科学与技术 学士 }
+    location: { en: "Hangzhou, China", zh: 中国杭州 }
+    period: { start: "2020", end: "2024" }
+    details:
+      - { en: GPA 3.6/4., zh: GPA 3.6/4。 }
+
+# RESUME-ONLY: restated as written (internal RESUME_CROSSCHECK §4); no repository evidence exists for internships.
+experience:
+  - org: { en: Vendream, zh: Vendream（万郡绿建） }
+    role: { en: Backend Developer Intern, zh: 后端开发实习生 }
+    location: { en: "Zhejiang, China", zh: 中国浙江 }
+    period: { start: "2023-06", end: "2023-09" }
+    bullets:
+      - en: Unified API versions for mobile and web clients across two Spring Cloud releases by mapping SaaS service dependencies; refactored controller and service layers and built CI/CD pipelines with GitLab and Jenkins.
+        zh: 通过梳理 SaaS 服务依赖，在两个 Spring Cloud 版本中统一移动端与 Web 端的 API 版本；重构控制层与服务层，并基于 GitLab 与 Jenkins 搭建 CI/CD 流水线。
+      - en: Profiled end-to-end API latency with Cloud Trace, fixed inefficient loops and unindexed SQL queries in six APIs, and cut response time by 19%.
+        zh: 借助 Cloud Trace 定位端到端 API 耗时，修复 6 个接口中的低效循环与缺失索引的 SQL 查询，响应时间降低 19%。
+      - en: Contributed to an automated bidding bot for commodity auctions (regression-based price prediction, bidder-pattern analysis) that raised average sale prices by 4.6%.
+        zh: 参与大宗商品拍卖自动竞价系统的开发，结合回归价格预测与竞拍者行为分析制定出价策略，平均成交价提升 4.6%。
+  - org: { en: "Industrial and Commercial Bank of China, Software Development Center", zh: 中国工商银行软件开发中心 }
+    role: { en: Software Testing Intern, zh: 软件测试实习生 }
+    location: { en: "Hangzhou, China", zh: 中国杭州 }
+    period: { start: "2022-06", end: "2022-09" }
+    bullets:
+      - en: Tested the loan-approval workflow on Linux and reported slow APIs. Wrote Shell scripts that validate REST APIs and SQL data consistency in the loan modules, cutting manual testing time by 21%.
+        zh: 在 Linux 环境下对贷款审批流程做功能测试并定位慢接口；编写 Shell 脚本校验贷款模块的 REST API 与 SQL 数据一致性，人工测试时间降低 21%。
+
+# 3–5 verified outcomes, each a fact of a project page.
+highlights:
+  - { project: kk-knock, fact: tests }
+  - { project: kk-knock, fact: adrs }
+  - { project: distributed-llm, fact: ddp_scaling }
+  - { project: f1-bayesian, fact: podium }
+  - { project: cloud-native, fact: deploy_median }
+
+skills:
+  # Skill names stay in English in both languages (industry-standard terms); group headings are translated.
+  - group: { en: Languages, zh: 编程语言 }
+    items:
+      - { name: Java, evidence: [cloud-native, equipment-assignment, enterprise-workflow] }
+      - { name: Python, evidence: [kk-knock, personal-writing-lora, distributed-llm, f1-bayesian, quant-ai] }
+      - { name: Kotlin, evidence: [kk-knock] }
+      - { name: TypeScript, evidence: [personal-writing-lora, kk-knock, equipment-assignment] }
+      - { name: JavaScript, evidence: [smartbuyer] }
+      - { name: SQL, evidence: [kk-knock, personal-writing-lora, cloud-native] }
+  - group: { en: Backend and data, zh: 后端与数据 }
+    items:
+      - { name: FastAPI, evidence: [kk-knock, personal-writing-lora] }
+      - { name: Spring Boot, evidence: [cloud-native, equipment-assignment] }
+      - { name: Express / Mongoose, evidence: [smartbuyer] }
+      - { name: PostgreSQL, evidence: [kk-knock, personal-writing-lora] }
+      - { name: MySQL, evidence: [cloud-native, equipment-assignment] }
+      - { name: MongoDB, evidence: [smartbuyer] }
+      - { name: MinIO, evidence: [equipment-assignment] }
+      - { name: Alembic / Flyway, evidence: [personal-writing-lora, cloud-native] }
+  - group: { en: Mobile and web, zh: 移动端与 Web }
+    items:
+      - { name: Kotlin Multiplatform / Jetpack Compose, evidence: [kk-knock] }
+      - { name: Room / WorkManager, evidence: [kk-knock] }
+      - { name: React, evidence: [kk-knock, smartbuyer] }
+      - { name: Next.js, evidence: [personal-writing-lora] }
+      - { name: Vue 3, evidence: [equipment-assignment] }
+  - group: { en: Cloud and DevOps, zh: 云与 DevOps }
+    items:
+      - { name: "AWS (VPC, EC2, ALB, Auto Scaling, RDS, S3, KMS, Secrets Manager, SNS, Lambda, CloudWatch)", evidence: [cloud-native, personal-writing-lora] }
+      - { name: Terraform, evidence: [cloud-native, personal-writing-lora, kk-knock] }
+      - { name: Packer, evidence: [cloud-native, kk-knock] }
+      - { name: GitHub Actions, evidence: [cloud-native, kk-knock] }
+      - { name: Docker Compose / Nginx, evidence: [kk-knock] }
+  - group: { en: ML and LLM, zh: 机器学习与大模型 }
+    items:
+      - { name: "PyTorch (DDP, FSDP)", evidence: [distributed-llm, quant-ai] }
+      - { name: NCCL / Slurm, evidence: [distributed-llm, quant-ai] }
+      - { name: whisper.cpp (on-device ASR), evidence: [kk-knock] }
+      - { name: vLLM multi-LoRA / QLoRA, evidence: [personal-writing-lora] }
+      - { name: "LLM APIs (DeepSeek, Gemini)", evidence: [kk-knock] }
+  - group: { en: Data science, zh: 数据科学 }
+    items:
+      - { name: PyMC / NUTS / ArviZ, evidence: [f1-bayesian, info6105-methods] }
+      - { name: Hierarchical Bayesian modeling, evidence: [f1-bayesian, info6105-methods] }
+      - { name: Monte Carlo simulation, evidence: [f1-bayesian, info6105-methods] }
+      - { name: Walk-forward validation / backtesting, evidence: [quant-ai] }
+      - { name: pandas / NumPy, evidence: [f1-bayesian, quant-ai, distributed-llm] }
+  - group: { en: Engineering practice, zh: 工程实践 }
+    items:
+      - { name: Architecture Decision Records (ADR), evidence: [kk-knock, personal-writing-lora] }
+      - { name: Contract-first API design, evidence: [personal-writing-lora] }
+      - { name: Idempotency / offline-first design, evidence: [kk-knock] }
+      - { name: pytest / JUnit / Vitest, evidence: [kk-knock, personal-writing-lora, cloud-native] }
+      - { name: "Observability (structured logs, custom metrics)", evidence: [cloud-native] }

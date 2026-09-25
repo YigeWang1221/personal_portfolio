@@ -1,0 +1,4 @@
+# Never upload build internals, even from a failed build (wrangler reads this file in the assets directory).
+.prerender
+*.mjs
+*.map

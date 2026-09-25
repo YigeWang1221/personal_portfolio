@@ -1,0 +1,23 @@
+%% CURRENT — the capture pipeline as implemented across phone and backend (near-exactly-once delivery).
+sequenceDiagram
+  autonumber
+  actor U as User
+  participant P as Phone · recording + ASR
+  participant Q as Phone · capture job queue (Room)
+  participant B as FastAPI backend
+  participant L as LLM providers
+  U->>P: Tap KK Capture, speak, tap again
+  P->>P: Create the client capture ID (never regenerated)
+  P->>P: Transcribe on device, delete audio only once the receipt is durable
+  P->>Q: Enqueue the capture job
+  Q->>B: POST /v1/capture (transcript + client capture ID)
+  alt Seen before: same account and capture ID
+    B-->>Q: Replay the cached response
+  else New capture
+    B->>L: Judge TODO / THOUGHT / IGNORED, research a THOUGHT
+    L-->>B: Result
+    B->>B: Meter the call, cache the response (no content)
+    B-->>Q: Result
+  end
+  Q->>P: Save the todo or thought under a stable local ID
+  Note over Q,B: Retries are stage-aware and honor 429 Retry-After with backoff

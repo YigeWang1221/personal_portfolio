@@ -58,7 +58,7 @@
 <polyline points="69.7,839.4 60.0,846.5 60.5,834.5" fill="none"/>
 </g>
 <rect x="36.7" y="463.4" width="161.1" height="19.9" rx="2.4" fill="none" stroke="#1e1e1e" stroke-width="2" opacity="1.0"/>
-<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="19.267625708310607" fill="#1e1e1e" text-anchor="start" opacity="1.0">
+<text font-family="Helvetica, Arial, 'PingFang SC', sans-serif" font-size="19.267" fill="#1e1e1e" text-anchor="start" opacity="1.0">
 <tspan x="536.9" y="508.2">I like a md showing way</tspan>
 <tspan x="536.9" y="532.3">so, it should be a text/doc</tspan>
 <tspan x="536.9" y="556.4">showing area like claude</tspan>

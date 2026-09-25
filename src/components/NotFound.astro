@@ -1,0 +1,26 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { localePath, type Locale } from '../lib/i18n';
+import { getContent, t } from '../lib/content/load';
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const { tracks } = getContent();
+---
+
+<BaseLayout locale={locale} path="/" title={t(locale, 'notfound.title')} description={t(locale, 'notfound.body')} notFound>
+  <div class="container">
+    <section class="notfound">
+      <p class="eyebrow">404</p>
+      <h1>{t(locale, 'notfound.title')}</h1>
+      <p>{t(locale, 'notfound.body')}</p>
+      <ul>
+        <li><a href={localePath(locale, '/')}>{t(locale, 'nav.home')}</a></li>
+        {tracks.map((tr) => <li><a href={localePath(locale, `/tracks/${tr.id}/`)}>{tr.title[locale]}</a></li>)}
+        <li><a href={localePath(locale, '/resume/')}>{t(locale, 'nav.resume')}</a></li>
+      </ul>
+    </section>
+  </div>
+</BaseLayout>

@@ -5,163 +5,132 @@
 This document separates what exists (**CURRENT**) from what is planned (**PROPOSED**). Nothing marked PROPOSED
 exists yet.
 
-## CURRENT: documentation repository with a content skeleton
+## CURRENT: repository layout
 
 ```text
 personal_portfolio/
 ├── README.md, AGENTS.md, CLAUDE.md
 ├── PROJECT_CONTEXT.md, ARCHITECTURE.md, DECISIONS.md
 ├── docs/style/          BILINGUAL_STYLE.md, GLOSSARY.md
-├── content/             skeleton only (ADR-011): README.md + projects/<slug>/{ASSETS.md, assets/}
+├── content/             track registry, résumé data, UI strings, page and project modules (see below)
+├── src/                 Astro site: layouts, components, pages, content loader, styles
+├── public/              _headers, .assetsignore, favicon, self-hosted fonts
+├── scripts/             render-diagrams.mjs, postbuild.mjs, check-dist.mjs
+├── diagrams/            mermaid.config.json (the diagram theme)
+├── astro.config.mjs, wrangler.jsonc, package.json, .node-version
+├── .github/workflows/   ci.yml
 └── internal/            git-ignored: source registry, inventories, ledgers, strategy, estimate, state
 ```
 
-Staged assets are labeled `CURRENT`, `PROPOSED` or `HISTORICAL` (ADR-011). `HISTORICAL` assets, such as early
-wireframes, appear only in the "How it was planned" sections.
-
 - External projects are evidence sources that live outside this repository.
 - `internal/` refers to them by repository, commit SHA and path. They are never copied in (ADR-002).
+- Reviewed assets taken from external projects (screenshots, plots) are listed with their provenance in each module's
+  `ASSETS.md` (ADR-011).
 
 ```mermaid
 %% CURRENT
 flowchart LR
   EP["External projects<br/>(repositories and folders)"] -- read-only inspection --> INV["internal/<br/>inventories and claim ledgers"]
   RES["Resume and LinkedIn"] -- cross-check --> INV
-  INV -- "claims marked Public use: Use" --> PUB["Public documents<br/>(later: site content)"]
+  INV -- "claims marked Public use: Use" --> CON["content/<br/>meta.yaml facts + narratives"]
+  CON -- "validated build" --> SITE["dist/<br/>static site"]
+  SITE -- "wrangler deploy" --> CF["Cloudflare Workers<br/>static assets"]
 ```
 
-## PROPOSED: content model
+## CURRENT: content model
 
-- Each project is a self-contained module.
-- Tracks reference projects by slug only.
-- The layout follows the tree below.
+Each project is a self-contained module. Tracks reference projects by slug only.
 
 ```text
 content/
-├── tracks.yaml                 track order, cross-listing, featured flags (the only place ordering lives)
-├── profile.yaml                language-neutral résumé data: education, experience, skills → evidence links
-├── site/{en,zh}.yaml           UI strings per locale
+├── tracks.yaml                 track order, cross-listing, featured projects (the only place ordering lives)
+├── profile.yaml                résumé data: education, experience, highlights, skills → evidence links
+├── site/{en,zh}.yaml           UI strings per locale (identical key sets)
+├── pages/<page>/               about, plan-and-design: en.md, zh.md, optional meta.yaml
 └── projects/<slug>/
-    ├── meta.yaml               language-neutral facts: tracks, status label, stack, dates, links, numbers
-    ├── en.md                   English narrative; references facts by key
-    ├── zh.md                   Chinese narrative; same sections and anchors as en.md
-    └── assets/                 Mermaid sources, diagrams, screenshots
+    ├── meta.yaml               language-neutral facts: tracks, status, team, period, stack, links, facts, figures, roadmap
+    ├── en.md, zh.md            narratives: the same "## Title {#id}" sections; numbers only via {{fact:key}}
+    ├── ASSETS.md               provenance and label of every staged asset
+    └── assets/                 Mermaid sources and rendered SVGs, screenshots, plots
 ```
 
-Illustrative shapes (placeholder values):
-
-```yaml
-# content/tracks.yaml
-tracks:
-  - id: sde
-    title: { en: "SDE", zh: "软件开发" }
-    projects: [project-a, project-b]      # order = display order
-  - id: cloud-llm
-    title: { en: "Cloud & LLM", zh: "云计算与大模型" }
-    projects: [project-c, project-a]      # project-a is cross-listed
-```
-
-```yaml
-# content/projects/project-a/meta.yaml
-slug: project-a
-tracks: { primary: sde, also: [cloud-llm] }
-status: implemented-not-deployed          # rendered via the glossary label in each language
-facts:
-  example_latency_ms: { value: 120, condition: { en: "single load test", zh: "单次压测" }, claim: "<ledger id>" }
-```
-
-**Rules**
-- **Add a project:** create `content/projects/<slug>/` and add the slug to one or more tracks in `tracks.yaml`.
+**Rules** (enforced by the content loader at build time)
+- **Add a project:** create `content/projects/<slug>/` and add the slug to the tracks its `meta.yaml` declares.
 - **Hide or remove:** delete the slug from `tracks.yaml`. The module can stay.
 - **Re-rank:** reorder slugs in `tracks.yaml`, and nothing else.
-- **Cross-list:** list the slug under several tracks. The project page is rendered once and has one canonical URL.
-- **Numbers live only in `meta.yaml`.** Both languages render them from there, so English and Chinese can never
-  disagree.
-- **Every fact cites an internal ledger claim ID.** The build strips the ID from its output.
+- **Cross-list:** declare the extra track in `meta.yaml` and list the slug under it. The project page is rendered once
+  and has one canonical URL.
+- **Numbers live only in `meta.yaml`.** Narratives reference them as `{{fact:key}}` (pages: `{{fact:slug.key}}`), so
+  English and Chinese can never disagree. A measurement written directly in a narrative fails the build.
+- **Every fact cites an internal ledger claim ID.** The build never renders it, and the output scan fails if one
+  appears.
+- **Figures** are attached to sections in `meta.yaml`, each with a CURRENT / PROPOSED / HISTORICAL label and alt text
+  and a caption in both languages.
 
-## PROPOSED: site map
+## CURRENT: site map
 
 ```mermaid
-%% PROPOSED
+%% CURRENT
 flowchart TD
-  LS["Language switch on every page<br/>EN (default) ⇄ 中文"] --- H
-  H["Home<br/>30-second summary · featured projects · track entry points"] --> T1["Track: SDE"]
+  LS["Language switch on every page<br/>EN (root) ⇄ 中文 (/zh/)"] --- H
+  H["Home<br/>summary · featured projects · track entry points"] --> T1["Track: SDE"]
   H --> T2["Track: Cloud & LLM"]
   H --> T3["Track: Data Science & Finance"]
   T1 --> P["Project page<br/>scan → read → deep dive"]
   T2 --> P
   T3 --> P
-  H --> R["Résumé<br/>timeline · skills → evidence · PDF download"]
-  H --> D["How I plan & design<br/>decision records and roadmaps across projects"]
+  H --> R["Résumé<br/>highlights · education · experience · projects · skills → evidence"]
+  H --> D["How I plan & design<br/>roadmaps · decision records · architecture thumbnails"]
   H --> A["About / Contact"]
 ```
 
 **Project page layers**
-1. **Scan (30 s):**
-   - title and one-line problem;
-   - role and status label;
-   - stack chips;
-   - two or three verified outcomes.
-2. **Read (3 min):**
-   - the CURRENT architecture diagram;
-   - how the work was planned (phases or milestones);
-   - three to five key decisions with their trade-offs;
-   - what the owner personally owned.
-3. **Deep dive:**
-   - decision records (context → options → decision → consequences);
-   - PROPOSED architecture and roadmap;
-   - failure analysis;
-   - testing and operations;
-   - what I would do next;
-   - links to public code.
+1. **Scan (30 s):** title and subtitle, status badge, tracks, role, team, period, context, stack chips, links, and an
+   "at a glance" box with the one-line problem and two or three verified facts.
+2. **Read (3 min):** the narrative sections before the "Deep dive" marker — typically the CURRENT architecture, how
+   the work was planned (with a roadmap), key decisions with trade-offs, and what the owner owned.
+3. **Deep dive:** the sections from the marker on — decision details, PROPOSED architecture, failure analysis,
+   testing and operations, limits and next steps.
 
-**Résumé page** — a visual, bilingual résumé that stands out while staying consistent with the PDF résumé:
-- **Header:** name, target roles, and a short positioning statement per track.
-- **Timeline:** education, internships and projects in one timeline.
-- **Skills matrix:** grouped by track. Every skill links to the project pages that prove it; skills with no evidence
-  are not shown.
-- **PDF download:** offered only after the résumé matches the verified facts.
+## CURRENT: build and hosting (ADR-014, ADR-015)
 
-**"How I plan & design" page** — shows planning and architecture ability directly:
-- a gallery of decision records and roadmaps drawn from the projects;
-- each item links back to its project.
-
-## PROPOSED: build-phase requirements
-
-These apply once the discovery gate is cleared (ADR-009).
-
-**Technology route (ADR-014):** Astro, hosted on Cloudflare Pages. Implementation choices are made in the build phase
-and must meet the requirements below.
+**Stack.** Astro 7, static output, no adapter, no client-side JavaScript. Own content loader (`src/lib/content/`):
+YAML parsed with `yaml`, validated with Zod, Markdown rendered with `marked`. Images through `astro:assets` (sharp).
 
 **Internationalization**
-- English is the default language at the site root, and Chinese is reached through the language switch. Each
-  language has its own linkable, indexable URLs.
-- Every page has `hreflang` alternates and `<html lang>` set per locale (`en`, `zh-CN`).
-- The language switch on every page keeps the reader on the same page in the other language.
-- There is no automatic redirect and no cookie.
-- The build fails if a page, string or fact exists in one language but not the other.
+- English at the root, Chinese under `/zh/`. Each page type is one route file (`src/pages/[...locale]/…`) that renders
+  both languages from the same data.
+- `<html lang>` is `en` or `zh-CN`. With `SITE_URL` set, every page has a canonical URL and `hreflang` alternates
+  (en, zh-CN, x-default); a sitemap is generated.
+- The language switch links to the same page in the other language. No automatic redirect, no cookie.
 
 **Privacy, security, reachability**
-- No requests to third-party origins. Fonts, images and scripts are self-hosted. This also keeps the site usable
-  from mainland China.
-- No analytics by default.
-- A strict Content-Security-Policy (`default-src 'self'`) and no inline scripts.
+- No requests to third-party origins: fonts (Source Serif 4, OFL), images and styles are self-hosted.
+- No analytics.
+- CSP `default-src 'self'` without `'unsafe-inline'`, sent as a `<meta>` tag and as a header (`public/_headers`, which
+  also sets `frame-ancestors`, `X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`).
+  SVG assets get their own policy so that diagram styles render.
+- `noindex` unless `SITE_URL` and `SITE_INDEXING=true` are both set.
 
 **Content safety**
-- The build reads only `content/`.
-- It fails if the output contains any of: text from `internal/`, local paths, private IPs, account IDs, tokens, or
-  email addresses other than the published contact.
-- Links to external repositories must pass the public-link gate (ADR-004).
+- The build reads only `content/` and `src/`.
+- `scripts/check-dist.mjs` fails the build on local paths, private IPs, account IDs, keys, email addresses, ledger
+  claim IDs, `internal/` references, private working names, inline code, third-party resources, broken internal links
+  or anchors, a wrong `<html lang>` or a missing CSP.
+- `public/.assetsignore` keeps build internals out of an upload even after a failed build.
+- Links to external repositories follow the public-link gate (ADR-004).
 
-**Quality and presentation**
-- Static output and a fast first load; images are sized and lazy-loaded.
-- A consistent visual system for diagrams, status labels and stack chips, so architecture and planning content
-  reads as a set.
-- Accessibility: semantic headings, alt text in both languages, keyboard navigation, sufficient contrast.
-- CI runs a link check and a zh/en parity check.
+**Hosting.** Cloudflare Workers static assets (`wrangler.jsonc`): `not_found_handling: "404-page"` serves the nearest
+`404.html` (English at the root, Chinese under `/zh/`), and `html_handling: "auto-trailing-slash"` normalizes URLs.
 
-**Precedent:** the owner's public KK Knock introduction page already follows the same rules:
-- English and Chinese content as sibling elements;
-- no third-party origins;
-- `localStorage` limited to the language choice;
-- a `default-src 'self'` CSP.
+**CI.** `.github/workflows/ci.yml` runs `npm ci` and `npm run build` on every push and pull request.
+
+## PROPOSED
+
+- **Résumé PDF download**, offered only after the PDF résumé matches the verified facts (the owner's pending resume
+  decisions).
+- **Code links** for Cloud-Native, Equipment & Assignment and Quant AI, after their repository cleanup (ADR-004).
+- **Indexing**, after the owner reviews the Chinese copy and binds the custom domain.
+
+**Precedent:** the owner's public KK Knock introduction page follows the same rules: no third-party origins, a
+`default-src 'self'` CSP, and bilingual content.

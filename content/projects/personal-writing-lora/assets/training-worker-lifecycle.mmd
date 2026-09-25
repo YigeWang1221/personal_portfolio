@@ -13,7 +13,7 @@ sequenceDiagram
     W->>S3: Claim the job (conditional write)
     W->>ASG: SetInstanceProtection(true)
     loop While training (QLoRA)
-        W->>Q: ChangeMessageVisibility (lease heartbeat; stop work if the lease is lost)
+        W->>Q: ChangeMessageVisibility (lease heartbeat, stop work if the lease is lost)
         W->>S3: Write checkpoint
     end
     W->>W: Reload and evaluate the adapter

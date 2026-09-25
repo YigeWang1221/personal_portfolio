@@ -1,0 +1,36 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ProjectCard from '../../../components/ProjectCard.astro';
+import { LOCALES, localeParam, localePath, type Locale } from '../../../lib/i18n';
+import { getContent, t, type Track } from '../../../lib/content/load';
+
+export function getStaticPaths() {
+  const { tracks } = getContent();
+  return LOCALES.flatMap((locale) =>
+    tracks.map((track) => ({ params: { locale: localeParam(locale), track: track.id }, props: { locale, track } })),
+  );
+}
+
+const { locale, track } = Astro.props as { locale: Locale; track: Track };
+const path = `/tracks/${track.id}/`;
+---
+
+<BaseLayout locale={locale} path={path} title={track.title[locale]} description={track.positioning[locale]} nav="tracks">
+  <div class={`container track-${track.id}`}>
+    <nav class="breadcrumb" aria-label={t(locale, 'nav.breadcrumb')}>
+      <ol>
+        <li><a href={localePath(locale, '/')}>{t(locale, 'nav.home')}</a></li>
+        <li aria-current="page">{track.title[locale]}</li>
+      </ol>
+    </nav>
+    <header class="page-head">
+      <p class="eyebrow">{t(locale, 'tracks.eyebrow')}</p>
+      <h1>{track.title[locale]}</h1>
+      <p class="lede">{track.positioning[locale]}</p>
+    </header>
+    <div class="card-grid">
+      {track.projects.map((p) => <ProjectCard project={p} locale={locale} />)}
+    </div>
+    <p class="note block">{t(locale, 'tracks.note')}</p>
+  </div>
+</BaseLayout>

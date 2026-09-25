@@ -1,0 +1,22 @@
+---
+import type { Locale } from '../lib/i18n';
+import type { Roadmap } from '../lib/content/schema';
+import { t, termText } from '../lib/content/load';
+
+interface Props {
+  roadmap: Roadmap;
+  locale: Locale;
+}
+const { roadmap, locale } = Astro.props;
+---
+
+<ol class="roadmap">
+  {roadmap.phases.map((p) => (
+    <li class={`status-${p.status}`}>
+      <span class="dot" aria-hidden="true"></span>
+      <span class="phase-name">{p.name[locale]}</span>
+      <span class="phase-state">{p.when ? `${termText(p.when, locale)} · ` : ''}{t(locale, `roadmap.${p.status}`)}</span>
+      {p.detail && <span class="phase-detail">{p.detail[locale]}</span>}
+    </li>
+  ))}
+</ol>

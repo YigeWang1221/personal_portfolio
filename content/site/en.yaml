@@ -1,0 +1,122 @@
+# UI strings, English. Every key must also exist in zh.yaml (the build checks it).
+site:
+  name: Yige Wang
+
+nav:
+  label: Main
+  skip: Skip to content
+  home: Home
+  resume: Résumé
+  plan: Plan & design
+  about: About
+  breadcrumb: Breadcrumb
+  language: Language
+  language_name: EN
+  language_switch_title: Read this page in English
+
+footer:
+  note: A static site with no trackers and no third-party requests. Every number on it states its conditions and traces to a repository, a log or a design document.
+  label: Profiles
+
+common:
+  present: present
+  expected_suffix: " (expected)"
+
+team:
+  solo: Solo
+  of: Team of {n}
+  suffix_solo: " (solo)"
+  suffix_team: " (team of {n})"
+  mixed: Solo and in pairs
+  suffix_mixed: " (solo and pair work)"
+
+status:
+  self-hosted-pilot: Self-hosted pilot
+  implemented-not-deployed: Implemented, not deployed
+  course-project: Course project
+  course-benchmark: Course benchmark
+  undergraduate-capstone: Undergraduate capstone
+  research-prototype: Research prototype
+  archived: Archived
+
+figure:
+  full_size: Full-size image
+
+labels:
+  CURRENT: Matches the implementation
+  PROPOSED: Designed, not implemented or not deployed
+  HISTORICAL: Early design artifact
+
+roadmap:
+  done: done
+  in-progress: in progress
+  planned: planned
+
+home:
+  title: Yige Wang · Engineering portfolio
+  description: Engineering portfolio of Yige Wang, in English and Chinese. Case studies in backend and mobile engineering, cloud infrastructure, distributed training and Bayesian modeling, with the planning and design behind each.
+  eyebrow: Engineering portfolio
+  intro: I am finishing a Master of Science in Software Engineering Systems at Northeastern University (December 2026). This site covers what a one-page résumé cannot — how each system was planned, which trade-offs I made, what I measured, and what did not work.
+  roles_label: Target roles
+  cta_resume: View résumé
+  cta_plan: How I plan & design
+  featured: Featured projects
+  featured_note: Each project page can be read in 30 seconds, in 3 minutes, or in depth.
+  tracks: Tracks
+  tracks_note: Projects are grouped by the kind of role they speak to. Some appear in more than one track.
+  track_count: "{n} projects"
+  evidence_title: How the claims on this site are backed
+  evidence_body: Every number here comes from a repository, a log or a design document, and it carries its conditions. Status labels say plainly what is deployed and what is not. Team projects state the team size and what I did.
+  evidence_link: How this site is written
+
+tracks:
+  eyebrow: Track
+  note: Projects are ordered by the depth of their evidence, not by size. A project listed under several tracks has a single page.
+
+project:
+  role: My role
+  team: Team
+  period: Period
+  context: Context
+  stack: Stack
+  links: Links
+  no_public_code: No public code link.
+  at_a_glance: At a glance
+  contents: On this page
+  deep_dive: Deep dive
+  related: More in {track}
+  all_in_track: All projects in this track
+
+resume:
+  title: Résumé
+  description: Visual résumé of Yige Wang — education, experience, projects and skills, with every skill linked to the project that shows it.
+  eyebrow: Résumé
+  highlights: Highlights
+  education: Education
+  experience: Experience
+  projects: Projects
+  skills: Skills and where they are shown
+  skills_note: Only skills backed by a project on this site are listed.
+  note: The experience entries restate my résumé. Project facts come from the project pages, which state their conditions.
+
+plan:
+  title: How I plan & design
+  description: Roadmaps, decision records and architecture diagrams drawn from Yige Wang's projects. Each item links back to the project it comes from.
+  eyebrow: Planning and architecture
+  lede: Roadmaps, decision records and architecture diagrams taken from the projects on this site. Each item links back to the project it comes from.
+  roadmaps: Roadmaps from real project history
+  roadmaps_note: Filled dots are done; open dots are in progress or planned.
+  records: Decision records
+  records_note: Context → options → decision → trade-off → evidence
+  architecture: Architecture diagrams
+  architecture_note: Every diagram is derived from the implementation and labeled CURRENT, PROPOSED or HISTORICAL.
+
+about:
+  title: About
+  description: About Yige Wang and how this portfolio is written — evidence rules, status labels, team credit and AI-assisted development.
+  eyebrow: About
+  contact: Contact
+
+notfound:
+  title: Page not found
+  body: The page you asked for does not exist. These links lead back into the site.

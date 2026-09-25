@@ -149,3 +149,10 @@ vite.config.ts.timestamp-*
 # details, security notes). Never commit them; see DECISIONS.md ADR-001.
 /internal/
 *.local.md
+
+# Astro and Wrangler local state
+.astro/
+.wrangler/
+
+# Local Claude Code tooling (launch configs, local settings)
+.claude/

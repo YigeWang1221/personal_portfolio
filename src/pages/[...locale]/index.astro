@@ -1,0 +1,63 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import { localePath, localePaths, type Locale } from '../../lib/i18n';
+import { getContent, t } from '../../lib/content/load';
+
+export function getStaticPaths() {
+  return localePaths();
+}
+
+const { locale } = Astro.props as { locale: Locale };
+const { tracks, featured, profile } = getContent();
+---
+
+<BaseLayout locale={locale} path="/" title={t(locale, 'home.title')} description={t(locale, 'home.description')} nav="home">
+  <div class="container">
+    <section class="hero">
+      <p class="eyebrow">{t(locale, 'home.eyebrow')}</p>
+      <h1>{profile.name[locale]}</h1>
+      <p class="headline">{profile.headline[locale]}</p>
+      <p class="intro">{t(locale, 'home.intro')}</p>
+      <ul class="role-list" aria-label={t(locale, 'home.roles_label')}>
+        {profile.target_roles.map((r) => <li>{r[locale]}</li>)}
+      </ul>
+      <div class="cta-row">
+        <a class="button primary" href={localePath(locale, '/resume/')}>{t(locale, 'home.cta_resume')}</a>
+        <a class="button" href={localePath(locale, '/plan-and-design/')}>{t(locale, 'home.cta_plan')}</a>
+      </div>
+    </section>
+
+    <section class="block" aria-labelledby="featured">
+      <div class="block-head">
+        <h2 id="featured">{t(locale, 'home.featured')}</h2>
+        <p class="muted small">{t(locale, 'home.featured_note')}</p>
+      </div>
+      <div class="card-grid two-up">
+        {featured.map((p) => <ProjectCard project={p} locale={locale} />)}
+      </div>
+    </section>
+
+    <section class="block" aria-labelledby="tracks">
+      <div class="block-head">
+        <h2 id="tracks">{t(locale, 'home.tracks')}</h2>
+        <p class="muted small">{t(locale, 'home.tracks_note')}</p>
+      </div>
+      <div class="track-grid">
+        {tracks.map((tr) => (
+          <a class={`track-card track-${tr.id}`} href={localePath(locale, `/tracks/${tr.id}/`)}>
+            <h3>{tr.title[locale]}</h3>
+            <p>{tr.positioning[locale]}</p>
+            <span class="count">{t(locale, 'home.track_count', { n: tr.projects.length })}</span>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <section class="block measure" aria-labelledby="evidence">
+      <h2 id="evidence">{t(locale, 'home.evidence_title')}</h2>
+      <p>{t(locale, 'home.evidence_body')}</p>
+      <p><a href={localePath(locale, '/about/')}>{t(locale, 'home.evidence_link')}</a></p>
+    </section>
+  </div>
+</BaseLayout>

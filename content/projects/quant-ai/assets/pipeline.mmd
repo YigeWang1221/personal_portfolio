@@ -1,0 +1,15 @@
+%% CURRENT — version 4.5 ("Step 2") of the research package (Apr 2026). Research prototype; no performance claims.
+flowchart TB
+  subgraph Data["Data and labels"]
+    direction LR
+    D["Daily prices 2018–2025<br/>yfinance, cached · ETFs as factor proxies"] --> F["35 factors<br/>momentum · volatility · volume<br/>bands · RSI · ETF-relative"] --> L["Label: 5-day return minus the<br/>ETF-implied return (trailing betas)<br/>per-ticker rolling z-score"]
+  end
+  subgraph Train["Model and training"]
+    direction LR
+    M["Transformer<br/>Time2Vec → attention over time<br/>→ attention across stocks → pooling → MLP"] --> T["Walk-forward trainer<br/>8 expanding folds · IC loss<br/>AdamW + cosine · fp16"]
+  end
+  subgraph Eval["Evaluation"]
+    direction LR
+    B["Long/short backtest<br/>top and bottom N · 10 bps per side"] ~~~ S["Offline sweeps<br/>seed-stability runner"]
+  end
+  Data --> Train --> Eval

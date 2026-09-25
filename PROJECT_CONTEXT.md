@@ -1,6 +1,6 @@
 # Portfolio Project Context
 
-**Last reviewed:** 2026-09-24 · **Phase:** documentation and project discovery (no site code yet)
+**Last reviewed:** 2026-09-24 · **Phase:** build (discovery gate cleared 2026-09-24)
 
 ## Purpose
 
@@ -60,14 +60,17 @@ machine translation of the other (ADR-005).
 | Field | English | 中文 |
 |---|---|---|
 | Name | Yige Wang | 王一格 |
-| Graduate study | Northeastern University (Boston, MA), master's program in Software Engineering, expected Dec 2026 | 美国东北大学（Northeastern University）软件工程硕士，预计 2026 年 12 月毕业 |
-| Undergraduate | Zhejiang Gongshang University, Computer Science and Technology (bachelor's, 2024) | 浙江工商大学 计算机科学与技术 学士（2024） |
+| Graduate study | Northeastern University (Boston, MA), Master of Science in Software Engineering Systems, expected Dec 2026 | 美国东北大学（Northeastern University）软件工程系统硕士，预计 2026 年 12 月毕业 |
+| Undergraduate | Zhejiang Gongshang University, Bachelor of Engineering in Computer Science and Technology (2020 – 2024) | 浙江工商大学 计算机科学与技术 学士（2020 – 2024） |
 | Profiles | github.com/YigeWang1221 · linkedin.com/in/yigewang1221 | 同左 |
 
 ## Domain and hosting
 
 - Production domain: `wangyige1221.website`. DNS is managed on Cloudflare.
-- **Technology route (ADR-014):** Astro, hosted on Cloudflare Pages. English is the default language.
+- **Technology route:** Astro (ADR-014), hosted as Cloudflare Workers static assets (ADR-015). English is the default
+  language.
+- **Rollout:** the owner deploys to workers.dev first, then binds a custom subdomain. The public URL is passed to the
+  build as `SITE_URL`; it is not hard-coded, and workers.dev is never the canonical URL.
 - As of 2026-09-24 the domain does not serve a site.
 
 ## Naming
@@ -96,15 +99,16 @@ the build phase.
 | `PROJECT_CONTEXT.md`, `ARCHITECTURE.md`, `DECISIONS.md` | Project memory | yes |
 | `docs/style/` | Bilingual writing rules and glossary | yes |
 | `internal/` | Source registry, project inventories, evidence ledgers, resume cross-check, content strategy, estimate, current state | **no** (git-ignored) |
-| `content/` | Skeleton with staged, reviewed assets and their manifests (ADR-011). Page text follows after the discovery gate | yes |
-| Site source | Planned after the discovery gate | — |
+| `content/` | Content model: track registry, résumé data, UI strings, one module per project, reviewed assets and their manifests (ADR-011, ADR-015) | yes |
+| `src/`, `public/`, `scripts/`, `astro.config.mjs`, `wrangler.jsonc` | Astro site source, static files, build gates, hosting configuration | yes |
 
 ## Current maturity
 
 - **Documentation foundation:** in place.
 - **Project discovery:** complete for the registered sources. The inventories live in `internal/`.
-- **Content skeleton:** `content/` holds staged, reviewed design assets. The first batch is early wireframes, an ER
-  sketch and a worker-lifecycle diagram for the Personal Writing LoRA Platform (ADR-011).
-- **Site:** not started. Stack, hosting and default language are decided (ADR-014).
-  - Remaining before launch: the owner's review of claims, security cleanup for any linked repository, and Cloudflare
-    account setup.
+- **Discovery gate:** cleared on 2026-09-24 (ADR-009).
+- **Site:** implemented as an Astro 7 static site (ADR-015). Ten project modules and all global pages exist in
+  English and Chinese; the build enforces language parity and scans its output before it succeeds.
+  - Remaining before launch: the owner deploys the Worker and binds the custom domain, reviews the Chinese copy and
+    the facts added in the build phase, finishes the repository cleanup behind the pending code links, and keeps
+    Cloudflare Web Analytics off for the site's hostname.

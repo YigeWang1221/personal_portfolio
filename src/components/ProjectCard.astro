@@ -1,0 +1,25 @@
+---
+import StatusBadge from './StatusBadge.astro';
+import StackChips from './StackChips.astro';
+import { localePath, type Locale } from '../lib/i18n';
+import type { Project } from '../lib/content/load';
+import { t } from '../lib/content/load';
+import { formatPeriod, teamLabel } from '../lib/format';
+
+interface Props {
+  project: Project;
+  locale: Locale;
+}
+const { project, locale } = Astro.props;
+const m = project.meta;
+---
+
+<article class={`project-card track-${m.tracks.primary}`}>
+  <StatusBadge status={m.status} team={m.team} locale={locale} />
+  <h3><a href={localePath(locale, `/projects/${m.slug}/`)}>{m.title[locale]}</a></h3>
+  <p class="subtitle">{m.subtitle[locale]}</p>
+  <p class="meta-line">{m.context[locale]} · {teamLabel(m.team, locale)} · {formatPeriod(m.period, locale)}</p>
+  <div class="card-foot">
+    <StackChips items={m.stack} limit={6} label={t(locale, 'project.stack')} />
+  </div>
+</article>

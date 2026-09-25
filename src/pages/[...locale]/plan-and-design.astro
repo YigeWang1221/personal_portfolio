@@ -1,0 +1,103 @@
+---
+// "How I plan & design" (ARCHITECTURE.md site map): roadmaps, decision records and architecture thumbnails
+// drawn from the projects. Every item links back to its project.
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import RoadmapView from '../../components/RoadmapView.astro';
+import { localePath, localePaths, type Locale } from '../../lib/i18n';
+import { getContent, t } from '../../lib/content/load';
+
+export function getStaticPaths() {
+  return localePaths();
+}
+
+const { locale } = Astro.props as { locale: Locale };
+const { pages, projects } = getContent();
+const { meta } = pages.plan;
+const sections = pages.plan.sections[locale];
+const recordIds = new Set(meta.records.map((r) => r.id));
+const intro = sections.filter((s) => !recordIds.has(s.id));
+const records = meta.records.map((r) => ({
+  ...r,
+  section: sections.find((s) => s.id === r.id)!,
+  project: projects.get(r.project)!,
+}));
+const roadmaps = meta.roadmaps.map((slug) => projects.get(slug)!);
+const thumbs = meta.thumbnails.map((th) => {
+  const project = projects.get(th.project)!;
+  const figure = project.figures.find((f) => f.id === th.figure)!;
+  return { project, figure };
+});
+---
+
+<BaseLayout locale={locale} path="/plan-and-design/" title={t(locale, 'plan.title')} description={t(locale, 'plan.description')} nav="plan">
+  <div class="container">
+    <header class="page-head">
+      <p class="eyebrow">{t(locale, 'plan.eyebrow')}</p>
+      <h1>{t(locale, 'plan.title')}</h1>
+      <p class="lede">{t(locale, 'plan.lede')}</p>
+    </header>
+
+    {intro.map((s) => (
+      <section class="block measure" id={s.id} aria-labelledby={`${s.id}-title`}>
+        <h2 id={`${s.id}-title`}>{s.title}</h2>
+        <div class="prose" set:html={s.html} />
+      </section>
+    ))}
+
+    <section class="block" aria-labelledby="roadmaps">
+      <div class="block-head">
+        <h2 id="roadmaps">{t(locale, 'plan.roadmaps')}</h2>
+        <p class="muted small">{t(locale, 'plan.roadmaps_note')}</p>
+      </div>
+      <div class="roadmap-grid">
+        {roadmaps.map((p) => (
+          <article class={`roadmap-card track-${p.meta.tracks.primary}`}>
+            <h3><a href={localePath(locale, `/projects/${p.meta.slug}/#${p.meta.roadmap!.section}`)}>{p.meta.title[locale]}</a></h3>
+            <RoadmapView roadmap={p.meta.roadmap!} locale={locale} />
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="block" aria-labelledby="records">
+      <div class="block-head">
+        <h2 id="records">{t(locale, 'plan.records')}</h2>
+        <p class="muted small">{t(locale, 'plan.records_note')}</p>
+      </div>
+      <div class="records">
+        {records.map((r) => (
+          <article class={`record track-${r.project.meta.tracks.primary}`} id={r.id} aria-labelledby={`${r.id}-title`}>
+            <h3 id={`${r.id}-title`}>{r.section.title}</h3>
+            <p class="record-project muted">
+              <a href={localePath(locale, `/projects/${r.project.meta.slug}/#${r.anchor}`)}>{r.project.meta.title[locale]}</a>
+            </p>
+            <div class="prose" set:html={r.section.html} />
+          </article>
+        ))}
+      </div>
+    </section>
+
+    {thumbs.length > 0 && (
+      <section class="block" aria-labelledby="architecture">
+        <div class="block-head">
+          <h2 id="architecture">{t(locale, 'plan.architecture')}</h2>
+          <p class="muted small">{t(locale, 'plan.architecture_note')}</p>
+        </div>
+        <ul class="thumbs">
+          {thumbs.map(({ project, figure }) => (
+            <li>
+              <a href={localePath(locale, `/projects/${project.meta.slug}/#fig-${figure.id}`)}>
+                {figure.kind !== 'screens' && figure.svg && (
+                  <img src={figure.svg.url} width={figure.svg.width} height={figure.svg.height} alt={figure.alt[locale]} loading="lazy" decoding="async" />
+                )}
+                <span>
+                  {figure.kind !== 'screens' && figure.label && <span class={`asset-label label-${figure.label}`}>{figure.label}</span>} {project.meta.title[locale]}
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
+  </div>
+</BaseLayout>

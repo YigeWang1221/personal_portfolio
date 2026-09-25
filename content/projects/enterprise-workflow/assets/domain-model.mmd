@@ -1,0 +1,18 @@
+%% CURRENT — the domain model in the model/ package of the team repository (INFO 5100, Mar–Apr 2025).
+classDiagram
+  direction TB
+  class FoodShelterSystem
+  class Network
+  class Enterprise
+  class Organization
+  class UserAccount
+  class Role
+  class WorkQueue
+  class WorkRequest
+  FoodShelterSystem "1" --> "*" Network
+  Network "1" --> "*" Enterprise : four enterprise types
+  Enterprise "1" --> "*" Organization : seven organization types
+  Organization "1" --> "*" UserAccount
+  UserAccount --> Role : one of fourteen role classes
+  Network "1" --> "*" WorkQueue : inspection and warehouse queues
+  WorkQueue "1" --> "*" WorkRequest : delivery, food item and needs requests

@@ -1,0 +1,22 @@
+%% CURRENT — derived from the Terraform configuration and application code (Sep–Nov 2025). The environment is not
+%% known to be running today. The SNS topic and the TLS certificate were created outside Terraform.
+flowchart TB
+  subgraph Public["Public subnets · 3 Availability Zones"]
+    direction LR
+    R53["Route 53 alias"] --> ALB["Application Load Balancer<br/>HTTPS only"]
+    NAT["NAT gateway<br/>one, shared"]
+  end
+  subgraph Private["Private subnets · 3 Availability Zones · no public IPs"]
+    direction LR
+    ASG["Auto Scaling group · 3–5 instances<br/>Spring Boot on a Packer AMI"] --> CWA["CloudWatch agent<br/>JSON logs · StatsD metrics · CPU alarms"]
+  end
+  subgraph Data["Data, secrets and keys"]
+    direction LR
+    RDS[("RDS MySQL 8.0<br/>single-AZ · KMS-encrypted")] ~~~ S3[("S3 · KMS-encrypted<br/>Standard-IA after 30 days")] ~~~ SEC["Secrets Manager + 4 KMS keys<br/>DB password fetched at boot"]
+  end
+  subgraph Email["Email verification · off the request path"]
+    direction LR
+    SNS["SNS topic"] --> L["Lambda in the VPC<br/>Python 3.11"] --> MG["Mailgun"]
+  end
+  Public --> Private --> Data
+  Private -- "publish on sign-up" --> Email

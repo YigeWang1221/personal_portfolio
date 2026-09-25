@@ -1,0 +1,14 @@
+---
+import type { Locale } from '../lib/i18n';
+import type { StatusKey } from '../lib/content/schema';
+import { statusLabel, statusTone, type Team } from '../lib/format';
+
+interface Props {
+  status: StatusKey;
+  team: Team;
+  locale: Locale;
+}
+const { status, team, locale } = Astro.props;
+---
+
+<span class={`badge tone-${statusTone(status)}`}>{statusLabel(status, team, locale)}</span>

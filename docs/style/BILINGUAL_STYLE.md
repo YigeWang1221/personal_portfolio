@@ -98,6 +98,8 @@ The same label is used in both languages. Labels are defined in the glossary.
 | Self-hosted pilot | 自托管试运行 | Running on owned hardware for limited use |
 | Implemented, not deployed | 已实现，未部署 | Code exists and is tested but has never run in its target environment |
 | Course project (team of N) | 课程项目（N 人团队） | Coursework; state the team size |
+| Course project (solo) | 课程项目（个人） | Coursework done alone |
+| Undergraduate capstone (solo) | 本科毕业设计（个人） | The undergraduate capstone |
 | Course benchmark | 课程基准实验 | Measurement-focused coursework |
 | Research prototype | 研究原型 | Exploratory research code |
 | Archived | 已归档 | No longer maintained |
@@ -117,3 +119,5 @@ The same label is used in both languages. Labels are defined in the glossary.
   - Show them only in "How it was planned" sections.
   - Place them next to the final design, with a caption such as "Early wireframe (2026-06) → final design".
 - Screenshots come only from demo or showcase data. Never show real user data, private hosts or credentials.
+- Mask any privacy- or payment-related value that has to appear in text, a screenshot or a diagram (account names,
+  emails, hostnames, billing details) as `*****`.

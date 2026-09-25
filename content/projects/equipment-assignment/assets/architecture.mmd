@@ -1,0 +1,16 @@
+%% CURRENT — the original capstone backend (recovered source, committed history 2024) and the public frontend.
+%% The 2026 Redis maintenance branch is not merged or built yet, so Redis is not drawn.
+flowchart TB
+  subgraph Client["Vue 3 + TypeScript + Element Plus"]
+    direction LR
+    T["Teacher views"] ~~~ S["Student views"] ~~~ G["Guest showcase"]
+  end
+  subgraph API["Spring Boot 2.7 · 11 controllers · 89 REST endpoints"]
+    direction LR
+    I["Login, student and teacher<br/>interceptors"] --> SVC["Services: equipment · classes and groups<br/>homework · showcase · export"]
+  end
+  subgraph Store["Storage and documents"]
+    direction LR
+    DB[("MySQL · MyBatis-Plus")] ~~~ MINIO[("MinIO<br/>SDK multipart upload<br/>HTTP Range playback")] ~~~ DOC["Apache POI for Excel<br/>iText html2pdf for PDF"]
+  end
+  Client --> API --> Store

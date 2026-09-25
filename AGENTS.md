@@ -92,6 +92,17 @@ Source priority for technical facts, highest first:
   - Each one is labeled `CURRENT` or `PROPOSED`.
   - Never draw a planned component as deployed.
 
+## Build
+
+- `npm run build` runs the content checks, the Astro build and the output scan (`scripts/check-dist.mjs`). It must pass
+  before any commit that touches `content/`, `src/`, `public/` or `scripts/`.
+- After editing a Mermaid source (`content/**/assets/*.mmd`), run `npm run diagrams` and commit the rendered SVG. The
+  script uses the local Chrome; never let it download a browser.
+- Install dependencies with `npm ci` (or `npm install` when changing `package.json`). Check what is already installed
+  or cached before downloading anything.
+- Authoring rules for `content/` live in `content/README.md`: numbers only through `{{fact:key}}`, identical section ids
+  in `en.md` and `zh.md`, quoted YAML values when they contain commas or colons.
+
 ## Content rules for the build phase
 
 - **Language parity (ADR-005):** every public page exists in English and Chinese, with the same structure and the
@@ -116,6 +127,7 @@ Source priority for technical facts, highest first:
 | Resume text and discrepancies | `internal/docs/RESUME_CROSSCHECK.md` |
 | Polished resume and site copy (EN / 中文) | `internal/docs/RESUME_POLISHED.md` |
 | Staged assets and their intended use | `content/projects/<slug>/ASSETS.md` |
+| Site structure, build gates, hosting | `ARCHITECTURE.md`; commands and deploy steps in `README.md` |
 | Positioning, track order, overlap with the resume | `internal/docs/CONTENT_STRATEGY.md` |
 | Effort and confidence | `internal/docs/ESTIMATE.md` |
 | Phase, gate, owner actions, log | `internal/CURRENT_STATE.md` |
@@ -128,7 +140,8 @@ Source priority for technical facts, highest first:
 
 ## Before any commit
 
-Commits and pushes happen only when the owner asks. Each of these checks must print nothing:
+Commits and pushes happen only when the owner asks. `npm run build` must pass, and each of these checks must print
+nothing:
 
 ```bash
 # Nothing from internal/ is tracked

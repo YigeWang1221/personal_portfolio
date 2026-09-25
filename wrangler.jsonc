@@ -1,0 +1,13 @@
+// Cloudflare Workers static assets (ADR-015). No Worker script: the Worker only serves ./dist.
+// Deploy: `npm run build` then `npx wrangler deploy`. Custom domains are bound in the Cloudflare dashboard.
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "yige-portfolio",
+  "compatibility_date": "2026-09-24",
+  "assets": {
+    "directory": "./dist/",
+    // Serve the nearest 404.html with status 404 (/zh/404.html for missing /zh/* paths).
+    "not_found_handling": "404-page",
+    "html_handling": "auto-trailing-slash"
+  }
+}

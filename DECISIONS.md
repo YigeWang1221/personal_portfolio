@@ -239,3 +239,40 @@ Architecture decision records for the portfolio repository.
     - set up the Cloudflare Pages project;
     - clear the stale DNS records;
     - retire the stale `.me` CNAME on the github.io repo.
+
+## ADR-015 — Build-phase implementation choices; hosting on Cloudflare Workers static assets
+
+- **Status:** Accepted · **Date:** 2026-09-24
+- **Supersedes:** the "Hosting: Cloudflare Pages" line of ADR-014. The rest of ADR-014 stands.
+- **Context:**
+  - The discovery gate was cleared on 2026-09-24.
+  - The owner deploys the site as a Cloudflare Worker with static assets, checks it on workers.dev, and then binds a
+    custom subdomain. The production URL is not fixed yet.
+  - Astro 7 renders Markdown with its own pipeline instead of remark/rehype plugins, and its compiler rejects invalid
+    HTML.
+- **Decision:**
+  - **Framework:** Astro 7, static output, no adapter. Node 22.12 or later.
+  - **Hosting:** Cloudflare Workers static assets, configured in `wrangler.jsonc`, with no Worker script.
+    `not_found_handling: "404-page"` serves the nearest `404.html`, so each language has its own 404 page.
+  - **URLs:** English at `/`, Chinese at `/zh/`, directory-style URLs with trailing slashes. Each page type is one route
+    file that renders both languages from the same data.
+  - **Site URL and indexing:**
+    - `SITE_URL` comes from the environment. Without it, the build emits no absolute canonical, `hreflang` or sitemap
+      URLs.
+    - A `workers.dev` or `pages.dev` URL is rejected as `SITE_URL`.
+    - Pages are `noindex` unless `SITE_URL` is set and `SITE_INDEXING=true`.
+  - **No client-side JavaScript,** and no inline scripts or styles. The CSP is sent both as a `<meta>` tag and in
+    `_headers`. SVG assets get their own policy so that diagram styles render.
+  - **Content loading:** a small loader reads `content/` (YAML and Markdown), validates it, substitutes facts from
+    `meta.yaml` and renders Markdown with `marked`. Section IDs do not depend on the language. The build fails on any
+    English/Chinese parity violation.
+  - **Diagrams:** Mermaid sources are rendered to SVG on the owner's machine (`npm run diagrams`, using the installed
+    Chrome) and committed. The hosted build never needs a browser.
+  - **Visual system:** the visual language of the KK Knock introduction page (warm off-white, Source Serif 4 display
+    type, dark green accent) with an engineering-minimal information architecture.
+  - **Gates:** after the build, a scan of `dist/` fails on private data, inline code, third-party origins and broken
+    internal links. CI runs the full build.
+- **Consequences:**
+  - The output works on any static host. Only `_headers` and `wrangler.jsonc` are Cloudflare-specific.
+  - Authors write plain Markdown with `{{fact:key}}` references and `{#id}` section anchors.
+  - A diagram's SVG must be regenerated whenever its `.mmd` source changes.

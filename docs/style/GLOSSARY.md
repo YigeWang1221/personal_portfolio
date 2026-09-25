@@ -31,6 +31,8 @@ a Chinese gloss on first use.
 | Self-hosted pilot | 自托管试运行 |
 | Implemented, not deployed | 已实现，未部署 |
 | Course project (team of N) | 课程项目（N 人团队） |
+| Course project (solo) | 课程项目（个人） |
+| Undergraduate capstone (solo) | 本科毕业设计（个人） |
 | Course benchmark | 课程基准实验 |
 | Research prototype | 研究原型 |
 | Archived | 已归档 |
@@ -104,7 +106,7 @@ a Chinese gloss on first use.
 | English | 中文 |
 |---|---|
 | Northeastern University | 美国东北大学（Northeastern University） |
-| Master's program in Software Engineering | 软件工程硕士 |
+| Master of Science in Software Engineering Systems | 软件工程系统硕士 |
 | Expected graduation Dec 2026 | 预计 2026 年 12 月毕业 |
 | Zhejiang Gongshang University | 浙江工商大学 |
 

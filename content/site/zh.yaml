@@ -1,0 +1,122 @@
+# 界面文案（简体中文）。键必须与 en.yaml 完全一致（构建时检查）。
+site:
+  name: 王一格
+
+nav:
+  label: 主导航
+  skip: 跳到正文
+  home: 首页
+  resume: 简历
+  plan: 规划与设计
+  about: 关于
+  breadcrumb: 面包屑导航
+  language: 语言
+  language_name: 中文
+  language_switch_title: 阅读本页中文版
+
+footer:
+  note: 本站为静态网站，没有追踪脚本，也不向第三方发起请求。站内每个数字都注明条件，并可追溯到代码仓库、日志或设计文档。
+  label: 个人主页
+
+common:
+  present: 至今
+  expected_suffix: （预计）
+
+team:
+  solo: 个人
+  of: "{n} 人团队"
+  suffix_solo: （个人）
+  suffix_team: （{n} 人团队）
+  mixed: 个人与两人合作
+  suffix_mixed: （个人与两人合作）
+
+status:
+  self-hosted-pilot: 自托管试运行
+  implemented-not-deployed: 已实现，未部署
+  course-project: 课程项目
+  course-benchmark: 课程基准实验
+  undergraduate-capstone: 本科毕业设计
+  research-prototype: 研究原型
+  archived: 已归档
+
+figure:
+  full_size: 查看原图
+
+labels:
+  CURRENT: 与实现一致
+  PROPOSED: 已设计，未实现或未部署
+  HISTORICAL: 早期设计草图
+
+roadmap:
+  done: 已完成
+  in-progress: 进行中
+  planned: 计划中
+
+home:
+  title: 王一格 · 工程作品集
+  description: 王一格的中英双语工程作品集：后端与移动端开发、云基础设施、分布式训练与贝叶斯建模的项目详解，以及每个项目背后的规划与设计。
+  eyebrow: 工程作品集
+  intro: 我在美国东北大学（Northeastern University）攻读软件工程系统硕士，2026 年 12 月毕业。这里补充一页简历写不下的内容：每个系统如何规划、做了哪些取舍、测了什么，以及哪些没有成功。
+  roles_label: 目标岗位
+  cta_resume: 查看简历
+  cta_plan: 我如何规划与设计
+  featured: 精选项目
+  featured_note: 每个项目页都可以 30 秒速览、3 分钟细读，或深入阅读。
+  tracks: 方向
+  tracks_note: 项目按对应的岗位方向分组，部分项目同时出现在多个方向。
+  track_count: "{n} 个项目"
+  evidence_title: 本站内容的依据
+  evidence_body: 站内每个数字都来自代码仓库、日志或设计文档，并注明测量条件。状态标签如实说明哪些已部署、哪些没有。团队项目写明团队人数和我负责的部分。
+  evidence_link: 本站的写作原则
+
+tracks:
+  eyebrow: 方向
+  note: 项目按证据的充分程度排序，而不是按规模。出现在多个方向的项目只有一个页面。
+
+project:
+  role: 我的角色
+  team: 团队
+  period: 时间
+  context: 背景
+  stack: 技术栈
+  links: 链接
+  no_public_code: 未提供公开代码链接。
+  at_a_glance: 速览
+  contents: 本页内容
+  deep_dive: 深入
+  related: "{track}方向的其他项目"
+  all_in_track: 查看该方向全部项目
+
+resume:
+  title: 简历
+  description: 王一格的可视化简历：教育、实习、项目与技能，每项技能都链接到能证明它的项目。
+  eyebrow: 简历
+  highlights: 亮点
+  education: 教育经历
+  experience: 实习经历
+  projects: 项目
+  skills: 技能与对应项目
+  skills_note: 只列出本站有项目支撑的技能。
+  note: 实习经历按简历原文重述。项目事实来自各项目页，均注明条件。
+
+plan:
+  title: 我如何规划与设计
+  description: 来自王一格各个项目的路线图、决策记录与架构图，每一项都链接回所属项目。
+  eyebrow: 规划与架构
+  lede: 这里汇集了本站各项目的路线图、决策记录与架构图，每一项都链接回所属项目。
+  roadmaps: 来自真实项目历史的路线图
+  roadmaps_note: 实心点为已完成，空心点为进行中或计划中。
+  records: 决策记录
+  records_note: 背景 → 备选方案 → 决策 → 取舍 → 证据
+  architecture: 架构图
+  architecture_note: 每张图都依据实现绘制，并标注 CURRENT（当前）、PROPOSED（规划）或 HISTORICAL（早期草图）。
+
+about:
+  title: 关于
+  description: 关于王一格，以及本作品集的写作原则：证据规则、状态标签、团队署名与 AI 辅助开发。
+  eyebrow: 关于
+  contact: 联系方式
+
+notfound:
+  title: 页面不存在
+  body: 你访问的页面不存在，可以从下面的链接回到网站。

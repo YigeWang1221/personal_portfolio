@@ -1,0 +1,17 @@
+%% CURRENT — structure of the final model in the model-building notebook: a team-tier level above driver effects,
+%% plus race covariates, with a Normal likelihood on finishing position.
+flowchart TB
+  subgraph Hier["Hierarchy"]
+    direction LR
+    TIER["Team tier<br/>priors set from data"] --> DRV["Driver effect<br/>HalfNormal hyperprior on its spread"]
+  end
+  subgraph Cov["Race covariates"]
+    direction LR
+    GRID["Grid position"] ~~~ TRACK["Track type<br/>three groups"] ~~~ FORM["Recent form"] ~~~ DNF["DNF risk"]
+  end
+  subgraph Out["Likelihood"]
+    direction LR
+    MU["Expected finishing position"] --> OBS["Normal likelihood<br/>observed position"]
+  end
+  Hier --> Out
+  Cov --> Out

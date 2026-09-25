@@ -1,0 +1,20 @@
+%% PROPOSED — the AWS topology written in Terraform (117 resource blocks) and checked with mock-provider tests.
+%% Never planned or applied against a real AWS account.
+flowchart TB
+  subgraph Edge["Public subnets · 2 Availability Zones"]
+    direction LR
+    ALB["Application Load Balancer<br/>HTTPS · HTTP → HTTPS redirect"] ~~~ NAT["One NAT gateway<br/>accepted single point of failure"]
+  end
+  subgraph AppTier["Private application subnets · no public IPs · SSM instead of SSH"]
+    direction LR
+    BASG["Backend Auto Scaling group<br/>launch template: IMDSv2, encrypted disks"] ~~~ GPU["Serving GPU instance · Version 0<br/>adapter manager + vLLM"]
+  end
+  subgraph Data["Private data tier · KMS everywhere"]
+    direction LR
+    RDS[("RDS PostgreSQL")] ~~~ S3[("S3 · versioned · TLS only<br/>public access blocked")] ~~~ Q[["SQS + dead-letter queue"]]
+  end
+  subgraph Train["Training capacity"]
+    direction LR
+    TASG["GPU training Auto Scaling group<br/>min 0 · desired 0 · termination lifecycle hook<br/>scaled on queue backlog per instance"]
+  end
+  Edge --> AppTier --> Data --> Train

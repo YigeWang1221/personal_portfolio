@@ -1,0 +1,16 @@
+%% CURRENT — the notebooks of the public repository (Nov–Dec 2025, README and restructure Apr 2026).
+flowchart TB
+  subgraph Data["Data · 2025 season"]
+    direction LR
+    FF["FastF1 API<br/>cached session data"] --> DG["Feature building<br/>driver and team CSVs"]
+  end
+  subgraph Model["Model"]
+    direction LR
+    MB["Hierarchical Bayesian model in PyMC<br/>NUTS sampling · convergence checks"] --> TR[("Posterior trace")]
+  end
+  subgraph Forecast["Forecast and evaluation"]
+    direction LR
+    SIM["Posterior draws → scores<br/>→ unique positions P1–P20<br/>500,000 simulations per race"] --> EV["Evaluation against results<br/>championship projection"]
+    SIM --> BT["Ranking-strategy variants<br/>22-race backtest"]
+  end
+  Data --> Model --> Forecast

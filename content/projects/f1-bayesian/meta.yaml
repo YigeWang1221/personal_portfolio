@@ -1,0 +1,106 @@
+slug: f1-bayesian
+title: { en: F1 Race Prediction with Hierarchical Bayesian Modeling, zh: 基于分层贝叶斯模型的 F1 比赛预测 }
+subtitle:
+  en: Team and driver strength in a PyMC model, turned into full simulated finishing orders for each race
+  zh: 用 PyMC 为车队与车手实力建模，再为每站比赛模拟完整的完赛名次
+summary:
+  en: In a team of two, we modeled the 2025 Formula 1 season with a hierarchical Bayesian model and simulated complete finishing orders from the posterior. A pre-race forecast of the season finale named all three podium finishers and the final championship order.
+  zh: 我们两人团队用分层贝叶斯模型为 2025 赛季 F1 建模，并从后验分布模拟完整的完赛名次。对赛季收官战的赛前预测命中了全部三位领奖台车手，以及最终的年度排名顺序。
+tracks: { primary: ds-finance, also: [] }
+status: course-project
+team: { size: 2 }
+role:
+  en: Led the modeling and the implementation in a team of two
+  zh: 在两人团队中主导建模与实现
+context: { en: "Course project, INFO 6105 Data Science Engineering Methods", zh: 课程项目，INFO 6105 数据科学工程方法 }
+period: { start: "2025-11", end: "2025-12" }
+stack: [Python, PyMC, NUTS (MCMC), ArviZ, FastF1, pandas, NumPy, SciPy, joblib, matplotlib]
+links:
+  - kind: code
+    url: https://github.com/dataSciF/6105DataSci
+    label: { en: Code on GitHub, zh: GitHub 代码 }
+highlights: [podium, finale_mae, rhat]
+deep_dive_from: limits
+
+facts:
+  podium:
+    value: 3/3
+    label: { en: podium finishers named in the pre-race forecast of the 2025 finale, zh: 2025 赛季收官战赛前预测命中的领奖台车手 }
+    condition: { en: "Forecast saved the day before the race, with no results in it; the championship order was also right", zh: 预测在比赛前一天保存，其中不含任何比赛结果；年度排名顺序也预测正确 }
+    claim: F1-07
+  finale_mae:
+    value: { en: 3.10 positions, zh: 3.10 个名次 }
+    label: { en: mean absolute error of the finale forecast, zh: 收官战预测的平均绝对误差 }
+    condition: { en: "All 20 drivers, pre-race forecast", zh: 全部 20 名车手，赛前预测 }
+    claim: F1-07
+  rhat:
+    value: ≤ 1.005
+    label: { en: maximum R-hat across the model's parameters, zh: 模型所有参数中的最大 R-hat }
+    condition: { en: "NUTS with 4 chains; 0 divergences; minimum effective sample size 455", zh: NUTS 采样，4 条链；0 次发散；最小有效样本量 455 }
+    claim: F1-06
+  in_sample_mae:
+    value: { en: 3.12 positions, zh: 3.12 个名次 }
+    label: { en: in-sample mean absolute error, zh: 样本内平均绝对误差 }
+    condition: { en: "Fit on the 2025 season; in-sample R² 0.490", zh: 基于 2025 赛季拟合；样本内 R² 为 0.490 }
+    claim: F1-06
+  simulations:
+    value: { en: "500,000", zh: 50 万 }
+    label: { en: simulated finishing orders per race, zh: 每站模拟的完赛名次序列 }
+    condition: { en: Every draw becomes a complete order with no shared positions, zh: 每次抽样都生成一个不重复的完整名次序列 }
+    claim: F1-05
+  backtest_winner:
+    value: 1/22
+    label: { en: races where the model picked the winner, zh: 预测对冠军的比赛场次 }
+    condition: { en: "22-race backtest over the 2025 season (in-sample)", zh: 2025 赛季 22 站回测（样本内） }
+    claim: F1-08
+  backtest_top10:
+    value: 55%
+    label: { en: top-10 hit rate in the same backtest, zh: 同一回测中前十名的命中率 }
+    condition: { en: "22-race backtest over the 2025 season (in-sample)", zh: 2025 赛季 22 站回测（样本内） }
+    claim: F1-08
+
+figures:
+  - kind: diagram
+    id: model
+    section: model
+    file: assets/model.svg
+    source: assets/model.mmd
+    label: CURRENT
+    alt:
+      en: "Model structure: a team-tier level feeds driver effects with a HalfNormal hyperprior; grid position, track type, recent form and DNF risk enter as covariates; together they set the expected finishing position under a Normal likelihood."
+      zh: 模型结构：车队层级之下是带 HalfNormal 超先验的车手效应；发车位、赛道类型、近期状态和退赛风险作为协变量；二者共同决定预期完赛名次，观测名次服从正态似然。
+    caption:
+      en: The final model structure. An earlier ordinal-logistic version was replaced by this Normal-likelihood model.
+      zh: 最终的模型结构。早期的有序 logistic 版本后来被这个正态似然模型取代。
+  - kind: image
+    id: team-tiers
+    section: model
+    file: assets/team_tiers.png
+    alt:
+      en: "Three histograms of average finishing position by team tier (top, mid, lower), each with a fitted normal curve and its mean and standard deviation."
+      zh: 按车队层级（前、中、后）划分的平均完赛名次直方图，每张图都叠加了拟合的正态曲线及其均值和标准差。
+    caption:
+      en: Priors chosen from data. The team-tier distributions set the means and spreads of the tier-level priors.
+      zh: 根据数据选定先验：各车队层级的分布决定了层级先验的均值和离散程度。
+  - kind: image
+    id: position-distribution
+    section: simulation
+    file: assets/abu_dhabi_position_distribution.png
+    alt:
+      en: "Predicted finishing-position distributions for every driver at the 2025 Abu Dhabi Grand Prix: a median marker with interquartile and full ranges per driver."
+      zh: 2025 年阿布扎比大奖赛每位车手的预测完赛名次分布：每位车手都标出中位数、四分位区间和完整范围。
+    caption:
+      en: The pre-race distribution for the season finale, from the simulated finishing orders.
+      zh: 赛季收官战的赛前名次分布，来自模拟出的完赛名次序列。
+  - kind: diagram
+    id: pipeline
+    section: approach
+    file: assets/pipeline.svg
+    source: assets/pipeline.mmd
+    label: CURRENT
+    alt:
+      en: "Pipeline: FastF1 data for the 2025 season becomes driver and team features; a PyMC model is sampled with NUTS; posterior draws are turned into simulated finishing orders, evaluated against results and backtested."
+      zh: 管线图：2025 赛季的 FastF1 数据被整理成车手和车队特征；用 NUTS 对 PyMC 模型采样；后验样本被转化为模拟的完赛名次，再与实际结果比对并做回测。
+    caption:
+      en: From public timing data to evaluated forecasts, in notebooks that can be rerun end to end.
+      zh: 从公开的计时数据到经过评估的预测，整个流程都在可从头重跑的 notebook 中完成。

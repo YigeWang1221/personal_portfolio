@@ -1,0 +1,17 @@
+%% CURRENT — KK Knock as documented in September 2026: the Android app and the self-hosted backend.
+%% A Cloudflare Tunnel in front of the host is configured but its public acceptance is pending, so it is not drawn.
+flowchart TB
+  subgraph Phone["Android app · Kotlin Multiplatform — owns all content, audio never leaves"]
+    direction LR
+    REC["Record + transcribe on device<br/>foreground service · whisper.cpp (NDK)"] --> QUEUE["Transcript receipts +<br/>capture job queue<br/>Room · WorkManager · SQL lease"] --> STORE[("Room: todos · thoughts<br/>shown in home-screen widgets")]
+  end
+  subgraph Host["Self-hosted Mac mini · Docker Compose"]
+    direction LR
+    EDGE["Nginx + React admin console<br/>only published port"] --> API["FastAPI backend<br/>auth · metering · quotas"] --> PG[("PostgreSQL 16<br/>accounts · usage · prompts<br/>response-only idempotency cache")]
+  end
+  subgraph LLM["LLM providers — receive text only"]
+    direction LR
+    JUDGE["DeepSeek judge<br/>TODO / THOUGHT / IGNORED"] ~~~ GEM["Gemini research<br/>Google Search grounding"]
+  end
+  Phone -- "transcript text + client capture ID" --> Host
+  Host -- "classify, then research a THOUGHT" --> LLM

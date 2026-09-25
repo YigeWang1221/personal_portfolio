@@ -1,0 +1,15 @@
+%% CURRENT — the GitHub Actions workflows of the webapp repository (Sep–Nov 2025).
+flowchart TB
+  subgraph PR["On every pull request"]
+    direction LR
+    T1["JDK 21 + MySQL 8 service container<br/>mvn test"] ~~~ T2["packer fmt · init · validate"]
+  end
+  subgraph Merge["On merge · dev account"]
+    direction LR
+    B["Build the jar"] --> P["Packer builds the AMI"] --> SH["Share the AMI<br/>with the demo account"]
+  end
+  subgraph Demo["Rollout · demo account"]
+    direction LR
+    LT["New launch-template version<br/>set as default"] --> IR["Instance refresh<br/>50–150% healthy · 180 s warm-up"] --> W["Wait until the refresh completes"]
+  end
+  PR --> Merge --> Demo

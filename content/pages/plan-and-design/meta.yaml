@@ -1,0 +1,18 @@
+# "How I plan & design" (ARCHITECTURE.md site map). Records are sections of en.md / zh.md; each points to the project
+# section it summarizes. Numbers come from the projects' facts through {{fact:<slug>.<key>}}.
+roadmaps: [kk-knock, personal-writing-lora, cloud-native]
+records:
+  - { id: kk-self-hosting, project: kk-knock, anchor: operations }
+  - { id: kk-idempotency, project: kk-knock, anchor: capture }
+  - { id: kk-cpu-asr, project: kk-knock, anchor: asr }
+  - { id: lora-scale-from-zero, project: personal-writing-lora, anchor: scale-from-zero }
+  - { id: lora-adapter-cache, project: personal-writing-lora, anchor: serving }
+  - { id: cloud-immutable, project: cloud-native, anchor: pipeline }
+  - { id: hpc-token-budget, project: distributed-llm, anchor: time-to-quality }
+thumbnails:
+  - { project: kk-knock, figure: architecture }
+  - { project: personal-writing-lora, figure: current-architecture }
+  - { project: personal-writing-lora, figure: proposed-aws }
+  - { project: cloud-native, figure: aws-architecture }
+  - { project: distributed-llm, figure: pipeline }
+  - { project: f1-bayesian, figure: model }
