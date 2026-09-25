@@ -1,0 +1,115 @@
+slug: cloud-native
+title: { en: Cloud-Native Web Application on AWS, zh: AWS 云原生 Web 应用 }
+subtitle:
+  en: Immutable releases across two AWS accounts, with the whole platform defined in Terraform
+  zh: 跨两个 AWS 账号的不可变发布，整个平台用 Terraform 定义
+summary:
+  en: A Spring Boot REST API that runs on Packer-built images in an auto-scaled EC2 group behind an HTTPS load balancer. Terraform defines the network, data stores, keys and alarms; GitHub Actions tests every pull request and rolls each merge out as a new machine image.
+  zh: 一个 Spring Boot REST API，运行在 HTTPS 负载均衡器后、自动伸缩的 EC2 组中，机器镜像由 Packer 构建。网络、数据存储、密钥和告警由 Terraform 定义；GitHub Actions 测试每个 PR，并把每次合并以新镜像的方式滚动上线。
+tracks: { primary: cloud-llm, also: [sde] }
+status: course-project
+team: { size: 1 }
+role:
+  en: Built it alone — the API, the Terraform infrastructure, the image pipeline and the serverless email flow
+  zh: 独立完成：API、Terraform 基础设施、镜像流水线与无服务器邮件流程
+context: { en: "Course project, CSYE 6225 Network Structures & Cloud Computing", zh: 课程项目，CSYE 6225 网络架构与云计算 }
+period: { start: "2025-09", end: "2025-11" }
+stack:
+  - Java 21
+  - Spring Boot 3.5
+  - MySQL
+  - Flyway
+  - Terraform
+  - Packer
+  - GitHub Actions
+  - AWS VPC · ALB · Auto Scaling
+  - RDS
+  - S3
+  - KMS
+  - Secrets Manager
+  - SNS → Lambda
+  - CloudWatch
+links: []
+highlights: [deploy_median, azs, kms_keys]
+deep_dive_from: pipeline
+
+facts:
+  deploy_median:
+    value: { en: ≈10.5 min, zh: 约 10.5 分钟 }
+    label: { en: "median automated deploy, from image build to a finished instance refresh", zh: 自动部署的中位耗时（从构建镜像到实例刷新完成） }
+    condition: { en: "32 successful runs in the GitHub Actions history (range 7–27 min); no earlier baseline exists", zh: GitHub Actions 历史中的 32 次成功运行（范围 7—27 分钟）；没有更早的基线可供比较 }
+    claim: CN-05
+  azs:
+    value: "3"
+    label: { en: Availability Zones spanned by the application tier, zh: 应用层跨越的可用区数量 }
+    condition: { en: "A public and a private subnet in each; the database and the NAT gateway are single-AZ", zh: 每个可用区各有一个公有子网和一个私有子网；数据库与 NAT 网关为单可用区 }
+    claim: CN-02
+  kms_keys:
+    value: "4"
+    label: { en: "customer-managed KMS keys, one per service, rotated every 90 days", zh: 按服务划分的客户托管 KMS 密钥，每 90 天轮换 }
+    condition: { en: "For S3, the instance disks, RDS and Secrets Manager", zh: 分别用于 S3、实例磁盘、RDS 和 Secrets Manager }
+    claim: CN-11
+  ci_runs:
+    value: { en: "~434", zh: 约 434 }
+    label: { en: CI runs across the three repositories, zh: 三个仓库的 CI 运行次数 }
+    condition: { en: "GitHub Actions history as of Sep 2026; volume, not quality", zh: 截至 2026 年 9 月的 GitHub Actions 记录；只说明数量，不代表质量 }
+    claim: CN-12
+
+figures:
+  - kind: diagram
+    id: aws-architecture
+    section: overview
+    file: assets/aws-architecture.svg
+    source: assets/aws-architecture.mmd
+    label: CURRENT
+    alt:
+      en: "AWS architecture: Route 53 and an HTTPS load balancer in public subnets across three Availability Zones; an Auto Scaling group of Spring Boot instances in private subnets; RDS MySQL, S3 and Secrets Manager with KMS keys; sign-ups published to SNS, which triggers a Lambda that sends email through Mailgun."
+      zh: AWS 架构图：Route 53 和 HTTPS 负载均衡器位于跨三个可用区的公有子网；运行 Spring Boot 的 Auto Scaling 组位于私有子网；RDS MySQL、S3 与 Secrets Manager 均使用 KMS 密钥；注册事件发布到 SNS，触发 Lambda 通过 Mailgun 发送邮件。
+    caption:
+      en: Derived from the Terraform configuration. The application tier spans three Availability Zones; the database and the NAT gateway are single-AZ to keep cost down.
+      zh: 依据 Terraform 配置绘制。应用层跨三个可用区；数据库和 NAT 网关为单可用区，以控制成本。
+  - kind: diagram
+    id: cicd
+    section: pipeline
+    file: assets/cicd.svg
+    source: assets/cicd.mmd
+    label: CURRENT
+    alt:
+      en: "Pipeline: pull requests run the test suite against a MySQL service container and validate the Packer template; a merge builds the jar and an AMI in the dev account, shares it with the demo account, creates a new launch-template version and starts an instance refresh."
+      zh: 流水线图：PR 阶段在 MySQL 服务容器上运行测试并校验 Packer 模板；合并后在 dev 账号构建 jar 和 AMI，共享到 demo 账号，创建新的启动模板版本并发起实例刷新。
+    caption:
+      en: Every release is a new machine image, promoted from the dev account to the demo account and rolled out by an instance refresh.
+      zh: 每次发布都是一个新的机器镜像：从 dev 账号晋升到 demo 账号，再通过实例刷新滚动上线。
+
+roadmap:
+  section: planning
+  title: { en: Assignment milestones, zh: 作业里程碑 }
+  phases:
+    - name: { en: A01–A02 — scaffold and REST API, zh: A01—A02 — 项目骨架与 REST API }
+      detail: { en: Resource endpoints with tests, zh: 资源接口及其测试 }
+      when: { en: Sep 2025, zh: 2025 年 9 月 }
+      status: done
+    - name: { en: A03 — authentication and CI, zh: A03 — 认证与 CI }
+      detail: { en: "Positive, negative and edge-case integration tests; CI against MySQL; branch protection", zh: 正向、反向与边界集成测试；接入 MySQL 的 CI；分支保护 }
+      when: { en: Sep–Oct 2025, zh: 2025 年 9—10 月 }
+      status: done
+    - name: { en: A04–A05 — images and infrastructure as code, zh: A04—A05 — 镜像与基础设施即代码 }
+      detail: { en: "Setup scripts, the Terraform repository, Packer AMIs with validate and build workflows, a systemd service", zh: 安装脚本、Terraform 仓库、带校验与构建流程的 Packer AMI、systemd 服务 }
+      when: { en: Oct 2025, zh: 2025 年 10 月 }
+      status: done
+    - name: { en: A06 — database and IAM, zh: A06 — 数据库与 IAM }
+      detail: { en: "Product APIs; RDS, its subnet group and the instance role in Terraform", zh: 商品接口；在 Terraform 中定义 RDS、其子网组与实例角色 }
+      when: { en: Oct 2025, zh: 2025 年 10 月 }
+      status: done
+    - name: { en: A07 — observability and DNS, zh: A07 — 可观测性与 DNS }
+      detail: { en: "StatsD metrics, the CloudWatch agent, controller AOP, Route 53", zh: StatsD 指标、CloudWatch agent、控制器 AOP、Route 53 }
+      when: { en: Oct 2025, zh: 2025 年 10 月 }
+      status: done
+    - name: { en: A08 — load balancing and hardening, zh: A08 — 负载均衡与加固 }
+      detail: { en: "Security groups, the load balancer, DNS and email records, S3 and clock-drift fixes", zh: 安全组、负载均衡器、DNS 与邮件记录，修复 S3 与时钟漂移问题 }
+      when: { en: Nov 2025, zh: 2025 年 11 月 }
+      status: done
+    - name: { en: "A09 — events, keys and serverless", zh: A09 — 事件、密钥与无服务器 }
+      detail: { en: "SNS publishing, Lambda with Mailgun, KMS keys, Lambda CI/CD from dev to demo", zh: SNS 发布、Lambda 与 Mailgun、KMS 密钥、从 dev 到 demo 的 Lambda CI/CD }
+      when: { en: Nov 2025, zh: 2025 年 11 月 }
+      status: done

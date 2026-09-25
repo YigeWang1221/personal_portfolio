@@ -1,0 +1,21 @@
+---
+import { localePath, type Locale } from '../lib/i18n';
+import { getContent, t } from '../lib/content/load';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const { profile } = getContent();
+---
+
+<footer class="site-footer">
+  <div class="container">
+    <p>{t(locale, 'footer.note')}</p>
+    <nav aria-label={t(locale, 'footer.label')}>
+      {profile.links.map((l) => <a href={l.url}>{l.label[locale]}</a>)}
+      <a href={localePath(locale, '/about/')}>{t(locale, 'nav.about')}</a>
+    </nav>
+  </div>
+</footer>

@@ -1,0 +1,48 @@
+slug: enterprise-workflow
+title: { en: "FoodShelter: Food-Rescue Workflow System", zh: FoodShelter：食物救助多组织协作系统 }
+subtitle:
+  en: A desktop system that routes food donations, inspections and deliveries between organizations
+  zh: 在多个组织之间流转食物捐赠、检验与配送任务的桌面系统
+summary:
+  en: In a team of three, we built a Java Swing system that coordinates food rescue across donors, inspectors, a rescue network, drivers, task managers and administrators. I designed its domain model and persistence layer.
+  zh: 我们三人团队用 Java Swing 开发了一个食物救助协作系统，连接捐赠方、检验员、救助网络、司机、任务调度员和管理员。我负责设计它的领域模型和持久化层。
+tracks: { primary: sde, also: [] }
+status: course-project
+team: { size: 3 }
+role:
+  en: Designed the domain model and the persistence layer; co-implemented the task-manager, driver, inspection and rescue-network workflows
+  zh: 设计领域模型与持久化层；参与实现任务调度、司机配送、食品检验和救助网络工作流
+context: { en: "Course project, INFO 5100 Application Engineering & Development", zh: 课程项目，INFO 5100 应用工程与开发 }
+period: { start: "2025-03", end: "2025-04" }
+stack: [Java 18, Swing, Maven, db4o, JFreeChart, iText, Datafaker]
+links:
+  - kind: code
+    url: https://github.com/5100GroupWork/FoodShelter
+    label: { en: Code on GitHub, zh: GitHub 代码 }
+highlights: [model_classes, prs]
+
+facts:
+  model_classes:
+    value: { en: 41 of 44, zh: 44 个中的 41 个 }
+    label: { en: domain-model classes I created, zh: 由我创建的领域模型类 }
+    condition: { en: "Counted by the author of each file's first commit", zh: 按每个文件首次提交的作者统计 }
+    claim: FS-01
+  prs:
+    value: "110"
+    label: { en: pull requests in the team repository, zh: 团队仓库中的 PR 数量 }
+    condition: { en: "Feature branches per person, team of three; volume, not quality", zh: 每人使用各自的功能分支，三人团队；只说明数量，不代表质量 }
+    claim: FS-04
+
+figures:
+  - kind: diagram
+    id: domain-model
+    section: domain-model
+    file: assets/domain-model.svg
+    source: assets/domain-model.mmd
+    label: CURRENT
+    alt:
+      en: "Class diagram: the system holds networks; each network has enterprises, each enterprise has organizations, organizations hold user accounts with roles; networks own work queues that hold delivery, food-item and needs requests."
+      zh: 类图：系统包含多个网络；每个网络下有企业，企业下有组织，组织中的用户账号各有角色；网络拥有工作队列，队列中是配送、食品和需求请求。
+    caption:
+      en: Redrawn from the code. The hierarchy lets a request move between organizations without the screens knowing about each other.
+      zh: 依据代码重新绘制。这套层级让请求可以在组织之间流转，而各个界面之间无需互相了解。

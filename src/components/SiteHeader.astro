@@ -1,0 +1,48 @@
+---
+import { HTML_LANG, localePath, otherLocale, type Locale } from '../lib/i18n';
+import { getContent, t } from '../lib/content/load';
+
+interface Props {
+  locale: Locale;
+  path: string;
+  current?: 'home' | 'tracks' | 'resume' | 'plan' | 'about';
+}
+
+const { locale, path } = Astro.props;
+const { tracks, profile } = getContent();
+const other = otherLocale(locale);
+
+const items = [
+  ...tracks.map((tr) => ({ href: `/tracks/${tr.id}/`, label: tr.title[locale] })),
+  { href: '/resume/', label: t(locale, 'nav.resume') },
+  { href: '/plan-and-design/', label: t(locale, 'nav.plan') },
+  { href: '/about/', label: t(locale, 'nav.about') },
+];
+const isCurrent = (href: string) => path === href;
+---
+
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href={localePath(locale, '/')}>
+      {profile.name.en}<span> · {profile.name.zh}</span>
+    </a>
+    <nav class="site-nav" aria-label={t(locale, 'nav.label')}>
+      {items.map((item) => (
+        <a href={localePath(locale, item.href)} aria-current={isCurrent(item.href) ? 'page' : undefined}>
+          {item.label}
+        </a>
+      ))}
+    </nav>
+    <span class="lang-switch" role="group" aria-label={t(locale, 'nav.language')}>
+        {(['en', 'zh'] as Locale[]).map((loc) =>
+          loc === locale ? (
+            <span aria-current="true" lang={HTML_LANG[loc]}>{t(loc, 'nav.language_name')}</span>
+          ) : (
+            <a href={localePath(other, path)} hreflang={HTML_LANG[loc]} lang={HTML_LANG[loc]} title={t(loc, 'nav.language_switch_title')}>
+              {t(loc, 'nav.language_name')}
+            </a>
+          ),
+        )}
+    </span>
+  </div>
+</header>

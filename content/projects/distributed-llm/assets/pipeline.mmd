@@ -1,0 +1,18 @@
+%% CURRENT — the experiment pipeline as implemented (single node, data parallelism only; no tensor or pipeline
+%% parallelism, no multi-node runs). Redrawn for the site; the team's original image contains a cluster username.
+flowchart TB
+  subgraph Data["Data preparation · CPU"]
+    direction LR
+    OWT["OpenWebText<br/>Hugging Face datasets"] --> TOK["tiktoken GPT-2 BPE<br/>multi-process sharding"] --> BIN["uint16 train.bin / val.bin<br/>90/10 split on scratch storage"]
+  end
+  subgraph Jobs["Slurm batch jobs · one node · 1, 2 or 4 V100-SXM2 GPUs"]
+    direction LR
+    MM["np.memmap loader<br/>8% subset per run"] --> TR["torchrun<br/>NCCL process group"]
+    TR --> DDP["DDP trainer<br/>gradient sync every 8 micro-steps"]
+    TR --> FSDP["FSDP trainer<br/>FULL_SHARD · SHARD_GRAD_OP · NO_SHARD"]
+  end
+  subgraph Out["Measurement · rank 0"]
+    direction LR
+    LOG["tokens/s · iteration time<br/>peak GPU memory · validation perplexity"]
+  end
+  Data --> Jobs --> Out

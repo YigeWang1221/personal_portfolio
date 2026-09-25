@@ -1,0 +1,120 @@
+slug: distributed-llm
+title: { en: Distributed LLM Training on HPC, zh: HPC 集群上的分布式大模型训练 }
+subtitle:
+  en: What scales and what doesn't when a small GPT-2 trains on up to four V100 GPUs
+  zh: 在最多四块 V100 上训练小型 GPT-2：哪些能近线性扩展，哪些不能
+summary:
+  en: We measured how a 51.5M-parameter GPT-2 trains on one node of Northeastern's HPC cluster — parallel tokenization, DDP scaling on one to four V100 GPUs, the FSDP memory trade-off, and NVLink versus shared-memory transport — and wrote down where the numbers stop meaning what they seem to.
+  zh: 我们测量了一个 5150 万参数的 GPT-2 在美国东北大学 HPC 集群单节点上的训练表现：并行分词、1 到 4 块 V100 上的 DDP 扩展、FSDP 的显存取舍，以及 NVLink 与共享内存两种通信方式；也记录了这些数字在什么情况下不再代表表面上的含义。
+tracks: { primary: cloud-llm, also: [] }
+status: course-benchmark
+team: { size: 2 }
+role:
+  en: I ran the tokenization, single-GPU baseline and DDP experiments, and co-implemented and debugged the rest with my teammate
+  zh: 我负责分词、单卡基线和 DDP 实验，并与队友共同实现、调试其余部分
+context: { en: "Course project, CSYE 7105 High-Performance Computing", zh: 课程项目，CSYE 7105 高性能并行计算 }
+period: { start: "2026-03", end: "2026-04" }
+stack: [PyTorch, DDP, FSDP, NCCL, torchrun, Slurm, tiktoken, Hugging Face datasets, NumPy memmap]
+links:
+  - kind: code
+    url: https://github.com/CSYE7105-nanoGPT-HPC/Nano-GPT-HPC
+    label: { en: Code on GitHub, zh: GitHub 代码 }
+highlights: [ddp_scaling, transport_gap, fsdp_memory]
+deep_dive_from: time-to-quality
+
+facts:
+  params:
+    value: 51.5M
+    label: { en: model parameters, zh: 模型参数量 }
+    condition: { en: "GPT-2 with 8 layers, 8 heads and 512-dimensional embeddings; context 1,024", zh: "GPT-2，8 层、8 头、512 维嵌入；上下文长度 1,024" }
+    claim: HPC-02
+  ddp_scaling:
+    value: ≈3.8–4.0×
+    label: { en: DDP throughput scaling from 1 to 4 V100 GPUs, zh: 1→4 块 V100 的 DDP 吞吐扩展倍数 }
+    condition: { en: "Same token budget, single runs: 3.83× in the preserved raw log (shared-memory transport), 3.97× in the report (NVLink run whose raw log was overwritten)", zh: "相同 token 预算，单次运行：保留下来的原始日志为 3.83×（共享内存通信），报告中为 3.97×（NVLink 运行，其原始日志已被覆盖）" }
+    claim: HPC-05
+  transport_gap:
+    value: 3–4%
+    label: { en: throughput gap between NVLink and shared-memory transport, zh: NVLink 与共享内存通信之间的吞吐差距 }
+    condition: { en: With gradients synchronized once every 8 micro-steps, zh: 每 8 个微批次同步一次梯度 }
+    claim: HPC-10
+  fsdp_memory:
+    value: 6.4–7.8%
+    label: { en: lower peak GPU memory with FSDP than with DDP (team result), zh: FSDP 相比 DDP 降低的峰值显存（团队成果） }
+    condition: { en: "51.5M parameters, where activations dominate memory; peak memory measured on rank 0", zh: 5150 万参数、激活值占显存大头的规模；峰值显存只在 rank 0 上测量 }
+    claim: HPC-08
+  ppl_1gpu:
+    value: "41.8"
+    label: { en: validation perplexity on one GPU, zh: 单卡的验证集 perplexity }
+    condition: { en: "Committed logs, same token budget, single runs", zh: 已提交的日志，相同 token 预算，单次运行 }
+    claim: HPC-15
+  ppl_4gpu:
+    value: "58.5"
+    label: { en: validation perplexity on four GPUs, zh: 四卡的验证集 perplexity }
+    condition: { en: "Committed FSDP logs, same token budget (a quarter of the optimizer steps), single runs", zh: 已提交的 FSDP 日志，相同 token 预算（优化步数为四分之一），单次运行 }
+    claim: HPC-15
+  tokenize_repeat:
+    value: 77×
+    label: { en: faster OpenWebText tokenization on repeated runs, zh: 重复运行时 OpenWebText 分词的加速倍数 }
+    condition: { en: "970 s → 12.5 s on a 10% sample, combining multi-process sharding with reuse of cached tokenized shards", zh: "10% 样本上由 970 s 降至 12.5 s，来自多进程分片加上对已分词缓存的复用" }
+    claim: HPC-07
+  tokenize_mp:
+    value: ≈9×
+    label: { en: speedup from multiprocessing alone, zh: 仅靠多进程带来的加速 }
+    condition: { en: "Pool.imap with 8 workers on the same 10% sample (970 s → 106 s)", zh: "同一 10% 样本上，8 个 worker 的 Pool.imap（970 s → 106 s）" }
+    claim: HPC-07
+  chunk_tuning:
+    value: ~26%
+    label: { en: additional gain from tuning the chunk size, zh: 调整分块大小带来的额外提升 }
+    condition: { en: "Pool.imap, same sample", zh: Pool.imap，同一样本 }
+    claim: HPC-07
+  subset:
+    value: 8%
+    label: { en: share of the tokenized training data used per run, zh: 每次运行使用的已分词训练数据比例 }
+    condition: { en: "The same fraction in every configuration", zh: 所有配置使用相同比例 }
+    claim: HPC-06
+  sample:
+    value: 10%
+    label: { en: corpus sample used for the tokenization benchmarks, zh: 分词基准测试使用的语料样本比例 }
+    condition: { en: About eight hundred thousand documents, zh: 约八十万篇文档 }
+    claim: HPC-07
+  corpus_docs:
+    value: 8.0M
+    label: { en: OpenWebText documents tokenized in parallel, zh: 并行分词的 OpenWebText 文档数 }
+    condition: { en: "The full corpus; each training run then used an 8% subset", zh: 全量语料；每次训练使用其中 8% 的子集 }
+    claim: HPC-06
+
+figures:
+  - kind: diagram
+    id: pipeline
+    section: pipeline
+    file: assets/pipeline.svg
+    source: assets/pipeline.mmd
+    label: CURRENT
+    alt:
+      en: "Pipeline: OpenWebText is tokenized in parallel into binary files; Slurm jobs launch torchrun, which runs either the DDP or the FSDP trainer on one to four GPUs; rank 0 records throughput, iteration time, peak memory and validation perplexity."
+      zh: 管线图：OpenWebText 并行分词后写成二进制文件；Slurm 作业通过 torchrun 在 1 到 4 块 GPU 上运行 DDP 或 FSDP 训练器；rank 0 记录吞吐、迭代时间、峰值显存和验证集 perplexity。
+    caption:
+      en: One node, data parallelism only. Every configuration is a Slurm script, so each run can be repeated exactly.
+      zh: 单节点，只做数据并行。每种配置都是一个 Slurm 脚本，任何一次运行都可以原样复现。
+
+roadmap:
+  section: plan
+  title: { en: Project timeline, zh: 项目时间线 }
+  phases:
+    - name: { en: Proposal — three parallelization strategies, zh: 立项 — 三种并行策略 }
+      detail: { en: "Multiprocess tokenization, DDP and FSDP", zh: 多进程分词、DDP 与 FSDP }
+      when: { en: Mar 2026, zh: 2026 年 3 月 }
+      status: done
+    - name: { en: Tokenization benchmarks and the full corpus pass, zh: 分词基准测试与全量语料分词 }
+      status: done
+    - name: { en: Single-GPU baseline and DDP scaling runs, zh: 单卡基线与 DDP 扩展实验 }
+      status: done
+    - name: { en: FSDP sharding strategies and transport comparison, zh: FSDP 分片策略与通信方式对比 }
+      status: done
+    - name: { en: Report and slides, zh: 报告与答辩幻灯片 }
+      when: { en: Apr 2026, zh: 2026 年 4 月 }
+      status: done
+    - name: { en: Public README with the FSDP code and logs, zh: 公开 README，附 FSDP 代码与日志 }
+      when: { en: Apr 2026, zh: 2026 年 4 月 }
+      status: done

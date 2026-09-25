@@ -1,0 +1,169 @@
+slug: personal-writing-lora
+title: { en: Personal Writing LoRA Platform, zh: 个人写作风格 LoRA 平台 }
+subtitle:
+  en: A multi-tenant platform that fine-tunes a LoRA on each user's own writing and serves many of them from one GPU
+  zh: 基于每位用户自己的文字微调专属 LoRA、并在单卡上同时服务多个 LoRA 的多租户平台
+summary:
+  en: Users upload their own writing, the platform trains a personal LoRA "style" on a pinned Qwen2.5-7B-Instruct base, and they draft long-form Markdown with it. Designed from wireframes and contracts through dated milestone plans, implemented across four repositories and tested against local fakes — it has not been deployed.
+  zh: 用户上传自己的文字，平台基于固定版本的 Qwen2.5-7B-Instruct 训练个人 LoRA"风格"，再用它撰写长篇 Markdown。项目从线框图和接口契约出发，经过带日期的里程碑计划，在四个仓库中实现并基于本地替身完成测试，目前尚未部署。
+tracks: { primary: cloud-llm, also: [sde] }
+status: implemented-not-deployed
+team: { size: 1 }
+role:
+  en: Sole designer across all layers; implemented with AI coding assistants working from my specifications
+  zh: 各层唯一的设计者；由 AI 编码助手按我的规格说明实现
+context: { en: Personal project, zh: 个人项目 }
+period: { start: "2026-06", end: "2026-08" }
+stack:
+  - Next.js 16
+  - React 19
+  - TypeScript
+  - FastAPI
+  - SQLAlchemy (async)
+  - PostgreSQL
+  - Alembic
+  - Amazon SQS
+  - Amazon S3
+  - PyTorch · PEFT · TRL
+  - vLLM
+  - Terraform
+  - Packer
+links:
+  - kind: code
+    url: https://github.com/perosnalStartUp/front_end
+    label: { en: Frontend code, zh: 前端代码 }
+  - kind: code
+    url: https://github.com/perosnalStartUp/backend
+    label: { en: Backend code, zh: 后端代码 }
+  - kind: code
+    url: https://github.com/perosnalStartUp/vLLMAndManager
+    label: { en: GPU training and serving code, zh: GPU 训练与推理代码 }
+  - kind: code
+    url: https://github.com/perosnalStartUp/aws_tf
+    label: { en: Terraform code, zh: Terraform 代码 }
+highlights: [tf_resources, tests, tables]
+deep_dive_from: job-handoff
+
+facts:
+  tf_resources:
+    value: "117"
+    label: { en: Terraform resource blocks for the AWS platform, zh: 定义 AWS 平台的 Terraform 资源块 }
+    condition: { en: "Written and checked with mock-provider tests; never planned or applied against AWS", zh: 已编写并通过 mock provider 测试；从未在 AWS 上 plan 或 apply }
+    claim: LORA-09
+  tests:
+    value: { en: "~314", zh: 约 314 }
+    label: { en: automated test functions, zh: 自动化测试函数 }
+    condition: { en: "Backend, training worker, dataset builder, adapter manager and contracts, all against local fakes; plus 26 Terraform mock-provider runs", zh: 覆盖后端、训练 worker、数据集构建器、适配器管理服务和接口契约，全部基于本地替身；另有 26 次 Terraform mock provider 测试 }
+    claim: LORA-11
+  tables:
+    value: "15"
+    label: { en: PostgreSQL tables under Alembic migrations, zh: 由 Alembic 迁移管理的 PostgreSQL 表 }
+    condition: { en: "Five migrations; CHECK constraints guard status fields", zh: 共五次迁移；状态字段由 CHECK 约束保护 }
+    claim: LORA-10
+
+figures:
+  - kind: image
+    id: wireframe-main
+    section: design-process
+    file: assets/wireframe-main-page.svg
+    label: HISTORICAL
+    alt:
+      en: "Early wireframe of the main workspace: a project and chat sidebar, a chat box, a Markdown answer area with a drafts panel, and a create-project dialog that picks a base model and a LoRA."
+      zh: 主工作区的早期线框图：项目与对话侧栏、对话输入框、带草稿面板的 Markdown 回答区，以及选择基座模型和 LoRA 的新建项目对话框。
+    caption:
+      en: "Early wireframe, June 2026 (working name QVoice). The information architecture carried into the implemented pages."
+      zh: 早期线框图，2026 年 6 月（当时的工作名为 QVoice）。其信息架构延续到了最终实现的页面中。
+  - kind: image
+    id: wireframe-style
+    section: design-process
+    file: assets/wireframe-style-create.svg
+    label: HISTORICAL
+    alt:
+      en: "Early wireframe of the style pages: a style list with versions and status colours, a style detail view with re-train and delete, and the new-style flow."
+      zh: 风格页面的早期线框图：带版本与状态颜色的风格列表、可重新训练或删除的风格详情，以及新建风格流程。
+    caption:
+      en: "Early wireframe, June 2026. Its note that training data would not be saved on the server predates the implementation: sources are stored temporarily for training and removed by a cleanup job afterwards."
+      zh: 早期线框图，2026 年 6 月。图中"不在服务器保存训练数据"的批注早于实现：实际做法是训练期间临时保存源文件，训练结束后由清理任务删除。
+  - kind: image
+    id: er-sketch
+    section: design-process
+    file: assets/er-sketch.svg
+    label: HISTORICAL
+    alt:
+      en: "Early entity-relationship sketch: user profiles, workspaces, chats, messages, models, LoRA sets, LoRAs, source-file lists, source files and training jobs."
+      zh: 早期实体关系草图：用户资料、工作区、对话、消息、模型、LoRA 集合、LoRA、源文件列表、源文件和训练任务。
+    caption:
+      en: "Early ER sketch, June 2026. Its entities map one to one onto the implemented tables; the implementation adds sessions, upload batches and two outbox tables."
+      zh: 早期 ER 草图，2026 年 6 月。其中的实体与最终实现的表一一对应；实现时又增加了会话、上传批次和两张发件箱表。
+  - kind: image
+    id: wireframe-profile
+    section: design-process
+    file: assets/wireframe-profile-settings.svg
+    label: HISTORICAL
+    alt:
+      en: "Early wireframe of the profile menu and settings page, with subscription plans shown as a static mock."
+      zh: 个人菜单与设置页的早期线框图，订阅套餐只是静态示意。
+    caption:
+      en: Early wireframe, June 2026. The subscription plans were only a mock; the platform has no billing.
+      zh: 早期线框图，2026 年 6 月。订阅套餐只是示意，平台没有计费功能。
+  - kind: diagram
+    id: current-architecture
+    section: architecture
+    file: assets/current-architecture.svg
+    source: assets/current-architecture.mmd
+    label: CURRENT
+    alt:
+      en: "Current architecture: a Next.js app and a FastAPI backend on PostgreSQL; training jobs go through an outbox to an SQS queue and a training worker that publishes adapters to S3; an adapter manager in front of vLLM serves them."
+      zh: 当前架构：Next.js 前端与基于 PostgreSQL 的 FastAPI 后端；训练任务经发件箱进入 SQS 队列，由训练 worker 处理并把适配器发布到 S3；vLLM 前的适配器管理服务负责加载和推理。
+    caption:
+      en: As implemented and run locally against a real PostgreSQL and fake S3, SQS, GPU and vLLM services.
+      zh: 按实现绘制：在本地基于真实 PostgreSQL，以及替身形式的 S3、SQS、GPU 和 vLLM 服务运行。
+  - kind: diagram
+    id: worker-lifecycle
+    section: job-handoff
+    file: assets/training-worker-lifecycle.svg
+    source: assets/training-worker-lifecycle.mmd
+    label: CURRENT
+    alt:
+      en: "Training worker sequence: receive one SQS message, claim the job with a conditional S3 write, protect the instance from scale-in, send lease heartbeats while training, publish the adapter and its manifest, call back the backend, delete the message and release protection."
+      zh: 训练 worker 时序图：接收一条 SQS 消息，用 S3 条件写入认领任务，开启缩容保护，训练期间发送租约心跳，发布适配器及其 manifest，回调后端，删除消息并解除保护。
+    caption:
+      en: Implemented in the worker and tested against local fakes; never run on AWS.
+      zh: 已在 worker 中实现，并基于本地替身测试；从未在 AWS 上运行。
+  - kind: diagram
+    id: proposed-aws
+    section: infrastructure
+    file: assets/proposed-aws.svg
+    source: assets/proposed-aws.mmd
+    label: PROPOSED
+    alt:
+      en: "Proposed AWS topology: a load balancer and one NAT gateway in public subnets across two zones; a backend Auto Scaling group and one serving GPU instance in private subnets; RDS PostgreSQL, S3 and SQS encrypted with KMS; a GPU training Auto Scaling group that scales from zero on queue backlog."
+      zh: 规划中的 AWS 拓扑：负载均衡器和一个 NAT 网关位于跨两个可用区的公有子网；后端 Auto Scaling 组和一台推理 GPU 实例位于私有子网；RDS PostgreSQL、S3 和 SQS 均用 KMS 加密；GPU 训练 Auto Scaling 组根据队列积压从零扩容。
+    caption:
+      en: Written in Terraform and checked with mock-provider tests; never applied. Drawn as proposed because nothing here has run on AWS.
+      zh: 已用 Terraform 编写并通过 mock provider 测试，但从未 apply。由于这些资源从未在 AWS 上运行，图中标为规划架构。
+
+roadmap:
+  section: planning
+  title: { en: Training (T) and serving (W) milestones, zh: 训练（T）与推理（W）里程碑 }
+  phases:
+    - name: { en: T0 / W0 — freeze the contracts, zh: T0 / W0 — 冻结接口契约 }
+      detail: { en: "JSON Schema and OpenAPI, with valid and deliberately invalid examples", zh: JSON Schema 与 OpenAPI，附有效示例和刻意构造的无效示例 }
+      status: done
+    - name: { en: T1 — dataset builder on a tiny fixture, zh: T1 — 数据集构建器（基于小型样例） }
+      status: done
+    - name: { en: "T2 — local worker: idempotency, checkpoints, callbacks", zh: T2 — 本地 worker：幂等、检查点、回调 }
+      status: done
+    - name: { en: W1 — adapter manager, zh: W1 — 适配器管理服务 }
+      status: done
+    - name: { en: T3 — real single-GPU training and vLLM load, zh: T3 — 真实单卡训练并由 vLLM 加载 }
+      detail: { en: Implemented; not yet verified on a GPU, zh: 已实现，尚未在 GPU 上验证 }
+      status: in-progress
+    - name: { en: T4 — training AMI and scale-from-zero, zh: T4 — 训练 AMI 与缩容至零 }
+      status: in-progress
+    - name: { en: W2 — vLLM with a real LoRA on one GPU, zh: W2 — 单卡 vLLM 加载真实 LoRA }
+      status: planned
+    - name: { en: "W3–W5 — serving AMI, isolation benchmark, internal load balancer", zh: W3—W5 — 推理 AMI、多用户隔离基准测试、内部负载均衡 }
+      status: planned
+    - name: { en: "T5 — failure drills, observability, runbook", zh: T5 — 故障演练、可观测性、运维手册 }
+      status: planned

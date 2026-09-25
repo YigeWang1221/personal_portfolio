@@ -1,0 +1,26 @@
+{
+  "name": "yige-wang-portfolio",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Bilingual (English / 简体中文) engineering portfolio of Yige Wang",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build && node scripts/postbuild.mjs && node scripts/check-dist.mjs",
+    "preview": "astro preview",
+    "diagrams": "node scripts/render-diagrams.mjs",
+    "check:dist": "node scripts/check-dist.mjs",
+    "deploy": "npm run build && wrangler deploy"
+  },
+  "dependencies": {
+    "astro": "7.3.5",
+    "marked": "^18.0.14",
+    "yaml": "^2.9.1"
+  },
+  "devDependencies": {
+    "wrangler": "^4.139.0"
+  }
+}

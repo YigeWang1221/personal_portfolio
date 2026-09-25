@@ -1,0 +1,43 @@
+---
+// Diagrams, images and screenshot sets. Raster images go through astro:assets (sized, lazy, WebP);
+// SVGs are served as files so their internal styles never meet the page CSP.
+import { Image } from 'astro:assets';
+import type { Locale } from '../lib/i18n';
+import type { ResolvedFigure } from '../lib/content/load';
+import { t } from '../lib/content/load';
+
+interface Props {
+  figure: ResolvedFigure;
+  locale: Locale;
+}
+const { figure, locale } = Astro.props;
+const label = figure.kind !== 'screens' ? figure.label : undefined;
+---
+
+{figure.kind === 'screens' ? (
+  <figure class="figure" id={`fig-${figure.id}`}>
+    <ul class="screens">
+      {figure.items.map((item) => (
+        <li>
+          <Image src={item.image[locale]} alt={item.alt[locale]} widths={[360, 540]} sizes="(max-width: 40rem) 45vw, 11rem" format="webp" loading="lazy" decoding="async" />
+        </li>
+      ))}
+    </ul>
+    <figcaption>{figure.caption[locale]}</figcaption>
+  </figure>
+) : (
+  <figure class={`figure${label ? ` label-${label}` : ''}`} id={`fig-${figure.id}`}>
+    <div class="figure-frame">
+      {figure.svg ? (
+        <img src={figure.svg.url} width={figure.svg.width} height={figure.svg.height} alt={figure.alt[locale]} loading="lazy" decoding="async" />
+      ) : (
+        figure.raster && <Image src={figure.raster} alt={figure.alt[locale]} widths={[800, 1400]} sizes="(max-width: 60rem) 100vw, 46rem" format="webp" loading="lazy" decoding="async" />
+      )}
+    </div>
+    <figcaption>
+      {label && <span class={`asset-label label-${label}`} title={t(locale, `labels.${label}`)}>{label}</span>}
+      {figure.caption[locale]}
+      {figure.svg && <a class="full-size" href={figure.svg.url}>{t(locale, 'figure.full_size')}</a>}
+    </figcaption>
+  </figure>
+)}

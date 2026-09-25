@@ -1,0 +1,21 @@
+---
+import type { Locale } from '../lib/i18n';
+import type { Fact } from '../lib/content/schema';
+import { termText } from '../lib/content/load';
+
+interface Props {
+  facts: Fact[];
+  locale: Locale;
+}
+const { facts, locale } = Astro.props;
+---
+
+<ul class="facts">
+  {facts.map((f) => (
+    <li>
+      <span class="value">{termText(f.value, locale)}</span>
+      <span class="label">{f.label[locale]}</span>
+      <span class="condition">{f.condition[locale]}</span>
+    </li>
+  ))}
+</ul>

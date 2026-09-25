@@ -1,0 +1,124 @@
+---
+// Visual résumé (ADR-007): consistent with the PDF résumé, with every skill linked to its evidence.
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import StatusBadge from '../../components/StatusBadge.astro';
+import { localePath, localePaths, type Locale } from '../../lib/i18n';
+import { getContent, t, termText } from '../../lib/content/load';
+import { formatPeriod, teamLabel } from '../../lib/format';
+
+export function getStaticPaths() {
+  return localePaths();
+}
+
+const { locale } = Astro.props as { locale: Locale };
+const { profile, projects } = getContent();
+
+const byStart = [...projects.values()].sort((a, b) => b.meta.period.start.localeCompare(a.meta.period.start));
+const highlights = profile.highlights.map((h) => ({ project: projects.get(h.project)!, fact: projects.get(h.project)!.meta.facts[h.fact] }));
+---
+
+<BaseLayout locale={locale} path="/resume/" title={t(locale, 'resume.title')} description={t(locale, 'resume.description')} nav="resume">
+  <div class="container">
+    <header class="resume-head">
+      <div>
+        <p class="eyebrow">{t(locale, 'resume.eyebrow')}</p>
+        <h1>{profile.name[locale]}</h1>
+        <p class="headline">{profile.headline[locale]}</p>
+      </div>
+      <ul class="resume-links">
+        {profile.links.map((l) => <li><a href={l.url}>{l.label[locale]}</a></li>)}
+      </ul>
+    </header>
+
+    <section class="block" aria-labelledby="highlights">
+      <h2 id="highlights">{t(locale, 'resume.highlights')}</h2>
+      <ul class="highlights">
+        {highlights.map(({ project, fact }) => (
+          <li>
+            <span class="value">{termText(fact.value, locale)}</span>
+            <span class="label">{fact.label[locale]}</span>
+            <span class="source">
+              <a href={localePath(locale, `/projects/${project.meta.slug}/`)}>{project.meta.title[locale]}</a> · {fact.condition[locale]}
+            </span>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section class="block" aria-labelledby="education">
+      <h2 id="education">{t(locale, 'resume.education')}</h2>
+      <ol class="cv-list">
+        {profile.education.map((e) => (
+          <li class="cv-item">
+            <div class="cv-when">{formatPeriod(e.period, locale)}</div>
+            <div class="cv-what">
+              <h3>{e.school[locale]}</h3>
+              <p class="cv-sub">{e.degree[locale]} · {e.location[locale]}</p>
+              {e.details.length > 0 && <ul>{e.details.map((d) => <li>{d[locale]}</li>)}</ul>}
+            </div>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <section class="block" aria-labelledby="experience">
+      <h2 id="experience">{t(locale, 'resume.experience')}</h2>
+      <ol class="cv-list">
+        {profile.experience.map((x) => (
+          <li class="cv-item">
+            <div class="cv-when">{formatPeriod(x.period, locale)}</div>
+            <div class="cv-what">
+              <h3>{x.org[locale]}</h3>
+              <p class="cv-sub">{x.role[locale]} · {x.location[locale]}</p>
+              <ul>{x.bullets.map((b) => <li>{b[locale]}</li>)}</ul>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <section class="block" aria-labelledby="projects">
+      <h2 id="projects">{t(locale, 'resume.projects')}</h2>
+      <ol class="cv-list">
+        {byStart.map((p) => (
+          <li class="cv-item">
+            <div class="cv-when">{formatPeriod(p.meta.period, locale)}</div>
+            <div class="cv-what">
+              <h3><a href={localePath(locale, `/projects/${p.meta.slug}/`)}>{p.meta.title[locale]}</a></h3>
+              <p class="cv-sub">{p.meta.subtitle[locale]} · {p.meta.context[locale]} · {teamLabel(p.meta.team, locale)}</p>
+              <StatusBadge status={p.meta.status} team={p.meta.team} locale={locale} />
+            </div>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <section class="block" aria-labelledby="skills">
+      <div class="block-head">
+        <h2 id="skills">{t(locale, 'resume.skills')}</h2>
+        <p class="muted small">{t(locale, 'resume.skills_note')}</p>
+      </div>
+      <div class="skill-groups">
+        {profile.skills.map((g) => (
+          <div class="skill-group">
+            <h3>{g.group[locale]}</h3>
+            <ul class="skill-list">
+              {g.items.map((item) => (
+                <li>
+                  <span class="skill">{termText(item.name, locale)}</span>
+                  <span class="evidence">
+                    {item.evidence.map((slug) => (
+                      <a href={localePath(locale, `/projects/${slug}/`)}>{projects.get(slug)!.meta.title[locale]}</a>
+                    ))}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <p class="note block no-print">{t(locale, 'resume.note')}</p>
+  </div>
+</BaseLayout>

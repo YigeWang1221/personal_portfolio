@@ -1,0 +1,26 @@
+slug: smartbuyer
+title: { en: SmartBuyer E-commerce, zh: SmartBuyer 电商平台 }
+subtitle:
+  en: The backend of a five-person React, Express and MongoDB store
+  zh: 五人团队 React / Express / MongoDB 电商项目的后端
+summary:
+  en: In a team of five, we built an online store with category browsing, search, a cart, simulated checkout and refund review. I led the backend — the data models, the REST API and its restructuring into controller and route layers.
+  zh: 我们五人团队开发了一个网上商城，支持分类浏览、搜索、购物车、模拟结账和退款审核。我主导后端开发，包括数据模型、REST API，以及把 API 重构为 controller 与 route 分层。
+tracks: { primary: sde, also: [] }
+status: course-project
+team: { size: 5 }
+role:
+  en: Led the backend; the React frontend was built by the team
+  zh: 主导后端开发；React 前端由团队共同完成
+context: { en: "Course project, INFO 6150 Web Design & User Experience", zh: 课程项目，INFO 6150 网页设计与用户体验 }
+period: { start: "2025-03", end: "2025-04" }
+stack: [Node.js, Express, MongoDB, Mongoose, bcrypt, express-session, Multer, React, Axios]
+links: []
+highlights: [schemas]
+
+facts:
+  schemas:
+    value: "9"
+    label: { en: Mongoose schemas I wrote, zh: 由我编写的 Mongoose 数据模型 }
+    condition: { en: "Team of five; the order schema was later reworked by a teammate", zh: 五人团队；其中订单模型后来由队友重新修改 }
+    claim: SB-01

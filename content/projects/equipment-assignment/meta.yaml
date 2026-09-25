@@ -1,0 +1,41 @@
+slug: equipment-assignment
+title: { en: Equipment & Assignment Grading System, zh: 设备借用与作业批改平台 }
+subtitle:
+  en: A teaching platform for an IoT course — equipment loans, group homework with a collaborative editing lock, grading and media
+  zh: 物联网课程的教学平台：设备借用、带协同编辑锁的小组作业、作业批改与媒体管理
+summary:
+  en: My undergraduate capstone. A Vue 3 and Spring Boot platform that runs an IoT course end to end — equipment borrowing with approval, classes and groups, homework that a group edits together, grading, PDF export, and course videos that play from object storage and can be scrubbed without downloading the whole file.
+  zh: 我的本科毕业设计。一个基于 Vue 3 与 Spring Boot 的平台，覆盖一门物联网课程的完整流程：带审批的设备借用、班级与分组、小组协同编辑的作业、作业批改、PDF 导出，以及存放在对象存储中、无需完整下载即可拖动播放的课程视频。
+tracks: { primary: sde, also: [] }
+status: undergraduate-capstone
+team: { size: 1 }
+role:
+  en: Built it alone as my undergraduate capstone
+  zh: 本科毕业设计，独立完成
+context: { en: "Undergraduate capstone, Zhejiang Gongshang University", zh: 本科毕业设计，浙江工商大学 }
+period: { start: "2023-02", end: "2024-04" }
+stack: [Java 17, Spring Boot 2.7, MyBatis-Plus, MySQL, MinIO, Apache POI, iText html2pdf, Vue 3, TypeScript, Element Plus]
+links: []
+highlights: [endpoints]
+deep_dive_from: maintenance
+
+facts:
+  endpoints:
+    value: "89"
+    label: { en: REST endpoints in the backend, zh: 后端 REST 接口 }
+    condition: { en: Across 11 controllers in the recovered backend source, zh: 分布在已恢复后端源码的 11 个控制器中 }
+    claim: EQ-09
+
+figures:
+  - kind: diagram
+    id: architecture
+    section: architecture
+    file: assets/architecture.svg
+    source: assets/architecture.mmd
+    label: CURRENT
+    alt:
+      en: "Architecture: teacher, student and guest views in a Vue 3 frontend call a Spring Boot backend with role interceptors and services for equipment, classes and groups, homework, the showcase and exports; data lives in MySQL, media in MinIO, and documents are produced with Apache POI and html2pdf."
+      zh: 架构图：Vue 3 前端的教师、学生和访客页面调用 Spring Boot 后端；后端有按角色划分的拦截器，以及设备、班级与分组、作业、作品展示和导出等服务；数据存于 MySQL，媒体存于 MinIO，文档由 Apache POI 和 html2pdf 生成。
+    caption:
+      en: The capstone as built. The 2026 maintenance branch (Redis lock and cache) is not drawn because it is not merged yet.
+      zh: 毕业设计完成时的架构。2026 年维护分支（Redis 锁与缓存）尚未合并，因此没有画入图中。

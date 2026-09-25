@@ -1,0 +1,37 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { localePaths, type Locale } from '../../lib/i18n';
+import { getContent, t } from '../../lib/content/load';
+
+export function getStaticPaths() {
+  return localePaths();
+}
+
+const { locale } = Astro.props as { locale: Locale };
+const { pages, profile } = getContent();
+const sections = pages.about.sections[locale];
+---
+
+<BaseLayout locale={locale} path="/about/" title={t(locale, 'about.title')} description={t(locale, 'about.description')} nav="about">
+  <div class="container">
+    <header class="page-head">
+      <p class="eyebrow">{t(locale, 'about.eyebrow')}</p>
+      <h1>{t(locale, 'about.title')}</h1>
+      <p class="lede">{profile.headline[locale]}</p>
+    </header>
+    <div class="narrative measure">
+      {sections.map((s) => (
+        <section id={s.id} aria-labelledby={`${s.id}-title`}>
+          <h2 id={`${s.id}-title`}>{s.title}</h2>
+          <div class="prose" set:html={s.html} />
+        </section>
+      ))}
+      <section id="contact" aria-labelledby="contact-title">
+        <h2 id="contact-title">{t(locale, 'about.contact')}</h2>
+        <ul class="link-list">
+          {profile.links.map((l) => <li><a href={l.url}>{l.label[locale]}</a></li>)}
+        </ul>
+      </section>
+    </div>
+  </div>
+</BaseLayout>
