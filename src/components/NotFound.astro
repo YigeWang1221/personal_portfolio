@@ -1,13 +1,12 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { localePath, type Locale } from '../lib/i18n';
-import { getContent, t } from '../lib/content/load';
+import { t } from '../lib/content/load';
 
 interface Props {
   locale: Locale;
 }
 const { locale } = Astro.props;
-const { tracks } = getContent();
 ---
 
 <BaseLayout locale={locale} path="/" title={t(locale, 'notfound.title')} description={t(locale, 'notfound.body')} notFound>
@@ -18,7 +17,8 @@ const { tracks } = getContent();
       <p>{t(locale, 'notfound.body')}</p>
       <ul>
         <li><a href={localePath(locale, '/')}>{t(locale, 'nav.home')}</a></li>
-        {tracks.map((tr) => <li><a href={localePath(locale, `/tracks/${tr.id}/`)}>{tr.title[locale]}</a></li>)}
+        <li><a href={localePath(locale, '/projects/')}>{t(locale, 'nav.projects')}</a></li>
+        <li><a href={localePath(locale, '/background/')}>{t(locale, 'nav.background')}</a></li>
         <li><a href={localePath(locale, '/resume/')}>{t(locale, 'nav.resume')}</a></li>
       </ul>
     </section>

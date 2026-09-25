@@ -13,17 +13,18 @@ import {
 } from './markdown';
 import {
   type AssetLabel,
+  catalogFile,
   planPageMeta,
   profileFile,
   projectMeta,
-  tracksFile,
+  type CatalogFile,
   type Fact,
+  type FocusId,
   type Localized,
   type Term,
   type PlanPageMeta,
   type ProfileFile,
   type ProjectMeta,
-  type TrackId,
 } from './schema';
 
 const RAW = import.meta.glob('/content/**/*.{yaml,md,mmd}', {
@@ -75,15 +76,16 @@ export interface Project {
   meta: ProjectMeta;
   sections: Record<Locale, RenderedSection[]>;
   figures: ResolvedFigure[];
-  /** Tracks that list this project, in registry order. */
-  trackIds: TrackId[];
+  /** The page figure shown next to a featured card, when the card has no step list. */
+  cardFigure?: ResolvedFigure;
+  /** Primary capability first, then the others. */
+  focusIds: FocusId[];
 }
 
-export interface Track {
-  id: TrackId;
+export interface Focus {
+  id: FocusId;
   title: Localized;
-  positioning: Localized;
-  projects: Project[];
+  description: Localized;
 }
 
 export interface Page {
@@ -91,15 +93,24 @@ export interface Page {
 }
 
 export interface Content {
-  tracks: Track[];
+  focus: Focus[];
+  /** Every published project, in catalog order. */
+  catalog: Project[];
   featured: Project[];
+  more: Project[];
+  entries: CatalogFile['entries'];
   projects: Map<string, Project>;
   profile: ProfileFile;
   strings: Record<Locale, Record<string, string>>;
   pages: {
-    about: Page;
+    background: Page;
     plan: Page & { meta: PlanPageMeta };
   };
+}
+
+/** Section and sub-heading ids of a project, for anchor checks. */
+export function projectAnchors(p: Project): Set<string> {
+  return new Set(p.sections.en.flatMap((s) => [s.id, ...s.subIds]));
 }
 
 // ---------------------------------------------------------------------------------------------------
@@ -282,12 +293,13 @@ function buildContent(): Content {
   if (missingZh.length) errors.push(`content/site/zh.yaml is missing keys: ${missingZh.join(', ')}`);
   if (missingEn.length) errors.push(`content/site/en.yaml is missing keys: ${missingEn.join(', ')}`);
 
-  // Track registry ------------------------------------------------------------------------------------
-  const registry = validate(tracksFile, readYaml('/content/tracks.yaml', errors), 'content/tracks.yaml', errors);
+  // Catalog registry ----------------------------------------------------------------------------------
+  const registry = validate<CatalogFile>(catalogFile, readYaml('/content/catalog.yaml', errors), 'content/catalog.yaml', errors);
 
   // Project modules -----------------------------------------------------------------------------------
   const metaPaths = Object.keys(RAW).filter((p) => /^\/content\/projects\/[^/]+\/meta\.yaml$/.test(p));
-  const listed = new Set(registry?.tracks.flatMap((t) => t.projects) ?? []);
+  const listed = new Set(registry?.order ?? []);
+  if (registry && listed.size !== registry.order.length) errors.push('content/catalog.yaml: "order" lists a project twice');
   const projects = new Map<string, Project>();
   for (const metaPath of metaPaths.sort()) {
     const dir = metaPath.replace(/\/meta\.yaml$/, '');
@@ -308,46 +320,64 @@ function buildContent(): Content {
       errors.push(`${metaPath.slice(1)}: deep_dive_from "${meta.deep_dive_from}" is not a section`);
     }
     const figures = resolveFigures(dir, meta, sectionIds, errors);
-    projects.set(meta.slug, { meta, sections: rendered, figures, trackIds: [] });
+    let cardFigure: ResolvedFigure | undefined;
+    if (meta.card?.figure && meta.card.steps) {
+      errors.push(`${metaPath.slice(1)}: card has both "figure" and "steps"; use one`);
+    } else if (meta.card?.figure) {
+      cardFigure = figures.find((f) => f.id === meta.card!.figure);
+      if (!cardFigure) errors.push(`${metaPath.slice(1)}: card figure "${meta.card.figure}" is not a figure of the project`);
+    }
+    const focusIds = [meta.focus.primary, ...meta.focus.also.filter((f) => f !== meta.focus.primary)];
+    projects.set(meta.slug, { meta, sections: rendered, figures, cardFigure, focusIds });
   }
   for (const slug of listed) {
     if (!projects.has(slug) && !metaPaths.includes(`/content/projects/${slug}/meta.yaml`)) {
-      errors.push(`content/tracks.yaml lists "${slug}", but content/projects/${slug}/meta.yaml does not exist`);
+      errors.push(`content/catalog.yaml lists "${slug}", but content/projects/${slug}/meta.yaml does not exist`);
     }
   }
 
-  // Tracks: membership lives in meta.yaml, order lives in tracks.yaml (ADR-006) ------------------------
-  const tracks: Track[] = [];
-  for (const t of registry?.tracks ?? []) {
-    const seen = new Set<string>();
-    const list: Project[] = [];
-    for (const slug of t.projects) {
-      if (seen.has(slug)) errors.push(`content/tracks.yaml: "${slug}" appears twice in track "${t.id}"`);
-      seen.add(slug);
-      const p = projects.get(slug);
-      if (!p) continue;
-      const declared = [p.meta.tracks.primary, ...p.meta.tracks.also];
-      if (!declared.includes(t.id)) {
-        errors.push(`content/tracks.yaml lists "${slug}" under "${t.id}", but its meta.yaml does not declare that track`);
-      }
-      p.trackIds.push(t.id);
-      list.push(p);
-    }
-    tracks.push({ id: t.id, title: t.title, positioning: t.positioning, projects: list });
+  // Catalog: membership lives in meta.yaml, order lives in catalog.yaml (ADR-006, ADR-016) -------------
+  const catalog = (registry?.order ?? []).map((slug) => projects.get(slug)).filter((p): p is Project => Boolean(p));
+  const pick = (list: string[], what: string) =>
+    list
+      .map((slug) => {
+        const p = projects.get(slug);
+        if (!p) errors.push(`content/catalog.yaml: ${what} project "${slug}" is not in "order"`);
+        return p;
+      })
+      .filter((p): p is Project => Boolean(p));
+  const featured = pick(registry?.featured ?? [], 'featured');
+  const more = pick(registry?.more ?? [], '"more"');
+  for (const p of featured) {
+    const where = `content/projects/${p.meta.slug}/meta.yaml`;
+    if (!p.meta.card) errors.push(`${where}: a featured project needs "card"`);
+    else if (!p.cardFigure && !p.meta.card.steps) errors.push(`${where}: a featured card needs "card.figure" or "card.steps"`);
+    if (!p.meta.overview) errors.push(`${where}: a featured project needs "overview"`);
+    if (more.includes(p)) errors.push(`content/catalog.yaml: "${p.meta.slug}" is both featured and in "more"`);
   }
   for (const p of projects.values()) {
-    const declared = [p.meta.tracks.primary, ...p.meta.tracks.also];
-    for (const id of declared) {
-      if (!p.trackIds.includes(id)) {
-        errors.push(`${p.meta.slug}: meta.yaml declares track "${id}", but content/tracks.yaml does not list it there`);
+    const where = `content/projects/${p.meta.slug}/meta.yaml`;
+    if (p.meta.card?.anchor && !projectAnchors(p).has(p.meta.card.anchor)) {
+      errors.push(`${where}: card anchor "#${p.meta.card.anchor}" is not a section or sub-heading`);
+    }
+    const anchors = projectAnchors(p);
+    for (const [alias, target] of Object.entries(p.meta.anchor_aliases)) {
+      if (anchors.has(alias)) errors.push(`${where}: anchor alias "${alias}" is still a section or sub-heading id`);
+      if (!p.sections.en.some((s) => s.id === target)) errors.push(`${where}: anchor alias "${alias}" points to missing section "${target}"`);
+    }
+    if (p.meta.related && (!projects.has(p.meta.related) || p.meta.related === p.meta.slug)) {
+      errors.push(`${where}: related project "${p.meta.related}" is not another published project`);
+    }
+  }
+  for (const e of registry?.entries ?? []) {
+    for (const l of [e.link, e.also].filter((x): x is NonNullable<typeof x> => Boolean(x))) {
+      const p = projects.get(l.project);
+      if (!p || !projectAnchors(p).has(l.anchor)) {
+        errors.push(`content/catalog.yaml: entry "${e.id}" links to missing ${l.project}#${l.anchor}`);
       }
     }
   }
-  const featured = (registry?.featured ?? []).map((slug) => {
-    const p = projects.get(slug);
-    if (!p) errors.push(`content/tracks.yaml: featured project "${slug}" is not published`);
-    return p;
-  }).filter((p): p is Project => Boolean(p));
+  const focus = registry?.focus ?? [];
 
   // All project facts, addressable from page narratives as {{fact:slug.key}} ---------------------------
   const allFacts: Record<string, Fact> = {};
@@ -373,7 +403,7 @@ function buildContent(): Content {
   }
 
   // Pages ---------------------------------------------------------------------------------------------
-  const about = loadSections('/content/pages/about', 'content/pages/about', allFacts, errors).rendered;
+  const background = loadSections('/content/pages/background', 'content/pages/background', allFacts, errors).rendered;
   const planMeta = validate(planPageMeta, readYaml('/content/pages/plan-and-design/meta.yaml', errors), 'content/pages/plan-and-design/meta.yaml', errors);
   const plan = loadSections('/content/pages/plan-and-design', 'content/pages/plan-and-design', allFacts, errors).rendered;
   if (planMeta) {
@@ -384,7 +414,7 @@ function buildContent(): Content {
     for (const r of planMeta.records) {
       if (!planIds.has(r.id)) errors.push(`plan-and-design/meta.yaml: record "${r.id}" is not a section of the page`);
       const p = projects.get(r.project);
-      const anchors = new Set(p?.sections.en.flatMap((s) => [s.id, ...s.subIds]) ?? []);
+      const anchors = p ? projectAnchors(p) : new Set<string>();
       if (!anchors.has(r.anchor)) errors.push(`plan-and-design/meta.yaml: record "${r.id}" points to missing anchor ${r.project}#${r.anchor}`);
     }
     for (const th of planMeta.thumbnails) {
@@ -397,12 +427,15 @@ function buildContent(): Content {
     throw new Error(`Content validation failed (${errors.length}):\n- ${errors.join('\n- ')}`);
   }
   return {
-    tracks,
+    focus,
+    catalog,
     featured,
+    more,
+    entries: registry!.entries,
     projects,
     profile: profile!,
     strings,
-    pages: { about: { sections: about }, plan: { sections: plan, meta: planMeta! } },
+    pages: { background: { sections: background }, plan: { sections: plan, meta: planMeta! } },
   };
 }
 

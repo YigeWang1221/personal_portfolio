@@ -1,0 +1,14 @@
+%% CURRENT — one donation, traced from the event handlers of the team repository (INFO 5100, Mar–Apr 2025).
+flowchart TB
+  FP["Food provider<br/>submits a donation"] -- "request: Pending" --> CQ[("Network<br/>inspection queue")]
+  CQ --> FC["Fresh checker<br/>approves or rejects"]
+  FC -- "approve · item: accepted, stored" --> WQ[("Network<br/>warehouse queue")]
+  FC -. "reject · removed from the queue" .-> X["No further step"]
+  HR["Homeless client<br/>asks for food"] -- "needs request: Pending" --> RQ[("Shelter network<br/>request queue")]
+  WQ --> SH["Shelter helper<br/>pairs food with a request"]
+  RQ --> SH
+  SH -- "task: UnPick · request: Matched · item: Assigned" --> TQ[("Shelter network<br/>delivery tasks")]
+  TQ --> TM["Task manager<br/>assigns an unassigned task"]
+  TM -- "task: Waiting to be picked up · driver: busy" --> DQ[("Driver's<br/>active queue")]
+  DQ --> DR["Driver"]
+  DR -- "Picked up, then Delivered · item: donated" --> FQ[("Driver's<br/>finished queue")]

@@ -1,25 +1,61 @@
 slug: enterprise-workflow
 title: { en: "FoodShelter: Food-Rescue Workflow System", zh: FoodShelter：食物救助多组织协作系统 }
 subtitle:
-  en: A desktop system that routes food donations, inspections and deliveries between organizations
-  zh: 在多个组织之间流转食物捐赠、检验与配送任务的桌面系统
+  en: A desktop system that moves food donations through inspection, matching and delivery across several organizations
+  zh: 让食物捐赠在多个组织之间依次完成检验、匹配和配送的桌面系统
 summary:
-  en: In a team of three, we built a Java Swing system that coordinates food rescue across donors, inspectors, a rescue network, drivers, task managers and administrators. I designed its domain model and persistence layer.
-  zh: 我们三人团队用 Java Swing 开发了一个食物救助协作系统，连接捐赠方、检验员、救助网络、司机、任务调度员和管理员。我负责设计它的领域模型和持久化层。
-tracks: { primary: sde, also: [] }
+  en: In a team of three, we built a Java Swing system in which donors, inspectors, a shelter network, task managers and drivers each work in their own screen, and a donation moves between them as requests in shared work queues. I designed the domain model and the persistence layer.
+  zh: 我们三人团队用 Java Swing 开发了这个系统：捐赠方、检验员、救助网络、任务调度员和司机各有自己的工作界面，一份捐赠以请求的形式在共享工作队列之间流转。我负责设计领域模型和持久化层。
+focus: { primary: business-modeling, also: [] }
 status: course-project
 team: { size: 3 }
 role:
-  en: Designed the domain model and the persistence layer; co-implemented the task-manager, driver, inspection and rescue-network workflows
-  zh: 设计领域模型与持久化层；参与实现任务调度、司机配送、食品检验和救助网络工作流
+  en: Designed the domain model and the persistence layer; co-implemented the inspection, matching, task-manager and driver workflows
+  zh: 设计领域模型与持久化层；参与实现检验、匹配、任务调度和司机配送工作流
 context: { en: "Course project, INFO 5100 Application Engineering & Development", zh: 课程项目，INFO 5100 应用工程与开发 }
 period: { start: "2025-03", end: "2025-04" }
 stack: [Java 18, Swing, Maven, db4o, JFreeChart, iText, Datafaker]
 links:
   - kind: code
     url: https://github.com/5100GroupWork/FoodShelter
-    label: { en: Code on GitHub, zh: GitHub 代码 }
-highlights: [model_classes, prs]
+    label: { en: Source on GitHub, zh: GitHub 源码 }
+highlights: []
+# Section ids retired in the 2026-09 redesign.
+anchor_aliases: { system: scenario, ownership: contribution, lessons: limits }
+related: cloud-native
+
+overview:
+  problem:
+    en: A food donation has to pass through several independent organizations — the donor, an inspection team, a shelter network, a volunteer dispatch team — and each person should see only the work that is theirs to do.
+    zh: 一份食物捐赠要经过多个彼此独立的组织：捐赠方、检验团队、救助网络、志愿者调度团队；每个人只应看到属于自己的工作。
+  contributions:
+    - en: Designed the object model — network, enterprise, organization, account, role, work queue and the request types — and the db4o persistence around it.
+      zh: 设计对象模型（网络、企业、组织、账号、角色、工作队列和各类请求），以及围绕它的 db4o 持久化。
+    - en: Wrote the application shell and the role-based login, and co-implemented the inspection, matching, task-manager and driver screens with my teammates.
+      zh: 编写应用主框架与按角色分派的登录；与队友共同实现检验、匹配、任务调度和司机界面。
+  outcome:
+    en: A completed course project that runs a donation end to end on seeded demo data. It has no automated tests, and several state rules are enforced only by which screen a user is given.
+    zh: 已完成的课程项目，可以在预置演示数据上跑通一份捐赠的完整流程。项目没有自动化测试，部分状态规则只靠"用户能进入哪个界面"来保证。
+
+card:
+  question:
+    en: How does one donation pass through five roles in separate organizations without the screens knowing about each other?
+    zh: 一份捐赠如何经过分属不同组织的五种角色，而各个界面彼此互不依赖？
+  contribution:
+    en: Designed the domain model and persistence; co-implemented the workflow screens (team of three).
+    zh: 设计领域模型与持久化；参与实现各工作流界面（三人团队）。
+  tech: [Java, Swing, db4o]
+  cta: { en: Explore the domain model, zh: 查看领域模型 }
+  anchor: domain-model
+  steps:
+    label: CURRENT
+    items:
+      - { title: { en: Food provider donates, zh: 食品提供方提交捐赠 }, detail: "Pending" }
+      - { title: { en: Fresh checker approves, zh: 检验员批准 }, detail: "accepted · stored" }
+      - { title: { en: Shelter helper matches a request, zh: 救助站助理匹配需求 }, detail: "UnPick" }
+      - { title: { en: Task manager assigns a driver, zh: 任务调度员指派司机 }, detail: "Waiting to be picked up" }
+      - { title: { en: Driver delivers, zh: 司机完成配送 }, detail: "Delivered" }
+    note: { en: Status values as the code writes them, zh: 状态值即代码中写入的字符串 }
 
 facts:
   model_classes:
@@ -27,13 +63,20 @@ facts:
     label: { en: domain-model classes I created, zh: 由我创建的领域模型类 }
     condition: { en: "Counted by the author of each file's first commit", zh: 按每个文件首次提交的作者统计 }
     claim: FS-01
-  prs:
-    value: "110"
-    label: { en: pull requests in the team repository, zh: 团队仓库中的 PR 数量 }
-    condition: { en: "Feature branches per person, team of three; volume, not quality", zh: 每人使用各自的功能分支，三人团队；只说明数量，不代表质量 }
-    claim: FS-04
 
 figures:
+  - kind: diagram
+    id: donation-flow
+    section: workflow
+    file: assets/donation-flow.svg
+    source: assets/donation-flow.mmd
+    label: CURRENT
+    alt:
+      en: "Flow of one donation: a food provider submits it into the network's inspection queue; an inspector approves it into the warehouse queue; a shelter helper pairs it with a pending shelter request and creates a delivery task; a task manager assigns an unassigned task to a driver; the driver marks it picked up and then delivered."
+      zh: 一份捐赠的流程：食品提供方把捐赠提交到网络的检验队列；检验员批准后移入仓库队列；救助站助理把它与一条待处理的收容请求配对，生成配送任务；任务调度员把未分配的任务派给司机；司机先标记已取货，再标记已送达。
+    caption:
+      en: Traced from the screens' event handlers. Each arrow is a real handler; the labels are the status values the code sets.
+      zh: 依据各界面的事件处理代码梳理。每个箭头都对应真实存在的处理函数，标注的是代码实际写入的状态值。
   - kind: diagram
     id: domain-model
     section: domain-model
@@ -41,8 +84,8 @@ figures:
     source: assets/domain-model.mmd
     label: CURRENT
     alt:
-      en: "Class diagram: the system holds networks; each network has enterprises, each enterprise has organizations, organizations hold user accounts with roles; networks own work queues that hold delivery, food-item and needs requests."
-      zh: 类图：系统包含多个网络；每个网络下有企业，企业下有组织，组织中的用户账号各有角色；网络拥有工作队列，队列中是配送、食品和需求请求。
+      en: "Class diagram of the objects on the donation path: a network owns an inspection queue, a warehouse queue, enterprises and user accounts; enterprises and organizations each own a work queue; a user account has one role, and each role builds its own work screen; the driver role keeps its own active and finished queues; work requests carry a sender, a receiver and a status, with food-item, delivery and needs requests as subclasses."
+      zh: 捐赠路径上各对象的类图：网络拥有检验队列、仓库队列、企业和用户账号；企业和组织各自拥有工作队列；用户账号只有一个角色，每个角色构建自己的工作界面；司机角色另有进行中和已完成两个队列；工作请求带有发送方、接收方和状态，食品、配送和需求请求是它的子类。
     caption:
-      en: Redrawn from the code. The hierarchy lets a request move between organizations without the screens knowing about each other.
-      zh: 依据代码重新绘制。这套层级让请求可以在组织之间流转，而各个界面之间无需互相了解。
+      en: A partial class diagram, redrawn from the model package. Only the objects on the donation path are shown.
+      zh: 依据 model 包重新绘制的局部类图，只画出捐赠路径上的对象。

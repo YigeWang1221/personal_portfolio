@@ -6,7 +6,7 @@ subtitle:
 summary:
   en: Short method cards from the Data Science Engineering Methods course — what each method is for and where I applied it. The graded notebooks themselves are not published.
   zh: 来自"数据科学工程方法"课程的方法卡片：每种方法用来解决什么问题，以及我在哪里用过它。评分作业本身不公开。
-tracks: { primary: ds-finance, also: [] }
+focus: { primary: ai-research, also: [] }
 status: course-project
 team: { size: 2, mixed: true }
 role:

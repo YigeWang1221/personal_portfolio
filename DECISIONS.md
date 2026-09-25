@@ -86,7 +86,8 @@ Architecture decision records for the portfolio repository.
 
 ## ADR-006 — Three tracks and modular project modules
 
-- **Status:** Accepted · **Date:** 2026-09-24
+- **Status:** Accepted · **Date:** 2026-09-24 · **Amended by ADR-016:** the three tracks are replaced by capability
+  filters, and the registry is `content/catalog.yaml`. Modularity and the single registry stand.
 - **Context:** The owner targets several role families and wants to re-order, add, remove or cross-list projects
   freely.
 - **Decision:**
@@ -261,7 +262,8 @@ Architecture decision records for the portfolio repository.
       URLs.
     - A `workers.dev` or `pages.dev` URL is rejected as `SITE_URL`.
     - Pages are `noindex` unless `SITE_URL` is set and `SITE_INDEXING=true`.
-  - **No client-side JavaScript,** and no inline scripts or styles. The CSP is sent both as a `<meta>` tag and in
+  - **No client-side JavaScript,** and no inline scripts or styles. *(Amended by ADR-016: one first-party
+    progressive-enhancement script is allowed.)* The CSP is sent both as a `<meta>` tag and in
     `_headers`. SVG assets get their own policy so that diagram styles render.
   - **Content loading:** a small loader reads `content/` (YAML and Markdown), validates it, substitutes facts from
     `meta.yaml` and renders Markdown with `marked`. Section IDs do not depend on the language. The build fails on any
@@ -276,3 +278,38 @@ Architecture decision records for the portfolio repository.
   - The output works on any static host. Only `_headers` and `wrangler.jsonc` are Cloudflare-specific.
   - Authors write plain Markdown with `{{fact:key}}` references and `{#id}` section anchors.
   - A diagram's SVG must be regenerated whenever its `.mmd` source changes.
+
+## ADR-016 — Redesign: a résumé companion organized by capability, with case studies first
+
+- **Status:** Accepted · **Date:** 2026-09-25 · **Amends:** ADR-006 (tracks), ADR-015 (client-side JavaScript)
+- **Context:**
+  - The owner's redesign brief (2026-09-24) asks the site to work as a quick companion to the résumé: a clear
+    software-engineering position first, then case studies that show business modeling, backend and cloud delivery,
+    and system planning, each with the owner's own contribution on the first screen.
+  - Three role tracks made readers choose a job family before seeing any work.
+  - The brief asks for a filterable catalog, a mobile menu with keyboard support, and old links that keep working.
+- **Decision:**
+  - **Navigation:** Projects / Background / Résumé / language switch. "How I plan & design" stays as a secondary page,
+    linked from Background and the footer.
+  - **Home:** position → three capability entries that open a section of a case study → four selected case studies
+    (KK Knock, FoodShelter, Cloud-Native, Personal Writing LoRA) → three compact "more" projects → a short background.
+  - **Capabilities replace tracks.** Four capability ids (`business-modeling`, `backend-cloud`, `planning-delivery`,
+    `ai-research`) are declared per project (`focus` in `meta.yaml`) and used as catalog filters. The only ordering
+    registry is `content/catalog.yaml` (featured, more, catalog order, capability entries).
+  - **Case studies** open with status, role, team and a three-part overview (problem / my contribution / outcome and
+    validation). Cards and overviews are written by an editor; nothing is truncated from the stack list.
+  - **Card schematics.** A featured card shows either a page figure or a short HTML step list labeled like a diagram
+    (CURRENT / PROPOSED). Dense diagrams stay on the case study, where they are readable.
+  - **One script.** `public/js/site.js` adds the mobile menu, the catalog filter (with `?focus=` in the URL, refresh
+    and back-button support) and a language switch that keeps the current `#section`. It is loaded from the site's own
+    origin with a content-hash version, so the CSP stays `script-src 'self'`. Every page works without it.
+    `scripts/check-dist.mjs` allows exactly this script and nothing else.
+  - **Old links.** Retired pages (`/about/`, `/tracks/*`, and their `/zh/` versions) get permanent single-hop
+    redirects in `public/_redirects`, checked by `check-dist`. Retired section ids of a case study are kept as
+    anchor aliases (`anchor_aliases` in `meta.yaml`), so old `#anchors` still land on the section that replaced them.
+  - **URLs and slugs are unchanged:** English at `/`, Chinese at `/zh/`, and the existing project slugs, so no project
+    page needed a redirect.
+- **Consequences:**
+  - Re-ranking or featuring a project still touches one registry file.
+  - The site now ships one small script; the no-inline-code rule and the CSP are unchanged.
+  - `_redirects` is Cloudflare-specific, like `_headers`; on another host the redirects must be re-created.

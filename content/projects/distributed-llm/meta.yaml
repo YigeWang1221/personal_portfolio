@@ -6,7 +6,7 @@ subtitle:
 summary:
   en: We measured how a 51.5M-parameter GPT-2 trains on one node of Northeastern's HPC cluster — parallel tokenization, DDP scaling on one to four V100 GPUs, the FSDP memory trade-off, and NVLink versus shared-memory transport — and wrote down where the numbers stop meaning what they seem to.
   zh: 我们测量了一个 5150 万参数的 GPT-2 在美国东北大学 HPC 集群单节点上的训练表现：并行分词、1 到 4 块 V100 上的 DDP 扩展、FSDP 的显存取舍，以及 NVLink 与共享内存两种通信方式；也记录了这些数字在什么情况下不再代表表面上的含义。
-tracks: { primary: cloud-llm, also: [] }
+focus: { primary: ai-research, also: [backend-cloud] }
 status: course-benchmark
 team: { size: 2 }
 role:

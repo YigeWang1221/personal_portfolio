@@ -6,8 +6,11 @@ subtitle:
 summary:
   en: Tasks and ideas show up when your hands are busy. KK Knock transcribes speech on the phone, sends only the text to an LLM that files it as a todo or a researched thought, and keeps every result on the phone.
   zh: 要做的事和想法，常常在手上正忙时冒出来。KK Knock 在手机上完成语音转写，只把文字交给大模型整理成待办或研究好的想法，所有结果都保存在手机上。
-tracks: { primary: sde, also: [cloud-llm] }
+focus: { primary: planning-delivery, also: [backend-cloud] }
 status: self-hosted-pilot
+status_note:
+  en: Accepted on one Android test phone; not yet publicly released
+  zh: 已在一台 Android 测试手机上验收；尚未公开发布
 team: { size: 1 }
 role:
   en: Designed and built it solo — Android app, backend, admin console and infrastructure
@@ -31,7 +34,35 @@ links:
     url: https://introductionkk.wangyige1221.website
     label: { en: Product page (public release not yet available), zh: 产品介绍页（尚未公开发布） }
 highlights: [asr_speedup, tests, adrs]
-deep_dive_from: capture
+deep_dive_from: asr
+# Section ids retired in the 2026-09 redesign.
+anchor_aliases: { capture: reliability, decisions: architecture }
+related: personal-writing-lora
+
+overview:
+  problem:
+    en: Tasks and ideas come up when your hands are busy. Speaking is faster than typing, but a voice note is only useful if it reliably ends up as a todo or a thought — even when the network drops, the app is killed or the LLM call fails.
+    zh: 要做的事和想法，常常在手上正忙时冒出来。说话比打字快，但语音速记只有在能稳定变成待办或想法时才有用——哪怕网络中断、App 被杀掉，或者大模型调用失败。
+  contributions:
+    - en: Designed and built it alone — the Android app with on-device transcription, the FastAPI backend, the React admin console and the self-hosted deployment.
+      zh: 独立设计并实现：带端侧转写的 Android 客户端、FastAPI 后端、React 管理后台，以及自托管部署。
+    - en: Wrote the specifications and the decision log that AI coding agents work from, and reviewed what they produced. There is no team; the agents are tools.
+      zh: 编写 AI 编码代理所依据的规格说明和决策日志，并审查它们的产出。项目没有团队成员，代理只是工具。
+  outcome:
+    en: A self-hosted pilot, accepted on a single Android test phone. The capture pipeline survives app kills and retries; a duplicate that arrives mid-request can still be charged twice. Not publicly released; latency and cost per capture are not measured yet.
+    zh: 自托管试运行，已在一台 Android 测试手机上验收。采集管线能扛住 App 被杀和重试；但请求进行中到达的重复提交仍可能被重复计费。尚未公开发布，也还没有测量延迟和单次采集成本。
+
+card:
+  question:
+    en: What happens to a spoken note when the network drops, the app is killed or the LLM call fails?
+    zh: 网络中断、App 被杀掉或大模型调用失败时，一条语音速记会怎样？
+  contribution:
+    en: Built it solo across the Android app, backend, admin console and deployment.
+    zh: 独立完成 Android 客户端、后端、管理后台与部署。
+  tech: [Kotlin Multiplatform, FastAPI, whisper.cpp]
+  cta: { en: See the capture workflow, zh: 查看采集流程 }
+  anchor: reliability
+  figure: widgets
 
 facts:
   asr_speedup:
@@ -71,8 +102,8 @@ facts:
     claim: KK-05
   idempotency_window:
     value: { en: 14 days, zh: 14 天 }
-    label: { en: retention of the server's response-only idempotency cache, zh: 服务端仅存响应的幂等缓存保留时长 }
-    condition: { en: Keyed by account and client capture ID; stores no transcript or result content, zh: 以账号和客户端捕捉 ID 为键；不保存转写或结果内容 }
+    label: { en: validity of the server's idempotency cache, zh: 服务端幂等缓存的有效期 }
+    condition: { en: "Keyed by account and client capture ID; holds the returned response (the generated todo or thought), not the transcript", zh: 以账号和客户端捕捉 ID 为键；保存返回给手机的响应（生成的待办或想法），不保存转写文本 }
     claim: KK-06
   tests:
     value: { en: "~500", zh: 约 500 }
@@ -131,11 +162,23 @@ figures:
       en: "Architecture: the Android app records, transcribes on device and queues captures; the self-hosted backend classifies text through DeepSeek and researches thoughts through Gemini; results return to the phone."
       zh: 架构图：Android 客户端负责录音、端侧转写和采集排队；自托管后端通过 DeepSeek 分类文字、通过 Gemini 研究想法；结果回到手机。
     caption:
-      en: Data ownership is the main boundary. The phone owns all content, and results come back to it; the backend owns accounts, usage and prompts, plus a response-only idempotency cache.
-      zh: 数据归属是最主要的边界：手机拥有全部内容，结果也回到手机；后端只负责账号、用量和提示词，外加一个只存响应的幂等缓存。
+      en: Data ownership is the main boundary. The phone keeps the notes; the backend owns accounts, usage and prompts, plus a short-lived cache of responses used only to replay retries.
+      zh: 数据归属是最主要的边界：笔记保存在手机上；后端负责账号、用量和提示词，另有一个只用于重放重试的短期响应缓存。
+  - kind: diagram
+    id: capture-states
+    section: reliability
+    file: assets/capture-states.svg
+    source: assets/capture-states.mmd
+    label: CURRENT
+    alt:
+      en: "State diagram of a capture job on the phone: recording, transcribing, queued, processing, completed; transcription can fail and be retried from the saved audio; processing can fail, or be re-queued for a network retry, and a failed job is retried from its saved transcript; old failures are abandoned by the retention rules."
+      zh: 手机上采集任务的状态图：录音、转写、排队、处理、完成；转写可能失败，并可用保存的音频重试；处理可能失败，或因网络问题重新排队，失败的任务用保存的转写文本重试；过旧的失败任务按保留规则放弃。
+    caption:
+      en: The job states in the phone's capture state machine. Retries always reuse what is already saved — the audio or the transcript — and the same capture ID.
+      zh: 手机端采集状态机中的任务状态。重试总是复用已保存的内容（音频或转写文本）以及同一个捕捉 ID。
   - kind: diagram
     id: capture-flow
-    section: capture
+    section: reliability
     file: assets/capture-flow.svg
     source: assets/capture-flow.mmd
     label: CURRENT

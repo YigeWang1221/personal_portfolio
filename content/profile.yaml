@@ -2,14 +2,10 @@
 # (internal RESUME_POLISHED, decisions of 2026-09-24). Skills list only what a project on this site shows.
 name: { en: Yige Wang, zh: 王一格 }
 headline:
-  en: Software engineer who designs, builds and measures systems end to end.
-  zh: 端到端设计、实现并度量系统的软件工程师。
-
-target_roles:
-  - { en: Software engineer (backend / full-stack), zh: 软件工程师（后端 / 全栈） }
-  - { en: AI infrastructure and LLM training, zh: AI 基础设施与大模型训练 }
-  - { en: Cloud and platform engineering, zh: 云计算与平台工程 }
-  - { en: Quantitative and trading engineering, zh: 量化与交易工程 }
+  en: Software Engineer — Backend & Systems
+  zh: 软件工程师 · 后端与系统
+# Date the résumé data below was last checked against the owner-confirmed résumé.
+updated: "2026-09-24"
 
 links:
   - { label: { en: GitHub, zh: GitHub }, url: "https://github.com/YigeWang1221" }

@@ -29,7 +29,7 @@ const thumbs = meta.thumbnails.map((th) => {
 });
 ---
 
-<BaseLayout locale={locale} path="/plan-and-design/" title={t(locale, 'plan.title')} description={t(locale, 'plan.description')} nav="plan">
+<BaseLayout locale={locale} path="/plan-and-design/" title={t(locale, 'plan.title')} description={t(locale, 'plan.description')} >
   <div class="container">
     <header class="page-head">
       <p class="eyebrow">{t(locale, 'plan.eyebrow')}</p>
@@ -51,7 +51,7 @@ const thumbs = meta.thumbnails.map((th) => {
       </div>
       <div class="roadmap-grid">
         {roadmaps.map((p) => (
-          <article class={`roadmap-card track-${p.meta.tracks.primary}`}>
+          <article class="roadmap-card">
             <h3><a href={localePath(locale, `/projects/${p.meta.slug}/#${p.meta.roadmap!.section}`)}>{p.meta.title[locale]}</a></h3>
             <RoadmapView roadmap={p.meta.roadmap!} locale={locale} />
           </article>
@@ -66,7 +66,7 @@ const thumbs = meta.thumbnails.map((th) => {
       </div>
       <div class="records">
         {records.map((r) => (
-          <article class={`record track-${r.project.meta.tracks.primary}`} id={r.id} aria-labelledby={`${r.id}-title`}>
+          <article class="record" id={r.id} aria-labelledby={`${r.id}-title`}>
             <h3 id={`${r.id}-title`}>{r.section.title}</h3>
             <p class="record-project muted">
               <a href={localePath(locale, `/projects/${r.project.meta.slug}/#${r.anchor}`)}>{r.project.meta.title[locale]}</a>

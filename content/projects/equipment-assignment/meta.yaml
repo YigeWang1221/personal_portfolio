@@ -6,7 +6,7 @@ subtitle:
 summary:
   en: My undergraduate capstone. A Vue 3 and Spring Boot platform that runs an IoT course end to end — equipment borrowing with approval, classes and groups, homework that a group edits together, grading, PDF export, and course videos that play from object storage and can be scrubbed without downloading the whole file.
   zh: 我的本科毕业设计。一个基于 Vue 3 与 Spring Boot 的平台，覆盖一门物联网课程的完整流程：带审批的设备借用、班级与分组、小组协同编辑的作业、作业批改、PDF 导出，以及存放在对象存储中、无需完整下载即可拖动播放的课程视频。
-tracks: { primary: sde, also: [] }
+focus: { primary: backend-cloud, also: [business-modeling] }
 status: undergraduate-capstone
 team: { size: 1 }
 role:

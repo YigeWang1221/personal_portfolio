@@ -14,7 +14,10 @@ the live product page serves. Every screen shows invented showcase data; there a
 | `assets/capture/{idle,recording,processing}.png` | — | The KK Capture widget's three states | Same | Language-neutral |
 | `assets/widgets/{en,zh}/todo.png` | — | The todo home-screen widget | Same | Localized |
 | `assets/architecture.mmd` → `.svg` | CURRENT | Phone and self-hosted backend, data ownership, LLM providers | "Architecture"; "How I plan & design" thumbnail | The Cloudflare Tunnel is not drawn: configured, public acceptance pending |
-| `assets/capture-flow.mmd` → `.svg` | CURRENT | Near-exactly-once capture sequence | "Near-exactly-once capture" | The in-flight duplicate gap is stated in the text |
+| `assets/capture-states.mmd` → `.svg` | CURRENT | Capture job states on the phone | "When a capture fails" | From the committed capture state machine; the uncommitted ADR-057 work is not drawn |
+| `assets/capture-flow.mmd` → `.svg` | CURRENT | Capture sequence with idempotent replay | "When a capture fails" | The server cache holds the returned response, not the transcript; the in-flight duplicate gap is stated in the text |
+
+The home-page card shows the three KK Capture widget states (`assets/capture/*.png`).
 
 Screenshots are not labeled CURRENT / PROPOSED / HISTORICAL because they show the shipped UI with demo data, not
 architecture. Code links are never added: the code repositories are private.

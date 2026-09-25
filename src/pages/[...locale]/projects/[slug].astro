@@ -1,13 +1,14 @@
 ---
-// Project page in three layers (ARCHITECTURE.md): scan (header + at a glance), read, deep dive.
+// Case study page. First screen: what it is, status, my role, team, and the three-part overview
+// (problem / my contribution / outcome). Then the engineering story with an "On this page" navigation,
+// the deep dive, the full stack, one related case study and the way back to the catalog.
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import StatusBadge from '../../../components/StatusBadge.astro';
 import StackChips from '../../../components/StackChips.astro';
-import TrackTags from '../../../components/TrackTags.astro';
 import FactList from '../../../components/FactList.astro';
 import FigureView from '../../../components/FigureView.astro';
 import RoadmapView from '../../../components/RoadmapView.astro';
-import ProjectCard from '../../../components/ProjectCard.astro';
+import ProjectLinks from '../../../components/ProjectLinks.astro';
 import { LOCALES, localeParam, localePath, type Locale } from '../../../lib/i18n';
 import { getContent, t, type Project } from '../../../lib/content/load';
 import { formatPeriod, teamLabel } from '../../../lib/format';
@@ -23,63 +24,81 @@ export function getStaticPaths() {
 }
 
 const { locale, project } = Astro.props as { locale: Locale; project: Project };
-const { tracks } = getContent();
+const { projects, focus } = getContent();
 const m = project.meta;
 const path = `/projects/${m.slug}/`;
-const primary = tracks.find((tr) => tr.id === m.tracks.primary)!;
 const sections = project.sections[locale];
 const highlights = m.highlights.map((key) => m.facts[key]);
 const figuresFor = (sectionId: string) => project.figures.filter((f) => f.section === sectionId);
-const related = primary.projects.filter((p) => p.meta.slug !== m.slug).slice(0, 3);
-const codeLinks = m.links.filter((l) => l.kind === 'code');
-const productLinks = m.links.filter((l) => l.kind === 'product');
+const related = m.related ? projects.get(m.related) : undefined;
+const aliasesFor = (sectionId: string) =>
+  Object.entries(m.anchor_aliases).filter(([, target]) => target === sectionId).map(([alias]) => alias);
+const focusTitles = project.focusIds.map((id) => focus.find((f) => f.id === id)!.title[locale]);
 ---
 
-<BaseLayout locale={locale} path={path} title={m.title[locale]} description={m.summary[locale]} nav="tracks">
-  <div class={`container track-${m.tracks.primary}`}>
+<BaseLayout locale={locale} path={path} title={m.title[locale]} description={m.summary[locale]} nav="projects">
+  <div class="container">
     <nav class="breadcrumb" aria-label={t(locale, 'nav.breadcrumb')}>
       <ol>
-        <li><a href={localePath(locale, '/')}>{t(locale, 'nav.home')}</a></li>
-        <li><a href={localePath(locale, `/tracks/${primary.id}/`)}>{primary.title[locale]}</a></li>
+        <li><a href={localePath(locale, '/projects/')}>{t(locale, 'nav.projects')}</a></li>
         <li aria-current="page">{m.title[locale]}</li>
       </ol>
     </nav>
 
     <header class="project-head">
+      <p class="capability">{focusTitles.join(' · ')}</p>
       <h1>{m.title[locale]}</h1>
       <p class="subtitle">{m.subtitle[locale]}</p>
-      <div class="head-badges">
+      <p class="status-line">
         <StatusBadge status={m.status} team={m.team} locale={locale} />
-        <TrackTags ids={project.trackIds} locale={locale} />
-      </div>
+        {m.status_note && <span class="status-note">{m.status_note[locale]}</span>}
+      </p>
       <dl class="meta-grid">
-        <div><dt>{t(locale, 'project.role')}</dt><dd>{m.role[locale]}</dd></div>
+        <div class="wide"><dt>{t(locale, 'project.role')}</dt><dd>{m.role[locale]}</dd></div>
         <div><dt>{t(locale, 'project.team')}</dt><dd>{teamLabel(m.team, locale)}</dd></div>
         <div><dt>{t(locale, 'project.period')}</dt><dd>{formatPeriod(m.period, locale)}</dd></div>
         <div><dt>{t(locale, 'project.context')}</dt><dd>{m.context[locale]}</dd></div>
-        <div class="wide"><dt>{t(locale, 'project.stack')}</dt><dd><StackChips items={m.stack} label={t(locale, 'project.stack')} /></dd></div>
-        <div class="wide">
-          <dt>{t(locale, 'project.links')}</dt>
-          <dd>
-            {m.links.length ? (
-              <ul class="link-list">
-                {productLinks.map((l) => <li><a href={l.url}>{l.label[locale]}</a></li>)}
-                {codeLinks.map((l) => <li><a href={l.url}>{l.label[locale]}</a></li>)}
-              </ul>
-            ) : null}
-            {!codeLinks.length && <span class="muted small">{t(locale, 'project.no_public_code')}</span>}
-          </dd>
-        </div>
       </dl>
+      {m.links.length > 0 ? <ProjectLinks links={m.links} locale={locale} /> : null}
+      {!m.links.some((l) => l.kind === 'code') && <p class="muted small no-code">{t(locale, 'project.no_public_code')}</p>}
     </header>
 
-    <section class="glance" aria-labelledby="glance">
-      <div>
-        <h2 id="glance">{t(locale, 'project.at_a_glance')}</h2>
+    {m.overview ? (
+      <section class="overview" aria-labelledby="overview-title">
+        <h2 id="overview-title" class="visually-hidden">{t(locale, 'project.overview')}</h2>
+        <div class="overview-item">
+          <h3>{t(locale, 'project.problem')}</h3>
+          <p>{m.overview.problem[locale]}</p>
+        </div>
+        <div class="overview-item">
+          <h3>{t(locale, 'project.contribution')}</h3>
+          <ul>{m.overview.contributions.map((c) => <li>{c[locale]}</li>)}</ul>
+        </div>
+        <div class="overview-item">
+          <h3>{t(locale, 'project.outcome')}</h3>
+          <p>{m.overview.outcome[locale]}</p>
+        </div>
+      </section>
+    ) : (
+      <section class="overview overview-single" aria-labelledby="overview-title">
+        <h2 id="overview-title" class="visually-hidden">{t(locale, 'project.overview')}</h2>
         <p class="summary">{m.summary[locale]}</p>
-      </div>
-      {highlights.length > 0 && <FactList facts={highlights} locale={locale} />}
-    </section>
+      </section>
+    )}
+
+    {highlights.length > 0 && (
+      <section class="key-facts" aria-labelledby="facts-title">
+        <h2 id="facts-title" class="section-label">{t(locale, 'project.facts')}</h2>
+        <FactList facts={highlights} locale={locale} />
+      </section>
+    )}
+
+    <details class="toc-mobile">
+      <summary>{t(locale, 'project.contents')}</summary>
+      <ol>
+        {sections.map((s) => <li><a href={`#${s.id}`}>{s.title}</a></li>)}
+      </ol>
+    </details>
 
     <div class="project-body">
       <nav class="toc" aria-labelledby="toc-title">
@@ -103,6 +122,7 @@ const productLinks = m.links.filter((l) => l.kind === 'product');
               </div>
             )}
             <section id={s.id} aria-labelledby={`${s.id}-title`}>
+              {aliasesFor(s.id).map((alias) => <span id={alias} class="anchor-alias"></span>)}
               <h2 id={`${s.id}-title`}>{s.title}</h2>
               <div class="prose" set:html={s.html} />
               {m.roadmap && m.roadmap.section === s.id && (
@@ -115,19 +135,23 @@ const productLinks = m.links.filter((l) => l.kind === 'product');
             </section>
           </>
         ))}
+
+        <section class="stack-block" aria-labelledby="stack-title">
+          <h2 id="stack-title" class="section-label">{t(locale, 'project.stack')}</h2>
+          <StackChips items={m.stack} label={t(locale, 'project.stack')} />
+        </section>
       </div>
     </div>
 
-    {related.length > 0 && (
-      <section class="block" aria-labelledby="related">
-        <div class="block-head">
-          <h2 id="related">{t(locale, 'project.related', { track: primary.title[locale] })}</h2>
-          <a href={localePath(locale, `/tracks/${primary.id}/`)}>{t(locale, 'project.all_in_track')}</a>
-        </div>
-        <div class="card-grid">
-          {related.map((p) => <ProjectCard project={p} locale={locale} />)}
-        </div>
-      </section>
-    )}
+    <nav class="case-foot" aria-label={t(locale, 'project.related')}>
+      {related && (
+        <p class="related">
+          <span class="section-label">{t(locale, 'project.related')}</span>
+          <a href={localePath(locale, `/projects/${related.meta.slug}/`)}>{related.meta.title[locale]}</a>
+          <span class="muted">{related.meta.subtitle[locale]}</span>
+        </p>
+      )}
+      <p><a href={localePath(locale, '/projects/')}><span aria-hidden="true">← </span>{t(locale, 'project.all_projects')}</a></p>
+    </nav>
   </div>
 </BaseLayout>

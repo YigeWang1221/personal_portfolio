@@ -9,14 +9,14 @@ export function getStaticPaths() {
 }
 
 export const GET: APIRoute = () => {
-  const { tracks, projects } = getContent();
+  const { catalog } = getContent();
   const paths = [
     '/',
+    '/projects/',
+    '/background/',
     '/resume/',
     '/plan-and-design/',
-    '/about/',
-    ...tracks.map((tr) => `/tracks/${tr.id}/`),
-    ...[...projects.keys()].map((slug) => `/projects/${slug}/`),
+    ...catalog.map((p) => `/projects/${p.meta.slug}/`),
   ];
   const urls = paths.flatMap((path) =>
     (['en', 'zh'] as const).map((locale) => {

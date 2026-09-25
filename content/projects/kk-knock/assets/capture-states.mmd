@@ -1,0 +1,19 @@
+%% CURRENT — the capture job states of the phone's CaptureJobStateMachine (committed code, Sep 2026).
+stateDiagram-v2
+  direction LR
+  [*] --> RECORDING
+  RECORDING --> TRANSCRIBING: stop
+  TRANSCRIBING --> QUEUED: transcript saved
+  TRANSCRIBING --> COMPLETED: no speech
+  TRANSCRIBING --> FAILED_TRANSCRIPTION
+  RECORDING --> FAILED_TRANSCRIPTION
+  FAILED_TRANSCRIPTION --> TRANSCRIBING: retry from saved audio
+  QUEUED --> PROCESSING: claim with a lease
+  PROCESSING --> COMPLETED: result saved
+  PROCESSING --> QUEUED: network retry scheduled
+  PROCESSING --> FAILED_PROCESSING
+  PROCESSING --> FAILED_RESEARCH
+  FAILED_PROCESSING --> QUEUED: retry from saved transcript
+  FAILED_RESEARCH --> QUEUED: retry from saved transcript
+  FAILED_TRANSCRIPTION --> ABANDONED: retention limit
+  COMPLETED --> [*]

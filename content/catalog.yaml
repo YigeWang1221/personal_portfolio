@@ -1,0 +1,66 @@
+# Catalog registry (ADR-006, ADR-016): the only place where ordering lives.
+# - Re-rank: reorder `order`. Hide: remove a slug from `order` (the module can stay).
+# - Capability membership lives in each project's meta.yaml (focus.primary / focus.also).
+# - The build checks every slug and every #anchor below.
+
+focus:
+  - id: business-modeling
+    title: { en: Business modeling, zh: 业务建模 }
+    description:
+      en: Turning a real workflow into objects, roles and states.
+      zh: 把真实业务流程落成对象、角色与状态。
+  - id: backend-cloud
+    title: { en: Backend & Cloud, zh: 后端与云 }
+    description:
+      en: APIs, data, infrastructure and how code reaches production.
+      zh: API、数据、基础设施，以及代码如何走到线上。
+  - id: planning-delivery
+    title: { en: Planning & Delivery, zh: 规划与交付 }
+    description:
+      en: Phased plans, written decisions, and fixing what real use exposed.
+      zh: 分阶段计划、书面决策，以及修正真实使用中暴露的问题。
+  - id: ai-research
+    title: { en: AI & Research, zh: AI 与研究 }
+    description:
+      en: Training, modeling and measurement, with their conditions stated.
+      zh: 训练、建模与测量，并写明各自的条件。
+
+# Home page: four case studies that complement each other, in reading order.
+featured: [kk-knock, enterprise-workflow, cloud-native, personal-writing-lora]
+# Home page: the compact "More to explore" list.
+more: [distributed-llm, equipment-assignment, f1-bayesian]
+
+# Catalog order: selected case studies first, then the others.
+order:
+  - kk-knock
+  - enterprise-workflow
+  - cloud-native
+  - personal-writing-lora
+  - distributed-llm
+  - equipment-assignment
+  - f1-bayesian
+  - smartbuyer
+  - quant-ai
+  - info6105-methods
+
+# Home page capability entries. Each opens the section of a case study that shows it.
+entries:
+  - id: model
+    title: { en: Model business workflows, zh: 业务建模 }
+    body:
+      en: Which object owns which responsibility, and how one request crosses organizations and roles.
+      zh: 每个对象承担什么职责，一条请求如何跨组织、跨角色流转。
+    link: { project: enterprise-workflow, anchor: domain-model, label: { en: "FoodShelter: the domain model", zh: FoodShelter：领域模型 } }
+  - id: deliver
+    title: { en: Build and deliver systems, zh: 系统实现与交付 }
+    body:
+      en: How a merged change becomes a new machine image, a rolling release and a health-checked service.
+      zh: 一次合并如何变成新的机器镜像、滚动发布，以及通过健康检查的服务。
+    link: { project: cloud-native, anchor: delivery, label: { en: "Cloud-Native AWS: code to deployment", zh: AWS 云原生应用：从代码到部署 } }
+  - id: plan
+    title: { en: Plan and improve products, zh: 规划与迭代 }
+    body:
+      en: Contracts and milestones before code, and a correction driven by what real use exposed.
+      zh: 先定契约和里程碑再写代码，并根据真实使用暴露的问题做修正。
+    link: { project: personal-writing-lora, anchor: planning, label: { en: "Writing LoRA: the system plan", zh: 写作风格 LoRA：系统规划 } }
+    also: { project: kk-knock, anchor: iteration, label: { en: "KK Knock: one iteration", zh: KK Knock：一次迭代 } }

@@ -1,0 +1,27 @@
+---
+// Demo and Source links of a project, each named by what it opens. The case study itself is always the
+// site's own project page, linked separately by the caller.
+import type { Locale } from '../lib/i18n';
+import type { ProjectMeta } from '../lib/content/schema';
+import { t } from '../lib/content/load';
+
+interface Props {
+  links: ProjectMeta['links'];
+  locale: Locale;
+}
+const { links, locale } = Astro.props;
+const ordered = [...links.filter((l) => l.kind !== 'code'), ...links.filter((l) => l.kind === 'code')];
+---
+
+{ordered.length > 0 && (
+  <ul class="project-links">
+    {ordered.map((l) => (
+      <li>
+        <a href={l.url}>
+          <span class="link-kind">{t(locale, l.kind === 'code' ? 'project.source' : 'project.demo')}</span>
+          {l.label[locale]}
+        </a>
+      </li>
+    ))}
+  </ul>
+)}

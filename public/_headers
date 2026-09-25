@@ -15,3 +15,7 @@
 # Font files are not content-hashed, so they get a shorter cache.
 /fonts/*
   Cache-Control: public, max-age=2592000
+
+# The enhancement script is not content-hashed either.
+/js/*
+  Cache-Control: public, max-age=3600

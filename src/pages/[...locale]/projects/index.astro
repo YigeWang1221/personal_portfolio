@@ -1,0 +1,45 @@
+---
+// Project catalog: selected case studies first, then the others (order from content/catalog.yaml).
+// The filter is a set of real links (?focus=…). public/js/site.js applies them in place and keeps the URL,
+// refresh and back button in sync; without the script every project is listed.
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ProjectCard from '../../../components/ProjectCard.astro';
+import { localePath, localePaths, type Locale } from '../../../lib/i18n';
+import { getContent, t } from '../../../lib/content/load';
+
+export function getStaticPaths() {
+  return localePaths();
+}
+
+const { locale } = Astro.props as { locale: Locale };
+const { catalog, featured, focus } = getContent();
+const featuredSlugs = new Set(featured.map((p) => p.meta.slug));
+const base = localePath(locale, '/projects/');
+const total = catalog.length;
+---
+
+<BaseLayout locale={locale} path="/projects/" title={t(locale, 'projects.title')} description={t(locale, 'projects.description')} nav="projects">
+  <div class="container">
+    <header class="page-head">
+      <h1>{t(locale, 'projects.title')}</h1>
+      <p class="lede">{t(locale, 'projects.lede')}</p>
+    </header>
+
+    <div class="catalog" data-catalog data-count-one={t(locale, 'projects.count_one')} data-count-many={t(locale, 'projects.count', { n: '{n}' })}>
+      <nav class="filters" aria-labelledby="filter-label">
+        <p id="filter-label" class="section-label">{t(locale, 'projects.filter_label')}</p>
+        <ul class="filter-list">
+          <li><a href={base} data-filter="" aria-current="true">{t(locale, 'projects.all')}</a></li>
+          {focus.map((f) => (
+            <li><a href={`${base}?focus=${f.id}`} data-filter={f.id} title={f.description[locale]}>{f.title[locale]}</a></li>
+          ))}
+        </ul>
+        <p class="filter-count" aria-live="polite" data-count>{t(locale, 'projects.count', { n: total })}</p>
+      </nav>
+
+      <ul class="index-list">
+        {catalog.map((p) => <ProjectCard project={p} locale={locale} featured={featuredSlugs.has(p.meta.slug)} />)}
+      </ul>
+    </div>
+  </div>
+</BaseLayout>

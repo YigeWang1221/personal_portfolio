@@ -1,6 +1,6 @@
 # Portfolio Architecture
 
-**Last reviewed:** 2026-09-24
+**Last reviewed:** 2026-09-25 (redesign, ADR-016)
 
 This document separates what exists (**CURRENT**) from what is planned (**PROPOSED**). Nothing marked PROPOSED
 exists yet.
@@ -14,7 +14,7 @@ personal_portfolio/
 ├── docs/style/          BILINGUAL_STYLE.md, GLOSSARY.md
 ├── content/             track registry, résumé data, UI strings, page and project modules (see below)
 ├── src/                 Astro site: layouts, components, pages, content loader, styles
-├── public/              _headers, .assetsignore, favicon, self-hosted fonts
+├── public/              _headers, _redirects, .assetsignore, js/site.js, favicon, self-hosted fonts
 ├── scripts/             render-diagrams.mjs, postbuild.mjs, check-dist.mjs
 ├── diagrams/            mermaid.config.json (the diagram theme)
 ├── astro.config.mjs, wrangler.jsonc, package.json, .node-version
@@ -39,27 +39,33 @@ flowchart LR
 
 ## CURRENT: content model
 
-Each project is a self-contained module. Tracks reference projects by slug only.
+Each project is a self-contained module. The catalog references projects by slug only.
 
 ```text
 content/
-├── tracks.yaml                 track order, cross-listing, featured projects (the only place ordering lives)
-├── profile.yaml                résumé data: education, experience, highlights, skills → evidence links
+├── catalog.yaml                capability filters, featured and "more" projects, catalog order, home capability
+│                               entries (the only place ordering lives)
+├── profile.yaml                résumé data: headline, education, experience, highlights, skills → evidence links
 ├── site/{en,zh}.yaml           UI strings per locale (identical key sets)
-├── pages/<page>/               about, plan-and-design: en.md, zh.md, optional meta.yaml
+├── pages/<page>/               background, plan-and-design: en.md, zh.md, optional meta.yaml
 └── projects/<slug>/
-    ├── meta.yaml               language-neutral facts: tracks, status, team, period, stack, links, facts, figures, roadmap
+    ├── meta.yaml               language-neutral facts: capabilities (focus), status and status note, team, period,
+    │                           stack, links, overview, card, facts, figures, roadmap, related, anchor aliases
     ├── en.md, zh.md            narratives: the same "## Title {#id}" sections; numbers only via {{fact:key}}
     ├── ASSETS.md               provenance and label of every staged asset
     └── assets/                 Mermaid sources and rendered SVGs, screenshots, plots
 ```
 
 **Rules** (enforced by the content loader at build time)
-- **Add a project:** create `content/projects/<slug>/` and add the slug to the tracks its `meta.yaml` declares.
-- **Hide or remove:** delete the slug from `tracks.yaml`. The module can stay.
-- **Re-rank:** reorder slugs in `tracks.yaml`, and nothing else.
-- **Cross-list:** declare the extra track in `meta.yaml` and list the slug under it. The project page is rendered once
-  and has one canonical URL.
+- **Add a project:** create `content/projects/<slug>/` and add the slug to `order` in `catalog.yaml`.
+- **Hide or remove:** delete the slug from `order`. The module can stay.
+- **Re-rank or feature:** edit `order`, `featured` or `more` in `catalog.yaml`, and nothing else.
+- **Capabilities:** a project declares one primary capability and any others in `meta.yaml` (`focus`). The catalog
+  filter and the capability labels come from there.
+- **Featured projects** must have an editor-written `card` (key question, one-line contribution, at most three
+  technologies, the section the main link opens, and a figure or a short step list) and an `overview` (problem, my
+  contribution, outcome and validation). Every `#anchor` a card or a home entry points to must exist.
+- **Retired section ids** are listed in `anchor_aliases`, so old links keep landing on the replacing section.
 - **Numbers live only in `meta.yaml`.** Narratives reference them as `{{fact:key}}` (pages: `{{fact:slug.key}}`), so
   English and Chinese can never disagree. A measurement written directly in a narrative fails the build.
 - **Every fact cites an internal ledger claim ID.** The build never renders it, and the output scan fails if one
@@ -72,29 +78,32 @@ content/
 ```mermaid
 %% CURRENT
 flowchart TD
-  LS["Language switch on every page<br/>EN (root) ⇄ 中文 (/zh/)"] --- H
-  H["Home<br/>summary · featured projects · track entry points"] --> T1["Track: SDE"]
-  H --> T2["Track: Cloud & LLM"]
-  H --> T3["Track: Data Science & Finance"]
-  T1 --> P["Project page<br/>scan → read → deep dive"]
-  T2 --> P
-  T3 --> P
+  LS["Header on every page<br/>Projects · Background · Résumé · EN (root) ⇄ 中文 (/zh/)"] --- H
+  H["Home<br/>position · capability entries · 4 selected case studies · more · background"] --> P["Case study<br/>overview → engineering story → deep dive"]
+  H -- "capability entry → #section" --> P
+  H --> C["Projects<br/>catalog with capability filter (?focus=)"]
+  C --> P
+  H --> B["Background<br/>education · experience · how I work · contact"]
   H --> R["Résumé<br/>highlights · education · experience · projects · skills → evidence"]
-  H --> D["How I plan & design<br/>roadmaps · decision records · architecture thumbnails"]
-  H --> A["About / Contact"]
+  B --> D["How I plan & design<br/>roadmaps · decision records · architecture thumbnails"]
 ```
 
-**Project page layers**
-1. **Scan (30 s):** title and subtitle, status badge, tracks, role, team, period, context, stack chips, links, and an
-   "at a glance" box with the one-line problem and two or three verified facts.
-2. **Read (3 min):** the narrative sections before the "Deep dive" marker — typically the CURRENT architecture, how
-   the work was planned (with a roadmap), key decisions with trade-offs, and what the owner owned.
-3. **Deep dive:** the sections from the marker on — decision details, PROPOSED architecture, failure analysis,
-   testing and operations, limits and next steps.
+**Case study layers**
+1. **First screen (30 s):** capabilities, title, what it does, status and status note, role, team, period, context,
+   Demo / Source links, and the overview: problem, my contribution, outcome and validation. Key facts follow.
+2. **Engineering story (3 min):** the sections before the "Deep dive" marker — the situation, ownership, and two
+   design questions with their trade-offs, then results and limits.
+3. **Deep dive:** the sections from the marker on, the full stack, one related case study and the way back to the
+   catalog. An "On this page" list sits beside the text on desktop and as a disclosure on narrow screens.
+
+**Retired URLs** (ADR-016): `/about/` → `/background/`; `/tracks/sde/` → `/projects/`;
+`/tracks/cloud-llm/` → `/projects/?focus=backend-cloud`; `/tracks/ds-finance/` → `/projects/?focus=ai-research`;
+the same under `/zh/`. Project URLs did not change.
 
 ## CURRENT: build and hosting (ADR-014, ADR-015)
 
-**Stack.** Astro 7, static output, no adapter, no client-side JavaScript. Own content loader (`src/lib/content/`):
+**Stack.** Astro 7, static output, no adapter. One first-party script (`public/js/site.js`, ADR-016) adds the mobile
+menu, the catalog filter and a hash-preserving language switch; every page works without it. Own content loader (`src/lib/content/`):
 YAML parsed with `yaml`, validated with Zod, Markdown rendered with `marked`. Images through `astro:assets` (sharp).
 
 **Internationalization**
@@ -115,13 +124,15 @@ YAML parsed with `yaml`, validated with Zod, Markdown rendered with `marked`. Im
 **Content safety**
 - The build reads only `content/` and `src/`.
 - `scripts/check-dist.mjs` fails the build on local paths, private IPs, account IDs, keys, email addresses, ledger
-  claim IDs, `internal/` references, private working names, inline code, third-party resources, broken internal links
-  or anchors, a wrong `<html lang>` or a missing CSP.
+  claim IDs, `internal/` references, private working names, inline code, any script other than `/js/site.js`,
+  third-party resources, broken internal links or anchors, redirects to missing pages or other redirects, a wrong
+  `<html lang>` or a missing CSP.
 - `public/.assetsignore` keeps build internals out of an upload even after a failed build.
 - Links to external repositories follow the public-link gate (ADR-004).
 
 **Hosting.** Cloudflare Workers static assets (`wrangler.jsonc`): `not_found_handling: "404-page"` serves the nearest
-`404.html` (English at the root, Chinese under `/zh/`), and `html_handling: "auto-trailing-slash"` normalizes URLs.
+`404.html` (English at the root, Chinese under `/zh/`), `html_handling: "auto-trailing-slash"` normalizes URLs, and
+`public/_redirects` holds the permanent redirects for retired pages.
 
 **CI.** `.github/workflows/ci.yml` runs `npm ci` and `npm run build` on every push and pull request.
 

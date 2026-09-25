@@ -1,0 +1,20 @@
+# Permanent redirects for pages retired in the 2026-09 redesign (ADR-016). Read by Cloudflare Workers static assets.
+# Each old URL points straight at its final destination (no chains); both slash forms are listed because
+# redirects are matched before html_handling normalizes the trailing slash. scripts/check-dist.mjs verifies
+# that every target exists in the build.
+/about                  /background/                        301
+/about/                 /background/                        301
+/zh/about               /zh/background/                     301
+/zh/about/              /zh/background/                     301
+/tracks/sde             /projects/                          301
+/tracks/sde/            /projects/                          301
+/tracks/cloud-llm       /projects/?focus=backend-cloud      301
+/tracks/cloud-llm/      /projects/?focus=backend-cloud      301
+/tracks/ds-finance      /projects/?focus=ai-research        301
+/tracks/ds-finance/     /projects/?focus=ai-research        301
+/zh/tracks/sde          /zh/projects/                       301
+/zh/tracks/sde/         /zh/projects/                       301
+/zh/tracks/cloud-llm    /zh/projects/?focus=backend-cloud   301
+/zh/tracks/cloud-llm/   /zh/projects/?focus=backend-cloud   301
+/zh/tracks/ds-finance   /zh/projects/?focus=ai-research     301
+/zh/tracks/ds-finance/  /zh/projects/?focus=ai-research     301

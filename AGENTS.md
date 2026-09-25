@@ -115,8 +115,8 @@ Source priority for technical facts, highest first:
   - Quant AI is described by its implementation, not by its results.
 - **Modular projects (ADR-006):**
   - Each project is a self-contained module.
-  - Track membership lives in the project's metadata.
-  - Ordering lives only in the track registry.
+  - Capability membership lives in the project's metadata (`focus`).
+  - Ordering and featuring live only in the catalog registry, `content/catalog.yaml` (ADR-016).
 
 ## Keeping documents current
 
@@ -128,7 +128,7 @@ Source priority for technical facts, highest first:
 | Polished resume and site copy (EN / 中文) | `internal/docs/RESUME_POLISHED.md` |
 | Staged assets and their intended use | `content/projects/<slug>/ASSETS.md` |
 | Site structure, build gates, hosting | `ARCHITECTURE.md`; commands and deploy steps in `README.md` |
-| Positioning, track order, overlap with the resume | `internal/docs/CONTENT_STRATEGY.md` |
+| Positioning, featured order, overlap with the resume | `internal/docs/CONTENT_STRATEGY.md` |
 | Effort and confidence | `internal/docs/ESTIMATE.md` |
 | Phase, gate, owner actions, log | `internal/CURRENT_STATE.md` |
 | Policies | `DECISIONS.md` |

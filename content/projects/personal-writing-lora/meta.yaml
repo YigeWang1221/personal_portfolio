@@ -1,13 +1,16 @@
 slug: personal-writing-lora
 title: { en: Personal Writing LoRA Platform, zh: 个人写作风格 LoRA 平台 }
 subtitle:
-  en: A multi-tenant platform that fine-tunes a LoRA on each user's own writing and serves many of them from one GPU
-  zh: 基于每位用户自己的文字微调专属 LoRA、并在单卡上同时服务多个 LoRA 的多租户平台
+  en: A multi-tenant platform designed to fine-tune a LoRA on each user's own writing and serve many of them from one GPU
+  zh: 一个多租户平台：基于每位用户自己的文字微调专属 LoRA，并设计为在一块 GPU 上同时服务多个 LoRA
 summary:
   en: Users upload their own writing, the platform trains a personal LoRA "style" on a pinned Qwen2.5-7B-Instruct base, and they draft long-form Markdown with it. Designed from wireframes and contracts through dated milestone plans, implemented across four repositories and tested against local fakes — it has not been deployed.
   zh: 用户上传自己的文字，平台基于固定版本的 Qwen2.5-7B-Instruct 训练个人 LoRA"风格"，再用它撰写长篇 Markdown。项目从线框图和接口契约出发，经过带日期的里程碑计划，在四个仓库中实现并基于本地替身完成测试，目前尚未部署。
-tracks: { primary: cloud-llm, also: [sde] }
+focus: { primary: planning-delivery, also: [backend-cloud, ai-research] }
 status: implemented-not-deployed
+status_note:
+  en: Design + partial implementation; GPU deployment not validated
+  zh: 已完成设计与部分实现；GPU 部署尚未验证
 team: { size: 1 }
 role:
   en: Sole designer across all layers; implemented with AI coding assistants working from my specifications
@@ -43,6 +46,42 @@ links:
     label: { en: Terraform code, zh: Terraform 代码 }
 highlights: [tf_resources, tests, tables]
 deep_dive_from: job-handoff
+# Section ids retired in the 2026-09 redesign.
+anchor_aliases: { design-process: planning, testing: validation }
+related: kk-knock
+
+overview:
+  problem:
+    en: A platform that trains a personal LoRA on each user's writing and serves many of them from one GPU has too many moving parts to build at once — a web product, a job queue, GPU training, adapter serving and cloud infrastructure. The question is how to split it so each piece can be built and tested on its own.
+    zh: 一个基于每位用户的文字训练专属 LoRA、并在一块 GPU 上同时服务多个 LoRA 的平台，组成部分太多，无法一次建成：Web 产品、任务队列、GPU 训练、适配器推理和云基础设施。问题在于如何拆分，让每一部分都能单独构建和测试。
+  contributions:
+    - en: Designed every layer alone — wireframes, data model, API contract, component boundaries, IAM rules — and wrote the milestone plans with dated decision logs.
+      zh: 独立设计所有层次：线框图、数据模型、API 契约、组件边界、IAM 规则，并编写带日期决策日志的里程碑计划。
+    - en: Froze the contracts between components before implementation, then built the four repositories with AI coding assistants working from those specifications, and reviewed the results.
+      zh: 在实现之前冻结组件之间的契约，再由 AI 编码助手按这些规格实现四个仓库，并由我审查结果。
+  outcome:
+    en: The product, dataset builder, local training worker and adapter manager are implemented and tested against local fakes. No real GPU training run, vLLM serving with a real adapter or cloud deployment has happened yet.
+    zh: 产品、数据集构建器、本地训练 worker 和适配器管理服务均已实现，并基于本地替身完成测试。真实的 GPU 训练、用真实适配器的 vLLM 推理和云端部署都还没有进行。
+
+card:
+  question:
+    en: How do you split a multi-user fine-tuning and serving system into pieces that can be built and tested one at a time?
+    zh: 如何把一个多用户的微调与推理系统拆成可以逐个构建、逐个测试的部分？
+  contribution:
+    en: Sole designer; implemented with AI coding assistants from my specifications.
+    zh: 唯一的设计者；由 AI 编码助手按我的规格实现。
+  tech: [FastAPI, vLLM, Terraform]
+  cta: { en: Explore the system plan, zh: 查看系统规划 }
+  anchor: planning
+  steps:
+    label: CURRENT
+    items:
+      - { title: { en: Web app → backend, zh: Web 应用 → 后端 }, detail: "product API /api/v1" }
+      - { title: { en: Backend → training worker via SQS, zh: 后端经 SQS → 训练 worker }, detail: "training contract T0" }
+      - { title: { en: Worker → backend, zh: worker → 后端 }, detail: { en: status callback, zh: 状态回调 } }
+      - { title: { en: Worker → S3, zh: worker → S3 }, detail: { en: adapter + manifest, zh: 适配器与 manifest } }
+      - { title: { en: Backend → adapter manager → vLLM, zh: 后端 → 适配器管理服务 → vLLM }, detail: "serving contract W0" }
+    note: { en: "Contracts frozen before code; run locally against fakes only", zh: 契约先于代码冻结；目前只在本地基于替身运行 }
 
 facts:
   tf_resources:
@@ -64,7 +103,7 @@ facts:
 figures:
   - kind: image
     id: wireframe-main
-    section: design-process
+    section: planning
     file: assets/wireframe-main-page.svg
     label: HISTORICAL
     alt:
@@ -75,7 +114,7 @@ figures:
       zh: 早期线框图，2026 年 6 月（当时的工作名为 QVoice）。其信息架构延续到了最终实现的页面中。
   - kind: image
     id: wireframe-style
-    section: design-process
+    section: planning
     file: assets/wireframe-style-create.svg
     label: HISTORICAL
     alt:
@@ -86,7 +125,7 @@ figures:
       zh: 早期线框图，2026 年 6 月。图中"不在服务器保存训练数据"的批注早于实现：实际做法是训练期间临时保存源文件，训练结束后由清理任务删除。
   - kind: image
     id: er-sketch
-    section: design-process
+    section: planning
     file: assets/er-sketch.svg
     label: HISTORICAL
     alt:
@@ -95,17 +134,6 @@ figures:
     caption:
       en: "Early ER sketch, June 2026. Its entities map one to one onto the implemented tables; the implementation adds sessions, upload batches and two outbox tables."
       zh: 早期 ER 草图，2026 年 6 月。其中的实体与最终实现的表一一对应；实现时又增加了会话、上传批次和两张发件箱表。
-  - kind: image
-    id: wireframe-profile
-    section: design-process
-    file: assets/wireframe-profile-settings.svg
-    label: HISTORICAL
-    alt:
-      en: "Early wireframe of the profile menu and settings page, with subscription plans shown as a static mock."
-      zh: 个人菜单与设置页的早期线框图，订阅套餐只是静态示意。
-    caption:
-      en: Early wireframe, June 2026. The subscription plans were only a mock; the platform has no billing.
-      zh: 早期线框图，2026 年 6 月。订阅套餐只是示意，平台没有计费功能。
   - kind: diagram
     id: current-architecture
     section: architecture

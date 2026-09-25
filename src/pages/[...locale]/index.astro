@@ -1,6 +1,9 @@
 ---
+// Home: who I am → pick a capability or a case study → background. Every case study is one click away,
+// and each capability entry opens the section of a case study that shows it.
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import ProjectCard from '../../components/ProjectCard.astro';
+import FeaturedProject from '../../components/FeaturedProject.astro';
+import StatusBadge from '../../components/StatusBadge.astro';
 import { localePath, localePaths, type Locale } from '../../lib/i18n';
 import { getContent, t } from '../../lib/content/load';
 
@@ -9,55 +12,76 @@ export function getStaticPaths() {
 }
 
 const { locale } = Astro.props as { locale: Locale };
-const { tracks, featured, profile } = getContent();
+const { featured, more, entries, focus, profile } = getContent();
+const focusTitle = (id: string) => focus.find((f) => f.id === id)!.title[locale];
+const caseHref = (l: { project: string; anchor: string }) => localePath(locale, `/projects/${l.project}/#${l.anchor}`);
 ---
 
-<BaseLayout locale={locale} path="/" title={t(locale, 'home.title')} description={t(locale, 'home.description')} nav="home">
+<BaseLayout locale={locale} path="/" title={t(locale, 'home.title')} description={t(locale, 'home.description')}>
   <div class="container">
-    <section class="hero">
-      <p class="eyebrow">{t(locale, 'home.eyebrow')}</p>
-      <h1>{profile.name[locale]}</h1>
-      <p class="headline">{profile.headline[locale]}</p>
-      <p class="intro">{t(locale, 'home.intro')}</p>
-      <ul class="role-list" aria-label={t(locale, 'home.roles_label')}>
-        {profile.target_roles.map((r) => <li>{r[locale]}</li>)}
-      </ul>
+    <section class="hero" aria-labelledby="hero-name">
+      <h1 id="hero-name">{profile.name[locale]}</h1>
+      <p class="hero-role">{profile.headline[locale]}</p>
+      <p class="hero-intro">{t(locale, 'home.intro')}</p>
+      <p class="hero-background">{t(locale, 'home.background_line')}</p>
       <div class="cta-row">
-        <a class="button primary" href={localePath(locale, '/resume/')}>{t(locale, 'home.cta_resume')}</a>
-        <a class="button" href={localePath(locale, '/plan-and-design/')}>{t(locale, 'home.cta_plan')}</a>
+        <a class="button primary" href="#selected-work">{t(locale, 'home.cta_work')}</a>
+        <a class="button" href={localePath(locale, '/resume/')}>{t(locale, 'home.cta_resume')}</a>
       </div>
+      <ul class="hero-links" aria-label={t(locale, 'home.links_label')}>
+        {profile.links.map((l) => <li><a href={l.url}>{l.label[locale]}</a></li>)}
+      </ul>
     </section>
 
-    <section class="block" aria-labelledby="featured">
-      <div class="block-head">
-        <h2 id="featured">{t(locale, 'home.featured')}</h2>
-        <p class="muted small">{t(locale, 'home.featured_note')}</p>
-      </div>
-      <div class="card-grid two-up">
-        {featured.map((p) => <ProjectCard project={p} locale={locale} />)}
-      </div>
-    </section>
-
-    <section class="block" aria-labelledby="tracks">
-      <div class="block-head">
-        <h2 id="tracks">{t(locale, 'home.tracks')}</h2>
-        <p class="muted small">{t(locale, 'home.tracks_note')}</p>
-      </div>
-      <div class="track-grid">
-        {tracks.map((tr) => (
-          <a class={`track-card track-${tr.id}`} href={localePath(locale, `/tracks/${tr.id}/`)}>
-            <h3>{tr.title[locale]}</h3>
-            <p>{tr.positioning[locale]}</p>
-            <span class="count">{t(locale, 'home.track_count', { n: tr.projects.length })}</span>
-          </a>
+    <section class="entries" aria-labelledby="entries-title">
+      <h2 id="entries-title" class="section-label">{t(locale, 'home.entries_title')}</h2>
+      <ul class="entry-list">
+        {entries.map((e) => (
+          <li>
+            <h3>{e.title[locale]}</h3>
+            <p>{e.body[locale]}</p>
+            <p class="entry-links">
+              <a href={caseHref(e.link)}>{e.link.label[locale]}<span aria-hidden="true"> →</span></a>
+              {e.also && <a class="entry-also" href={caseHref(e.also)}>{e.also.label[locale]}</a>}
+            </p>
+          </li>
         ))}
+      </ul>
+    </section>
+
+    <section class="block" id="selected-work" aria-labelledby="selected-title">
+      <div class="block-head">
+        <h2 id="selected-title">{t(locale, 'home.selected')}</h2>
+        <p class="muted small">{t(locale, 'home.selected_note')}</p>
+      </div>
+      <div class="featured-list">
+        {featured.map((p, i) => <FeaturedProject project={p} locale={locale} eager={i === 0} />)}
       </div>
     </section>
 
-    <section class="block measure" aria-labelledby="evidence">
-      <h2 id="evidence">{t(locale, 'home.evidence_title')}</h2>
-      <p>{t(locale, 'home.evidence_body')}</p>
-      <p><a href={localePath(locale, '/about/')}>{t(locale, 'home.evidence_link')}</a></p>
+    {more.length > 0 && (
+      <section class="block" aria-labelledby="more-title">
+        <div class="block-head">
+          <h2 id="more-title">{t(locale, 'home.more')}</h2>
+          <a href={localePath(locale, '/projects/')}>{t(locale, 'home.all_projects')}<span aria-hidden="true"> →</span></a>
+        </div>
+        <ul class="more-list">
+          {more.map((p) => (
+            <li>
+              <p class="capability">{focusTitle(p.meta.focus.primary)}</p>
+              <h3><a href={localePath(locale, `/projects/${p.meta.slug}/`)}>{p.meta.title[locale]}</a></h3>
+              <p class="purpose">{p.meta.subtitle[locale]}</p>
+              <StatusBadge status={p.meta.status} team={p.meta.team} locale={locale} />
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
+
+    <section class="block background-summary" aria-labelledby="background-title">
+      <h2 id="background-title">{t(locale, 'home.background_title')}</h2>
+      <p>{t(locale, 'home.background_body')}</p>
+      <p><a href={localePath(locale, '/background/')}>{t(locale, 'home.background_link')}<span aria-hidden="true"> →</span></a></p>
     </section>
   </div>
 </BaseLayout>

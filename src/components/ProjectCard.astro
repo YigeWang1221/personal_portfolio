@@ -1,25 +1,35 @@
 ---
+// Catalog entry: what it does, my part, status and capabilities. data-focus drives the optional filter in
+// public/js/site.js; without the script every entry is shown.
 import StatusBadge from './StatusBadge.astro';
-import StackChips from './StackChips.astro';
 import { localePath, type Locale } from '../lib/i18n';
-import type { Project } from '../lib/content/load';
-import { t } from '../lib/content/load';
+import { getContent, t, type Project } from '../lib/content/load';
 import { formatPeriod, teamLabel } from '../lib/format';
 
 interface Props {
   project: Project;
   locale: Locale;
+  featured?: boolean;
 }
-const { project, locale } = Astro.props;
+const { project, locale, featured = false } = Astro.props;
 const m = project.meta;
+const { focus } = getContent();
+const titles = project.focusIds.map((id) => focus.find((f) => f.id === id)!.title[locale]);
+const headingId = `item-${m.slug}`;
 ---
 
-<article class={`project-card track-${m.tracks.primary}`}>
-  <StatusBadge status={m.status} team={m.team} locale={locale} />
-  <h3><a href={localePath(locale, `/projects/${m.slug}/`)}>{m.title[locale]}</a></h3>
-  <p class="subtitle">{m.subtitle[locale]}</p>
-  <p class="meta-line">{m.context[locale]} · {teamLabel(m.team, locale)} · {formatPeriod(m.period, locale)}</p>
-  <div class="card-foot">
-    <StackChips items={m.stack} limit={6} label={t(locale, 'project.stack')} />
-  </div>
-</article>
+<li class="index-item" data-focus={project.focusIds.join(' ')}>
+  <article aria-labelledby={headingId}>
+    <p class="capability">
+      {titles.join(' · ')}
+      {featured && <span class="featured-flag">{t(locale, 'projects.featured')}</span>}
+    </p>
+    <h3 id={headingId}><a href={localePath(locale, `/projects/${m.slug}/`)}>{m.title[locale]}</a></h3>
+    <p class="purpose">{m.subtitle[locale]}</p>
+    <p class="index-role"><span class="index-label">{t(locale, 'projects.role')}:</span> {m.role[locale]}</p>
+    <p class="index-meta">
+      <StatusBadge status={m.status} team={m.team} locale={locale} />
+      <span>{m.context[locale]} · {teamLabel(m.team, locale)} · {formatPeriod(m.period, locale)}</span>
+    </p>
+  </article>
+</li>

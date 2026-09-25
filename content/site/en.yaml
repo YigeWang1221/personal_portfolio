@@ -6,9 +6,11 @@ nav:
   label: Main
   skip: Skip to content
   home: Home
+  projects: Projects
+  background: Background
   resume: Résumé
-  plan: Plan & design
-  about: About
+  plan: How I plan & design
+  menu: Menu
   breadcrumb: Breadcrumb
   language: Language
   language_name: EN
@@ -16,7 +18,7 @@ nav:
 
 footer:
   note: A static site with no trackers and no third-party requests. Every number on it states its conditions and traces to a repository, a log or a design document.
-  label: Profiles
+  label: Profiles and pages
 
 common:
   present: present
@@ -53,44 +55,73 @@ roadmap:
   planned: planned
 
 home:
-  title: Yige Wang · Engineering portfolio
-  description: Engineering portfolio of Yige Wang, in English and Chinese. Case studies in backend and mobile engineering, cloud infrastructure, distributed training and Bayesian modeling, with the planning and design behind each.
-  eyebrow: Engineering portfolio
-  intro: I am finishing a Master of Science in Software Engineering Systems at Northeastern University (December 2026). This site covers what a one-page résumé cannot — how each system was planned, which trade-offs I made, what I measured, and what did not work.
-  roles_label: Target roles
+  title: Yige Wang · Software Engineer — Backend & Systems
+  description: "Yige Wang, software engineer (backend and systems). Case studies on business modeling, backend and cloud delivery, and system planning, in English and Chinese."
+  intro: I turn business workflows into software systems, with a focus on object-oriented design, backend development and cloud delivery.
+  background_line: Northeastern University · MS in Software Engineering Systems · Expected Dec 2026
+  cta_work: Explore selected work
   cta_resume: View résumé
-  cta_plan: How I plan & design
-  featured: Featured projects
-  featured_note: Each project page can be read in 30 seconds, in 3 minutes, or in depth.
-  tracks: Tracks
-  tracks_note: Projects are grouped by the kind of role they speak to. Some appear in more than one track.
-  track_count: "{n} projects"
-  evidence_title: How the claims on this site are backed
-  evidence_body: Every number here comes from a repository, a log or a design document, and it carries its conditions. Status labels say plainly what is deployed and what is not. Team projects state the team size and what I did.
-  evidence_link: How this site is written
+  links_label: Profiles
+  entries_title: Start from a capability
+  selected: Selected work
+  selected_note: Four case studies, each showing a different part of the job. Each card says what I did and which question the case answers.
+  tech: Key technologies
+  steps: "How {title} works, step by step"
+  kind: Case study
+  my_part: My part
+  question: Key question
+  more: More to explore
+  all_projects: All projects
+  background_title: Background
+  background_body: I'm finishing a Master of Science in Software Engineering Systems at Northeastern University in Boston, after a Bachelor of Engineering in Computer Science and Technology at Zhejiang Gongshang University. I interned as a backend developer at Vendream and as a software tester at the Industrial and Commercial Bank of China's Software Development Center. Right now I'm building KK Knock, a voice-capture app whose backend I host on my own hardware.
+  background_link: More about my background
 
-tracks:
-  eyebrow: Track
-  note: Projects are ordered by the depth of their evidence, not by size. A project listed under several tracks has a single page.
+projects:
+  title: Projects
+  description: "All of Yige Wang's projects: case studies and supporting work, filterable by capability — business modeling, backend and cloud, planning and delivery, AI and research."
+  lede: Selected case studies first, then supporting work. Filter by the capability you want to see; a project can show more than one.
+  filter_label: Filter by capability
+  all: All
+  count: "{n} projects"
+  count_one: 1 project
+  featured: Selected case study
+  role: My part
 
 project:
   role: My role
   team: Team
   period: Period
   context: Context
-  stack: Stack
+  stack: Full stack
   links: Links
+  source: Source
+  demo: Demo
   no_public_code: No public code link.
-  at_a_glance: At a glance
+  overview: Overview
+  problem: Problem
+  contribution: My contribution
+  outcome: Outcome and validation
+  facts: Key facts
   contents: On this page
   deep_dive: Deep dive
-  related: More in {track}
-  all_in_track: All projects in this track
+  related: Related case study
+  all_projects: All projects
+
+background:
+  title: Background
+  description: Background of Yige Wang — education, experience, how I work, and how this portfolio is written.
+  eyebrow: Background
+  lede: Software engineer focused on backend and systems work, finishing a master's degree at Northeastern University in December 2026.
+  education: Education
+  experience: Experience
+  contact: Contact
+  contact_body: GitHub and LinkedIn are the best ways to reach me.
 
 resume:
   title: Résumé
-  description: Visual résumé of Yige Wang — education, experience, projects and skills, with every skill linked to the project that shows it.
+  description: Résumé of Yige Wang — education, experience, projects and skills, with every skill linked to the project that shows it.
   eyebrow: Résumé
+  updated: Last checked {date}
   highlights: Highlights
   education: Education
   experience: Experience
@@ -110,12 +141,6 @@ plan:
   records_note: Context → options → decision → trade-off → evidence
   architecture: Architecture diagrams
   architecture_note: Every diagram is derived from the implementation and labeled CURRENT, PROPOSED or HISTORICAL.
-
-about:
-  title: About
-  description: About Yige Wang and how this portfolio is written — evidence rules, status labels, team credit and AI-assisted development.
-  eyebrow: About
-  contact: Contact
 
 notfound:
   title: Page not found

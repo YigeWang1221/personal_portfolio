@@ -7,18 +7,22 @@
 
 ```text
 content/
-├── tracks.yaml                 track order, cross-listing, featured projects
+├── catalog.yaml                capability filters, featured / more / catalog order, home capability entries
 ├── profile.yaml                résumé data
 ├── site/{en,zh}.yaml           UI strings (identical keys)
-├── pages/about/                en.md, zh.md
+├── pages/background/           en.md, zh.md
 ├── pages/plan-and-design/      meta.yaml (roadmaps, records, thumbnails), en.md, zh.md
 └── projects/<slug>/            meta.yaml, en.md, zh.md, ASSETS.md, assets/
 ```
 
 ## Writing a project module
 
-- **`meta.yaml`** holds every language-neutral fact: tracks, status label, team, period, stack, links, facts,
-  figures and the roadmap. Localized strings are `{ en: …, zh: … }`; quote values that contain commas or colons.
+- **`meta.yaml`** holds every language-neutral fact: capabilities (`focus`), status label and note, team, period,
+  stack, links, facts, figures and the roadmap.
+- **Featured projects** also carry `overview` (problem, contributions, outcome) and `card` (key question, one-line
+  contribution, at most three editor-chosen technologies, the `#anchor` the main link opens, and either a page
+  `figure` or a short `steps` list labeled like a diagram). Write these by hand; never derive them from `stack`.
+- **Anchors.** When a section id is retired, add it to `anchor_aliases` with the section that replaced it. Localized strings are `{ en: …, zh: … }`; quote values that contain commas or colons.
 - **Facts.** Each fact has a `value` (a string, or `{ en, zh }` when the unit is a word), a `label`, a `condition`
   and the internal ledger `claim` ID it comes from. Only ledger rows marked `Public use: Use` may become facts
   (AGENTS.md).
@@ -55,15 +59,15 @@ Screenshots and result plots show shipped UI or published results; they carry no
 
 ## Modules
 
-| Module | Track | Assets |
+| Module | Capabilities | Assets |
 |---|---|---|
-| `kk-knock` | SDE, Cloud & LLM | Screenshots and widget art from the public product page; two CURRENT diagrams |
-| `distributed-llm` | Cloud & LLM | One CURRENT diagram |
-| `cloud-native` | Cloud & LLM, SDE | Two CURRENT diagrams |
-| `personal-writing-lora` | Cloud & LLM, SDE | Three wireframes and an ER sketch (HISTORICAL), three CURRENT diagrams, one PROPOSED diagram |
-| `f1-bayesian` | Data Science & Finance | Two CURRENT diagrams, two result plots |
-| `quant-ai` | Data Science & Finance | One CURRENT diagram |
-| `equipment-assignment` | SDE | One CURRENT diagram |
-| `enterprise-workflow` | SDE | One CURRENT class diagram |
-| `smartbuyer` | SDE | — |
-| `info6105-methods` | Data Science & Finance | — |
+| `kk-knock` | Planning & Delivery, Backend & Cloud | Screenshots and widget art from the public product page; three CURRENT diagrams |
+| `enterprise-workflow` | Business modeling | Two CURRENT diagrams (donation flow, partial class diagram) |
+| `cloud-native` | Backend & Cloud | Two CURRENT diagrams |
+| `personal-writing-lora` | Planning & Delivery, Backend & Cloud, AI & Research | Two wireframes and an ER sketch (HISTORICAL), two CURRENT diagrams, one PROPOSED diagram |
+| `distributed-llm` | AI & Research, Backend & Cloud | One CURRENT diagram |
+| `equipment-assignment` | Backend & Cloud, Business modeling | One CURRENT diagram |
+| `f1-bayesian` | AI & Research | Two CURRENT diagrams, two result plots |
+| `smartbuyer` | Backend & Cloud | — |
+| `quant-ai` | AI & Research | One CURRENT diagram |
+| `info6105-methods` | AI & Research | — |
