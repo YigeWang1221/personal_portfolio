@@ -40,7 +40,7 @@
 
 **决策。** 使用 CPU，并在运行时选择内核。
 
-**取舍。** 放弃了 GPU 可能带来的加速，换来在每种芯片上一致的表现。
+**取舍。** 放弃 GPU 可能带来的加速，减少对 Vulkan 或 NPU 支持的依赖；实际性能仍随设备而异。
 
 **证据与现状。** 在一台测试手机上用短音频测试：运行时选择内核后，Small 模型的转写耗时由 {{fact:kk-knock.asr_before}} 降至 {{fact:kk-knock.asr_after}}；Flash Attention 更慢，Vulkan 出现 `DeviceLost` 错误。该方案已在 App 中使用。
 
@@ -54,7 +54,7 @@
 
 **取舍。** 有冷启动延迟；换来的是没有闲置 GPU 的成本，后端也不需要启动实例的权限。
 
-**证据与现状。** Terraform 先通过了 mock provider 测试，worker 的生命周期基于本地替身测试，随后在 AWS 上实际运行：训练组为一次真实训练任务从零扩容。之后环境已销毁，这次运行的日志没有公开。
+**证据与现状。** Terraform 先通过了 mock provider 测试，worker 的生命周期基于本地替身测试，随后在 AWS 上实际运行：训练组为一次真实训练任务从零扩容。之后环境已销毁。
 
 ## 不淘汰使用中适配器的缓存 {#lora-adapter-cache}
 
@@ -68,17 +68,17 @@
 
 **证据与现状。** 已在适配器管理服务中实现，并基于替身测试；在 AWS 的一块 GPU 上，通过 vLLM 加载一个训练好的适配器提供了推理。同时加载多位用户的适配器还没有做基准测试。
 
-## 跨 AWS 账号晋升的不可变发布 {#cloud-immutable}
+## 跨 AWS 账号的镜像发布 {#cloud-immutable}
 
 **背景。** 运行在 Auto Scaling 组中的 Spring Boot 服务需要频繁部署，并且能安全回滚。
 
-**备选方案。** 原地更新正在运行的服务器，或者为每次发布构建新的机器镜像。这是课程作业，很多要构建的内容由作业规定，因此这条记录说明的是发布链路如何运作，而不是一次完全自主的产品选择。
+**备选方案。** 原地更新正在运行的服务器，或者为每次发布构建新的机器镜像。
 
 **决策。** 每次合并都用 Packer 构建 AMI：在 dev 账号构建，共享给 demo 账号，再通过新的启动模板版本和实例刷新滚动上线。
 
-**取舍。** 比原地更新慢（中位耗时{{fact:cloud-native.deploy_median}}），但每次发布都可复现、容易回滚，dev 里的失误也影响不到 demo。
+**取舍。** 比原地更新慢（中位耗时{{fact:cloud-native.deploy_median}}），但版本化镜像可用于回滚，dev 与 demo 使用独立账号。
 
-**证据与现状。** GitHub Actions 工作流及其运行记录；整个课程期间都在使用。
+**证据与现状。** GitHub Actions 工作流及其运行记录；用于项目的多次发布。
 
 ## 扩展实验采用固定 token 预算 {#hpc-token-budget}
 
@@ -88,6 +88,6 @@
 
 **决策。** 固定 token 预算：GPU 数量翻倍时，迭代次数减半。
 
-**取舍。** 吞吐比较很干净，但 GPU 越多，优化步数越少，验证集 perplexity 也更差：单卡为 {{fact:distributed-llm.ppl_1gpu}}，四卡为 {{fact:distributed-llm.ppl_4gpu}}。
+**取舍。** 便于在相同 token 预算下比较吞吐，但 GPU 越多，优化步数越少，验证集 perplexity 也更差：单卡为 {{fact:distributed-llm.ppl_1gpu}}，四卡为 {{fact:distributed-llm.ppl_4gpu}}。
 
-**证据与现状。** 配置文件和已提交的日志。"吞吐不等于收敛速度"这一教训，改变了我设计下一次实验的方式。
+**证据与现状。** 配置文件和已提交的日志。

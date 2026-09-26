@@ -40,7 +40,7 @@ The projects on this site are very different — a mobile product, a training be
 
 **Decision.** The CPU, with runtime kernel selection.
 
-**Trade-off.** It gives up possible GPU speed-ups, and it behaves the same on every chip.
+**Trade-off.** It gives up possible GPU speed-ups, but avoids a dependency on Vulkan or NPU support; performance still varies by device.
 
 **Evidence and status.** On one test phone with short clips, runtime kernel selection brought Small-model transcription from {{fact:kk-knock.asr_before}} to {{fact:kk-knock.asr_after}}; Flash Attention was slower and Vulkan failed with `DeviceLost`. Shipped in the app.
 
@@ -54,7 +54,7 @@ The projects on this site are very different — a mobile product, a training be
 
 **Trade-off.** Cold-start latency. In exchange, there is no idle GPU cost, and the backend needs no permission to launch instances.
 
-**Evidence and status.** Terraform checked with mock-provider tests and a worker lifecycle tested against local fakes, then run on AWS: the training group scaled up from zero for a real training job. The environment was destroyed afterwards, and the run's logs are not published.
+**Evidence and status.** Terraform checked with mock-provider tests and a worker lifecycle tested against local fakes, then run on AWS: the training group scaled up from zero for a real training job. The environment was destroyed afterwards.
 
 ## An adapter cache that never evicts adapters in use {#lora-adapter-cache}
 
@@ -72,13 +72,13 @@ The projects on this site are very different — a mobile product, a training be
 
 **Context.** A Spring Boot service in an Auto Scaling group has to be deployed often and rolled back safely.
 
-**Options.** Update the running servers in place, or bake a new machine image for every release. This was coursework: the assignments defined much of what had to be built, so this record describes how the release path works rather than a free product choice.
+**Options.** Update the running servers in place, or bake a new machine image for every release.
 
 **Decision.** A Packer AMI per merge, built in a dev account, shared with a demo account and rolled out through a new launch-template version and an instance refresh.
 
-**Trade-off.** Slower than updating in place — a median of {{fact:cloud-native.deploy_median}} — but every release is reproducible, easy to roll back, and a mistake in dev cannot touch demo.
+**Trade-off.** Slower than updating in place — a median of {{fact:cloud-native.deploy_median}} — but versioned images can be reused for rollback, with separate dev and demo accounts.
 
-**Evidence and status.** The GitHub Actions workflows and their run history; in use for the whole course.
+**Evidence and status.** The GitHub Actions workflows and their run history; used across project releases.
 
 ## A fixed token budget for scaling experiments {#hpc-token-budget}
 
@@ -90,4 +90,4 @@ The projects on this site are very different — a mobile product, a training be
 
 **Trade-off.** The throughput comparison is clean, but larger runs take fewer optimizer steps, and validation perplexity was worse: {{fact:distributed-llm.ppl_1gpu}} on one GPU against {{fact:distributed-llm.ppl_4gpu}} on four.
 
-**Evidence and status.** The config files and the committed logs. The lesson — throughput is not time-to-quality — changes how I would design the next experiment.
+**Evidence and status.** The config files and the committed logs.

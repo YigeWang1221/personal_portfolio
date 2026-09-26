@@ -35,5 +35,6 @@ const label = figure.kind === 'diagram' || figure.kind === 'image' ? figure.labe
   ) : (
     figure.raster && <Image src={figure.raster} alt={figure.alt[locale]} widths={[480, 800]} sizes="(max-width: 48rem) 100vw, 26rem" format="webp" loading={loading} decoding="async" />
   )}
+  {figure.kind === 'screens' && <figcaption><span class="screen-scroll-hint">{t(locale, 'figure.scroll_hint')} · </span>{figure.caption[locale]}</figcaption>}
   {label && <figcaption><span class={`asset-label label-${label}`}>{label}</span></figcaption>}
 </figure>

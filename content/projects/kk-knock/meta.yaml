@@ -4,18 +4,18 @@ subtitle:
   en: An Android app that turns a spoken sentence into a todo or a researched note
   zh: 说一句话，就整理成待办或查资料写成笔记的 Android App
 summary:
-  en: KK Knock transcribes speech on the phone, sends only the text to an LLM that files it as a todo with its due time or researches it into a written-up note, and keeps every note on the phone. Built solo, from the Android app to the self-hosted backend.
-  zh: KK Knock 在手机上完成语音转写，只把文字交给大模型，整理成带截止时间的待办，或查资料后写成一篇笔记；所有笔记都保存在手机上。从 Android 客户端到自托管后端均由我独立完成。
+  en: "I started KK Knock to capture fleeting ideas without stopping to type. I developed the idea into requirements and development documents, interaction prototypes, technology choices and coding guidelines, then planned milestones and built the Android app, backend and admin console with AI coding assistance. Spoken input becomes a todo or a researched note to act on later."
+  zh: "我从“不方便打字时，怎样留住一闪而过的想法”出发，提出 KK Knock，编写需求分析与开发文档、设计交互原型、确定技术选型和代码规范，再安排阶段计划，借助 AI 编码助手推进客户端、后端与管理端的实现，让语音输入成为之后可以执行的待办或继续思考的研究笔记。"
 focus: { primary: planning-delivery, also: [backend-cloud] }
 status: self-hosted-pilot
 status_note:
-  en: Accepted and in daily use on my Android test phone; not yet publicly released
-  zh: 已在我的 Android 测试手机上验收并日常使用；尚未公开发布
+  en: Self-hosted pilot in daily use on my Android phone
+  zh: 已完成自托管部署，并在 Android 手机上日常使用
 team: { size: 1 }
 role:
-  en: Solo. I defined the product, wrote the specifications and decision records, and built and tested the Android app, the backend, the admin console and the self-hosted deployment. AI coding agents wrote much of the code from those specifications; I reviewed what they produced and accepted each phase on the phone.
-  zh: 独立完成。我定义产品、编写规格说明和决策记录，并完成 Android 客户端、后端、管理后台和自托管部署的开发与测试。大量代码由 AI 编码助手按这些规格编写，由我审查，每个阶段都在手机上验收。
-context: { en: Personal product (pre-release), zh: 个人产品（发布前） }
+  en: "From idea to implementation. I own requirements analysis and development documentation, interaction prototyping, technology selection, coding guidelines, system design and milestone scheduling. I coordinate implementation across the Android app, backend and admin console through self-hosted deployment. AI coding assistants produce much of the code from my specifications; I review and integrate it."
+  zh: "从想法到实现由我推进。我负责需求分析与开发文档、交互原型、技术选型、代码规范、系统设计和阶段日程管理，统筹 Android 客户端、后端与管理端开发直至自托管部署。大量代码由 AI 编码助手按我的规格生成，由我审查与集成。"
+context: { en: "Voice capture and information organization", zh: "语音采集与信息整理" }
 period: { start: "2026-08", end: null }
 stack:
   - Kotlin Multiplatform
@@ -42,12 +42,12 @@ related: cloud-native
 
 card:
   intro:
-    en: Speak when your hands are busy. KK Knock transcribes on the phone and turns the text into a todo with its due time, or researches it into a written-up note. I built it alone, from the product definition to the Android app, the FastAPI backend, the admin console and the self-hosted deployment.
-    zh: 手上正忙时说一句话，KK Knock 在手机上完成转写，再把文字整理成带截止时间的待办，或查资料写成一篇笔记。从产品定义到 Android 客户端、FastAPI 后端、管理后台和自托管部署，都由我独立完成。
+    en: "I started with an idea: capture a thought without stopping to type. I turned it into requirements and development documents, interaction prototypes, technology choices and coding guidelines, then planned milestones and coordinated implementation across the app, backend and admin console."
+    zh: "我从“不方便打字时，怎样留住一闪而过的想法”出发，编写需求分析与开发文档、设计交互原型、确定技术选型和代码规范，再拆分里程碑、安排开发日程，推进客户端、后端和管理端的实现。"
   highlight:
-    en: A note survives a killed app or a dropped connection. Each capture keeps one ID from the first tap, and a retry reuses the saved audio or transcript instead of starting over.
-    zh: App 被杀或网络中断，笔记也不会丢：每次采集从第一次点击起就只用一个 ID，重试时复用已保存的音频或文字，而不是从头再来。
-  status: { en: In daily use on my test phone · not yet released, zh: 已在测试手机上日常使用 · 尚未发布 }
+    en: "I connected on-device transcription, intent classification and research into a voice workflow: a spoken reminder becomes a todo with a due time, while an idea becomes a note with sources. The goal is to reduce typing and manual organizing so everyday thoughts can turn into useful next steps at work or in life."
+    zh: "我把端侧转写、意图识别和资料研究接成语音工作流：随口说出的安排变成带截止时间的待办，零碎想法则整理成附来源的研究笔记。希望减少打字和手动整理，让生活、工作中的念头更容易变成下一步行动。"
+  status: { en: Self-hosted · in daily use on Android, zh: 自托管试运行 · Android 日常使用 }
   tech: [Kotlin Multiplatform, FastAPI, whisper.cpp]
   figure: screens
 
@@ -118,21 +118,21 @@ figures:
     id: screens
     section: product
     caption:
-      en: From a spoken sentence to a todo with its due time, and to a note written up with its sources. Screenshots from the public product page, with demo data.
-      zh: 从说出的一句话，到带截止时间的待办，再到附有参考来源的笔记。截图来自公开的产品介绍页，均为演示数据。
+      en: "Separate demo scenes: recording, a todo, and a researched note with sources. A capture becomes either a todo or a note; these screenshots do not show one continuous example."
+      zh: 不同演示场景：录音、待办，以及附参考来源的研究笔记。一次采集整理为待办或笔记；这些截图不是同一个案例的连续步骤。
     items:
       - file: { en: assets/screens/en/recording.jpg, zh: assets/screens/zh/recording.jpg }
         alt: { en: "Recording: the live transcript sits above a red waveform", zh: 录音中：红色声波上方显示实时转写的文字 }
-        label: { en: 1 · Speak, zh: 1 · 说一句话 }
+        label: { en: Recording, zh: 录音场景 }
       - file: { en: assets/screens/en/home_todo.jpg, zh: assets/screens/zh/home_todo.jpg }
         alt: { en: "The todo list, with due times taken from what was said", zh: 待办列表，截止时间取自说话内容 }
-        label: { en: 2 · A todo with its due time, zh: 2 · 带截止时间的待办 }
+        label: { en: Todo example, zh: 待办示例 }
       - file: { en: assets/screens/en/thought_read.jpg, zh: assets/screens/zh/thought_read.jpg }
         alt: { en: A thought written up with a summary and its advantages, zh: 整理成文的想法笔记，包含摘要和优点 }
-        label: { en: 3 · A researched note, zh: 3 · 查资料写成的笔记 }
+        label: { en: Research note example, zh: 研究笔记示例 }
       - file: { en: assets/screens/en/thought_sources.jpg, zh: assets/screens/zh/thought_sources.jpg }
         alt: { en: "The end of a note: recommendation, next steps and sources", zh: 笔记的结尾：建议、后续考虑和参考来源 }
-        label: { en: 4 · With its sources, zh: 4 · 附参考来源 }
+        label: { en: Note sources, zh: 笔记来源 }
   - kind: screens
     id: widgets
     section: product

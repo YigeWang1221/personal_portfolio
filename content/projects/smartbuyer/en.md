@@ -1,6 +1,6 @@
 ## The store {#system}
 
-SmartBuyer is an online store built as a course project. Shoppers browse by category, search, keep a cart, place orders with simulated payment and request refunds. Administrators manage products and categories and review refund requests.
+SmartBuyer is an online store. Shoppers browse by category, search, keep a cart, place orders with simulated payment and request refunds. Administrators manage products and categories and review refund requests.
 
 ## The backend I led {#backend}
 
@@ -11,4 +11,4 @@ SmartBuyer is an online store built as a course project. Shoppers browse by cate
 
 ## Scope {#scope}
 
-This was coursework that ran locally and was never deployed, and the repository stays private. A production version would need proper configuration management, automated tests and a deployment pipeline.
+The application ran locally and was never deployed. A production version would need proper configuration management, automated tests and a deployment pipeline.

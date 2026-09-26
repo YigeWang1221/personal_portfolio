@@ -1,6 +1,6 @@
-## The situation {#scenario}
+## From business requirements to my implementation {#scenario}
 
-Food rescue involves organizations that do not report to each other. A restaurant or grocer donates food; an inspection team checks that it is still good; a shelter network collects what its clients ask for; a volunteer team dispatches drivers. Each person needs a screen with only their own work on it, and a donation has to reach the next person without anyone forwarding it by hand.
+Food rescue requires donors, inspectors, shelters and drivers to coordinate. In our team, I translated those responsibilities into the domain model, work queues and role-based interface dispatch, implemented persistence and the application shell, and co-implemented workflow screens.
 
 The design question was how to turn that description into objects: which ones exist, what each one owns, and how work moves between people who never see each other's screens.
 
@@ -32,7 +32,7 @@ The path the code implements, step by step. Status values are the strings the co
 | Dispatch | Task manager | Accepts only a task that is still `UnPick`, assigns a driver, sets the task to `Waiting to be picked up` and marks the driver `busy` |
 | Deliver | Driver | Marks the task `Picked up`, then `Delivered`; the item becomes `donated`, and the task moves from the driver's active queue to the finished queue |
 
-## Where the design bends {#tradeoffs}
+## Design trade-offs {#tradeoffs}
 
 - **Queues share objects.** A request is not copied between queues; the same object sits in several at once. Every screen stays consistent without any syncing, but a change made on one screen is visible everywhere immediately, and nothing records who changed it.
 - **Screens own the business rules.** The rule "only unassigned tasks can be dispatched" lives in the task manager's button handler, not in a model method. There is no service layer, so the rules are hard to test and easy to bypass.

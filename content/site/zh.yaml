@@ -37,13 +37,14 @@ status:
   self-hosted-pilot: 自托管试运行
   in-development: 开发中
   implemented-not-deployed: 已实现，未部署
-  course-project: 课程项目
-  course-benchmark: 课程基准实验
-  undergraduate-capstone: 本科毕业设计
+  course-project: 项目
+  course-benchmark: 项目
+  undergraduate-capstone: 项目
   research-prototype: 研究原型
   archived: 已归档
 
 figure:
+  scroll_hint: 左右滑动查看更多截图
   screens: 产品截图
   full_size: 查看原图
 
@@ -58,9 +59,10 @@ roadmap:
   planned: 计划中
 
 home:
+  skills: 技术与能力
   title: 王一格 · 软件工程师（后端与系统）
   description: 王一格，软件工程师（后端与系统方向）。项目包括带自托管后端的语音速记 Android App、AWS 交付流水线、分布式大模型训练等，中英双语。
-  intro: 我是一名专注后端服务与云端交付的软件工程师。做过的项目包括 AWS 上的 REST API 与基础设施即代码、GPU 集群上的分布式模型训练，以及带 AI 能力的产品；每个项目都从需求一直做到能真正运行。
+  intro: "我负责从需求分析、架构设计到开发部署的完整流程，主要方向是后端服务、云基础设施与 AI 应用。项目涵盖 Spring Boot 与 FastAPI 后端、AWS 基础设施与 CI/CD、GPU 分布式训练，以及从想法到落地的语音 Android 产品。求职方向是后端、云平台与 AI 基础设施。"
   cta_work: 查看项目
   cta_resume: 查看简历
   links_label: 个人主页
@@ -73,9 +75,9 @@ home:
   tech: 主要技术
   steps: "{title} 的各个阶段"
   read_case: 阅读项目详情
-  background_link: 完整背景
+  background_link: 教育与工作经历
   contact_title: 联系我
-  contact_body: 我在寻找后端、云平台和 AI 基础设施方向的全职工作。通过 LinkedIn 联系我最方便。
+  contact_body: 我在寻找后端、云平台和 AI 基础设施方向的全职工作。欢迎通过邮件或 LinkedIn 联系我。
   contact_linkedin: 在 LinkedIn 上联系我
   contact_github: GitHub 主页
 
@@ -83,13 +85,13 @@ home:
 projects:
   title: 项目
   description: 王一格的全部项目，可按能力筛选：业务建模、后端与云、规划与交付、AI 与研究。
-  lede: 先列精选项目，再列其他项目。可以按能力筛选，一个项目可能同时属于多个类别。
+  lede: 按技术方向浏览项目。
   filter_label: 按能力筛选
   all: 全部
   count: "{n} 个项目"
   count_one: 1 个项目
   featured: 精选项目
-  role: 我的部分
+  role: 我的职责
 
 
 project:
@@ -105,13 +107,13 @@ project:
 
 background:
   title: 背景
-  description: 王一格的背景：教育、经历、工作方式，以及本作品集的写作原则。
+  description: 王一格的背景：教育、经历与工程实践。
   eyebrow: 背景
   lede: 专注后端与系统方向的软件工程师，将于 2026 年 12 月在美国东北大学完成硕士学业。
   education: 教育经历
   experience: 实习经历
   contact: 联系方式
-  contact_body: 通过 GitHub 或 LinkedIn 联系我最方便。
+  contact_body: 求职相关事宜可通过邮件或 LinkedIn 联系我。
 
 resume:
   title: 简历
@@ -141,3 +143,7 @@ plan:
 notfound:
   title: 页面不存在
   body: 你访问的页面不存在，可以从下面的链接回到网站。
+
+contact:
+  email_label: 求职联系邮箱
+  attachments: "附件总大小不超过 {mb} MB。"

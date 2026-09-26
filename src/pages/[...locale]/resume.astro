@@ -1,6 +1,7 @@
 ---
 // Visual résumé (ADR-007): consistent with the PDF résumé, with every skill linked to its evidence.
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import ContactEmail from '../../components/ContactEmail.astro';
 import StatusBadge from '../../components/StatusBadge.astro';
 import { localePath, localePaths, type Locale } from '../../lib/i18n';
 import { getContent, t, termText } from '../../lib/content/load';
@@ -24,6 +25,7 @@ const highlights = profile.highlights.map((h) => ({ project: projects.get(h.proj
         <p class="eyebrow">{t(locale, 'resume.eyebrow')}</p>
         <h1>{profile.name[locale]}</h1>
         <p class="headline">{profile.headline[locale]}</p>
+        <ContactEmail locale={locale} />
         <p class="muted small resume-updated">{t(locale, 'resume.updated', { date: profile.updated })}</p>
       </div>
       <ul class="resume-links">
@@ -87,6 +89,7 @@ const highlights = profile.highlights.map((h) => ({ project: projects.get(h.proj
             <div class="cv-what">
               <h3><a href={localePath(locale, `/projects/${p.meta.slug}/`)}>{p.meta.title[locale]}</a></h3>
               <p class="cv-sub">{p.meta.subtitle[locale]} · {p.meta.context[locale]} · {teamLabel(p.meta.team, locale)}</p>
+              <p>{p.meta.role[locale]}</p>
               <StatusBadge status={p.meta.status} team={p.meta.team} locale={locale} />
             </div>
           </li>
@@ -97,7 +100,6 @@ const highlights = profile.highlights.map((h) => ({ project: projects.get(h.proj
     <section class="block" aria-labelledby="skills">
       <div class="block-head">
         <h2 id="skills">{t(locale, 'resume.skills')}</h2>
-        <p class="muted small">{t(locale, 'resume.skills_note')}</p>
       </div>
       <div class="skill-groups">
         {profile.skills.map((g) => (
@@ -120,6 +122,5 @@ const highlights = profile.highlights.map((h) => ({ project: projects.get(h.proj
       </div>
     </section>
 
-    <p class="note block no-print">{t(locale, 'resume.note')}</p>
   </div>
 </BaseLayout>

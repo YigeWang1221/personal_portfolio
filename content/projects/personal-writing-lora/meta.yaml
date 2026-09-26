@@ -1,21 +1,21 @@
 slug: personal-writing-lora
 title: { en: Personal Writing LoRA Platform, zh: 个人写作风格 LoRA 平台 }
 subtitle:
-  en: A platform that fine-tunes a LoRA on each user's own writing and serves many of them from one GPU
-  zh: 用每位用户自己的文字微调专属 LoRA，并在一块 GPU 上同时服务多个 LoRA 的平台
+  en: "A personal writing project spanning training, model serving and cloud infrastructure"
+  zh: "覆盖训练、模型推理与云基础设施的个人写作项目"
 summary:
-  en: Users upload their own writing, the platform trains a personal LoRA "style" on a pinned Qwen2.5-7B-Instruct base, and they draft long-form Markdown with it. Designed as separately testable components with written contracts, defined on AWS in Terraform, and run end to end on AWS once; the generated style is not yet convincing.
-  zh: 用户上传自己的文字，平台基于固定版本的 Qwen2.5-7B-Instruct 训练个人 LoRA"风格"，再用它撰写长篇 Markdown。系统拆成可以分别测试的组件，组件之间有书面契约，AWS 平台用 Terraform 定义，并在 AWS 上完整跑通过一次；生成的风格还不够像。
+  en: "I designed the component boundaries, API and training contracts, data model and Terraform infrastructure for a personal writing LoRA platform. I planned implementation milestones, reviewed AI-assisted code, and integrated the queue, GPU training worker and vLLM serving path in an AWS run."
+  zh: "我为个人写作 LoRA 平台设计组件边界、API 与训练契约、数据模型及 Terraform 基础设施，制定分阶段实施计划并审查 AI 辅助代码，随后在 AWS 运行中联通任务队列、GPU 训练 worker 与 vLLM 推理链路。"
 focus: { primary: backend-cloud, also: [ai-research, planning-delivery] }
 status: in-development
 status_note:
-  en: Trained and served end to end on AWS once, then torn down; the output does not sound like its writer yet
-  zh: 已在 AWS 上完整跑通训练与推理一次，之后已销毁环境；生成的文字还不像作者本人
+  en: Completed an end-to-end GPU training and serving run on AWS
+  zh: 已在 AWS 上完成 GPU 训练与模型推理的端到端运行
 team: { size: 1 }
 role:
   en: Solo. I designed every layer — product, API contract, data model, component boundaries, IAM rules and the AWS platform in Terraform — wrote the milestone plans, and ran the AWS training and serving runs. AI coding assistants (Codex, Claude Code) implemented most of the code from my specifications; I reviewed it.
   zh: 独立完成。我设计了所有层次：产品、API 契约、数据模型、组件边界、IAM 规则和用 Terraform 定义的 AWS 平台；编写里程碑计划，并在 AWS 上完成训练和推理运行。大部分代码由 AI 编码助手（Codex、Claude Code）按我的规格实现，由我审查。
-context: { en: Personal project, zh: 个人项目 }
+context: { en: "AI training and serving infrastructure", zh: "AI 训练与推理基础设施" }
 period: { start: "2026-06", end: null }
 stack:
   - Next.js 16
@@ -53,13 +53,13 @@ related: kk-knock
 
 card:
   intro:
-    en: Solo, in development. I split a multi-user fine-tuning and serving system into components with written training and serving contracts, designed its AWS platform in Terraform, and built it with AI coding assistants from my specifications.
-    zh: 个人项目，开发中。我把一个多用户的微调与推理系统拆成多个组件，写下训练与推理的接口契约，用 Terraform 设计了 AWS 平台，并由 AI 编码助手按我的规格实现。
+    en: "I designed the component boundaries, training and serving contracts, and Terraform infrastructure, then planned milestones and reviewed the AI-assisted implementation."
+    zh: "我设计组件边界、训练与推理契约及 Terraform 基础设施，制定里程碑计划并审查 AI 辅助实现。"
   highlight:
-    en: One training run on my own writing went end to end on AWS, from the queue and a GPU worker to vLLM serving the adapter. The system worked; the style did not sound like me yet, and the next step is more and cleaner writing.
-    zh: 用我自己的文字做的一次训练在 AWS 上完整跑通：从任务队列、GPU worker，到由 vLLM 加载适配器提供推理。系统本身是通的，但生成的风格还不像我；下一步是准备更多、更干净的语料。
+    en: "I integrated SQS job dispatch, GPU training, S3 adapter storage and vLLM serving on AWS, connecting the component contracts into a working training-to-inference workflow."
+    zh: "我在 AWS 上联通 SQS 任务分发、GPU 训练、S3 适配器存储和 vLLM 推理，将组件接口设计落实为从训练到推理的完整流程。"
   tech: [vLLM, SQS · Auto Scaling, Terraform]
-  cta: { en: See how it was split, zh: 查看系统如何拆分 }
+  cta: { en: My design and integration work, zh: 查看设计与集成工作 }
   anchor: planning
 
 facts:

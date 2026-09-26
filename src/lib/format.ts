@@ -57,7 +57,7 @@ export function teamLabel(team: Team, locale: Locale): string {
   return team.size === 1 ? t(locale, 'team.solo') : t(locale, 'team.of', { n: team.size });
 }
 
-/** Coursework statuses carry the team size, as in the glossary: "Course project (team of 3)". */
+/** Legacy status keys retain project/team display without classifying work by educational origin. */
 const STATUS_WITH_TEAM: ReadonlySet<StatusKey> = new Set(['course-project', 'course-benchmark', 'undergraduate-capstone']);
 
 export function statusLabel(status: StatusKey, team: Team, locale: Locale): string {

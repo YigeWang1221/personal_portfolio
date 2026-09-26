@@ -31,6 +31,7 @@ const showVisual = variant !== 'exploring';
     <h3 id={headingId}><a href={localePath(locale, `/projects/${m.slug}/`)}>{m.title[locale]}</a></h3>
     <p class="purpose">{m.subtitle[locale]}</p>
     <p class="work-intro">{card.intro[locale]}</p>
+    {card.bullets && <ul class="work-contributions">{card.bullets.map((item) => <li>{item[locale]}</li>)}</ul>}
     {card.highlight && <p class="work-highlight">{card.highlight[locale]}</p>}
     <p class="work-meta">
       <StatusBadge status={m.status} team={m.team} locale={locale} />

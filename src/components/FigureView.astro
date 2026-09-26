@@ -29,7 +29,7 @@ const leadClass = lead ? ' figure-lead' : '';
         </li>
       ))}
     </ul>
-    <figcaption>{figure.caption[locale]}</figcaption>
+    <figcaption><span class="screen-scroll-hint">{t(locale, 'figure.scroll_hint')} · </span>{figure.caption[locale]}</figcaption>
   </figure>
 ) : figure.kind === 'chart' ? (
   <figure class={`figure figure-chart${leadClass}`} id={`fig-${figure.id}`}>

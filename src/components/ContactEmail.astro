@@ -1,0 +1,11 @@
+---
+import type { Locale } from '../lib/i18n';
+import { getContent, t } from '../lib/content/load';
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const { contact } = getContent().profile;
+---
+<div class="contact-email">
+  <p><span>{t(locale, 'contact.email_label')}: </span><a href={`mailto:${contact.email}`}>{contact.email}</a></p>
+  <p class="muted small">{t(locale, 'contact.attachments', { mb: String(contact.attachment_limit_mb) })}</p>
+</div>

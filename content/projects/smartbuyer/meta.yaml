@@ -12,7 +12,7 @@ team: { size: 5 }
 role:
   en: Team of five. I led the backend — the scaffold, the data models, the REST API and its restructuring into controller and route layers — and wrote a large part of the React frontend with the team.
   zh: 五人团队。我主导了后端，包括项目骨架、数据模型、REST API，以及把 API 重构为 controller 与 route 分层；React 前端也有很大一部分由我和团队一起完成。
-context: { en: "Course project, INFO 6150 Web Design & User Experience", zh: 课程项目，INFO 6150 网页设计与用户体验 }
+context: { en: "Full-stack web development", zh: "全栈 Web 开发" }
 period: { start: "2025-03", end: "2025-04" }
 stack: [Node.js, Express, MongoDB, Mongoose, bcrypt, express-session, Multer, React, Axios]
 links: []
