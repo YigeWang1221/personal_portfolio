@@ -7,6 +7,10 @@ headline:
 # Date the résumé data below was last checked against the owner-confirmed résumé.
 updated: "2026-09-24"
 
+contact:
+  email: wang.yige@northeatsern.edu
+  attachment_limit_mb: 2
+
 links:
   - { label: { en: GitHub, zh: GitHub }, url: "https://github.com/YigeWang1221" }
   - { label: { en: LinkedIn, zh: LinkedIn }, url: "https://www.linkedin.com/in/yigewang1221/" }
@@ -56,7 +60,7 @@ highlights:
   - { project: f1-bayesian, fact: podium }
 
 skills:
-  # Skill names stay in English in both languages (industry-standard terms); group headings are translated.
+  # Technology names retain standard spelling; descriptive skills and headings are localized.
   - group: { en: Languages, zh: 编程语言 }
     items:
       - { name: Java, evidence: [cloud-native, equipment-assignment, enterprise-workflow] }
@@ -73,6 +77,7 @@ skills:
       - { name: PostgreSQL, evidence: [kk-knock, personal-writing-lora] }
       - { name: MySQL, evidence: [cloud-native, equipment-assignment] }
       - { name: MongoDB, evidence: [smartbuyer] }
+      - { name: { en: Redis (maintenance branch), zh: Redis（维护分支） }, evidence: [equipment-assignment] }
       - { name: MinIO, evidence: [equipment-assignment] }
       - { name: Alembic / Flyway, evidence: [personal-writing-lora, cloud-native] }
   - group: { en: Mobile and web, zh: 移动端与 Web }
@@ -84,7 +89,7 @@ skills:
       - { name: Vue 3, evidence: [equipment-assignment] }
   - group: { en: Cloud and DevOps, zh: 云与 DevOps }
     items:
-      - { name: "AWS (VPC, EC2, ALB, Auto Scaling, RDS, S3, KMS, Secrets Manager, SNS, Lambda, CloudWatch)", evidence: [cloud-native, personal-writing-lora] }
+      - { name: "AWS (VPC, IAM, EC2, ALB, Auto Scaling, RDS, S3, KMS, Secrets Manager, SNS, Lambda, CloudWatch, Route 53)", evidence: [cloud-native, personal-writing-lora] }
       - { name: Terraform, evidence: [cloud-native, personal-writing-lora, kk-knock] }
       - { name: Packer, evidence: [cloud-native, kk-knock] }
       - { name: GitHub Actions, evidence: [cloud-native, kk-knock] }
@@ -93,20 +98,20 @@ skills:
     items:
       - { name: "PyTorch (DDP, FSDP)", evidence: [distributed-llm, quant-ai] }
       - { name: NCCL / Slurm, evidence: [distributed-llm, quant-ai] }
-      - { name: whisper.cpp (on-device ASR), evidence: [kk-knock] }
+      - { name: { en: whisper.cpp (on-device ASR), zh: whisper.cpp（端侧语音识别） }, evidence: [kk-knock] }
       - { name: vLLM multi-LoRA / QLoRA, evidence: [personal-writing-lora] }
       - { name: "LLM APIs (DeepSeek, Gemini)", evidence: [kk-knock] }
   - group: { en: Data science, zh: 数据科学 }
     items:
       - { name: PyMC / NUTS / ArviZ, evidence: [f1-bayesian] }
-      - { name: Hierarchical Bayesian modeling, evidence: [f1-bayesian] }
-      - { name: Monte Carlo simulation, evidence: [f1-bayesian] }
-      - { name: Walk-forward validation / backtesting, evidence: [quant-ai] }
+      - { name: { en: Hierarchical Bayesian modeling, zh: 分层贝叶斯建模 }, evidence: [f1-bayesian] }
+      - { name: { en: Monte Carlo simulation, zh: 蒙特卡罗模拟 }, evidence: [f1-bayesian] }
+      - { name: { en: Walk-forward validation / backtesting, zh: 滚动验证与回测 }, evidence: [quant-ai] }
       - { name: pandas / NumPy, evidence: [f1-bayesian, quant-ai, distributed-llm] }
   - group: { en: Engineering practice, zh: 工程实践 }
     items:
-      - { name: Architecture Decision Records (ADR), evidence: [kk-knock, personal-writing-lora] }
-      - { name: Contract-first API design, evidence: [personal-writing-lora] }
-      - { name: Idempotency / offline-first design, evidence: [kk-knock] }
+      - { name: { en: Architecture Decision Records (ADR), zh: 架构决策记录（ADR） }, evidence: [kk-knock, personal-writing-lora] }
+      - { name: { en: Contract-first API design, zh: 接口契约设计 }, evidence: [personal-writing-lora] }
+      - { name: { en: Idempotency / offline-first design, zh: 幂等与离线优先设计 }, evidence: [kk-knock] }
       - { name: pytest / JUnit / Vitest, evidence: [kk-knock, personal-writing-lora, cloud-native] }
-      - { name: "Observability (structured logs, custom metrics)", evidence: [cloud-native] }
+      - { name: { en: "Observability (structured logs, custom metrics)", zh: 可观测性（结构化日志、自定义指标） }, evidence: [cloud-native] }

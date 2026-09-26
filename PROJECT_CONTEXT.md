@@ -6,6 +6,8 @@
 
 A bilingual (English / 简体中文) engineering portfolio for Yige Wang, published at `portfolio.wangyige1221.website`.
 
+**Purpose in practice.** This is an expanded personal résumé: what I did, my responsibilities, concrete technical work, and the capabilities that work demonstrates (ADR-018). Projects and outcomes support that account. Education, internships and target roles remain essential.
+
 **Why it exists.** A one-page resume cannot show:
 - how a system was planned and designed;
 - why decisions were made;

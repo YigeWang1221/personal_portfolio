@@ -37,13 +37,14 @@ status:
   self-hosted-pilot: Self-hosted pilot
   in-development: In development
   implemented-not-deployed: Implemented, not deployed
-  course-project: Course project
-  course-benchmark: Course benchmark
-  undergraduate-capstone: Undergraduate capstone
+  course-project: Project
+  course-benchmark: Project
+  undergraduate-capstone: Project
   research-prototype: Research prototype
   archived: Archived
 
 figure:
+  scroll_hint: Swipe or scroll sideways for more screenshots
   screens: Product screenshots
   full_size: Full-size image
 
@@ -58,9 +59,10 @@ roadmap:
   planned: planned
 
 home:
+  skills: Technical skills
   title: Yige Wang · Software Engineer — Backend & Systems
   description: "Yige Wang, software engineer (backend and systems): a voice-capture Android app with a self-hosted backend, an AWS delivery pipeline, distributed LLM training and more, in English and Chinese."
-  intro: I'm a software engineer focused on backend services and cloud delivery. My projects range from REST APIs and infrastructure as code on AWS to distributed model training on a GPU cluster and products with AI features, each taken from requirements to something that runs.
+  intro: "I develop backend services, cloud infrastructure and AI applications, taking projects from requirements and architecture through implementation and deployment. My work includes Spring Boot and FastAPI services, AWS infrastructure and CI/CD, distributed GPU training, and a voice-first Android product. I am seeking backend, cloud platform and AI infrastructure roles."
   cta_work: See projects
   cta_resume: View résumé
   links_label: Profiles
@@ -73,9 +75,9 @@ home:
   tech: Key technologies
   steps: "How {title} works, stage by stage"
   read_case: Read the case study
-  background_link: Full background
+  background_link: Education and experience
   contact_title: Contact
-  contact_body: I'm looking for full-time roles in backend, cloud platform and AI infrastructure engineering. LinkedIn is the best way to reach me.
+  contact_body: I'm looking for full-time roles in backend, cloud platform and AI infrastructure engineering. Contact me by email or LinkedIn.
   contact_linkedin: Message me on LinkedIn
   contact_github: GitHub profile
 
@@ -83,13 +85,13 @@ home:
 projects:
   title: Projects
   description: "All of Yige Wang's projects, filterable by capability: business modeling, backend and cloud, planning and delivery, AI and research."
-  lede: Selected projects first, then the rest. Filter by capability; a project can show more than one.
+  lede: Explore projects by engineering focus.
   filter_label: Filter by capability
   all: All
   count: "{n} projects"
   count_one: 1 project
   featured: Selected project
-  role: My part
+  role: My contribution
 
 
 project:
@@ -105,13 +107,13 @@ project:
 
 background:
   title: Background
-  description: Background of Yige Wang — education, experience, how I work, and how this portfolio is written.
+  description: Background of Yige Wang — education, experience and engineering approach.
   eyebrow: Background
   lede: Software engineer focused on backend and systems work, finishing a master's degree at Northeastern University in December 2026.
   education: Education
   experience: Experience
   contact: Contact
-  contact_body: GitHub and LinkedIn are the best ways to reach me.
+  contact_body: For job inquiries, contact me by email or LinkedIn.
 
 resume:
   title: Résumé
@@ -141,3 +143,7 @@ plan:
 notfound:
   title: Page not found
   body: The page you asked for does not exist. These links lead back into the site.
+
+contact:
+  email_label: Job inquiries
+  attachments: "Attachments must total {mb} MB or less."

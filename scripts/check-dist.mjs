@@ -12,8 +12,8 @@ import { join, relative, extname, sep } from 'node:path';
 
 const argDir = process.argv.indexOf('--dir');
 const DIST = argDir > -1 ? process.argv[argDir + 1] : 'dist';
-/** Published contact emails (none: contact goes through GitHub and LinkedIn). */
-const ALLOWED_EMAILS = new Set([]);
+/** Exact public contact address explicitly confirmed by the owner (ADR-019). */
+const ALLOWED_EMAILS = new Set(['wang.yige@northeatsern.edu']);
 /** Internal names that must never appear on the site. */
 const PRIVATE_NAMES = [/KK Boost/i, /KKnock-Boost/i, /KKKnockBoost/i, /codex_dev/, /cursor_dev/, /AI_prompts_Recording/, /ObsidianWorkSpace/];
 const CLAIM_ID = /\b(?:KK|HPC|CN|LORA|F1|QA|EQ|FS|SB|DS|PSA)-\d{2}\b/;

@@ -644,3 +644,26 @@ main { display: block; padding-bottom: 4rem; }
   .badge { border: 1px solid #999; background: #fff !important; color: #000 !important; }
   h1, h2, h3 { break-after: avoid; }
 }
+
+/* Screenshot rows scroll on phones; keep the affordance visible. */
+.screen-scroll-hint { display: none; }
+@media (max-width: 40rem) { .screen-scroll-hint { display: inline; font-weight: 600; } }
+
+.contact-email { margin-block: 1rem; }
+.contact-email p { margin-block: 0.3rem; }
+.contact-email a { overflow-wrap: anywhere; }
+
+.work-contributions { padding-inline-start: 1.2rem; margin-block: 1rem; }
+.work-contributions li { margin-block: 0.65rem; line-height: 1.7; }
+
+/* Resume-style skills summary shared with the profile data. */
+.home-skills { margin-top: 2rem; padding: 1.5rem 1.75rem; background: var(--white); border: 1px solid var(--hairline); border-radius: var(--radius); }
+.home-skills h2 { margin: 0 0 1rem; }
+.home-skills-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem 2rem; margin: 0; }
+.home-skill-group { border-top: 1px solid var(--hairline); padding-top: 0.85rem; min-width: 0; }
+.home-skill-group dt { font-weight: 650; color: var(--forest-deep); margin-bottom: 0.3rem; }
+.home-skill-group dd { margin: 0; color: var(--ink-2); font-size: 0.92rem; line-height: 1.75; overflow-wrap: anywhere; }
+@media (max-width: 700px) {
+  .home-skills { padding: 1.2rem; }
+  .home-skills-grid { grid-template-columns: 1fr; }
+}

@@ -1,17 +1,19 @@
-## The product {#product}
+## Product scope and engineering responsibilities {#product}
 
-Tasks and ideas rarely wait for a free hand: you have just parked, you are pushing a shopping cart, you are cooking. With KK Knock you tap the KK Capture widget, say what is on your mind and tap again. The app files it as a todo with the due time you mentioned, or as a thought that it researches and writes up with sources. If there is nothing worth keeping, nothing is created.
+KK Knock began with an everyday need: capture a passing thought or reminder when my hands are busy. I developed the idea into requirements and development documents, interaction prototypes, technology decisions and coding guidelines, then scheduled work in phases across the app, backend and admin console.
+
+I connected on-device speech recognition to backend intent classification: an actionable reminder becomes a todo with a due time, while an idea that needs exploration goes through research and becomes a note with sources. These are alternative outputs. The goal is to reduce typing and organizing, so a thought can be captured now and acted on or developed later.
 
 Four rules shape both the product and the architecture behind it:
 
 - **Transcribed on the phone.** Whisper runs on the device, and audio never leaves it.
-- **Only text goes out.** The backend and the LLM providers see the transcript and nothing else.
+- **Audio stays on the device.** The capture path sends transcribed text rather than audio. This is a boundary for recording data, not a claim that account and profile features send no other data.
 - **Notes live on the phone.** Todos and thoughts are stored locally, not in an online notebook.
 - **Editing stays local.** Changing, organizing or searching notes never calls an LLM.
 
 It is deliberately not a chatbot, a project-management suite or a document editor.
 
-## Making the background queue visible {#iteration}
+## Capture queue and status feedback {#iteration}
 
 **What I wanted.** Recording should be free again as soon as the transcript is saved. Classification and research run in a background queue, so a second thought can be captured while the first is still being processed. I made capture asynchronous in September 2026.
 
@@ -27,7 +29,7 @@ It is deliberately not a chatbot, a project-management suite or a document edito
 
 **Where it stands.** New tests cover a network retry, an unfinished submission, an expired lease and failures staying in the list. I accepted the change on my phone and use it every day; it is not in a public release yet. One gap stays open on purpose, described in the next section.
 
-## When a capture fails {#reliability}
+## Failure recovery and idempotency {#reliability}
 
 A voice note has to survive a killed app, a flaky network and a failed LLM call without being lost or filed twice. Each capture is a job with explicit states on the phone, and the rule is that a retry never redoes work that is already saved.
 
@@ -35,9 +37,9 @@ A voice note has to survive a killed app, a flaky network and a failed LLM call 
 - **One worker per job.** A background worker claims a queued job with a lease in Room, so two workers never process the same capture.
 - **Retry by stage.** A failed transcription retries from the saved audio; a failed classification or research retries from the saved transcript. Automatic retries for temporary network errors are capped, honor `429 Retry-After`, and never loop on `401`.
 - **One ID for the whole life of a capture.** A client capture ID is created when recording starts and never regenerated. Local records use IDs derived from the account and that capture ID, so a replayed result overwrites instead of duplicating.
-- **Replay instead of re-running.** The server keeps its response for each account and capture ID. Within {{fact:idempotency_window}}, a retry after a lost response gets the same result back, without a second LLM call or a second charge.
+- **Replay instead of re-running (backend implementation).** Where the response-cache migration is enabled, the server keeps its response for each account and capture ID. Within {{fact:idempotency_window}}, a retry after a lost response gets the same result back, without a second LLM call or a second charge.
 
-**What the server keeps.** No transcripts. The response cache does hold what it returned — the generated todo or thought, including a researched article and its sources — keyed by account and capture ID. An entry counts as expired after {{fact:idempotency_window}} and is dropped the next time that capture ID is looked up.
+**Response-cache scope.** This is implemented in the backend, but I have not confirmed that it is enabled on my self-hosted machine. The retention period is a configuration choice, not a performance result. The cache does not store transcripts. The response cache does hold what it returned — the generated todo or thought, including a researched article and its sources — keyed by account and capture ID. An entry counts as expired after {{fact:idempotency_window}} and is dropped the next time that capture ID is looked up.
 
 **The open gap.** The cache holds only completed responses. A retry that reaches the server while the first request is still running, for example after a dropped connection during a long research call, runs the pipeline again and can be charged twice. A server-side "in progress" marker would close it; I have left it for after the first release.
 
@@ -71,7 +73,7 @@ The system has two halves with a strict data-ownership line between them.
 - **The LLM layer** is provider-neutral. A DeepSeek model, called through an OpenAI-compatible API, is the judge that files a capture as TODO, THOUGHT or IGNORED. Gemini with Google Search grounding researches thoughts. Each slot picks its protocol from the configured URL.
 - **A React admin console** (TypeScript, Vite) manages users, usage, announcements and system settings, behind its own admin authentication.
 
-## LLM cost governance {#cost}
+## LLM cost controls {#cost}
 
 A free consumer app that calls LLMs needs hard limits. Every provider call is metered by provider, model and cache use, and the counters are incremented atomically in the database.
 
@@ -87,7 +89,7 @@ A free consumer app that calls LLMs needs hard limits. Every provider call is me
 
 **Forced updates.** The backend is the authority on the minimum supported app version. Older apps receive HTTP 426 and an update prompt. Diagnostics record request IDs and timings, never content.
 
-## How the work is organized {#planning}
+## Development plan {#planning}
 
 Every repository carries instructions for AI coding agents, and a shared project memory — context, architecture, current state and a decision log — keeps me and the agents working from the same facts. The decision log reached {{fact:adrs}} records in about four weeks. Each record states its context, the decision and its consequences, and a superseded decision says so; the queue iteration above is two such records.
 

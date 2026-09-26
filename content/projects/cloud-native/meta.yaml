@@ -1,36 +1,38 @@
 slug: cloud-native
 title: { en: Cloud-Native Web Application on AWS, zh: AWS 云原生 Web 应用 }
 subtitle:
-  en: A Spring Boot API on AWS, released as new machine images and defined end to end in Terraform
-  zh: 运行在 AWS 上的 Spring Boot API：每次发布都是一个新的机器镜像，整个平台用 Terraform 定义
+  en: "A Spring Boot service with infrastructure and release automation on AWS"
+  zh: "Spring Boot 后端与 AWS 基础设施、自动化交付"
 summary:
-  en: A Spring Boot REST API on Packer-built images in an Auto Scaling group behind an HTTPS load balancer, with the network, data stores, keys and alarms defined in Terraform. GitHub Actions tests every pull request and rolls each merge out as a new image, promoted from a dev account to a demo account.
-  zh: 一个 Spring Boot REST API，运行在 HTTPS 负载均衡器后的 Auto Scaling 组中，机器镜像由 Packer 构建；网络、数据存储、密钥和告警都由 Terraform 定义。GitHub Actions 测试每个 PR，并把每次合并做成新镜像，从 dev 账号晋升到 demo 账号后滚动上线。
+  en: "I built a Spring Boot API and its AWS platform: Terraform-managed VPC, EC2 Auto Scaling, ALB, RDS, S3, IAM, KMS and Secrets Manager; Route 53 and HTTPS; GitHub Actions with Packer AMI delivery across accounts; and SNS-triggered Lambda verification emails through Mailgun."
+  zh: "我实现 Spring Boot API 及 AWS 平台：用 Terraform 配置 VPC、EC2 Auto Scaling、ALB、RDS、S3、IAM、KMS 和 Secrets Manager，配置 Route 53 与 HTTPS，设计 GitHub Actions/Packer 跨账号镜像交付，并实现 SNS 触发 Lambda、经 Mailgun 发送验证邮件。"
 focus: { primary: backend-cloud, also: [] }
 status: course-project
 status_note:
-  en: Deployed and released repeatedly during the course; scaling was never load-tested
-  zh: 课程期间已部署并多次发布；自动伸缩没有做过压测
+  en: "Deployed on AWS with automated image builds and rolling releases"
+  zh: "已在 AWS 部署，完成自动镜像构建与多次滚动发布"
 team: { size: 1 }
 role:
-  en: "Individual coursework. The course set the milestones; the implementation is mine: the API, the Terraform, the Packer image, the GitHub Actions workflows and the serverless email function."
-  zh: 个人课程作业。里程碑由课程规定，实现全部由我完成：API、Terraform、Packer 镜像、GitHub Actions 工作流和无服务器邮件函数。
-context: { en: "Course project, CSYE 6225 Network Structures & Cloud Computing", zh: 课程项目，CSYE 6225 网络架构与云计算 }
+  en: "I implemented the API, Terraform infrastructure, domain and HTTPS configuration, Packer images and GitHub Actions CI/CD. I also built the SNS-triggered Lambda email-verification function and its release workflow."
+  zh: "我负责 API、Terraform 基础设施、域名与 HTTPS 配置、Packer 镜像和 GitHub Actions CI/CD，并实现 SNS 触发的 Lambda 邮件验证函数及其发布工作流。"
+context: { en: "Backend and cloud infrastructure", zh: "后端与云基础设施" }
 period: { start: "2025-09", end: "2025-11" }
 stack:
   - Java 21
   - Spring Boot 3.5
   - MySQL
   - Flyway
+  - Spring AOP · Micrometer · StatsD
   - Terraform
   - Packer
   - GitHub Actions
-  - AWS VPC · ALB · Auto Scaling
+  - AWS VPC · EC2 · ALB · Auto Scaling
   - RDS
   - S3
   - KMS
   - Secrets Manager
-  - SNS → Lambda
+  - SNS → Lambda → Mailgun
+  - Route 53 · HTTPS
   - CloudWatch
 links: []
 highlights: [deploy_median, azs, kms_keys]
@@ -42,20 +44,26 @@ related: distributed-llm
 
 card:
   intro:
-    en: "Solo coursework: a Spring Boot API on AWS. I wrote the API, the Terraform for the network, data stores, keys and alarms, the Packer image, and the GitHub Actions pipeline that ships each merge."
-    zh: 个人课程作业：一个运行在 AWS 上的 Spring Boot API。API、定义网络/数据存储/密钥/告警的 Terraform、Packer 镜像，以及把每次合并发布上线的 GitHub Actions 流水线，都由我编写。
-  highlight:
-    en: No one logs in to a server to release. A merge becomes a new machine image, built in a dev account, promoted to a demo account and rolled out by replacing instances a few at a time.
-    zh: 发布时不需要登录任何服务器：一次合并会变成一个新的机器镜像，在 dev 账号构建，晋升到 demo 账号，再分批替换实例上线。
-  tech: [Terraform, Packer, GitHub Actions]
-  cta: { en: Follow one release, zh: 跟着一次发布走一遍 }
-  anchor: delivery
+    en: "I built the Spring Boot user, product and image APIs and the AWS infrastructure and delivery workflows around them."
+    zh: "我实现 Spring Boot 用户、商品与图片 API，并完成配套的 AWS 基础设施、权限配置和自动化交付。"
+  bullets:
+    - en: "Infrastructure: Terraform provisions the VPC and subnets, EC2 launch templates and Auto Scaling behind an ALB, RDS MySQL and S3; CloudWatch CPU alarms drive scaling."
+      zh: "基础设施：用 Terraform 配置 VPC 与子网、EC2 启动模板和 Auto Scaling、ALB、RDS MySQL 与 S3，并用 CloudWatch CPU 告警触发扩缩容。"
+    - en: "Access and data protection: I configured EC2 and Lambda IAM roles, security groups between the application and database, KMS encryption and Secrets Manager credentials."
+      zh: "权限与数据保护：配置 EC2 和 Lambda 的 IAM 角色、应用与数据库之间的安全组规则、KMS 加密和 Secrets Manager 凭据管理。"
+    - en: "CI/CD: I designed GitHub Actions for PR tests, Packer AMI builds, dev-to-demo image sharing and launch-template updates followed by instance refreshes."
+      zh: "CI/CD：设计 GitHub Actions 的 PR 测试、Packer AMI 构建、dev 到 demo 跨账号镜像共享，以及启动模板更新和实例刷新。"
+    - en: "Email and domains: I wrote the SNS-triggered Lambda that sends verification emails through Mailgun and automated its releases; I configured Route 53 application and email records and ALB HTTPS access."
+      zh: "邮件与域名：编写 SNS 触发、经 Mailgun 发送验证邮件的 Lambda 及自动发布流程；配置 Route 53 应用与邮件域名记录，以及 ALB HTTPS 访问。"
+  tech: [Spring Boot, Terraform, Packer · GitHub Actions]
+  cta: { en: My backend and delivery work, zh: 查看后端与交付工作 }
+  anchor: overview
   steps:
     label: CURRENT
     items:
       - { title: { en: "Check — tests and template checks on every pull request", zh: 检查：每个 PR 运行测试并校验镜像模板 } }
-      - { title: { en: "Build — bake a machine image in the dev account", zh: 构建：在 dev 账号烘焙机器镜像 }, detail: Packer }
-      - { title: { en: "Promote — share it with the demo account", zh: 晋升：共享给 demo 账号 }, detail: { en: new launch-template version, zh: 新的启动模板版本 } }
+      - { title: { en: "Build — bake a machine image in the dev account", zh: 构建：在 dev 账号构建机器镜像 }, detail: Packer }
+      - { title: { en: "Promote — share it with the demo account", zh: 发布：共享给 demo 账号 }, detail: { en: new launch-template version, zh: 新的启动模板版本 } }
       - { title: { en: "Roll out — replace instances a few at a time", zh: 上线：分批替换实例 }, detail: { en: gated by the load balancer's health check, zh: 由负载均衡器的健康检查把关 } }
 
 facts:
@@ -104,37 +112,37 @@ figures:
       zh: 流水线图：PR 阶段在 MySQL 服务容器上运行测试并校验 Packer 模板；合并后在 dev 账号构建 jar 和 AMI，共享到 demo 账号，创建新的启动模板版本并发起实例刷新。
     caption:
       en: Drawn from the GitHub Actions workflows. Every release is a new machine image, promoted from the dev account to the demo account and rolled out by an instance refresh.
-      zh: 依据 GitHub Actions 工作流绘制。每次发布都是一个新的机器镜像：从 dev 账号晋升到 demo 账号，再通过实例刷新滚动上线。
+      zh: 依据 GitHub Actions 工作流绘制。每次发布都是一个新的机器镜像：从 dev 账号发布到 demo 账号，再通过实例刷新滚动上线。
 
 roadmap:
   section: planning
-  title: { en: Assignment milestones, zh: 作业里程碑 }
+  title: { en: From application development to AWS deployment, zh: 从应用开发到云端部署 }
   phases:
-    - name: { en: Scaffold and REST API (assignments 1–2), zh: 项目骨架与 REST API（作业 1—2） }
+    - name: { en: Build the application and REST APIs, zh: 搭建应用与 REST API }
       detail: { en: Resource endpoints with tests, zh: 资源接口及其测试 }
       when: { en: Sep 2025, zh: 2025 年 9 月 }
       status: done
-    - name: { en: Authentication and CI (assignment 3), zh: 认证与 CI（作业 3） }
+    - name: { en: Add authentication and continuous integration, zh: 接入认证与持续集成 }
       detail: { en: "Positive, negative and edge-case integration tests; CI against MySQL; branch protection", zh: 正向、反向与边界集成测试；接入 MySQL 的 CI；分支保护 }
       when: { en: Sep–Oct 2025, zh: 2025 年 9—10 月 }
       status: done
-    - name: { en: Images and infrastructure as code (assignments 4–5), zh: 镜像与基础设施即代码（作业 4—5） }
+    - name: { en: Automate images and infrastructure, zh: 实现镜像构建与基础设施自动化 }
       detail: { en: "Setup scripts, the Terraform repository, Packer AMIs with validate and build workflows, a systemd service", zh: 安装脚本、Terraform 仓库、带校验与构建流程的 Packer AMI、systemd 服务 }
       when: { en: Oct 2025, zh: 2025 年 10 月 }
       status: done
-    - name: { en: Database and IAM (assignment 6), zh: 数据库与 IAM（作业 6） }
+    - name: { en: Connect cloud data services and IAM, zh: 接入云数据库与 IAM 权限 }
       detail: { en: "Product APIs; RDS, its subnet group and the instance role in Terraform", zh: 商品接口；在 Terraform 中定义 RDS、其子网组与实例角色 }
       when: { en: Oct 2025, zh: 2025 年 10 月 }
       status: done
-    - name: { en: Observability and DNS (assignment 7), zh: 可观测性与 DNS（作业 7） }
+    - name: { en: Add monitoring and domain routing, zh: 建立监控与域名访问 }
       detail: { en: "StatsD metrics, the CloudWatch agent, controller AOP, Route 53", zh: StatsD 指标、CloudWatch agent、控制器 AOP、Route 53 }
       when: { en: Oct 2025, zh: 2025 年 10 月 }
       status: done
-    - name: { en: Load balancing and hardening (assignment 8), zh: 负载均衡与加固（作业 8） }
+    - name: { en: Configure load balancing and network security, zh: 配置负载均衡与网络安全 }
       detail: { en: "Security groups, the load balancer, DNS and email records, S3 and clock-drift fixes", zh: 安全组、负载均衡器、DNS 与邮件记录，修复 S3 与时钟漂移问题 }
       when: { en: Nov 2025, zh: 2025 年 11 月 }
       status: done
-    - name: { en: "Events, keys and serverless (assignment 9)", zh: 事件、密钥与无服务器（作业 9） }
+    - name: { en: "Integrate asynchronous email and function delivery", zh: 集成异步邮件与函数自动发布 }
       detail: { en: "SNS publishing, Lambda with Mailgun, KMS keys, Lambda CI/CD from dev to demo", zh: SNS 发布、Lambda 与 Mailgun、KMS 密钥、从 dev 到 demo 的 Lambda CI/CD }
       when: { en: Nov 2025, zh: 2025 年 11 月 }
       status: done

@@ -21,7 +21,7 @@ content/
   stack, links, facts, figures and the roadmap.
 - **`role`** is the one statement of my responsibility on the page (owned / shared / AI assistance). Narratives do
   not repeat it. **`lead`** names the figure shown under the page header.
-- **Home-page projects** also carry `card`: a short `intro` (what it does, then my part), one `highlight`, an
+- **Home-page projects** also carry `card`: a short `intro` (my responsibilities and concrete work, with brief project context), one contribution-focused `highlight` or optional `bullets` for distinct responsibilities, an
   optional short `status`, at most three editor-chosen technologies, the `#anchor` the main link opens, and — for
   the flagship and the cases — either a page `figure` or a short `steps` flow labeled like a diagram. Write these by
   hand; never derive them from `stack`. Card text may not contain bare measurements.

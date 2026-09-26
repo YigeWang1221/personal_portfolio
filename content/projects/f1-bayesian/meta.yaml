@@ -12,7 +12,7 @@ team: { size: 2 }
 role:
   en: Team of two. I led the modeling and the implementation — the data pipeline, the model, the simulation and the evaluation — and later restructured the repository and wrote its README. The forecast and its results are our shared work.
   zh: 两人团队。我主导了建模与实现，包括数据管线、模型、模拟和评估；之后又重新整理了仓库结构并撰写 README。预测及其结果是我们共同的成果。
-context: { en: "Course project, INFO 6105 Data Science Engineering Methods", zh: 课程项目，INFO 6105 数据科学工程方法 }
+context: { en: "Bayesian modeling and prediction", zh: "贝叶斯建模与预测" }
 period: { start: "2025-11", end: "2025-12" }
 stack: [Python, PyMC, NUTS (MCMC), ArviZ, FastF1, pandas, NumPy, SciPy, joblib, matplotlib]
 links:

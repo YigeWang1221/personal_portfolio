@@ -1,10 +1,8 @@
-## What it does, and why it is hard to build {#problem}
+## Design scope and integration work {#problem}
 
-Generic LLMs write in a generic voice. This platform learns each user's own style: users upload their writing (TXT, Markdown or Word files), the system trains a personal LoRA "style" on a pinned Qwen2.5-7B-Instruct base model, and users then draft long-form Markdown — articles, social posts, video scripts — in a projects-and-chats workspace that runs on their active style. Styles are versioned, so a user can retrain and keep earlier versions.
+The goal is a platform for training and serving a LoRA from personal writing. I designed the API, data model, component contracts and cloud infrastructure, then organized implementation into milestones and reviewed the AI-assisted code. The engineering challenge was making the training queue, GPU worker and serving layer independently testable before integrating them.
 
-That is five systems in one: a web product, a training-job queue, GPU training, multi-adapter serving and the cloud platform under them. Built all at once, none of them could be tested until all of them worked, and every GPU hour spent debugging an integration costs money. So the work was split first.
-
-## Splitting it into pieces that could be built alone {#planning}
+## Component boundaries and contracts {#planning}
 
 The design came before the code, and each step narrowed what the next one had to decide:
 
@@ -14,9 +12,9 @@ The design came before the code, and each step narrowed what the next one had to
 4. **Contracts before components.** Before any component was implemented, the interfaces between the training worker, the backend and the serving layer were written down as JSON Schema and OpenAPI, with valid and deliberately invalid examples. Each component could then be built and tested against the contract alone, on a laptop, without a GPU.
 5. **Milestone plans** for training and for serving, each milestone with its scope and status and a dated decision log, plus a Terraform task breakdown from state bootstrap to image release.
 
-The order paid off where it was meant to: the product, the dataset builder, the training worker and the adapter manager were all built and tested against fakes, without a GPU. The wireframes and the ER sketch below are history — what the current design grew out of — not the design itself.
+The product, dataset builder, training worker and adapter manager were developed and tested with local fakes before GPU integration. The wireframes and ER sketch show the early design.
 
-## Two decisions I made against the first sketch {#decisions}
+## Architecture decisions {#decisions}
 
 An earlier architecture sketch survives in my design notes; the confirmed design rejects two of its ideas in writing.
 
@@ -34,7 +32,7 @@ An earlier architecture sketch survives in my design notes; the confirmed design
 - **What it became.** The group scales from zero on queue backlog. Each worker protects its own instance from scale-in while it trains and releases the protection when done; the group then scales in. The backend never launches GPU instances either.
 - **The cost.** Scaling in is driven by an alarm, so an idle GPU instance can run a little longer than its job. The backend's clean-up of silent instances is designed but not built.
 
-## What has run {#validation}
+## Integration validation {#validation}
 
 | Stage | Status |
 |---|---|
@@ -48,9 +46,7 @@ An earlier architecture sketch survives in my design notes; the confirmed design
 | Output quality | Not there yet: the text does not read like its writer |
 | Serving image, multi-user isolation benchmark, internal load balancer, failure drills | Not started |
 
-**The system worked; the style did not.** Drafts generated with my own adapter still read much like the base model. The most likely cause is the data: my personal corpus was too small and not clean enough for the model to learn a stable style. The next step is more and cleaner writing, and a before-and-after comparison that judges style, rather than more infrastructure.
-
-The AWS runs were made from another machine. Their logs and results are not in the public repositories, so this page reports them without numbers.
+**Generated writing.** Drafts generated with my own adapter still read much like the base model. The most likely cause is the data: my personal corpus was too small and not clean enough for the model to learn a stable style. The next step is more and cleaner writing, and a before-and-after comparison that judges style, rather than more infrastructure.
 
 ## Current architecture {#architecture}
 
@@ -92,7 +88,7 @@ Many users' styles should share one GPU. The adapter manager makes that safe:
 
 Serving has run with one trained adapter on one GPU. Loading many users' adapters at once, and proving that one user's requests cannot reach another user's style, is the isolation benchmark that is still ahead.
 
-## Terraform guardrails and IAM {#infrastructure}
+## Terraform validation and IAM {#infrastructure}
 
 The AWS platform is written in Terraform — {{fact:tf_resources}} resource blocks with input validation rules and cross-checks — tested with mock-provider runs before it was applied.
 
@@ -113,6 +109,5 @@ One more rule — letting the backend clean up stray GPU instances, scoped by ta
 ## What's next {#next}
 
 - **A style that sounds like its writer:** a larger, cleaner personal corpus, careful training-pair generation after a privacy review, and a before-and-after style comparison.
-- **Publish evidence of the AWS runs:** redacted logs, the training loss and serving latency.
 - **Multi-user serving:** load several adapters at once and run the isolation benchmark.
 - **Fix the release workflow and Terraform mismatch**, and switch the workflow to OIDC.

@@ -1,18 +1,18 @@
 slug: enterprise-workflow
 title: { en: "FoodShelter: Food-Rescue Workflow System", zh: FoodShelter：食物救助多组织协作系统 }
 subtitle:
-  en: An object model for a food-rescue network, where a donation moves through inspection, matching and delivery across organizations
-  zh: 为食物救助网络设计的对象模型：一份捐赠在多个组织之间依次完成检验、匹配和配送
+  en: "Domain modeling and shared workflow implementation for food rescue"
+  zh: "食物救助业务的领域建模与团队工作流实现"
 summary:
-  en: In a team of three, we built a Java Swing system in which donors, inspectors, a shelter network, task managers and drivers each work in their own screen, and a donation moves between them as requests in shared work queues. I designed the object model and its persistence.
-  zh: 我们三人团队用 Java Swing 开发了这个系统：捐赠方、检验员、救助网络、任务调度员和司机各有自己的工作界面，一份捐赠以请求的形式在共享工作队列之间流转。对象模型及其持久化由我设计。
+  en: "In a team of three, I designed the domain model and db4o persistence, implemented the application shell and role-based login, and co-implemented workflow screens. The project shows how I translated organizational responsibilities into objects, work queues and role-specific interfaces."
+  zh: "在三人团队中，我设计领域模型与 db4o 持久化，实现应用主框架和按角色分派的登录，并参与工作流界面开发，将组织职责转化为对象、工作队列和各角色的操作界面。"
 focus: { primary: business-modeling, also: [] }
 status: course-project
 team: { size: 3 }
 role:
-  en: "Team of three. I designed the object model and the persistence around it, and wrote the application shell and the role-based login. We built the workflow screens together; the metrics dashboard and the PDF reports were a teammate's work."
-  zh: 三人团队。我设计了对象模型和围绕它的持久化，编写了应用主框架和按角色分派的登录。各个工作流界面由我们共同实现；数据看板和 PDF 报表由队友完成。
-context: { en: "Course project, INFO 5100 Application Engineering & Development", zh: 课程项目，INFO 5100 应用工程与开发 }
+  en: "In a team of three, I designed the domain model and persistence layer, implemented the application shell and role-based login, and co-developed the donation, inspection and delivery workflow screens."
+  zh: 在三人团队中，我负责领域模型与持久化设计，实现应用主框架和角色登录，并共同开发捐赠、检验与配送工作流界面。
+context: { en: "Domain modeling and workflow implementation", zh: "领域建模与工作流实现" }
 period: { start: "2025-03", end: "2025-04" }
 stack: [Java 18, Swing, Maven, db4o, JFreeChart, iText, Datafaker]
 links:

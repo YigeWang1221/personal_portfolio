@@ -1,6 +1,6 @@
 ## Pipeline {#pipeline}
 
-A solo research prototype, built to learn a professional quantitative-research workflow end to end. The pipeline ranks a hand-picked universe of US stocks by their predicted five-day return after removing what broad ETFs explain, and trades a dollar-neutral long/short basket on the ranking.
+I built a research prototype covering feature engineering, model training and backtesting. The pipeline ranks a hand-picked universe of US stocks by their predicted five-day return after removing what broad ETFs explain, and trades a dollar-neutral long/short basket on the ranking.
 
 - **Data and features.** Daily prices from 2018 to 2025, cached locally, and 35 factors covering momentum, volatility, volume, bands, RSI and performance relative to index, sector, bond and gold ETFs.
 - **Labels.** The five-day return minus the return implied by the ETFs, using trailing betas, z-scored per ticker on a rolling window.
@@ -27,4 +27,4 @@ Training optimizes an information-coefficient loss — the rank correlation betw
 
 ## Scope {#scope}
 
-The page describes how the pipeline is built, not how it performed: the results were weak and unstable, so no returns or information coefficients are reported. The evaluation design needs work first — model selection used test-period results, the splits have no embargo gap although labels span several days, and the universe is today's list of tickers.
+The evaluation has three limitations: model selection used test-period results, the splits have no embargo gap although labels span several days, and the universe uses today's tickers, introducing survivorship bias.

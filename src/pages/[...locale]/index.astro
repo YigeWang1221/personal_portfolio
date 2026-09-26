@@ -3,10 +3,11 @@
 // on, education and experience, and the ways in. Scrolling down leads into the selected projects (one large
 // card, then the main case studies, then more work), the capabilities they show, and contact.
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import ContactEmail from '../../components/ContactEmail.astro';
 import FeaturedProject from '../../components/FeaturedProject.astro';
 import StatusBadge from '../../components/StatusBadge.astro';
 import { localePath, localePaths, type Locale } from '../../lib/i18n';
-import { getContent, t } from '../../lib/content/load';
+import { getContent, t, termText } from '../../lib/content/load';
 import { formatPeriod } from '../../lib/format';
 
 export function getStaticPaths() {
@@ -60,6 +61,18 @@ const capabilities = focus.map((f) => ({ ...f, projects: catalog.filter((p) => p
       </div>
     </section>
 
+    <section class="home-skills" id="skills" aria-labelledby="skills-title">
+      <h2 id="skills-title">{t(locale, 'home.skills')}</h2>
+      <dl class="home-skills-grid">
+        {profile.skills.map((group) => (
+          <div class="home-skill-group">
+            <dt>{group.group[locale]}</dt>
+            <dd>{group.items.map((item) => termText(item.name, locale)).join(' · ')}</dd>
+          </div>
+        ))}
+      </dl>
+    </section>
+
     <section class="block" id="work" aria-labelledby="work-title">
       <h2 id="work-title">{t(locale, 'home.selected')}</h2>
       <div class="flagship">
@@ -83,7 +96,7 @@ const capabilities = focus.map((f) => ({ ...f, projects: catalog.filter((p) => p
               {home.more.map((p) => (
                 <li>
                   <h3><a href={localePath(locale, `/projects/${p.meta.slug}/`)}>{p.meta.title[locale]}</a></h3>
-                  <p class="purpose">{p.meta.subtitle[locale]}</p>
+                  <p class="purpose">{p.meta.role[locale]}</p>
                   <StatusBadge status={p.meta.status} team={p.meta.team} locale={locale} />
                 </li>
               ))}
@@ -117,6 +130,7 @@ const capabilities = focus.map((f) => ({ ...f, projects: catalog.filter((p) => p
       <div>
         <h2 id="contact-title">{t(locale, 'home.contact_title')}</h2>
         <p>{t(locale, 'home.contact_body')}</p>
+        <ContactEmail locale={locale} />
       </div>
       <div class="cta-row">
         {linkedin && <a class="button primary" href={linkedin.url}>{t(locale, 'home.contact_linkedin')}</a>}

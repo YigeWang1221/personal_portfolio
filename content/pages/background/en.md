@@ -8,13 +8,6 @@
 
 I build with AI coding assistants, mostly Codex and Claude Code. I own the product definition, the specifications, the architecture decisions, the review of every change and the testing; the assistants write much of the implementation from those specifications. Each project page states the split in its role line.
 
-## How this site is written {#principles}
-
-- **Team credit.** Team projects state the team size; "we" is for team results and "I" for my own roles. Teammates are not named here.
-- **Status labels.** Each project says whether it is a pilot, in development, a course project or a research prototype, and what has and has not run.
-- **Diagrams.** Drawn from the implementation and labeled as current, proposed or historical.
-- **Privacy.** Screenshots use demo data, and any private value that has to appear is masked as `*****`.
-
 ## How the site is built {#site}
 
 A static Astro site with no trackers and no requests to third-party servers. One small script of its own adds the mobile menu and the project filter; every page works without it. English and Chinese pages come from the same data, and the build fails if a page, a string or a number exists in one language only. It is hosted on Cloudflare. Planning artifacts from several projects are collected on [How I plan & design](/plan-and-design/).

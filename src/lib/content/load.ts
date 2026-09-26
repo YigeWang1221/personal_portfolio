@@ -353,7 +353,7 @@ function buildContent(): Content {
     }
     if (meta.card) {
       for (const loc of LOCALES) {
-        const text = [meta.card.intro[loc], meta.card.highlight?.[loc] ?? '', meta.card.status?.[loc] ?? ''].join('\n');
+        const text = [meta.card.intro[loc], meta.card.highlight?.[loc] ?? '', ...(meta.card.bullets ?? []).map((item) => item[loc]), meta.card.status?.[loc] ?? ''].join('\n');
         for (const h of metricViolations(text)) errors.push(`${metaPath.slice(1)} card (${loc}): measurement in card text: ${h}`);
       }
     }

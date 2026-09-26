@@ -36,10 +36,10 @@ a Chinese gloss on first use.
 | Self-hosted pilot | 自托管试运行 |
 | In development | 开发中 |
 | Implemented, not deployed | 已实现，未部署 |
-| Course project (team of N) | 课程项目（N 人团队） |
-| Course project (solo) | 课程项目（个人） |
-| Undergraduate capstone (solo) | 本科毕业设计（个人） |
-| Course benchmark | 课程基准实验 |
+| Project (team of N) | 项目（N 人团队） |
+| Project (solo) | 项目（个人） |
+
+
 | Research prototype | 研究原型 |
 | Archived | 已归档 |
 

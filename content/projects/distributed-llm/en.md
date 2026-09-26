@@ -1,6 +1,6 @@
-## What we measured {#question}
+## My training implementation and experiments {#question}
 
-How far does data parallelism take a small language model on one GPU node, and where does it stop paying off? In a team of two, we trained a GPT-2 with {{fact:params}} parameters on one node of Northeastern's Explorer cluster and measured four things:
+Our team studied distributed training on a single HPC node. I led the implementation and experiment analysis, covering parallel data preparation and contributions to both DDP and FSDP trainers. My teammate helped connect to the Slurm cluster. The measurements below are team results; they support the discussion of implementation and experimental choices.
 
 1. How much parallel workers speed up tokenizing the OpenWebText corpus.
 2. DDP strong scaling on one, two and four V100-SXM2 GPUs.
@@ -18,7 +18,7 @@ The model code is upstream nanoGPT, unchanged. Our work is the data pipeline, th
 
 ## Experiment automation on Slurm {#automation}
 
-The plan was a matrix: GPU count (one, two, four) × strategy (DDP and three FSDP sharding modes) × transport (NVLink or shared memory). Every cell is a config file plus a Slurm script that requests the GPU type, sets the NCCL environment and launches the trainer — through `torchrun` for the multi-GPU runs — so any run can be repeated exactly and a new cell is a copy of an existing one.
+The plan was a matrix: GPU count (one, two, four) × strategy (DDP and three FSDP sharding modes) × transport (NVLink or shared memory). Every cell is a config file plus a Slurm script that requests the GPU type, sets the NCCL environment and launches the trainer — through `torchrun` for the multi-GPU runs — so the launch configuration can be reused and extended. This records how a run was launched; it does not guarantee identical results across runs.
 
 - **Transport as a switch.** The shared-memory scripts disable NCCL peer-to-peer (`NCCL_P2P_DISABLE=1`), and check runs log the topology NCCL actually builds (`NCCL_DEBUG_SUBSYS=GRAPH`), so each run records which path it used.
 - **A fixed token budget.** When the GPU count doubles, the iteration count halves. Every run sees the same amount of data, so throughput compares cleanly across GPU counts. The cost of that choice is the subject of the next sections.
@@ -36,7 +36,7 @@ The plan was a matrix: GPU count (one, two, four) × strategy (DDP and three FSD
 
 Scaling is close to linear because communication is rare: one all-reduce per eight micro-steps. The same reason keeps the transport gap small.
 
-## Throughput is not time-to-quality {#time-to-quality}
+## Throughput and convergence {#time-to-quality}
 
 The fixed token budget gives a clean throughput comparison, but it hides something. With four GPUs the run finishes in a quarter of the optimizer steps, each on a four-times-larger effective batch. In the committed logs, validation perplexity rose from {{fact:ppl_1gpu}} on one GPU to {{fact:ppl_2gpu}} on two and {{fact:ppl_4gpu}} on four.
 
@@ -44,13 +44,13 @@ So the four-GPU run is not four times faster at reaching the same model quality.
 
 ## NVLink, shared memory and a node mix-up {#transport}
 
-An early comparison seemed to show a large "PCIe versus NVLink" difference. It turned out to be a difference between nodes, not between transports: the runs had landed on different node types. After pinning the hardware, the gap shrank to {{fact:transport_gap}}. The README writes the episode up; for me it was the clearest lesson of the project — check which hardware and topology a run actually used before explaining a number.
+An early comparison seemed to show a large "PCIe versus NVLink" difference. It turned out to be a difference between nodes, not between transports: the runs had landed on different node types. After pinning the hardware, the gap shrank to {{fact:transport_gap}}.
 
-## Why FSDP did not pay off here {#fsdp}
+## FSDP memory and throughput trade-offs {#fsdp}
 
 We benchmarked FSDP's sharding modes against DDP. FSDP saved {{fact:fsdp_memory}} of peak memory, at a small cost in throughput. At this model size most memory goes to activations, not to parameters, gradients or optimizer state, and sharding only reduces the latter. FSDP is not worth its complexity for a model this small; it starts to matter when parameters and optimizer state dominate.
 
-This project uses the original FSDP API with a per-block auto-wrap policy. My only work with FSDP2 (`fully_shard`) is a separate course assignment.
+This project uses the original FSDP API with a per-block auto-wrap policy.
 
 ## Tokenization: separating parallelism from caching {#tokenization}
 

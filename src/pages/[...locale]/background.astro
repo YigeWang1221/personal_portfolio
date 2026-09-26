@@ -2,6 +2,7 @@
 // Background: short introduction → education → experience → how I work (linked to case studies) →
 // how this site is written → contact. Education and experience come from content/profile.yaml.
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import ContactEmail from '../../components/ContactEmail.astro';
 import { localePaths, type Locale } from '../../lib/i18n';
 import { getContent, t } from '../../lib/content/load';
 import { formatPeriod } from '../../lib/format';
@@ -59,6 +60,7 @@ const sections = pages.background.sections[locale];
       <section id="contact" aria-labelledby="contact-title">
         <h2 id="contact-title">{t(locale, 'background.contact')}</h2>
         <p>{t(locale, 'background.contact_body')}</p>
+        <ContactEmail locale={locale} />
         <ul class="link-list">
           {profile.links.map((l) => <li><a href={l.url}>{l.label[locale]}</a></li>)}
         </ul>

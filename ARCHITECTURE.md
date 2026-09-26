@@ -130,7 +130,7 @@ YAML parsed with `yaml`, validated with Zod, Markdown rendered with `marked`. Im
 
 **Content safety**
 - The build reads only `content/` and `src/`.
-- `scripts/check-dist.mjs` fails the build on local paths, private IPs, account IDs, keys, email addresses, ledger
+- `scripts/check-dist.mjs` fails the build on local paths, private IPs, account IDs, keys, unapproved email addresses, ledger
   claim IDs, `internal/` references, private working names, inline code, any script other than `/js/site.js`,
   third-party resources, broken internal links or anchors, redirects to missing pages or other redirects, a wrong
   `<html lang>` or a missing CSP.
@@ -152,3 +152,5 @@ YAML parsed with `yaml`, validated with Zod, Markdown rendered with `marked`. Im
 
 **Precedent:** the owner's public KK Knock introduction page follows the same rules: no third-party origins, a
 `default-src 'self'` CSP, and bilingual content.
+
+Public job contact data is defined in `content/profile.yaml` and rendered by `ContactEmail.astro` on Home, Background and Résumé. Only the owner-confirmed address is allowlisted by the output safety scan (ADR-019). The attachment limit is a sender instruction, not an upload feature.

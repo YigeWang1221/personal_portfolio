@@ -352,3 +352,33 @@ Architecture decision records for the portfolio repository.
   - Numbers still enter only through facts; card text is checked for bare measurements like narratives.
   - Owner-reported facts added in this revision are recorded as owner-attested in the internal ledgers and published
     without numbers.
+
+
+## ADR-018 — An expanded personal résumé led by contributions
+
+- **Status:** Accepted · **Date:** 2026-09-26
+- **Amends:** ADR-007 and ADR-017 where their emphasis could put product behavior or research results ahead of personal work.
+- **Decision:**
+  - Lead with responsibilities and concrete technical actions. Projects, architecture and results are evidence of that work.
+  - Keep education, internships and role targets. Retain the bilingual architecture and current visual design.
+  - Cards should establish what I implemented, designed, integrated or investigated. Avoid repeating a product introduction as the engineering highlight.
+  - Detail pages open with work context and contribution, then explain implementation choices and validation; fuller system descriptions and research discussion remain supporting material.
+  - Team work distinguishes personal responsibilities from shared results. Cluster login identity does not determine contribution; owner attestations follow ADR-012.
+  - Summaries, catalog cards and the résumé reuse project metadata to keep responsibility statements consistent.
+- **Consequences:** Changes to emphasis do not authorize stronger facts, new metrics, or publication of private or graded source materials.
+
+
+## ADR-019 — Owner-approved job contact email
+
+- **Status:** Accepted · **Date:** 2026-09-26
+- **Amends:** ADR-004 for the single owner-approved public contact address.
+- **Decision:** Publish the job contact email exactly as explicitly confirmed by the owner, together with a bilingual attachment-total size limit. The authoritative contact data lives in `content/profile.yaml` and a shared component renders it on Home, Background and Résumé.
+- **Safety gate:** Permit only that exact address in the output scan. All other email addresses remain blocked. External project links remain HTTPS-only; the contact component generates its own mailto link.
+- **Boundary:** This is a contact instruction, not an upload form or enforcement of mailbox attachment limits. No message is sent by this change.
+
+
+## ADR-020 — Project presentation without educational-origin labels
+
+- **Status:** Accepted · **Date:** 2026-09-26
+- **Decision:** Public project cards, headers and résumé entries use project descriptions, responsibilities, team size and runtime status rather than course-versus-personal categories. Existing internal status keys remain compatible; their visible labels are Project / 项目. Educational provenance remains in evidence records and relevant methodological background.
+- **Content:** AWS summaries name the actual resources and the owner's API, infrastructure, CI/CD, serverless email and domain work. Concision must not remove the technical evidence needed to assess the work.

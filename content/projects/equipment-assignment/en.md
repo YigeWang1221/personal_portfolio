@@ -28,7 +28,7 @@ Group members can edit the same homework. Saves and reads check that the user be
 
 In 2026 I recovered the backend source from an archive and started a maintenance branch:
 
-- **A per-homework Redis lock** replaces the application-wide lock: `SET NX PX` with a time-to-live, released by a Lua compare-and-delete script. Groups no longer block each other, the lock works across instances, and a crashed holder's lock expires on its own.
+- **A per-homework Redis lock** replaces the application-wide lock: `SET NX PX` with a time-to-live, released by a Lua compare-and-delete script. Locks are scoped to each homework and expire automatically. Cross-instance concurrency and operations that outlast the lease still need validation.
 - **A Redis cache** for the read-heavy equipment catalog and showcase, with eviction on every write path — including handlers that write through the mapper directly — and a fallback to MySQL when Redis is unavailable.
 - **Two bug fixes**, configuration moved to environment variables, and unit tests for the lock.
 

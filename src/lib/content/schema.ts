@@ -179,6 +179,8 @@ export const card = z.strictObject({
   intro: localized,
   /** One engineering point worth opening the case study for. No bare measurements. */
   highlight: localized.optional(),
+  /** Optional concrete responsibility list for work that needs more than one highlight. */
+  bullets: z.array(localized).min(1).max(5).optional(),
   /** Short status for the card, when the page's status note is too long for it. */
   status: localized.optional(),
   /** At most three technologies, chosen by the editor (not the first items of `stack`). */
@@ -258,6 +260,7 @@ export const catalogFile = z.strictObject({
 export type CatalogFile = z.infer<typeof catalogFile>;
 
 export const profileFile = z.strictObject({
+  contact: z.strictObject({ email: z.email(), attachment_limit_mb: z.number().int().positive() }),
   name: localized,
   headline: localized,
   /** Date the résumé data was last checked, YYYY-MM-DD. */
