@@ -667,3 +667,9 @@ main { display: block; padding-bottom: 4rem; }
   .home-skills { padding: 1.2rem; }
   .home-skills-grid { grid-template-columns: 1fr; }
 }
+
+/* Keep paired case-study links aligned without fixing content heights. */
+@media (min-width: 901px) {
+  .work-case > .work-text { display: flex; flex-direction: column; }
+  .work-case .card-actions { margin-top: auto; padding-top: 0.25rem; }
+}
