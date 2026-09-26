@@ -25,16 +25,24 @@ The Abu Dhabi forecast is a genuine pre-race forecast: its snapshot was saved th
 - Its mean absolute error over all twenty drivers was {{fact:finale_mae}}.
 - The model converged cleanly: maximum R-hat {{fact:rhat}}, no divergent transitions, and an in-sample mean absolute error of {{fact:in_sample_mae}}.
 
-## What I owned {#ownership}
-
-We were a team of two. I led the modeling and the implementation — the data pipeline, the model, the simulation and the evaluation — and I later restructured the repository and wrote its README. The forecast and its results are our shared work.
-
-## Honest limits {#limits}
+## Limits {#limits}
 
 A forecast that hits a podium once is not a validated model. What the evidence does and does not show:
 
 - **One season of data.** The model sees only 2025, so it learns little about how teams change.
 - **The Qatar score is in-sample.** The training data covers every round up to and including Qatar, plus pre-season testing, and the score was computed after the race. Only the Abu Dhabi forecast is truly out of sample.
 - **The backtest is sobering.** Over a 22-race backtest the model picked the winner in {{fact:backtest_winner}} races and placed {{fact:backtest_top10}} of the top ten correctly. The front of the grid is predictable; the midfield is noisy.
-- **One optimization went nowhere.** A "fusion" step meant to blend several ranking strategies stopped at its starting guess, so the four strategies it compared ended up identical. I report it rather than hide it.
+- **One optimization went nowhere.** A "fusion" step meant to blend several ranking strategies stopped at its starting guess, so the four strategies it compared ended up identical.
 - **What I would add next:** a non-hierarchical baseline so that any improvement claim has something to beat; a rolling time-split backtest that trains only on past races, which also fixes the Qatar leak; a check of how stable the probabilities are as the number of simulations grows; and a pinned environment.
+
+## The methods behind it {#foundations}
+
+The F1 model grew out of the Data Science Engineering Methods course, where I worked through the tools it relies on, some alone and some in pair labs:
+
+- **Estimation.** Derived maximum-likelihood estimators for exponential and Beta distributions, solved them with Newton–Raphson and checked the Hessian to confirm a maximum; fitted a Gaussian by the method of moments in a lab on the bias–variance trade-off.
+- **Simulation.** Estimated probabilities by Monte Carlo and checked them against an exact enumeration of all 7⁶ outcomes, to see how fast the simulation converges.
+- **Bayesian models in PyMC.** Beta–Binomial models of win rates, including a study over simulated Formula 1 seasons; a Poisson switchpoint model that locates the moment a rate changes in motorsport telemetry; and the three-driver hierarchical model that became the starting point of this project.
+- **Samplers.** Wrote a Metropolis–Hastings sampler from scratch, then compared it with PyMC's NUTS on the same model, checking convergence with ArviZ — the same diagnostics this project reports.
+- **Testing.** Compared a Welch t-test with Bayesian estimation of a difference in means on the same data, to contrast what each approach reports.
+
+The course notebooks were graded work and are not published.

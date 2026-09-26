@@ -1,21 +1,21 @@
 slug: kk-knock
 title: { en: KK Knock, zh: KK Knock }
 subtitle:
-  en: A voice-first capture app — speak when your hands are full, and it becomes a todo or a researched thought
-  zh: 语音优先的速记 App：手上正忙时说一句，它会整理成待办或研究好的想法
+  en: An Android app that turns a spoken sentence into a todo or a researched note
+  zh: 说一句话，就整理成待办或查资料写成笔记的 Android App
 summary:
-  en: Tasks and ideas show up when your hands are busy. KK Knock transcribes speech on the phone, sends only the text to an LLM that files it as a todo or a researched thought, and keeps every result on the phone.
-  zh: 要做的事和想法，常常在手上正忙时冒出来。KK Knock 在手机上完成语音转写，只把文字交给大模型整理成待办或研究好的想法，所有结果都保存在手机上。
+  en: KK Knock transcribes speech on the phone, sends only the text to an LLM that files it as a todo with its due time or researches it into a written-up note, and keeps every note on the phone. Built solo, from the Android app to the self-hosted backend.
+  zh: KK Knock 在手机上完成语音转写，只把文字交给大模型，整理成带截止时间的待办，或查资料后写成一篇笔记；所有笔记都保存在手机上。从 Android 客户端到自托管后端均由我独立完成。
 focus: { primary: planning-delivery, also: [backend-cloud] }
 status: self-hosted-pilot
 status_note:
-  en: Accepted on one Android test phone; not yet publicly released
-  zh: 已在一台 Android 测试手机上验收；尚未公开发布
+  en: Accepted and in daily use on my Android test phone; not yet publicly released
+  zh: 已在我的 Android 测试手机上验收并日常使用；尚未公开发布
 team: { size: 1 }
 role:
-  en: Designed and built it solo — Android app, backend, admin console and infrastructure
-  zh: 独立设计与实现：Android 客户端、后端、管理后台与基础设施
-context: { en: Personal product (pre-beta), zh: 个人产品（Beta 前） }
+  en: Solo. I defined the product, wrote the specifications and decision records, and built and tested the Android app, the backend, the admin console and the self-hosted deployment. AI coding agents wrote much of the code from those specifications; I reviewed what they produced and accepted each phase on the phone.
+  zh: 独立完成。我定义产品、编写规格说明和决策记录，并完成 Android 客户端、后端、管理后台和自托管部署的开发与测试。大量代码由 AI 编码助手按这些规格编写，由我审查，每个阶段都在手机上验收。
+context: { en: Personal product (pre-release), zh: 个人产品（发布前） }
 period: { start: "2026-08", end: null }
 stack:
   - Kotlin Multiplatform
@@ -32,44 +32,36 @@ stack:
 links:
   - kind: product
     url: https://introductionkk.wangyige1221.website
-    label: { en: Product page (public release not yet available), zh: 产品介绍页（尚未公开发布） }
-highlights: [asr_speedup, tests, adrs]
-deep_dive_from: asr
-# Section ids retired in the 2026-09 redesign.
-anchor_aliases: { capture: reliability, decisions: architecture }
-related: personal-writing-lora
-
-overview:
-  problem:
-    en: Tasks and ideas come up when your hands are busy. Speaking is faster than typing, but a voice note is only useful if it reliably ends up as a todo or a thought — even when the network drops, the app is killed or the LLM call fails.
-    zh: 要做的事和想法，常常在手上正忙时冒出来。说话比打字快，但语音速记只有在能稳定变成待办或想法时才有用——哪怕网络中断、App 被杀掉，或者大模型调用失败。
-  contributions:
-    - en: Designed and built it alone — the Android app with on-device transcription, the FastAPI backend, the React admin console and the self-hosted deployment.
-      zh: 独立设计并实现：带端侧转写的 Android 客户端、FastAPI 后端、React 管理后台，以及自托管部署。
-    - en: Wrote the specifications and the decision log that AI coding agents work from, and reviewed what they produced. There is no team; the agents are tools.
-      zh: 编写 AI 编码代理所依据的规格说明和决策日志，并审查它们的产出。项目没有团队成员，代理只是工具。
-  outcome:
-    en: A self-hosted pilot, accepted on a single Android test phone. The capture pipeline survives app kills and retries; a duplicate that arrives mid-request can still be charged twice. Not publicly released; latency and cost per capture are not measured yet.
-    zh: 自托管试运行，已在一台 Android 测试手机上验收。采集管线能扛住 App 被杀和重试；但请求进行中到达的重复提交仍可能被重复计费。尚未公开发布，也还没有测量延迟和单次采集成本。
+    label: { en: Product introduction page, zh: 产品介绍页 }
+highlights: [asr_speedup, cancel_speedup, idempotency_window]
+lead: screens
+deep_dive_from: architecture
+# Section ids retired in earlier redesigns, and where they land now.
+anchor_aliases: { capture: reliability, decisions: architecture, ownership: product, limits: validation }
+related: cloud-native
 
 card:
-  question:
-    en: What happens to a spoken note when the network drops, the app is killed or the LLM call fails?
-    zh: 网络中断、App 被杀掉或大模型调用失败时，一条语音速记会怎样？
-  contribution:
-    en: Built it solo across the Android app, backend, admin console and deployment.
-    zh: 独立完成 Android 客户端、后端、管理后台与部署。
+  intro:
+    en: Speak when your hands are busy. KK Knock transcribes on the phone and turns the text into a todo with its due time, or researches it into a written-up note. I built it alone, from the product definition to the Android app, the FastAPI backend, the admin console and the self-hosted deployment.
+    zh: 手上正忙时说一句话，KK Knock 在手机上完成转写，再把文字整理成带截止时间的待办，或查资料写成一篇笔记。从产品定义到 Android 客户端、FastAPI 后端、管理后台和自托管部署，都由我独立完成。
+  highlight:
+    en: A note survives a killed app or a dropped connection. Each capture keeps one ID from the first tap, and a retry reuses the saved audio or transcript instead of starting over.
+    zh: App 被杀或网络中断，笔记也不会丢：每次采集从第一次点击起就只用一个 ID，重试时复用已保存的音频或文字，而不是从头再来。
+  status: { en: In daily use on my test phone · not yet released, zh: 已在测试手机上日常使用 · 尚未发布 }
   tech: [Kotlin Multiplatform, FastAPI, whisper.cpp]
-  cta: { en: See the capture workflow, zh: 查看采集流程 }
-  anchor: reliability
-  figure: widgets
+  figure: screens
 
 facts:
   asr_speedup:
     value: 19.4–19.7 s → 11.9–12.6 s
-    label: { en: Small-model transcription time after runtime ARM64 kernel selection, zh: 运行时选择 ARM64 计算内核后，Small 模型的单段转写耗时 }
+    label: { en: "on-device transcription time per clip (Whisper Small), before and after runtime ARM64 kernel selection", zh: 端侧单段转写耗时（Whisper Small），运行时选择 ARM64 计算内核前后 }
     condition: { en: "One test phone (Android 16), short synthetic clips, no thermal control", zh: 单台测试手机（Android 16），短合成音频，未控制温度 }
     claim: KK-04
+  cancel_speedup:
+    value: 11,373 ms → 0 ms
+    label: { en: "time to cancel a transcription that had not started, before and after a native abort patch", zh: 为 whisper.cpp 加入原生中止补丁前后，取消尚未开始的转写所需时间 }
+    condition: { en: "Same test phone; a cancel issued mid-run returns in 16 ms", zh: 同一台测试手机；转写过程中发出的取消在 16 毫秒内返回 }
+    claim: KK-05
   asr_before:
     value: 19.4–19.7 s
     label: { en: "Small-model transcription time, baseline CPU path", zh: Small 模型单段转写耗时（CPU 基线） }
@@ -108,7 +100,7 @@ facts:
   tests:
     value: { en: "~500", zh: 约 500 }
     label: { en: automated test cases, zh: 自动化测试用例 }
-    condition: { en: "Test definitions across the backend, the Android app and the admin console, counted in Sep 2026", zh: 后端、Android 客户端与管理后台的测试定义数，2026 年 9 月统计 }
+    condition: { en: "Test definitions across the backend, the Android app and the admin console, counted in Sep 2026 (a count of cases, not of passing runs)", zh: 后端、Android 客户端与管理后台的测试定义数，2026 年 9 月统计（统计的是用例数，不是通过次数） }
     claim: KK-08
   adrs:
     value: "57"
@@ -126,30 +118,34 @@ figures:
     id: screens
     section: product
     caption:
-      en: From a spoken sentence to a todo with its due time, and a thought written up with its sources. Showcase data from the public product page.
-      zh: 从说出的一句话，到带截止时间的待办，再到附有来源、整理成文的想法。截图来自公开产品页，均为演示数据。
+      en: From a spoken sentence to a todo with its due time, and to a note written up with its sources. Screenshots from the public product page, with demo data.
+      zh: 从说出的一句话，到带截止时间的待办，再到附有参考来源的笔记。截图来自公开的产品介绍页，均为演示数据。
     items:
       - file: { en: assets/screens/en/recording.jpg, zh: assets/screens/zh/recording.jpg }
         alt: { en: "Recording: the live transcript sits above a red waveform", zh: 录音中：红色声波上方显示实时转写的文字 }
+        label: { en: 1 · Speak, zh: 1 · 说一句话 }
       - file: { en: assets/screens/en/home_todo.jpg, zh: assets/screens/zh/home_todo.jpg }
         alt: { en: "The todo list, with due times taken from what was said", zh: 待办列表，截止时间取自说话内容 }
+        label: { en: 2 · A todo with its due time, zh: 2 · 带截止时间的待办 }
       - file: { en: assets/screens/en/thought_read.jpg, zh: assets/screens/zh/thought_read.jpg }
-        alt: { en: A thought written up with a summary and its advantages, zh: 整理成文的想法，包含摘要和优点 }
+        alt: { en: A thought written up with a summary and its advantages, zh: 整理成文的想法笔记，包含摘要和优点 }
+        label: { en: 3 · A researched note, zh: 3 · 查资料写成的笔记 }
       - file: { en: assets/screens/en/thought_sources.jpg, zh: assets/screens/zh/thought_sources.jpg }
-        alt: { en: "The end of a thought: recommendation, next steps and sources", zh: 想法的结尾：建议、后续考虑和参考来源 }
+        alt: { en: "The end of a note: recommendation, next steps and sources", zh: 笔记的结尾：建议、后续考虑和参考来源 }
+        label: { en: 4 · With its sources, zh: 4 · 附参考来源 }
   - kind: screens
     id: widgets
     section: product
     caption:
-      en: "KK Capture, the one-tap home-screen widget, in its three states — ready, recording, processing — and the todo widget."
-      zh: 桌面一键录音小组件 KK Capture 的三种状态（就绪、录音中、处理中），以及待办小组件。
+      en: "KK Capture, the one-tap home-screen widget: ready, recording, and transcribing on the phone. The fourth image is the todo widget."
+      zh: 桌面一键录音小组件 KK Capture：就绪、录音中、正在手机上转写。第四张是待办小组件。
     items:
       - file: { en: assets/capture/idle.png, zh: assets/capture/idle.png }
         alt: { en: "KK Capture ready: a gold waveform on dark green", zh: KK Capture 就绪：深绿底上的金色声波 }
       - file: { en: assets/capture/recording.png, zh: assets/capture/recording.png }
         alt: { en: "KK Capture recording: a red waveform", zh: KK Capture 录音中：红色声波 }
       - file: { en: assets/capture/processing.png, zh: assets/capture/processing.png }
-        alt: { en: "KK Capture processing: a small progress ring", zh: KK Capture 处理中：右下角的小圆环 }
+        alt: { en: "KK Capture transcribing: a small progress ring", zh: KK Capture 转写中：右下角的小圆环 }
       - file: { en: assets/widgets/en/todo.png, zh: assets/widgets/zh/todo.png }
         alt: { en: The todo widget listing upcoming items, zh: 列出近期事项的待办小组件 }
   - kind: diagram
@@ -193,25 +189,21 @@ roadmap:
   section: planning
   title: { en: Delivery phases, zh: 交付阶段 }
   phases:
-    - name: { en: P3 — recording and on-device Whisper, zh: P3 — 录音与端侧 Whisper }
-      detail: { en: "Microphone service, local transcription, Quick Settings tile, first widgets", zh: 麦克风前台服务、本地转写、快捷设置磁贴、第一批小组件 }
+    - name: { en: Recording and on-device transcription, zh: 录音与端侧转写 }
+      detail: { en: "Microphone service, local Whisper, incremental windows, Quick Settings tile, first widgets (phases P3–P3C)", zh: 麦克风前台服务、本地 Whisper、增量窗口、快捷设置磁贴、第一批小组件（阶段 P3—P3C） }
       status: done
-    - name: { en: P3B — transcription requirements, zh: P3B — 转写需求 }
-      detail: { en: Hard phase boundaries and the incremental-window design, zh: 明确阶段边界与增量窗口设计 }
+    - name: { en: Accounts and background processing, zh: 账号与后台处理 }
+      detail: { en: "Shared app API, Android sign-in, the capture job queue, backend identity and the Docker deployment (P4)", zh: 共享 App API、Android 登录、采集任务队列、后端身份体系与 Docker 部署（P4） }
       status: done
-    - name: { en: "P3C — tile, tones and widgets", zh: P3C — 磁贴、提示音与小组件 }
-      detail: { en: "Quick Settings tile, feedback tones, two Glance widgets", zh: 快捷设置磁贴、提示音、两个 Glance 小组件 }
+    - name: { en: Error recovery and local editing, zh: 错误恢复与本地编辑 }
+      detail: { en: "Capture error handling, local editors, widget updates, token handling (P5)", zh: 采集错误处理、本地编辑器、小组件更新、令牌处理（P5） }
       status: done
-    - name: { en: P4 — accounts and asynchronous capture, zh: P4 — 账号与异步采集 }
-      detail: { en: "Shared app API, Android sign-in, capture job queue; backend identity and the Docker deployment", zh: 共享 App API、Android 登录、采集任务队列；后端身份体系与 Docker 部署 }
+    - name: { en: Interface foundation and usability fixes, zh: 界面基础与易用性修正 }
+      detail: { en: "Search, filters, collections, the note editor, density settings (P6.1–P6.2)", zh: 搜索、筛选、收藏夹、笔记编辑器、界面密度设置（P6.1—P6.2） }
       status: done
-    - name: { en: "P5 — errors, editors and tokens", zh: P5 — 错误处理、编辑器与令牌 }
-      detail: { en: "Capture error handling, local editors, widget updates, token handling", zh: 采集错误处理、本地编辑器、小组件更新、令牌处理 }
-      status: done
-    - name: { en: P6.1 / P6.2 — UI foundation and UX correction, zh: P6.1 / P6.2 — UI 基础与体验修正 }
-      status: done
-    - name: { en: Pre-beta — silent idle and a visible capture queue, zh: Beta 前 — 静默待机与可见的采集队列 }
+    - name: { en: Pre-release experience check, zh: 发布前体验验证 }
+      detail: { en: "The visible background queue is accepted on the test phone; the other pre-release checks continue", zh: 可见的后台队列已在测试手机上验收；其余发布前检查仍在进行 }
       status: in-progress
     - name: { en: "Next — public HTTPS, a public release, iOS", zh: 下一步 — 公网 HTTPS、公开发布、iOS }
-      detail: { en: "Tunnel acceptance, a GitHub release download, iOS recording and sign-in, store billing", zh: 隧道验收、GitHub Release 下载、iOS 录音与登录、应用商店计费 }
+      detail: { en: "Tunnel acceptance, a downloadable Android release, iOS recording and sign-in, store billing", zh: 隧道验收、可下载的 Android 版本、iOS 录音与登录、应用商店计费 }
       status: planned

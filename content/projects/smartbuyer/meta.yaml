@@ -1,8 +1,8 @@
 slug: smartbuyer
 title: { en: SmartBuyer E-commerce, zh: SmartBuyer 电商平台 }
 subtitle:
-  en: The backend of a five-person React, Express and MongoDB store
-  zh: 五人团队 React / Express / MongoDB 电商项目的后端
+  en: A five-person React, Express and MongoDB web store
+  zh: 五人团队的 React / Express / MongoDB 网上商城
 summary:
   en: In a team of five, we built an online store with category browsing, search, a cart, simulated checkout and refund review. I led the backend — the data models, the REST API and its restructuring into controller and route layers.
   zh: 我们五人团队开发了一个网上商城，支持分类浏览、搜索、购物车、模拟结账和退款审核。我主导后端开发，包括数据模型、REST API，以及把 API 重构为 controller 与 route 分层。
@@ -10,13 +10,15 @@ focus: { primary: backend-cloud, also: [] }
 status: course-project
 team: { size: 5 }
 role:
-  en: Led the backend; the React frontend was built by the team
-  zh: 主导后端开发；React 前端由团队共同完成
+  en: Team of five. I led the backend — the scaffold, the data models, the REST API and its restructuring into controller and route layers — and wrote a large part of the React frontend with the team.
+  zh: 五人团队。我主导了后端，包括项目骨架、数据模型、REST API，以及把 API 重构为 controller 与 route 分层；React 前端也有很大一部分由我和团队一起完成。
 context: { en: "Course project, INFO 6150 Web Design & User Experience", zh: 课程项目，INFO 6150 网页设计与用户体验 }
 period: { start: "2025-03", end: "2025-04" }
 stack: [Node.js, Express, MongoDB, Mongoose, bcrypt, express-session, Multer, React, Axios]
 links: []
 highlights: [schemas]
+# Section ids retired in earlier redesigns, and where they land now.
+anchor_aliases: { ownership: backend }
 
 facts:
   schemas:

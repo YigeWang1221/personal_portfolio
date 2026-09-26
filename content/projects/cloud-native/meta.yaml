@@ -1,20 +1,20 @@
 slug: cloud-native
 title: { en: Cloud-Native Web Application on AWS, zh: AWS 云原生 Web 应用 }
 subtitle:
-  en: Immutable releases across two AWS accounts, with the whole platform defined in Terraform
-  zh: 跨两个 AWS 账号的不可变发布，整个平台用 Terraform 定义
+  en: A Spring Boot API on AWS, released as new machine images and defined end to end in Terraform
+  zh: 运行在 AWS 上的 Spring Boot API：每次发布都是一个新的机器镜像，整个平台用 Terraform 定义
 summary:
-  en: A Spring Boot REST API that runs on Packer-built images in an auto-scaled EC2 group behind an HTTPS load balancer. Terraform defines the network, data stores, keys and alarms; GitHub Actions tests every pull request and rolls each merge out as a new machine image.
-  zh: 一个 Spring Boot REST API，运行在 HTTPS 负载均衡器后、自动伸缩的 EC2 组中，机器镜像由 Packer 构建。网络、数据存储、密钥和告警由 Terraform 定义；GitHub Actions 测试每个 PR，并把每次合并以新镜像的方式滚动上线。
+  en: A Spring Boot REST API on Packer-built images in an Auto Scaling group behind an HTTPS load balancer, with the network, data stores, keys and alarms defined in Terraform. GitHub Actions tests every pull request and rolls each merge out as a new image, promoted from a dev account to a demo account.
+  zh: 一个 Spring Boot REST API，运行在 HTTPS 负载均衡器后的 Auto Scaling 组中，机器镜像由 Packer 构建；网络、数据存储、密钥和告警都由 Terraform 定义。GitHub Actions 测试每个 PR，并把每次合并做成新镜像，从 dev 账号晋升到 demo 账号后滚动上线。
 focus: { primary: backend-cloud, also: [] }
 status: course-project
 status_note:
-  en: Deployed and released repeatedly during the course; scaling never load-tested
-  zh: 课程期间已部署并多次发布；自动伸缩从未做过压测
+  en: Deployed and released repeatedly during the course; scaling was never load-tested
+  zh: 课程期间已部署并多次发布；自动伸缩没有做过压测
 team: { size: 1 }
 role:
-  en: Built it alone — the API, the Terraform infrastructure, the image pipeline and the serverless email flow
-  zh: 独立完成：API、Terraform 基础设施、镜像流水线与无服务器邮件流程
+  en: "Individual coursework. The course set the milestones; the implementation is mine: the API, the Terraform, the Packer image, the GitHub Actions workflows and the serverless email function."
+  zh: 个人课程作业。里程碑由课程规定，实现全部由我完成：API、Terraform、Packer 镜像、GitHub Actions 工作流和无服务器邮件函数。
 context: { en: "Course project, CSYE 6225 Network Structures & Cloud Computing", zh: 课程项目，CSYE 6225 网络架构与云计算 }
 period: { start: "2025-09", end: "2025-11" }
 stack:
@@ -34,42 +34,29 @@ stack:
   - CloudWatch
 links: []
 highlights: [deploy_median, azs, kms_keys]
+lead: cicd
 deep_dive_from: observability
-# Section ids retired in the 2026-09 redesign.
-anchor_aliases: { pipeline: delivery, security: boundaries, decisions: boundaries }
-related: kk-knock
-
-overview:
-  problem:
-    en: A course series asks for a web service on AWS that can be released again and again, observed and maintained. The engineering questions are how a merged change reaches running instances safely, and what each component is allowed to reach.
-    zh: 一系列课程作业要求在 AWS 上构建一个能反复发布、可观测、可维护的 Web 服务。真正的工程问题是：一次合并如何安全地到达正在运行的实例，以及每个组件被允许访问什么。
-  contributions:
-    - en: Wrote the Spring Boot API, the Terraform for the network, data stores, keys and alarms, the Packer image and the GitHub Actions workflows.
-      zh: 编写 Spring Boot API、定义网络/数据存储/密钥/告警的 Terraform、Packer 镜像，以及 GitHub Actions 工作流。
-    - en: Wired the release path — an image built in a dev account, shared with a demo account and rolled out by an instance refresh that waits for healthy capacity.
-      zh: 打通发布链路：在 dev 账号构建镜像，共享给 demo 账号，再通过等待健康容量的实例刷新滚动上线。
-  outcome:
-    en: Individual coursework that was deployed and released repeatedly during the course. Auto scaling is configured but was never tested under load, and the health check accepts some error responses. Whether any environment still runs is unknown.
-    zh: 个人课程作业，课程期间已部署并多次发布。自动伸缩已配置，但从未做过压测；健康检查也会把部分错误响应视为健康。目前是否还有环境在运行未知。
+# Section ids retired in earlier redesigns, and where they land now.
+anchor_aliases: { pipeline: delivery, security: boundaries, decisions: boundaries, ownership: overview, limits: validation }
+related: distributed-llm
 
 card:
-  question:
-    en: How does a merged pull request become a new, health-checked release without anyone logging in to a server?
-    zh: 一次合并的 PR，如何在没人登录服务器的情况下变成一次通过健康检查的新发布？
-  contribution:
-    en: Built it alone as individual coursework — API, Terraform, image pipeline and serverless email.
-    zh: 个人课程作业，独立完成 API、Terraform、镜像流水线与无服务器邮件。
-  tech: [Spring Boot, Terraform, Packer]
-  cta: { en: Follow code to deployment, zh: 跟随代码走到部署 }
+  intro:
+    en: "Solo coursework: a Spring Boot API on AWS. I wrote the API, the Terraform for the network, data stores, keys and alarms, the Packer image, and the GitHub Actions pipeline that ships each merge."
+    zh: 个人课程作业：一个运行在 AWS 上的 Spring Boot API。API、定义网络/数据存储/密钥/告警的 Terraform、Packer 镜像，以及把每次合并发布上线的 GitHub Actions 流水线，都由我编写。
+  highlight:
+    en: No one logs in to a server to release. A merge becomes a new machine image, built in a dev account, promoted to a demo account and rolled out by replacing instances a few at a time.
+    zh: 发布时不需要登录任何服务器：一次合并会变成一个新的机器镜像，在 dev 账号构建，晋升到 demo 账号，再分批替换实例上线。
+  tech: [Terraform, Packer, GitHub Actions]
+  cta: { en: Follow one release, zh: 跟着一次发布走一遍 }
   anchor: delivery
   steps:
     label: CURRENT
     items:
-      - { title: { en: "Pull request: tests and Packer validate", zh: PR：运行测试并校验 Packer }, detail: "JDK 21 + MySQL" }
-      - { title: { en: "Merge: bake an image in the dev account", zh: 合并：在 dev 账号构建镜像 }, detail: "Packer AMI" }
-      - { title: { en: Share it to a new launch-template version, zh: 共享并生成新的启动模板版本 }, detail: { en: demo account, zh: demo 账号 } }
-      - { title: { en: Replace instances gradually, zh: 逐步替换实例 }, detail: { en: instance refresh, zh: 实例刷新 } }
-      - { title: { en: Admit only healthy instances, zh: 只接纳健康的实例 }, detail: { en: "/actuator/health · accepts 200–499", zh: "/actuator/health · 接受 200—499" } }
+      - { title: { en: "Check — tests and template checks on every pull request", zh: 检查：每个 PR 运行测试并校验镜像模板 } }
+      - { title: { en: "Build — bake a machine image in the dev account", zh: 构建：在 dev 账号烘焙机器镜像 }, detail: Packer }
+      - { title: { en: "Promote — share it with the demo account", zh: 晋升：共享给 demo 账号 }, detail: { en: new launch-template version, zh: 新的启动模板版本 } }
+      - { title: { en: "Roll out — replace instances a few at a time", zh: 上线：分批替换实例 }, detail: { en: gated by the load balancer's health check, zh: 由负载均衡器的健康检查把关 } }
 
 facts:
   deploy_median:
@@ -116,38 +103,38 @@ figures:
       en: "Pipeline: pull requests run the test suite against a MySQL service container and validate the Packer template; a merge builds the jar and an AMI in the dev account, shares it with the demo account, creates a new launch-template version and starts an instance refresh."
       zh: 流水线图：PR 阶段在 MySQL 服务容器上运行测试并校验 Packer 模板；合并后在 dev 账号构建 jar 和 AMI，共享到 demo 账号，创建新的启动模板版本并发起实例刷新。
     caption:
-      en: Every release is a new machine image, promoted from the dev account to the demo account and rolled out by an instance refresh.
-      zh: 每次发布都是一个新的机器镜像：从 dev 账号晋升到 demo 账号，再通过实例刷新滚动上线。
+      en: Drawn from the GitHub Actions workflows. Every release is a new machine image, promoted from the dev account to the demo account and rolled out by an instance refresh.
+      zh: 依据 GitHub Actions 工作流绘制。每次发布都是一个新的机器镜像：从 dev 账号晋升到 demo 账号，再通过实例刷新滚动上线。
 
 roadmap:
   section: planning
   title: { en: Assignment milestones, zh: 作业里程碑 }
   phases:
-    - name: { en: A01–A02 — scaffold and REST API, zh: A01—A02 — 项目骨架与 REST API }
+    - name: { en: Scaffold and REST API (assignments 1–2), zh: 项目骨架与 REST API（作业 1—2） }
       detail: { en: Resource endpoints with tests, zh: 资源接口及其测试 }
       when: { en: Sep 2025, zh: 2025 年 9 月 }
       status: done
-    - name: { en: A03 — authentication and CI, zh: A03 — 认证与 CI }
+    - name: { en: Authentication and CI (assignment 3), zh: 认证与 CI（作业 3） }
       detail: { en: "Positive, negative and edge-case integration tests; CI against MySQL; branch protection", zh: 正向、反向与边界集成测试；接入 MySQL 的 CI；分支保护 }
       when: { en: Sep–Oct 2025, zh: 2025 年 9—10 月 }
       status: done
-    - name: { en: A04–A05 — images and infrastructure as code, zh: A04—A05 — 镜像与基础设施即代码 }
+    - name: { en: Images and infrastructure as code (assignments 4–5), zh: 镜像与基础设施即代码（作业 4—5） }
       detail: { en: "Setup scripts, the Terraform repository, Packer AMIs with validate and build workflows, a systemd service", zh: 安装脚本、Terraform 仓库、带校验与构建流程的 Packer AMI、systemd 服务 }
       when: { en: Oct 2025, zh: 2025 年 10 月 }
       status: done
-    - name: { en: A06 — database and IAM, zh: A06 — 数据库与 IAM }
+    - name: { en: Database and IAM (assignment 6), zh: 数据库与 IAM（作业 6） }
       detail: { en: "Product APIs; RDS, its subnet group and the instance role in Terraform", zh: 商品接口；在 Terraform 中定义 RDS、其子网组与实例角色 }
       when: { en: Oct 2025, zh: 2025 年 10 月 }
       status: done
-    - name: { en: A07 — observability and DNS, zh: A07 — 可观测性与 DNS }
+    - name: { en: Observability and DNS (assignment 7), zh: 可观测性与 DNS（作业 7） }
       detail: { en: "StatsD metrics, the CloudWatch agent, controller AOP, Route 53", zh: StatsD 指标、CloudWatch agent、控制器 AOP、Route 53 }
       when: { en: Oct 2025, zh: 2025 年 10 月 }
       status: done
-    - name: { en: A08 — load balancing and hardening, zh: A08 — 负载均衡与加固 }
+    - name: { en: Load balancing and hardening (assignment 8), zh: 负载均衡与加固（作业 8） }
       detail: { en: "Security groups, the load balancer, DNS and email records, S3 and clock-drift fixes", zh: 安全组、负载均衡器、DNS 与邮件记录，修复 S3 与时钟漂移问题 }
       when: { en: Nov 2025, zh: 2025 年 11 月 }
       status: done
-    - name: { en: "A09 — events, keys and serverless", zh: A09 — 事件、密钥与无服务器 }
+    - name: { en: "Events, keys and serverless (assignment 9)", zh: 事件、密钥与无服务器（作业 9） }
       detail: { en: "SNS publishing, Lambda with Mailgun, KMS keys, Lambda CI/CD from dev to demo", zh: SNS 发布、Lambda 与 Mailgun、KMS 密钥、从 dev 到 demo 的 Lambda CI/CD }
       when: { en: Nov 2025, zh: 2025 年 11 月 }
       status: done

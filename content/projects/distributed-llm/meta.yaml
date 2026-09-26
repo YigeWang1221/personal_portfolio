@@ -1,17 +1,17 @@
 slug: distributed-llm
 title: { en: Distributed LLM Training on HPC, zh: HPC 集群上的分布式大模型训练 }
 subtitle:
-  en: What scales and what doesn't when a small GPT-2 trains on up to four V100 GPUs
-  zh: 在最多四块 V100 上训练小型 GPT-2：哪些能近线性扩展，哪些不能
+  en: Parallel tokenization and DDP / FSDP training of a small GPT-2 on up to four V100 GPUs, run as repeatable Slurm jobs
+  zh: 为小型 GPT-2 做并行分词，并在最多四块 V100 上用 DDP / FSDP 训练；每次实验都是可复现的 Slurm 作业
 summary:
-  en: We measured how a 51.5M-parameter GPT-2 trains on one node of Northeastern's HPC cluster — parallel tokenization, DDP scaling on one to four V100 GPUs, the FSDP memory trade-off, and NVLink versus shared-memory transport — and wrote down where the numbers stop meaning what they seem to.
-  zh: 我们测量了一个 5150 万参数的 GPT-2 在美国东北大学 HPC 集群单节点上的训练表现：并行分词、1 到 4 块 V100 上的 DDP 扩展、FSDP 的显存取舍，以及 NVLink 与共享内存两种通信方式；也记录了这些数字在什么情况下不再代表表面上的含义。
+  en: In a team of two, we trained a 51.5M-parameter GPT-2 on one node of Northeastern's HPC cluster and measured parallel tokenization, DDP scaling on one to four V100 GPUs, the FSDP memory trade-off, and NVLink versus shared-memory transport, with every configuration scripted as a Slurm job.
+  zh: 我们两人团队在美国东北大学 HPC 集群的单个节点上训练了一个 5150 万参数的 GPT-2，测量了并行分词、1 到 4 块 V100 上的 DDP 扩展、FSDP 的显存取舍，以及 NVLink 与共享内存两种通信方式；每种配置都写成了 Slurm 作业脚本。
 focus: { primary: ai-research, also: [backend-cloud] }
 status: course-benchmark
 team: { size: 2 }
 role:
-  en: I ran the tokenization, single-GPU baseline and DDP experiments, and co-implemented and debugged the rest with my teammate
-  zh: 我负责分词、单卡基线和 DDP 实验，并与队友共同实现、调试其余部分
+  en: Team of two. I wrote the parallel tokenization and ran the single-GPU baseline and the DDP scaling experiments. We built and debugged the DDP and FSDP trainers together, and the FSDP benchmarks are team results. I wrote the public README.
+  zh: 两人团队。我编写了并行分词，并负责单卡基线和 DDP 扩展实验；DDP 与 FSDP 训练器由我们共同实现和调试，FSDP 的基准结果属于团队成果。公开的 README 由我编写。
 context: { en: "Course project, CSYE 7105 High-Performance Computing", zh: 课程项目，CSYE 7105 高性能并行计算 }
 period: { start: "2026-03", end: "2026-04" }
 stack: [PyTorch, DDP, FSDP, NCCL, torchrun, Slurm, tiktoken, Hugging Face datasets, NumPy memmap]
@@ -19,8 +19,24 @@ links:
   - kind: code
     url: https://github.com/CSYE7105-nanoGPT-HPC/Nano-GPT-HPC
     label: { en: Code on GitHub, zh: GitHub 代码 }
-highlights: [ddp_scaling, transport_gap, fsdp_memory]
-deep_dive_from: time-to-quality
+highlights: [ddp_scaling, tokenize_mp, tokenize_repeat]
+lead: scaling-vs-quality
+deep_dive_from: transport
+# Section ids retired in earlier redesigns, and where they land now.
+anchor_aliases: { ownership: question, plan: automation }
+related: personal-writing-lora
+
+card:
+  intro:
+    en: "Team of two, on Northeastern's HPC cluster. I wrote the multiprocess tokenization for OpenWebText and ran the DDP scaling experiments; every configuration is a Slurm script that launches torchrun, so any run can be repeated exactly."
+    zh: 两人团队，在美国东北大学的 HPC 集群上完成。我为 OpenWebText 编写了多进程分词，并负责 DDP 扩展实验；每种配置都是一个启动 torchrun 的 Slurm 脚本，任何一次运行都能原样复现。
+  highlight:
+    en: Throughput scaled almost linearly to four GPUs, but under the same token budget validation perplexity got worse. More throughput did not mean a better model.
+    zh: 吞吐几乎随 GPU 数线性增长到四卡，但在相同 token 预算下，验证集 perplexity 反而变差：吞吐更高，不等于模型更好。
+  tech: [PyTorch DDP · FSDP, NCCL, Slurm]
+  cta: { en: See the experiments, zh: 查看实验 }
+  anchor: results
+  figure: scaling-vs-quality
 
 facts:
   params:
@@ -47,6 +63,11 @@ facts:
     value: "41.8"
     label: { en: validation perplexity on one GPU, zh: 单卡的验证集 perplexity }
     condition: { en: "Committed logs, same token budget, single runs", zh: 已提交的日志，相同 token 预算，单次运行 }
+    claim: HPC-15
+  ppl_2gpu:
+    value: "47.4"
+    label: { en: validation perplexity on two GPUs, zh: 双卡的验证集 perplexity }
+    condition: { en: "Committed FSDP logs, same token budget (half of the optimizer steps), single runs", zh: 已提交的 FSDP 日志，相同 token 预算（优化步数为一半），单次运行 }
     claim: HPC-15
   ppl_4gpu:
     value: "58.5"
@@ -85,9 +106,36 @@ facts:
     claim: HPC-06
 
 figures:
+  - kind: chart
+    id: scaling-vs-quality
+    section: results
+    title: { en: "Same token budget: throughput up, model quality down", zh: 相同 token 预算下：吞吐上升，模型质量下降 }
+    alt:
+      en: "Two bar charts. Left: throughput relative to one GPU, 1× on one GPU and about 3.8 to 4.0× on four GPUs, close to the linear line at 4×. Right: validation perplexity, 41.8 on one GPU, 47.4 on two and 58.5 on four; lower is better."
+      zh: 两张条形图。左图为相对单卡的吞吐：单卡为 1×，四卡约为 3.8—4.0×，接近 4× 的线性参考线。右图为验证集 perplexity：单卡 41.8，双卡 47.4，四卡 58.5，越低越好。
+    caption:
+      en: "A 51.5M-parameter GPT-2 on one node with V100-SXM2 GPUs. Every configuration trains on the same number of tokens, so four GPUs take a quarter of the optimizer steps; each bar is a single run. The four-GPU throughput is a range because the preserved raw log (shared-memory transport) and the report (NVLink) differ. Perplexity comes from the committed logs: the single-GPU baseline and the FSDP runs."
+      zh: 5150 万参数的 GPT-2，在一个配备 V100-SXM2 的节点上训练。所有配置训练相同数量的 token，因此四卡只有四分之一的优化步数；每根柱子都是单次运行。四卡吞吐是一个区间，因为保留下来的原始日志（共享内存通信）和报告（NVLink）数值略有不同。Perplexity 取自已提交的日志：单卡基线和 FSDP 运行。
+    panels:
+      - title: { en: Throughput relative to one GPU, zh: 相对单卡的吞吐 }
+        note: { en: higher is better, zh: 越高越好 }
+        claim: HPC-05
+        max: 4.6
+        reference: { value: 4, label: { en: linear, zh: 线性 } }
+        bars:
+          - { x: { en: 1 GPU, zh: 1 卡 }, value: 1, text: "1×" }
+          - { x: { en: 4 GPUs, zh: 4 卡 }, value: 3.83, high: 3.97, fact: ddp_scaling }
+      - title: { en: Validation perplexity, zh: 验证集 perplexity }
+        note: { en: lower is better, zh: 越低越好 }
+        claim: HPC-15
+        max: 70
+        bars:
+          - { x: { en: 1 GPU, zh: 1 卡 }, value: 41.76, fact: ppl_1gpu }
+          - { x: { en: 2 GPUs, zh: 2 卡 }, value: 47.35, fact: ppl_2gpu }
+          - { x: { en: 4 GPUs, zh: 4 卡 }, value: 58.51, fact: ppl_4gpu }
   - kind: diagram
     id: pipeline
-    section: pipeline
+    section: automation
     file: assets/pipeline.svg
     source: assets/pipeline.mmd
     label: CURRENT
@@ -95,11 +143,11 @@ figures:
       en: "Pipeline: OpenWebText is tokenized in parallel into binary files; Slurm jobs launch torchrun, which runs either the DDP or the FSDP trainer on one to four GPUs; rank 0 records throughput, iteration time, peak memory and validation perplexity."
       zh: 管线图：OpenWebText 并行分词后写成二进制文件；Slurm 作业通过 torchrun 在 1 到 4 块 GPU 上运行 DDP 或 FSDP 训练器；rank 0 记录吞吐、迭代时间、峰值显存和验证集 perplexity。
     caption:
-      en: One node, data parallelism only. Every configuration is a Slurm script, so each run can be repeated exactly.
-      zh: 单节点，只做数据并行。每种配置都是一个 Slurm 脚本，任何一次运行都可以原样复现。
+      en: One node, data parallelism only. Every configuration is a config file plus a Slurm script, so each run can be repeated exactly.
+      zh: 单节点，只做数据并行。每种配置都是一个配置文件加一个 Slurm 脚本，任何一次运行都可以原样复现。
 
 roadmap:
-  section: plan
+  section: automation
   title: { en: Project timeline, zh: 项目时间线 }
   phases:
     - name: { en: Proposal — three parallelization strategies, zh: 立项 — 三种并行策略 }

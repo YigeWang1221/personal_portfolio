@@ -1,4 +1,5 @@
 ---
+// Footer (ADR-017): navigation and contact first; one short privacy line.
 import { localePath, type Locale } from '../lib/i18n';
 import { getContent, t } from '../lib/content/load';
 
@@ -12,11 +13,15 @@ const { profile } = getContent();
 
 <footer class="site-footer">
   <div class="container">
-    <p>{t(locale, 'footer.note')}</p>
-    <nav aria-label={t(locale, 'footer.label')}>
-      {profile.links.map((l) => <a href={l.url}>{l.label[locale]}</a>)}
+    <nav class="footer-nav" aria-label={t(locale, 'footer.label')}>
+      <a href={localePath(locale, '/projects/')}>{t(locale, 'nav.projects')}</a>
       <a href={localePath(locale, '/background/')}>{t(locale, 'nav.background')}</a>
+      <a href={localePath(locale, '/resume/')}>{t(locale, 'nav.resume')}</a>
       <a href={localePath(locale, '/plan-and-design/')}>{t(locale, 'nav.plan')}</a>
     </nav>
+    <nav class="footer-contact" aria-label={t(locale, 'footer.contact_label')}>
+      {profile.links.map((l) => <a href={l.url}>{l.label[locale]}</a>)}
+    </nav>
+    <p class="footer-note">{t(locale, 'footer.note')}</p>
   </div>
 </footer>

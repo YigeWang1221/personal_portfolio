@@ -24,10 +24,6 @@ Course videos are large. Uploads go to MinIO through the SDK with the file size 
 
 Group members can edit the same homework. Saves and reads check that the user belongs to the group, and a lock serializes concurrent saves. In the original capstone that lock was a single read/write lock for the whole application: correct on one server, but it made every group wait for every other group, and it could not work across several instances.
 
-## What I owned {#ownership}
-
-Everything: it was my undergraduate capstone, built alone. The frontend starts from an open-source admin template; the application pages, the backend, the data model and the media handling are my work.
-
 ## 2026 maintenance branch (in progress) {#maintenance}
 
 In 2026 I recovered the backend source from an archive and started a maintenance branch:

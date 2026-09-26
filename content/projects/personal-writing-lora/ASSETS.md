@@ -2,6 +2,7 @@
 
 **Staged:** 2026-09-24 (ADR-011). Two diagrams were added in the build phase; `.mmd` sources are rendered to `.svg` with `npm run diagrams`.
 **Redesign (2026-09-25):** the profile-settings wireframe was removed from the page and deleted; the wireframes and the ER sketch now sit in "From sketches to a plan". The home-page card uses an HTML step list (`card.steps` in `meta.yaml`).
+**Revision (2026-09-26, ADR-017):** the home card is text only. The AWS topology diagram was renamed `aws-platform` and relabeled CURRENT: the owner reports that the Terraform was applied for the training and serving runs and destroyed afterwards. The architecture and worker-lifecycle captions no longer say "never run on AWS"; the architecture diagram is the page's lead figure.
 **Source:** the owner's design notes for this project, written in Obsidian between 2026-06 and 2026-08.
 - The notes cover UI wireframes, an ER sketch, an API contract, an IAM design, and a Terraform / project-structure
   design.
@@ -19,7 +20,7 @@
 | `assets/er-sketch.svg` | HISTORICAL | Early ER sketch: user profiles, workspaces, chats, messages, models, voice/LoRA sets, LoRAs, source-file lists and files, training | Deep dive → data model: early sketch → the implemented 15-table PostgreSQL schema (Alembic) | Field names differ in places. The implementation adds sessions, upload batches and two outbox tables |
 | `assets/training-worker-lifecycle.mmd` | CURRENT (code) | Sequence: receive job → conditional-write claim → scale-in protection → lease heartbeats and checkpoints → publish adapter + manifest (SHA-256) → READY → callback → delete message → release protection | Deep dive → reliability. Render with the site's Mermaid pipeline | Implemented in the worker and tested against local fakes; never run on AWS. Say so in the caption |
 | `assets/current-architecture.mmd` → `.svg` | CURRENT (code) | Product, training hand-off and serving as implemented and run locally | Project page → "Current architecture" | Added in the build phase (2026-09-24). Run locally against fakes only; the caption says so |
-| `assets/proposed-aws.mmd` → `.svg` | PROPOSED | The AWS topology written in Terraform | Project page → "Terraform guardrails and IAM" | Added in the build phase. Never applied: shown with the PROPOSED convention |
+| `assets/aws-platform.mmd` → `.svg` | CURRENT | The AWS topology written in Terraform | Project page → "Terraform guardrails and IAM" | Added in the build phase as PROPOSED (`proposed-aws`); relabeled 2026-09-26 on the owner's report that it was applied, then destroyed. The runs' logs are not public, so the caption says the environment no longer runs |
 
 ## Reviewed but not staged
 
@@ -29,7 +30,7 @@ These conflict with the current design, or are not the owner's design work.
 |---|---|
 | Early architecture sketch ("project structure design") | Training instances terminate themselves and read job data from the database. The final design explicitly rejects both |
 | Early cloud sketch | SSH open to the outside, frontend on EC2. Superseded (the final design uses SSM and no public SSH) |
-| "Revised" AWS Mermaid diagram | Differs from the implemented Terraform: Spot vs On-Demand, EC2 Image Builder vs Packer, fixed IP vs private DNS, single backend instance vs ASG. The site uses the Terraform-derived PROPOSED diagram instead |
+| "Revised" AWS Mermaid diagram | Differs from the implemented Terraform: Spot vs On-Demand, EC2 Image Builder vs Packer, fixed IP vs private DNS, single backend instance vs ASG. The site uses the Terraform-derived diagram instead |
 | AI-agent reply-flow infographic and two AI-assistant chat screenshots | Not the owner's design artifact; they describe a different agent and desktop product |
 
 ## Source material for page text (not images)

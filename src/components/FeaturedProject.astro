@@ -1,51 +1,50 @@
 ---
-// One row of "Selected work": capability → title → what it does → my part → key question → case link →
-// Demo / Source. The title and the main link open the case study on this site; no nested links.
+// A home-page project card (ADR-017). Three weights: the flagship (large, product screens), the main case
+// studies (a flow or a chart) and smaller "exploring" cards (text only). Every card reads as a short
+// introduction: what it does → what I did → one engineering point → status and a few technologies → one link
+// into the case study, plus at most one outside link. The title and the main link open the case study.
 import StatusBadge from './StatusBadge.astro';
 import ProjectLinks from './ProjectLinks.astro';
 import CardFigure from './CardFigure.astro';
 import CardSteps from './CardSteps.astro';
 import { localePath, type Locale } from '../lib/i18n';
-import { getContent, t, type Project } from '../lib/content/load';
+import { t, type Project } from '../lib/content/load';
 
 interface Props {
   project: Project;
   locale: Locale;
+  variant: 'flagship' | 'case' | 'exploring';
   eager?: boolean;
 }
-const { project, locale, eager = false } = Astro.props;
+const { project, locale, variant, eager = false } = Astro.props;
 const m = project.meta;
 const card = m.card!;
-const focus = getContent().focus.find((f) => f.id === m.focus.primary)!;
 const href = localePath(locale, `/projects/${m.slug}/${card.anchor ? `#${card.anchor}` : ''}`);
 const figure = project.cardFigure;
-const headingId = `featured-${m.slug}`;
+const headingId = `work-${m.slug}`;
+const status = card.status ?? m.status_note;
+const showVisual = variant !== 'exploring';
 ---
 
-<article class="featured" aria-labelledby={headingId}>
-  <div class="featured-text">
-    <p class="capability">{focus.title[locale]}</p>
+<article class={`work work-${variant}`} aria-labelledby={headingId}>
+  <div class="work-text">
     <h3 id={headingId}><a href={localePath(locale, `/projects/${m.slug}/`)}>{m.title[locale]}</a></h3>
     <p class="purpose">{m.subtitle[locale]}</p>
-    <p class="status-line">
+    <p class="work-intro">{card.intro[locale]}</p>
+    {card.highlight && <p class="work-highlight">{card.highlight[locale]}</p>}
+    <p class="work-meta">
       <StatusBadge status={m.status} team={m.team} locale={locale} />
-      {m.status_note && <span class="status-note">{m.status_note[locale]}</span>}
+      {status && <span class="status-note">{status[locale]}</span>}
     </p>
-    <dl class="card-facts">
-      <div><dt>{t(locale, 'home.my_part')}</dt><dd>{card.contribution[locale]}</dd></div>
-      <div><dt>{t(locale, 'home.question')}</dt><dd>{card.question[locale]}</dd></div>
-    </dl>
-    <ul class="tech" aria-label={t(locale, 'home.tech')}>
-      {card.tech.map((x) => <li>{x}</li>)}
-    </ul>
+    <p class="tech"><span class="visually-hidden">{t(locale, 'home.tech')}: </span>{card.tech.join(' · ')}</p>
     <div class="card-actions">
-      <a class="case-link" href={href}>{card.cta ? card.cta[locale] : t(locale, 'home.kind')}<span aria-hidden="true"> →</span></a>
-      <ProjectLinks links={m.links} locale={locale} />
+      <a class="case-link" href={href}>{card.cta ? card.cta[locale] : t(locale, 'home.read_case')}<span aria-hidden="true"> →</span></a>
+      <ProjectLinks links={m.links.filter((l) => l.kind !== 'code')} locale={locale} limit={1} buttons={variant === 'flagship'} />
     </div>
   </div>
-  {card.steps ? (
+  {showVisual && (card.steps ? (
     <CardSteps steps={card.steps} locale={locale} label={t(locale, 'home.steps', { title: m.title[locale] })} />
   ) : (
     figure && <CardFigure figure={figure} locale={locale} eager={eager} />
-  )}
+  ))}
 </article>

@@ -1,17 +1,17 @@
-%% CURRENT — as implemented in the four repositories (Aug 2026). Run end to end locally against a real PostgreSQL and
-%% fake S3 / SQS / GPU / vLLM services. Never deployed; no real training run has completed.
+%% CURRENT — as implemented in the four repositories (Aug 2026). Tested locally against a real PostgreSQL and fake
+%% S3 / SQS / GPU / vLLM services; per the owner (2026-09-26), also run for real on AWS once, then torn down.
 flowchart TB
-  subgraph App["Product · run locally"]
+  subgraph App["Product"]
     direction LR
     WEB["Next.js app<br/>projects · chats · styles"] --> API["FastAPI<br/>router → service → repository"] --> PG[("PostgreSQL · Alembic<br/>15 tables · CHECK constraints")]
   end
-  subgraph Jobs["Training hand-off · tested against local fakes"]
+  subgraph Jobs["Training hand-off"]
     direction LR
     OB["Outbox dispatcher"] --> Q[["SQS queue + DLQ"]] --> W["Training worker<br/>S3 conditional-write claim<br/>QLoRA on Qwen2.5-7B-Instruct"] --> S3[("S3 · datasets and adapters<br/>manifest · SHA-256 · READY marker")]
   end
-  subgraph Serve["Serving · tested against fakes"]
+  subgraph Serve["Serving"]
     direction LR
-    AM["Adapter manager<br/>in-use-safe LRU · bounded queue"] --> V["vLLM runtime LoRA API<br/>code integration, vLLM not packaged"]
+    AM["Adapter manager<br/>in-use-safe LRU · bounded queue"] --> V["vLLM<br/>runtime LoRA API"]
   end
   App -- "training job → outbox row" --> Jobs
   Jobs -- "published adapter artifacts" --> Serve

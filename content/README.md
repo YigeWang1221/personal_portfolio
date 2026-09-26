@@ -7,7 +7,7 @@
 
 ```text
 content/
-├── catalog.yaml                capability filters, featured / more / catalog order, home capability entries
+├── catalog.yaml                capability filters, home-page slots (flagship / cases / exploring / more), catalog order
 ├── profile.yaml                résumé data
 ├── site/{en,zh}.yaml           UI strings (identical keys)
 ├── pages/background/           en.md, zh.md
@@ -19,9 +19,14 @@ content/
 
 - **`meta.yaml`** holds every language-neutral fact: capabilities (`focus`), status label and note, team, period,
   stack, links, facts, figures and the roadmap.
-- **Featured projects** also carry `overview` (problem, contributions, outcome) and `card` (key question, one-line
-  contribution, at most three editor-chosen technologies, the `#anchor` the main link opens, and either a page
-  `figure` or a short `steps` list labeled like a diagram). Write these by hand; never derive them from `stack`.
+- **`role`** is the one statement of my responsibility on the page (owned / shared / AI assistance). Narratives do
+  not repeat it. **`lead`** names the figure shown under the page header.
+- **Home-page projects** also carry `card`: a short `intro` (what it does, then my part), one `highlight`, an
+  optional short `status`, at most three editor-chosen technologies, the `#anchor` the main link opens, and — for
+  the flagship and the cases — either a page `figure` or a short `steps` flow labeled like a diagram. Write these by
+  hand; never derive them from `stack`. Card text may not contain bare measurements.
+- **Charts** (`kind: chart`) are small bar charts drawn from values in `meta.yaml`. Each panel names its ledger
+  `claim`; each bar prints a project `fact` or a baseline `text`, so no chart shows a number the page does not state.
 - **Anchors.** When a section id is retired, add it to `anchor_aliases` with the section that replaced it. Localized strings are `{ en: …, zh: … }`; quote values that contain commas or colons.
 - **Facts.** Each fact has a `value` (a string, or `{ en, zh }` when the unit is a word), a `label`, a `condition`
   and the internal ledger `claim` ID it comes from. Only ledger rows marked `Public use: Use` may become facts
@@ -61,13 +66,12 @@ Screenshots and result plots show shipped UI or published results; they carry no
 
 | Module | Capabilities | Assets |
 |---|---|---|
-| `kk-knock` | Planning & Delivery, Backend & Cloud | Screenshots and widget art from the public product page; three CURRENT diagrams |
+| `kk-knock` | Planning & Delivery, Backend & Cloud | Screenshots (lead and home card) and widget art from the public product page; three CURRENT diagrams |
 | `enterprise-workflow` | Business modeling | Two CURRENT diagrams (donation flow, partial class diagram) |
 | `cloud-native` | Backend & Cloud | Two CURRENT diagrams |
-| `personal-writing-lora` | Planning & Delivery, Backend & Cloud, AI & Research | Two wireframes and an ER sketch (HISTORICAL), two CURRENT diagrams, one PROPOSED diagram |
-| `distributed-llm` | AI & Research, Backend & Cloud | One CURRENT diagram |
+| `personal-writing-lora` | Backend & Cloud, AI & Research, Planning & Delivery | Two wireframes and an ER sketch (HISTORICAL), three CURRENT diagrams |
+| `distributed-llm` | AI & Research, Backend & Cloud | One CURRENT diagram, one chart drawn from facts |
 | `equipment-assignment` | Backend & Cloud, Business modeling | One CURRENT diagram |
 | `f1-bayesian` | AI & Research | Two CURRENT diagrams, two result plots |
 | `smartbuyer` | Backend & Cloud | — |
 | `quant-ai` | AI & Research | One CURRENT diagram |
-| `info6105-methods` | AI & Research | — |

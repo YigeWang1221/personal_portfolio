@@ -1,7 +1,8 @@
 ---
-// Case study page. First screen: what it is, status, my role, team, and the three-part overview
-// (problem / my contribution / outcome). Then the engineering story with an "On this page" navigation,
-// the deep dive, the full stack, one related case study and the way back to the catalog.
+// Case study page (ADR-017). First screen: what it is, one status line, one statement of my role, the period
+// and context, the outside links, then the lead visual (product screens, a key chart or an architecture
+// preview) and the few facts worth remembering. Then the project's own story with an "On this page"
+// navigation, the deep dive, the full stack, one related case study and the way back to the catalog.
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import StatusBadge from '../../../components/StatusBadge.astro';
 import StackChips from '../../../components/StackChips.astro';
@@ -11,7 +12,7 @@ import RoadmapView from '../../../components/RoadmapView.astro';
 import ProjectLinks from '../../../components/ProjectLinks.astro';
 import { LOCALES, localeParam, localePath, type Locale } from '../../../lib/i18n';
 import { getContent, t, type Project } from '../../../lib/content/load';
-import { formatPeriod, teamLabel } from '../../../lib/format';
+import { formatPeriod } from '../../../lib/format';
 
 export function getStaticPaths() {
   const { projects } = getContent();
@@ -29,7 +30,8 @@ const m = project.meta;
 const path = `/projects/${m.slug}/`;
 const sections = project.sections[locale];
 const highlights = m.highlights.map((key) => m.facts[key]);
-const figuresFor = (sectionId: string) => project.figures.filter((f) => f.section === sectionId);
+const lead = m.lead ? project.figures.find((f) => f.id === m.lead) : undefined;
+const figuresFor = (sectionId: string) => project.figures.filter((f) => f.section === sectionId && f.id !== m.lead);
 const related = m.related ? projects.get(m.related) : undefined;
 const aliasesFor = (sectionId: string) =>
   Object.entries(m.anchor_aliases).filter(([, target]) => target === sectionId).map(([alias]) => alias);
@@ -46,44 +48,25 @@ const focusTitles = project.focusIds.map((id) => focus.find((f) => f.id === id)!
     </nav>
 
     <header class="project-head">
-      <p class="capability">{focusTitles.join(' · ')}</p>
       <h1>{m.title[locale]}</h1>
       <p class="subtitle">{m.subtitle[locale]}</p>
       <p class="status-line">
         <StatusBadge status={m.status} team={m.team} locale={locale} />
         {m.status_note && <span class="status-note">{m.status_note[locale]}</span>}
       </p>
-      <dl class="meta-grid">
-        <div class="wide"><dt>{t(locale, 'project.role')}</dt><dd>{m.role[locale]}</dd></div>
-        <div><dt>{t(locale, 'project.team')}</dt><dd>{teamLabel(m.team, locale)}</dd></div>
-        <div><dt>{t(locale, 'project.period')}</dt><dd>{formatPeriod(m.period, locale)}</dd></div>
-        <div><dt>{t(locale, 'project.context')}</dt><dd>{m.context[locale]}</dd></div>
-      </dl>
-      {m.links.length > 0 ? <ProjectLinks links={m.links} locale={locale} /> : null}
-      {!m.links.some((l) => l.kind === 'code') && <p class="muted small no-code">{t(locale, 'project.no_public_code')}</p>}
+      <p class="project-role"><span class="role-label">{t(locale, 'project.role')}</span> {m.role[locale]}</p>
+      <p class="project-meta">
+        <span>{formatPeriod(m.period, locale)}</span>
+        <span>{m.context[locale]}</span>
+        <span>{focusTitles.join(' · ')}</span>
+      </p>
+      {m.links.length > 0 && <ProjectLinks links={m.links} locale={locale} buttons />}
     </header>
 
-    {m.overview ? (
-      <section class="overview" aria-labelledby="overview-title">
-        <h2 id="overview-title" class="visually-hidden">{t(locale, 'project.overview')}</h2>
-        <div class="overview-item">
-          <h3>{t(locale, 'project.problem')}</h3>
-          <p>{m.overview.problem[locale]}</p>
-        </div>
-        <div class="overview-item">
-          <h3>{t(locale, 'project.contribution')}</h3>
-          <ul>{m.overview.contributions.map((c) => <li>{c[locale]}</li>)}</ul>
-        </div>
-        <div class="overview-item">
-          <h3>{t(locale, 'project.outcome')}</h3>
-          <p>{m.overview.outcome[locale]}</p>
-        </div>
-      </section>
-    ) : (
-      <section class="overview overview-single" aria-labelledby="overview-title">
-        <h2 id="overview-title" class="visually-hidden">{t(locale, 'project.overview')}</h2>
-        <p class="summary">{m.summary[locale]}</p>
-      </section>
+    {lead && (
+      <div class="project-lead">
+        <FigureView figure={lead} locale={locale} lead />
+      </div>
     )}
 
     {highlights.length > 0 && (
