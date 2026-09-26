@@ -30,9 +30,15 @@ card:
   intro:
     en: "In a team of two, I led the distributed-training implementation and experiment analysis. I implemented parallel OpenWebText tokenization and contributed to the DDP and FSDP trainers and their debugging."
     zh: "两人团队中，我主导分布式训练实现与实验分析，编写 OpenWebText 并行分词，并参与 DDP、FSDP 训练器的实现与调试。"
-  highlight:
-    en: "I organized GPU runs with Slurm and torchrun, compared throughput under a fixed token budget, and separated multiprocessing gains from cache reuse in the tokenization benchmarks."
-    zh: "我用 Slurm 和 torchrun 组织 GPU 作业，在固定 token 预算下比较吞吐，并在分词基准中区分多进程加速与缓存复用的收益。"
+  bullets:
+    - en: "Parallel preprocessing: I implemented OpenWebText tokenization with Python multiprocessing and tiktoken, compared chunk sizes, and separated parallel speedup from cache reuse."
+      zh: "并行预处理：用 Python multiprocessing 与 tiktoken 实现 OpenWebText 分词，对比 chunk size，分析任务分块对吞吐的影响，并区分并行加速与缓存复用。"
+    - en: "DDP training: I contributed to the PyTorch DDP trainer, using torchrun and NCCL for multi-GPU execution, gradient accumulation with no_sync(), and validation aggregation with all_reduce."
+      zh: "DDP 训练：参与 PyTorch DDP 训练器实现，通过 torchrun 与 NCCL 组织多 GPU 训练，使用 no_sync() 做梯度累积，并用 all_reduce 汇总验证结果。"
+    - en: "FSDP sharding: I contributed to implementation and debugging across FULL_SHARD, SHARD_GRAD_OP and NO_SHARD, with per-block wrapping and mixed precision to compare memory and throughput."
+      zh: "FSDP 分片：参与 FULL_SHARD、SHARD_GRAD_OP 和 NO_SHARD 模式的实现与调试，结合 Transformer Block 自动包装和混合精度，对比显存占用与吞吐。"
+    - en: "Experiment design: I organized Slurm GPU jobs under a fixed token budget, compared NVLink and shared-memory communication, and analyzed tokens/s, iteration time, peak memory and validation perplexity."
+      zh: "实验设计：用 Slurm 调度 GPU 作业，在固定 token 预算下对比 NVLink 与共享内存通信，分析 tokens/s、迭代耗时、峰值显存和验证集困惑度。"
   tech: [PyTorch DDP · FSDP, Python multiprocessing, Slurm · torchrun]
   cta: { en: My data and training work, zh: 查看数据与训练工作 }
   anchor: question
