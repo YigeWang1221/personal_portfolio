@@ -12,7 +12,7 @@ records:
 thumbnails:
   - { project: kk-knock, figure: architecture }
   - { project: personal-writing-lora, figure: current-architecture }
-  - { project: personal-writing-lora, figure: proposed-aws }
+  - { project: personal-writing-lora, figure: aws-platform }
   - { project: cloud-native, figure: aws-architecture }
   - { project: distributed-llm, figure: pipeline }
   - { project: f1-bayesian, figure: model }

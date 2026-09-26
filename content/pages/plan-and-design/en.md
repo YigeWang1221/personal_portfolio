@@ -54,7 +54,7 @@ The projects on this site are very different — a mobile product, a training be
 
 **Trade-off.** Cold-start latency. In exchange, there is no idle GPU cost, and the backend needs no permission to launch instances.
 
-**Evidence and status.** Terraform checked with mock-provider tests and a worker lifecycle tested against local fakes. Designed and implemented; never run on AWS.
+**Evidence and status.** Terraform checked with mock-provider tests and a worker lifecycle tested against local fakes, then run on AWS: the training group scaled up from zero for a real training job. The environment was destroyed afterwards, and the run's logs are not published.
 
 ## An adapter cache that never evicts adapters in use {#lora-adapter-cache}
 
@@ -66,7 +66,7 @@ The projects on this site are very different — a mobile product, a training be
 
 **Trade-off.** It can refuse a load under pressure. It never serves a half-loaded adapter.
 
-**Evidence and status.** Implemented in the adapter manager and tested against fakes; not yet run with vLLM on a GPU.
+**Evidence and status.** Implemented in the adapter manager and tested against fakes; served one trained adapter through vLLM on one GPU on AWS. Loading many users' adapters at once has not been benchmarked yet.
 
 ## Immutable releases promoted across AWS accounts {#cloud-immutable}
 

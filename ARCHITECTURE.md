@@ -43,14 +43,14 @@ Each project is a self-contained module. The catalog references projects by slug
 
 ```text
 content/
-├── catalog.yaml                capability filters, featured and "more" projects, catalog order, home capability
-│                               entries (the only place ordering lives)
+├── catalog.yaml                capability filters, the home page's project slots (flagship, cases, exploring,
+│                               more) and the catalog order (the only place ordering lives)
 ├── profile.yaml                résumé data: headline, education, experience, highlights, skills → evidence links
 ├── site/{en,zh}.yaml           UI strings per locale (identical key sets)
 ├── pages/<page>/               background, plan-and-design: en.md, zh.md, optional meta.yaml
 └── projects/<slug>/
     ├── meta.yaml               language-neutral facts: capabilities (focus), status and status note, team, period,
-    │                           stack, links, overview, card, facts, figures, roadmap, related, anchor aliases
+    │                           role, stack, links, lead figure, card, facts, figures, roadmap, related, anchor aliases
     ├── en.md, zh.md            narratives: the same "## Title {#id}" sections; numbers only via {{fact:key}}
     ├── ASSETS.md               provenance and label of every staged asset
     └── assets/                 Mermaid sources and rendered SVGs, screenshots, plots
@@ -59,12 +59,17 @@ content/
 **Rules** (enforced by the content loader at build time)
 - **Add a project:** create `content/projects/<slug>/` and add the slug to `order` in `catalog.yaml`.
 - **Hide or remove:** delete the slug from `order`. The module can stay.
-- **Re-rank or feature:** edit `order`, `featured` or `more` in `catalog.yaml`, and nothing else.
+- **Re-rank or feature:** edit `order` or the `home` slots in `catalog.yaml`, and nothing else.
 - **Capabilities:** a project declares one primary capability and any others in `meta.yaml` (`focus`). The catalog
   filter and the capability labels come from there.
-- **Featured projects** must have an editor-written `card` (key question, one-line contribution, at most three
-  technologies, the section the main link opens, and a figure or a short step list) and an `overview` (problem, my
-  contribution, outcome and validation). Every `#anchor` a card or a home entry points to must exist.
+- **Home-page projects** must have an editor-written `card` (a short introduction with my part, one engineering
+  highlight, an optional short status, at most three technologies, the section the main link opens). The flagship and
+  the cases also need a visual: a page figure or a short flow list. Card text may not contain bare measurements.
+  Every `#anchor` a card points to must exist.
+- **One role statement per project** (`role`): what I owned, what was shared, how AI assistants were used. The page
+  header shows it once; narratives do not repeat it.
+- **Charts** (`kind: chart`) are drawn as inline SVG from values in `meta.yaml`. Each panel cites its ledger claim,
+  and every printed value is a project fact or a baseline text.
 - **Retired section ids** are listed in `anchor_aliases`, so old links keep landing on the replacing section.
 - **Numbers live only in `meta.yaml`.** Narratives reference them as `{{fact:key}}` (pages: `{{fact:slug.key}}`), so
   English and Chinese can never disagree. A measurement written directly in a narrative fails the build.
@@ -79,8 +84,7 @@ content/
 %% CURRENT
 flowchart TD
   LS["Header on every page<br/>Projects · Background · Résumé · EN (root) ⇄ 中文 (/zh/)"] --- H
-  H["Home<br/>position · capability entries · 4 selected case studies · more · background"] --> P["Case study<br/>overview → engineering story → deep dive"]
-  H -- "capability entry → #section" --> P
+  H["Home<br/>résumé summary · selected projects · more work · capabilities · contact"] --> P["Case study<br/>header · lead visual · key decisions · validation → deep dive"]
   H --> C["Projects<br/>catalog with capability filter (?focus=)"]
   C --> P
   H --> B["Background<br/>education · experience · how I work · contact"]
@@ -89,16 +93,19 @@ flowchart TD
 ```
 
 **Case study layers**
-1. **First screen (30 s):** capabilities, title, what it does, status and status note, role, team, period, context,
-   Demo / Source links, and the overview: problem, my contribution, outcome and validation. Key facts follow.
-2. **Engineering story (3 min):** the sections before the "Deep dive" marker — the situation, ownership, and two
-   design questions with their trade-offs, then results and limits.
+1. **First screen (30 s):** title, what it does, one status line, one role statement, period and context, outside
+   links (product page, demo, video, grouped source repositories), then the lead visual — product screens, a key
+   chart or an architecture preview — and the few facts worth remembering, each with its conditions.
+2. **Engineering story (3 min):** the sections before the "Deep dive" marker — the situation, two or three key
+   decisions told as problem → options → choice → cost → validation, and one section on what has been verified.
+   Conditions that change a result stay next to that result.
 3. **Deep dive:** the sections from the marker on, the full stack, one related case study and the way back to the
    catalog. An "On this page" list sits beside the text on desktop and as a disclosure on narrow screens.
 
 **Retired URLs** (ADR-016): `/about/` → `/background/`; `/tracks/sde/` → `/projects/`;
 `/tracks/cloud-llm/` → `/projects/?focus=backend-cloud`; `/tracks/ds-finance/` → `/projects/?focus=ai-research`;
-the same under `/zh/`. Project URLs did not change.
+the same under `/zh/`. ADR-017: `/projects/info6105-methods/` → `/projects/f1-bayesian/#foundations`. Other project
+URLs did not change.
 
 ## CURRENT: build and hosting (ADR-014, ADR-015)
 

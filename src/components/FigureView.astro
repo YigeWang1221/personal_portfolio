@@ -1,7 +1,8 @@
 ---
-// Diagrams, images and screenshot sets. Raster images go through astro:assets (sized, lazy, WebP);
-// SVGs are served as files so their internal styles never meet the page CSP.
+// Diagrams, images, screenshot sets and result charts. Raster images go through astro:assets (sized, lazy, WebP);
+// SVG diagrams are served as files so their internal styles never meet the page CSP; charts are inline SVG.
 import { Image } from 'astro:assets';
+import ChartView from './ChartView.astro';
 import type { Locale } from '../lib/i18n';
 import type { ResolvedFigure } from '../lib/content/load';
 import { t } from '../lib/content/load';
@@ -9,29 +10,41 @@ import { t } from '../lib/content/load';
 interface Props {
   figure: ResolvedFigure;
   locale: Locale;
+  /** The figure right under the page header: loaded eagerly, shown a little wider. */
+  lead?: boolean;
 }
-const { figure, locale } = Astro.props;
-const label = figure.kind !== 'screens' ? figure.label : undefined;
+const { figure, locale, lead = false } = Astro.props;
+const label = figure.kind === 'diagram' || figure.kind === 'image' ? figure.label : undefined;
+const loading = lead ? 'eager' : 'lazy';
+const leadClass = lead ? ' figure-lead' : '';
 ---
 
 {figure.kind === 'screens' ? (
-  <figure class="figure" id={`fig-${figure.id}`}>
-    <ul class="screens">
+  <figure class={`figure figure-screens${leadClass}`} id={`fig-${figure.id}`}>
+    <ul class="screens" role="list" tabindex="0" aria-label={t(locale, "figure.screens")}>
       {figure.items.map((item) => (
         <li>
-          <Image src={item.image[locale]} alt={item.alt[locale]} widths={[360, 540]} sizes="(max-width: 40rem) 45vw, 11rem" format="webp" loading="lazy" decoding="async" />
+          <Image src={item.image[locale]} alt={item.alt[locale]} widths={[360, 540, 720]} sizes="(max-width: 40rem) 62vw, 13rem" format="webp" loading={loading} decoding="async" />
+          {item.label && <span class="screen-label">{item.label[locale]}</span>}
         </li>
       ))}
     </ul>
     <figcaption>{figure.caption[locale]}</figcaption>
   </figure>
+) : figure.kind === 'chart' ? (
+  <figure class={`figure figure-chart${leadClass}`} id={`fig-${figure.id}`}>
+    <div class="figure-frame">
+      <ChartView chart={figure} locale={locale} />
+    </div>
+    <figcaption>{figure.caption[locale]}</figcaption>
+  </figure>
 ) : (
-  <figure class={`figure${label ? ` label-${label}` : ''}`} id={`fig-${figure.id}`}>
+  <figure class={`figure${label ? ` label-${label}` : ''}${leadClass}`} id={`fig-${figure.id}`}>
     <div class="figure-frame">
       {figure.svg ? (
-        <img src={figure.svg.url} width={figure.svg.width} height={figure.svg.height} alt={figure.alt[locale]} loading="lazy" decoding="async" />
+        <img src={figure.svg.url} width={figure.svg.width} height={figure.svg.height} alt={figure.alt[locale]} loading={loading} decoding="async" />
       ) : (
-        figure.raster && <Image src={figure.raster} alt={figure.alt[locale]} widths={[800, 1400]} sizes="(max-width: 60rem) 100vw, 46rem" format="webp" loading="lazy" decoding="async" />
+        figure.raster && <Image src={figure.raster} alt={figure.alt[locale]} widths={[800, 1400]} sizes="(max-width: 60rem) 100vw, 46rem" format="webp" loading={loading} decoding="async" />
       )}
     </div>
     <figcaption>

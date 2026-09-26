@@ -1,22 +1,22 @@
 slug: personal-writing-lora
 title: { en: Personal Writing LoRA Platform, zh: 个人写作风格 LoRA 平台 }
 subtitle:
-  en: A multi-tenant platform designed to fine-tune a LoRA on each user's own writing and serve many of them from one GPU
-  zh: 一个多租户平台：基于每位用户自己的文字微调专属 LoRA，并设计为在一块 GPU 上同时服务多个 LoRA
+  en: A platform that fine-tunes a LoRA on each user's own writing and serves many of them from one GPU
+  zh: 用每位用户自己的文字微调专属 LoRA，并在一块 GPU 上同时服务多个 LoRA 的平台
 summary:
-  en: Users upload their own writing, the platform trains a personal LoRA "style" on a pinned Qwen2.5-7B-Instruct base, and they draft long-form Markdown with it. Designed from wireframes and contracts through dated milestone plans, implemented across four repositories and tested against local fakes — it has not been deployed.
-  zh: 用户上传自己的文字，平台基于固定版本的 Qwen2.5-7B-Instruct 训练个人 LoRA"风格"，再用它撰写长篇 Markdown。项目从线框图和接口契约出发，经过带日期的里程碑计划，在四个仓库中实现并基于本地替身完成测试，目前尚未部署。
-focus: { primary: planning-delivery, also: [backend-cloud, ai-research] }
-status: implemented-not-deployed
+  en: Users upload their own writing, the platform trains a personal LoRA "style" on a pinned Qwen2.5-7B-Instruct base, and they draft long-form Markdown with it. Designed as separately testable components with written contracts, defined on AWS in Terraform, and run end to end on AWS once; the generated style is not yet convincing.
+  zh: 用户上传自己的文字，平台基于固定版本的 Qwen2.5-7B-Instruct 训练个人 LoRA"风格"，再用它撰写长篇 Markdown。系统拆成可以分别测试的组件，组件之间有书面契约，AWS 平台用 Terraform 定义，并在 AWS 上完整跑通过一次；生成的风格还不够像。
+focus: { primary: backend-cloud, also: [ai-research, planning-delivery] }
+status: in-development
 status_note:
-  en: Design + partial implementation; GPU deployment not validated
-  zh: 已完成设计与部分实现；GPU 部署尚未验证
+  en: Trained and served end to end on AWS once, then torn down; the output does not sound like its writer yet
+  zh: 已在 AWS 上完整跑通训练与推理一次，之后已销毁环境；生成的文字还不像作者本人
 team: { size: 1 }
 role:
-  en: Sole designer across all layers; implemented with AI coding assistants working from my specifications
-  zh: 各层唯一的设计者；由 AI 编码助手按我的规格说明实现
+  en: Solo. I designed every layer — product, API contract, data model, component boundaries, IAM rules and the AWS platform in Terraform — wrote the milestone plans, and ran the AWS training and serving runs. AI coding assistants (Codex, Claude Code) implemented most of the code from my specifications; I reviewed it.
+  zh: 独立完成。我设计了所有层次：产品、API 契约、数据模型、组件边界、IAM 规则和用 Terraform 定义的 AWS 平台；编写里程碑计划，并在 AWS 上完成训练和推理运行。大部分代码由 AI 编码助手（Codex、Claude Code）按我的规格实现，由我审查。
 context: { en: Personal project, zh: 个人项目 }
-period: { start: "2026-06", end: "2026-08" }
+period: { start: "2026-06", end: null }
 stack:
   - Next.js 16
   - React 19
@@ -44,50 +44,29 @@ links:
   - kind: code
     url: https://github.com/perosnalStartUp/aws_tf
     label: { en: Terraform code, zh: Terraform 代码 }
-highlights: [tf_resources, tests, tables]
-deep_dive_from: job-handoff
-# Section ids retired in the 2026-09 redesign.
-anchor_aliases: { design-process: planning, testing: validation }
+highlights: []
+lead: current-architecture
+deep_dive_from: architecture
+# Section ids retired in earlier redesigns, and where they land now.
+anchor_aliases: { design-process: planning, testing: validation, ownership: problem }
 related: kk-knock
 
-overview:
-  problem:
-    en: A platform that trains a personal LoRA on each user's writing and serves many of them from one GPU has too many moving parts to build at once — a web product, a job queue, GPU training, adapter serving and cloud infrastructure. The question is how to split it so each piece can be built and tested on its own.
-    zh: 一个基于每位用户的文字训练专属 LoRA、并在一块 GPU 上同时服务多个 LoRA 的平台，组成部分太多，无法一次建成：Web 产品、任务队列、GPU 训练、适配器推理和云基础设施。问题在于如何拆分，让每一部分都能单独构建和测试。
-  contributions:
-    - en: Designed every layer alone — wireframes, data model, API contract, component boundaries, IAM rules — and wrote the milestone plans with dated decision logs.
-      zh: 独立设计所有层次：线框图、数据模型、API 契约、组件边界、IAM 规则，并编写带日期决策日志的里程碑计划。
-    - en: Froze the contracts between components before implementation, then built the four repositories with AI coding assistants working from those specifications, and reviewed the results.
-      zh: 在实现之前冻结组件之间的契约，再由 AI 编码助手按这些规格实现四个仓库，并由我审查结果。
-  outcome:
-    en: The product, dataset builder, local training worker and adapter manager are implemented and tested against local fakes. No real GPU training run, vLLM serving with a real adapter or cloud deployment has happened yet.
-    zh: 产品、数据集构建器、本地训练 worker 和适配器管理服务均已实现，并基于本地替身完成测试。真实的 GPU 训练、用真实适配器的 vLLM 推理和云端部署都还没有进行。
-
 card:
-  question:
-    en: How do you split a multi-user fine-tuning and serving system into pieces that can be built and tested one at a time?
-    zh: 如何把一个多用户的微调与推理系统拆成可以逐个构建、逐个测试的部分？
-  contribution:
-    en: Sole designer; implemented with AI coding assistants from my specifications.
-    zh: 唯一的设计者；由 AI 编码助手按我的规格实现。
-  tech: [FastAPI, vLLM, Terraform]
-  cta: { en: Explore the system plan, zh: 查看系统规划 }
+  intro:
+    en: Solo, in development. I split a multi-user fine-tuning and serving system into components with written training and serving contracts, designed its AWS platform in Terraform, and built it with AI coding assistants from my specifications.
+    zh: 个人项目，开发中。我把一个多用户的微调与推理系统拆成多个组件，写下训练与推理的接口契约，用 Terraform 设计了 AWS 平台，并由 AI 编码助手按我的规格实现。
+  highlight:
+    en: One training run on my own writing went end to end on AWS, from the queue and a GPU worker to vLLM serving the adapter. The system worked; the style did not sound like me yet, and the next step is more and cleaner writing.
+    zh: 用我自己的文字做的一次训练在 AWS 上完整跑通：从任务队列、GPU worker，到由 vLLM 加载适配器提供推理。系统本身是通的，但生成的风格还不像我；下一步是准备更多、更干净的语料。
+  tech: [vLLM, SQS · Auto Scaling, Terraform]
+  cta: { en: See how it was split, zh: 查看系统如何拆分 }
   anchor: planning
-  steps:
-    label: CURRENT
-    items:
-      - { title: { en: Web app → backend, zh: Web 应用 → 后端 }, detail: "product API /api/v1" }
-      - { title: { en: Backend → training worker via SQS, zh: 后端经 SQS → 训练 worker }, detail: "training contract T0" }
-      - { title: { en: Worker → backend, zh: worker → 后端 }, detail: { en: status callback, zh: 状态回调 } }
-      - { title: { en: Worker → S3, zh: worker → S3 }, detail: { en: adapter + manifest, zh: 适配器与 manifest } }
-      - { title: { en: Backend → adapter manager → vLLM, zh: 后端 → 适配器管理服务 → vLLM }, detail: "serving contract W0" }
-    note: { en: "Contracts frozen before code; run locally against fakes only", zh: 契约先于代码冻结；目前只在本地基于替身运行 }
 
 facts:
   tf_resources:
     value: "117"
     label: { en: Terraform resource blocks for the AWS platform, zh: 定义 AWS 平台的 Terraform 资源块 }
-    condition: { en: "Written and checked with mock-provider tests; never planned or applied against AWS", zh: 已编写并通过 mock provider 测试；从未在 AWS 上 plan 或 apply }
+    condition: { en: "Checked with mock-provider tests, then applied for the AWS training and serving runs and destroyed afterwards", zh: 先通过 mock provider 测试，再为 AWS 上的训练与推理运行实际 apply，之后已销毁 }
     claim: LORA-09
   tests:
     value: { en: "~314", zh: 约 314 }
@@ -144,8 +123,8 @@ figures:
       en: "Current architecture: a Next.js app and a FastAPI backend on PostgreSQL; training jobs go through an outbox to an SQS queue and a training worker that publishes adapters to S3; an adapter manager in front of vLLM serves them."
       zh: 当前架构：Next.js 前端与基于 PostgreSQL 的 FastAPI 后端；训练任务经发件箱进入 SQS 队列，由训练 worker 处理并把适配器发布到 S3；vLLM 前的适配器管理服务负责加载和推理。
     caption:
-      en: As implemented and run locally against a real PostgreSQL and fake S3, SQS, GPU and vLLM services.
-      zh: 按实现绘制：在本地基于真实 PostgreSQL，以及替身形式的 S3、SQS、GPU 和 vLLM 服务运行。
+      en: As implemented. The automated tests run it locally against a real PostgreSQL and fake S3, SQS, GPU and vLLM services; the same components ran on AWS for the training and serving runs.
+      zh: 按实现绘制。自动化测试在本地运行，使用真实的 PostgreSQL 和替身形式的 S3、SQS、GPU 与 vLLM 服务；同样的组件也在 AWS 上完成了训练和推理运行。
   - kind: diagram
     id: worker-lifecycle
     section: job-handoff
@@ -156,42 +135,43 @@ figures:
       en: "Training worker sequence: receive one SQS message, claim the job with a conditional S3 write, protect the instance from scale-in, send lease heartbeats while training, publish the adapter and its manifest, call back the backend, delete the message and release protection."
       zh: 训练 worker 时序图：接收一条 SQS 消息，用 S3 条件写入认领任务，开启缩容保护，训练期间发送租约心跳，发布适配器及其 manifest，回调后端，删除消息并解除保护。
     caption:
-      en: Implemented in the worker and tested against local fakes; never run on AWS.
-      zh: 已在 worker 中实现，并基于本地替身测试；从未在 AWS 上运行。
+      en: Implemented in the worker, tested against local fakes, and used in the AWS training runs.
+      zh: 已在 worker 中实现，基于本地替身测试，并在 AWS 上的训练运行中使用。
   - kind: diagram
-    id: proposed-aws
+    id: aws-platform
     section: infrastructure
-    file: assets/proposed-aws.svg
-    source: assets/proposed-aws.mmd
-    label: PROPOSED
+    file: assets/aws-platform.svg
+    source: assets/aws-platform.mmd
+    label: CURRENT
     alt:
-      en: "Proposed AWS topology: a load balancer and one NAT gateway in public subnets across two zones; a backend Auto Scaling group and one serving GPU instance in private subnets; RDS PostgreSQL, S3 and SQS encrypted with KMS; a GPU training Auto Scaling group that scales from zero on queue backlog."
-      zh: 规划中的 AWS 拓扑：负载均衡器和一个 NAT 网关位于跨两个可用区的公有子网；后端 Auto Scaling 组和一台推理 GPU 实例位于私有子网；RDS PostgreSQL、S3 和 SQS 均用 KMS 加密；GPU 训练 Auto Scaling 组根据队列积压从零扩容。
+      en: "AWS topology: a load balancer and one NAT gateway in public subnets across two zones; a backend Auto Scaling group and one serving GPU instance in private subnets; RDS PostgreSQL, S3 and SQS encrypted with KMS; a GPU training Auto Scaling group that scales from zero on queue backlog."
+      zh: AWS 拓扑：负载均衡器和一个 NAT 网关位于跨两个可用区的公有子网；后端 Auto Scaling 组和一台推理 GPU 实例位于私有子网；RDS PostgreSQL、S3 和 SQS 均用 KMS 加密；GPU 训练 Auto Scaling 组根据队列积压从零扩容。
     caption:
-      en: Written in Terraform and checked with mock-provider tests; never applied. Drawn as proposed because nothing here has run on AWS.
-      zh: 已用 Terraform 编写并通过 mock provider 测试，但从未 apply。由于这些资源从未在 AWS 上运行，图中标为规划架构。
+      en: Drawn from the Terraform. Applied for the training and serving runs and destroyed afterwards, so no environment is running now.
+      zh: 依据 Terraform 绘制。为训练和推理运行实际 apply 过，之后已销毁，目前没有在运行的环境。
 
 roadmap:
   section: planning
   title: { en: Training (T) and serving (W) milestones, zh: 训练（T）与推理（W）里程碑 }
   phases:
-    - name: { en: T0 / W0 — freeze the contracts, zh: T0 / W0 — 冻结接口契约 }
-      detail: { en: "JSON Schema and OpenAPI, with valid and deliberately invalid examples", zh: JSON Schema 与 OpenAPI，附有效示例和刻意构造的无效示例 }
+    - name: { en: Contracts first, zh: 先定接口契约 }
+      detail: { en: "JSON Schema and OpenAPI, with valid and deliberately invalid examples (T0 / W0)", zh: JSON Schema 与 OpenAPI，附有效示例和刻意构造的无效示例（T0 / W0） }
       status: done
-    - name: { en: T1 — dataset builder on a tiny fixture, zh: T1 — 数据集构建器（基于小型样例） }
+    - name: { en: "Dataset builder, local training worker and adapter manager", zh: 数据集构建器、本地训练 worker 与适配器管理服务 }
+      detail: { en: "Idempotency, checkpoints and callbacks, tested against local fakes (T1, T2, W1)", zh: 幂等、检查点与回调，基于本地替身测试（T1、T2、W1） }
       status: done
-    - name: { en: "T2 — local worker: idempotency, checkpoints, callbacks", zh: T2 — 本地 worker：幂等、检查点、回调 }
+    - name: { en: "Real training on a GPU, loaded by vLLM", zh: 在 GPU 上真实训练，并由 vLLM 加载 }
+      detail: { en: "Trained on my own writing and served from one GPU on AWS (T3, W2)", zh: 用我自己的文字训练，并在 AWS 的一块 GPU 上提供推理（T3、W2） }
       status: done
-    - name: { en: W1 — adapter manager, zh: W1 — 适配器管理服务 }
+    - name: { en: Training image and scale-from-zero, zh: 训练镜像与从零扩容 }
+      detail: { en: "The training group scaled up from zero on queued work (T4)", zh: 训练组根据排队任务从零扩容（T4） }
       status: done
-    - name: { en: T3 — real single-GPU training and vLLM load, zh: T3 — 真实单卡训练并由 vLLM 加载 }
-      detail: { en: Implemented; not yet verified on a GPU, zh: 已实现，尚未在 GPU 上验证 }
+    - name: { en: A style that sounds like its writer, zh: 生成的风格要像作者本人 }
+      detail: { en: "More and cleaner personal writing, and a before-and-after style check", zh: 更多、更干净的个人语料，以及训练前后的风格对比 }
       status: in-progress
-    - name: { en: T4 — training AMI and scale-from-zero, zh: T4 — 训练 AMI 与缩容至零 }
-      status: in-progress
-    - name: { en: W2 — vLLM with a real LoRA on one GPU, zh: W2 — 单卡 vLLM 加载真实 LoRA }
+    - name: { en: "Serving image, multi-user isolation benchmark, internal load balancer", zh: 推理镜像、多用户隔离基准测试、内部负载均衡 }
+      detail: { en: (W3–W5), zh: （W3—W5） }
       status: planned
-    - name: { en: "W3–W5 — serving AMI, isolation benchmark, internal load balancer", zh: W3—W5 — 推理 AMI、多用户隔离基准测试、内部负载均衡 }
-      status: planned
-    - name: { en: "T5 — failure drills, observability, runbook", zh: T5 — 故障演练、可观测性、运维手册 }
+    - name: { en: "Failure drills, observability, runbook", zh: 故障演练、可观测性、运维手册 }
+      detail: { en: (T5), zh: （T5） }
       status: planned

@@ -1,30 +1,35 @@
 ---
-// The evidence image next to a featured card: one diagram or image, or up to three screens. Decorative
-// duplication is avoided — the alt text is the figure's own, and the full figure lives on the case study.
+// The visual of a home-page card: up to three product screens, a result chart, or one diagram or image.
+// Phone screens stay readable on small screens: they become a row the reader scrolls sideways (never
+// automatically), instead of three shrunken images.
 import { Image } from 'astro:assets';
+import ChartView from './ChartView.astro';
 import type { Locale } from '../lib/i18n';
-import type { ResolvedFigure } from '../lib/content/load';
+import { t, type ResolvedFigure } from '../lib/content/load';
 
 interface Props {
   figure: ResolvedFigure;
   locale: Locale;
-  /** The first featured card is above the fold on large screens; the others load lazily. */
+  /** The flagship card is above the fold; the others load lazily. */
   eager?: boolean;
 }
 const { figure, locale, eager = false } = Astro.props;
 const loading = eager ? 'eager' : 'lazy';
-const label = figure.kind !== 'screens' ? figure.label : undefined;
+const label = figure.kind === 'diagram' || figure.kind === 'image' ? figure.label : undefined;
 ---
 
 <figure class={`card-figure kind-${figure.kind}`}>
   {figure.kind === 'screens' ? (
-    <ul class="card-screens">
+    <ul class="card-screens" role="list" tabindex="0" aria-label={t(locale, "figure.screens")}>
       {figure.items.slice(0, 3).map((item) => (
         <li>
-          <Image src={item.image[locale]} alt={item.alt[locale]} widths={[240, 360]} sizes="(max-width: 48rem) 28vw, 8.5rem" format="webp" loading={loading} decoding="async" />
+          <Image src={item.image[locale]} alt={item.alt[locale]} widths={[320, 480, 640]} sizes="(max-width: 40rem) 58vw, (max-width: 60rem) 30vw, 13rem" format="webp" loading={loading} decoding="async" />
+          {item.label && <span class="screen-label">{item.label[locale]}</span>}
         </li>
       ))}
     </ul>
+  ) : figure.kind === 'chart' ? (
+    <ChartView chart={figure} locale={locale} compact />
   ) : figure.svg ? (
     <img src={figure.svg.url} width={figure.svg.width} height={figure.svg.height} alt={figure.alt[locale]} loading={loading} decoding="async" />
   ) : (

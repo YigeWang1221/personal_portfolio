@@ -1,8 +1,8 @@
 slug: equipment-assignment
 title: { en: Equipment & Assignment Grading System, zh: 设备借用与作业批改平台 }
 subtitle:
-  en: A teaching platform for an IoT course — equipment loans, group homework with a collaborative editing lock, grading and media
-  zh: 物联网课程的教学平台：设备借用、带协同编辑锁的小组作业、作业批改与媒体管理
+  en: A full-stack teaching platform that runs an IoT course end to end — equipment loans, group homework, grading, exports and media
+  zh: 支撑一门物联网课程完整流程的全栈教学平台：设备借用、小组作业、作业批改、导出与媒体管理
 summary:
   en: My undergraduate capstone. A Vue 3 and Spring Boot platform that runs an IoT course end to end — equipment borrowing with approval, classes and groups, homework that a group edits together, grading, PDF export, and course videos that play from object storage and can be scrubbed without downloading the whole file.
   zh: 我的本科毕业设计。一个基于 Vue 3 与 Spring Boot 的平台，覆盖一门物联网课程的完整流程：带审批的设备借用、班级与分组、小组协同编辑的作业、作业批改、PDF 导出，以及存放在对象存储中、无需完整下载即可拖动播放的课程视频。
@@ -10,14 +10,17 @@ focus: { primary: backend-cloud, also: [business-modeling] }
 status: undergraduate-capstone
 team: { size: 1 }
 role:
-  en: Built it alone as my undergraduate capstone
-  zh: 本科毕业设计，独立完成
+  en: Solo undergraduate capstone. I built the backend, the data model, the media handling and the application pages; the frontend starts from an open-source admin template.
+  zh: 本科毕业设计，独立完成。后端、数据模型、媒体处理和各个应用页面都由我实现；前端基于一个开源的管理后台模板起步。
 context: { en: "Undergraduate capstone, Zhejiang Gongshang University", zh: 本科毕业设计，浙江工商大学 }
 period: { start: "2023-02", end: "2024-04" }
 stack: [Java 17, Spring Boot 2.7, MyBatis-Plus, MySQL, MinIO, Apache POI, iText html2pdf, Vue 3, TypeScript, Element Plus]
 links: []
 highlights: [endpoints]
 deep_dive_from: maintenance
+# Section ids retired in earlier redesigns, and where they land now.
+anchor_aliases: { ownership: platform }
+lead: architecture
 
 facts:
   endpoints:

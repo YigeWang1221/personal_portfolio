@@ -25,42 +25,22 @@ focus:
       en: Training, modeling and measurement, with their conditions stated.
       zh: 训练、建模与测量，并写明各自的条件。
 
-# Home page: four case studies that complement each other, in reading order.
-featured: [kk-knock, enterprise-workflow, cloud-native, personal-writing-lora]
-# Home page: the compact "More to explore" list.
-more: [distributed-llm, equipment-assignment, f1-bayesian]
+# Home page (ADR-017), in reading order: the flagship, the main case studies, smaller cards for exploratory
+# work, then a compact list. The order serves the "Backend & Systems" position of the home page.
+home:
+  flagship: kk-knock
+  cases: [cloud-native, distributed-llm]
+  exploring: [personal-writing-lora]
+  more: [enterprise-workflow, equipment-assignment, f1-bayesian]
 
-# Catalog order: selected case studies first, then the others.
+# Catalog order: the home page's projects first, then the others. INFO 6105 coursework is part of the F1 page.
 order:
   - kk-knock
-  - enterprise-workflow
   - cloud-native
-  - personal-writing-lora
   - distributed-llm
+  - personal-writing-lora
+  - enterprise-workflow
   - equipment-assignment
   - f1-bayesian
-  - smartbuyer
   - quant-ai
-  - info6105-methods
-
-# Home page capability entries. Each opens the section of a case study that shows it.
-entries:
-  - id: model
-    title: { en: Model business workflows, zh: 业务建模 }
-    body:
-      en: Which object owns which responsibility, and how one request crosses organizations and roles.
-      zh: 每个对象承担什么职责，一条请求如何跨组织、跨角色流转。
-    link: { project: enterprise-workflow, anchor: domain-model, label: { en: "FoodShelter: the domain model", zh: FoodShelter：领域模型 } }
-  - id: deliver
-    title: { en: Build and deliver systems, zh: 系统实现与交付 }
-    body:
-      en: How a merged change becomes a new machine image, a rolling release and a health-checked service.
-      zh: 一次合并如何变成新的机器镜像、滚动发布，以及通过健康检查的服务。
-    link: { project: cloud-native, anchor: delivery, label: { en: "Cloud-Native AWS: code to deployment", zh: AWS 云原生应用：从代码到部署 } }
-  - id: plan
-    title: { en: Plan and improve products, zh: 规划与迭代 }
-    body:
-      en: Contracts and milestones before code, and a correction driven by what real use exposed.
-      zh: 先定契约和里程碑再写代码，并根据真实使用暴露的问题做修正。
-    link: { project: personal-writing-lora, anchor: planning, label: { en: "Writing LoRA: the system plan", zh: 写作风格 LoRA：系统规划 } }
-    also: { project: kk-knock, anchor: iteration, label: { en: "KK Knock: one iteration", zh: KK Knock：一次迭代 } }
+  - smartbuyer

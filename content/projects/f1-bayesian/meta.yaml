@@ -10,8 +10,8 @@ focus: { primary: ai-research, also: [] }
 status: course-project
 team: { size: 2 }
 role:
-  en: Led the modeling and the implementation in a team of two
-  zh: 在两人团队中主导建模与实现
+  en: Team of two. I led the modeling and the implementation — the data pipeline, the model, the simulation and the evaluation — and later restructured the repository and wrote its README. The forecast and its results are our shared work.
+  zh: 两人团队。我主导了建模与实现，包括数据管线、模型、模拟和评估；之后又重新整理了仓库结构并撰写 README。预测及其结果是我们共同的成果。
 context: { en: "Course project, INFO 6105 Data Science Engineering Methods", zh: 课程项目，INFO 6105 数据科学工程方法 }
 period: { start: "2025-11", end: "2025-12" }
 stack: [Python, PyMC, NUTS (MCMC), ArviZ, FastF1, pandas, NumPy, SciPy, joblib, matplotlib]
@@ -20,7 +20,10 @@ links:
     url: https://github.com/dataSciF/6105DataSci
     label: { en: Code on GitHub, zh: GitHub 代码 }
 highlights: [podium, finale_mae, rhat]
-deep_dive_from: limits
+deep_dive_from: foundations
+lead: position-distribution
+# Section ids retired in earlier redesigns, and where they land now.
+anchor_aliases: { ownership: approach }
 
 facts:
   podium:

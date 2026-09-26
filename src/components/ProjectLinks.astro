@@ -1,6 +1,6 @@
 ---
-// Demo and Source links of a project, each named by what it opens. The case study itself is always the
-// site's own project page, linked separately by the caller.
+// Outside links of a project, named by what they open (ADR-017): a product page, a demo, a demo video, and the
+// source repositories grouped under one "Source" label. The case study itself is the site's own page.
 import type { Locale } from '../lib/i18n';
 import type { ProjectMeta } from '../lib/content/schema';
 import { t } from '../lib/content/load';
@@ -8,20 +8,33 @@ import { t } from '../lib/content/load';
 interface Props {
   links: ProjectMeta['links'];
   locale: Locale;
+  /** Cards show at most one outside link. */
+  limit?: number;
+  /** Show product, demo and video links as buttons (the flagship card and the page header). */
+  buttons?: boolean;
 }
-const { links, locale } = Astro.props;
-const ordered = [...links.filter((l) => l.kind !== 'code'), ...links.filter((l) => l.kind === 'code')];
+const { links, locale, limit, buttons = false } = Astro.props;
+const rank = { product: 0, demo: 1, video: 2, code: 3 } as const;
+const ordered = [...links].sort((a, b) => rank[a.kind] - rank[b.kind]).slice(0, limit ?? links.length);
+const other = ordered.filter((l) => l.kind !== 'code');
+const code = ordered.filter((l) => l.kind === 'code');
 ---
 
 {ordered.length > 0 && (
   <ul class="project-links">
-    {ordered.map((l) => (
-      <li>
-        <a href={l.url}>
-          <span class="link-kind">{t(locale, l.kind === 'code' ? 'project.source' : 'project.demo')}</span>
-          {l.label[locale]}
-        </a>
-      </li>
+    {other.map((l) => (
+      <li><a class={buttons ? 'button small' : undefined} href={l.url}>{l.label[locale]}<span aria-hidden="true"> ↗</span></a></li>
     ))}
+    {code.length > 0 && (
+      <li class="code-links">
+        <span class="link-kind">{t(locale, 'project.source')}</span>
+        {code.map((l, i) => (
+          <>
+            {i > 0 && <span class="sep" aria-hidden="true"> · </span>}
+            <a href={l.url}>{l.label[locale]}</a>
+          </>
+        ))}
+      </li>
+    )}
   </ul>
 )}

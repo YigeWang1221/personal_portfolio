@@ -13,11 +13,12 @@ import {
 } from './markdown';
 import {
   type AssetLabel,
+  type CatalogFile,
+  type ChartFigure,
   catalogFile,
   planPageMeta,
   profileFile,
   projectMeta,
-  type CatalogFile,
   type Fact,
   type FocusId,
   type Localized,
@@ -69,8 +70,13 @@ export type ResolvedFigure =
       id: string;
       section: string;
       caption: Localized;
-      items: { image: Record<Locale, ImageMetadata>; alt: Localized }[];
-    };
+      items: { image: Record<Locale, ImageMetadata>; alt: Localized; label?: Localized }[];
+    }
+  | (Omit<ChartFigure, 'panels'> & {
+      panels: (Omit<ChartFigure['panels'][number], 'bars'> & {
+        bars: (ChartFigure['panels'][number]['bars'][number] & { display: Term })[];
+      })[];
+    });
 
 export interface Project {
   meta: ProjectMeta;
@@ -96,9 +102,10 @@ export interface Content {
   focus: Focus[];
   /** Every published project, in catalog order. */
   catalog: Project[];
+  /** Home page sections, in reading order (ADR-017). */
+  home: { flagship: Project; cases: Project[]; exploring: Project[]; more: Project[] };
+  /** Projects presented as selected case studies (flagship and cases). */
   featured: Project[];
-  more: Project[];
-  entries: CatalogFile['entries'];
   projects: Map<string, Project>;
   profile: ProfileFile;
   strings: Record<Locale, Record<string, string>>;
@@ -253,9 +260,30 @@ function resolveFigures(dir: string, meta: ProjectMeta, sectionIds: Set<string>,
           const img = raster(`${dir}/${item.file[loc]}`, errors);
           if (img) image[loc] = img;
         }
-        return { image, alt: item.alt };
+        return { image, alt: item.alt, label: item.label };
       });
       figures.push({ kind: 'screens', id: f.id, section: f.section, caption: f.caption, items });
+      continue;
+    }
+    if (f.kind === 'chart') {
+      const panels = f.panels.map((panel, pi) => ({
+        ...panel,
+        bars: panel.bars.map((bar, bi) => {
+          const at = `${where} panel ${pi + 1} bar ${bi + 1}`;
+          let display: Term = '';
+          if (bar.fact && bar.text) errors.push(`${at}: use "fact" or "text", not both`);
+          if (bar.fact) {
+            const fact = meta.facts[bar.fact];
+            if (!fact) errors.push(`${at}: unknown fact "${bar.fact}"`);
+            else display = fact.value;
+          } else if (bar.text) display = bar.text;
+          else errors.push(`${at}: needs "fact" (a measured value) or "text" (a baseline)`);
+          if (Math.max(bar.value, bar.high ?? 0) > panel.max) errors.push(`${at}: value exceeds the panel's "max"`);
+          if (bar.high !== undefined && bar.high < bar.value) errors.push(`${at}: "high" is below "value"`);
+          return { ...bar, display };
+        }),
+      }));
+      figures.push({ ...f, panels });
       continue;
     }
     if (f.kind === 'diagram' && f.source && RAW[`${dir}/${f.source}`] === undefined) {
@@ -320,6 +348,15 @@ function buildContent(): Content {
       errors.push(`${metaPath.slice(1)}: deep_dive_from "${meta.deep_dive_from}" is not a section`);
     }
     const figures = resolveFigures(dir, meta, sectionIds, errors);
+    if (meta.lead && !figures.some((f) => f.id === meta.lead)) {
+      errors.push(`${metaPath.slice(1)}: lead figure "${meta.lead}" is not a figure of the project`);
+    }
+    if (meta.card) {
+      for (const loc of LOCALES) {
+        const text = [meta.card.intro[loc], meta.card.highlight?.[loc] ?? '', meta.card.status?.[loc] ?? ''].join('\n');
+        for (const h of metricViolations(text)) errors.push(`${metaPath.slice(1)} card (${loc}): measurement in card text: ${h}`);
+      }
+    }
     let cardFigure: ResolvedFigure | undefined;
     if (meta.card?.figure && meta.card.steps) {
       errors.push(`${metaPath.slice(1)}: card has both "figure" and "steps"; use one`);
@@ -346,14 +383,20 @@ function buildContent(): Content {
         return p;
       })
       .filter((p): p is Project => Boolean(p));
-  const featured = pick(registry?.featured ?? [], 'featured');
-  const more = pick(registry?.more ?? [], '"more"');
-  for (const p of featured) {
+  const homeCfg = registry?.home;
+  const [flagship] = pick(homeCfg ? [homeCfg.flagship] : [], 'flagship');
+  const cases = pick(homeCfg?.cases ?? [], 'case');
+  const exploring = pick(homeCfg?.exploring ?? [], '"exploring"');
+  const more = pick(homeCfg?.more ?? [], '"more"');
+  const onHome = [flagship, ...cases, ...exploring, ...more].filter(Boolean);
+  if (new Set(onHome).size !== onHome.length) errors.push('content/catalog.yaml: a project appears twice on the home page');
+  for (const p of [flagship, ...cases].filter((x): x is Project => Boolean(x))) {
     const where = `content/projects/${p.meta.slug}/meta.yaml`;
-    if (!p.meta.card) errors.push(`${where}: a featured project needs "card"`);
-    else if (!p.cardFigure && !p.meta.card.steps) errors.push(`${where}: a featured card needs "card.figure" or "card.steps"`);
-    if (!p.meta.overview) errors.push(`${where}: a featured project needs "overview"`);
-    if (more.includes(p)) errors.push(`content/catalog.yaml: "${p.meta.slug}" is both featured and in "more"`);
+    if (!p.meta.card) errors.push(`${where}: a home-page case study needs "card"`);
+    else if (!p.cardFigure && !p.meta.card.steps) errors.push(`${where}: a home-page case study needs "card.figure" or "card.steps"`);
+  }
+  for (const p of exploring) {
+    if (!p.meta.card) errors.push(`content/projects/${p.meta.slug}/meta.yaml: an "exploring" project needs "card"`);
   }
   for (const p of projects.values()) {
     const where = `content/projects/${p.meta.slug}/meta.yaml`;
@@ -367,14 +410,6 @@ function buildContent(): Content {
     }
     if (p.meta.related && (!projects.has(p.meta.related) || p.meta.related === p.meta.slug)) {
       errors.push(`${where}: related project "${p.meta.related}" is not another published project`);
-    }
-  }
-  for (const e of registry?.entries ?? []) {
-    for (const l of [e.link, e.also].filter((x): x is NonNullable<typeof x> => Boolean(x))) {
-      const p = projects.get(l.project);
-      if (!p || !projectAnchors(p).has(l.anchor)) {
-        errors.push(`content/catalog.yaml: entry "${e.id}" links to missing ${l.project}#${l.anchor}`);
-      }
     }
   }
   const focus = registry?.focus ?? [];
@@ -419,7 +454,7 @@ function buildContent(): Content {
     }
     for (const th of planMeta.thumbnails) {
       const fig = projects.get(th.project)?.figures.find((f) => f.id === th.figure);
-      if (!fig || fig.kind === 'screens') errors.push(`plan-and-design/meta.yaml: thumbnail ${th.project}/${th.figure} is not a diagram`);
+      if (!fig || fig.kind === 'screens' || fig.kind === 'chart') errors.push(`plan-and-design/meta.yaml: thumbnail ${th.project}/${th.figure} is not a diagram`);
     }
   }
 
@@ -429,9 +464,8 @@ function buildContent(): Content {
   return {
     focus,
     catalog,
-    featured,
-    more,
-    entries: registry!.entries,
+    home: { flagship: flagship!, cases, exploring, more },
+    featured: [flagship, ...cases].filter((x): x is Project => Boolean(x)),
     projects,
     profile: profile!,
     strings,

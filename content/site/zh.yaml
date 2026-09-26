@@ -17,8 +17,9 @@ nav:
   language_switch_title: 阅读本页中文版
 
 footer:
-  note: 本站为静态网站，没有追踪脚本，也不向第三方发起请求。站内每个数字都注明条件，并可追溯到代码仓库、日志或设计文档。
-  label: 个人主页与页面
+  note: 本站不使用追踪脚本，也不向第三方发起请求。
+  label: 站内页面
+  contact_label: 个人主页
 
 common:
   present: 至今
@@ -34,6 +35,7 @@ team:
 
 status:
   self-hosted-pilot: 自托管试运行
+  in-development: 开发中
   implemented-not-deployed: 已实现，未部署
   course-project: 课程项目
   course-benchmark: 课程基准实验
@@ -42,6 +44,7 @@ status:
   archived: 已归档
 
 figure:
+  screens: 产品截图
   full_size: 查看原图
 
 labels:
@@ -56,56 +59,49 @@ roadmap:
 
 home:
   title: 王一格 · 软件工程师（后端与系统）
-  description: 王一格，软件工程师（后端与系统方向）。中英双语的项目案例：业务建模、后端与云端交付、系统规划。
-  intro: 我关注业务流程如何落到软件系统中，重点是面向对象设计、后端开发与云端交付。
-  background_line: 美国东北大学（Northeastern University）· 软件工程系统硕士 · 预计 2026 年 12 月毕业
-  cta_work: 查看精选案例
+  description: 王一格，软件工程师（后端与系统方向）。项目包括带自托管后端的语音速记 Android App、AWS 交付流水线、分布式大模型训练等，中英双语。
+  intro: 我是一名专注后端服务与云端交付的软件工程师。做过的项目包括 AWS 上的 REST API 与基础设施即代码、GPU 集群上的分布式模型训练，以及带 AI 能力的产品；每个项目都从需求一直做到能真正运行。
+  cta_work: 查看项目
   cta_resume: 查看简历
   links_label: 个人主页
-  entries_title: 按能力查看
-  selected: 精选案例
-  selected_note: 四个案例分别展示工作的不同侧面。每张卡片都写明我做了什么，以及这个案例回答的问题。
-  tech: 主要技术
-  steps: "{title} 的实现步骤"
-  kind: 项目详解
-  my_part: 我的部分
-  question: 关键问题
+  selected: 精选项目
+  education: 教育经历
+  experience: 实习经历
+  capabilities: 我做的工作
   more: 更多项目
   all_projects: 全部项目
-  background_title: 背景
-  background_body: 我即将在美国东北大学（波士顿）完成软件工程系统硕士学业，本科毕业于浙江工商大学计算机科学与技术专业。曾在 Vendream（万郡绿建）担任后端开发实习生，在中国工商银行软件开发中心担任软件测试实习生。目前在开发 KK Knock，一款后端托管在我自己硬件上的语音速记 App。
-  background_link: 了解更多背景
+  tech: 主要技术
+  steps: "{title} 的各个阶段"
+  read_case: 阅读项目详情
+  background_link: 完整背景
+  contact_title: 联系我
+  contact_body: 我在寻找后端、云平台和 AI 基础设施方向的全职工作。通过 LinkedIn 联系我最方便。
+  contact_linkedin: 在 LinkedIn 上联系我
+  contact_github: GitHub 主页
+
 
 projects:
   title: 项目
-  description: 王一格的全部项目：精选案例与其他项目，可按能力筛选——业务建模、后端与云、规划与交付、AI 与研究。
-  lede: 先列精选案例，再列其他项目。可以按想看的能力筛选；一个项目可能同时体现多种能力。
+  description: 王一格的全部项目，可按能力筛选：业务建模、后端与云、规划与交付、AI 与研究。
+  lede: 先列精选项目，再列其他项目。可以按能力筛选，一个项目可能同时属于多个类别。
   filter_label: 按能力筛选
   all: 全部
   count: "{n} 个项目"
   count_one: 1 个项目
-  featured: 精选案例
+  featured: 精选项目
   role: 我的部分
+
 
 project:
   role: 我的角色
-  team: 团队
-  period: 时间
-  context: 背景
   stack: 完整技术栈
-  links: 链接
   source: 源码
-  demo: 演示
-  no_public_code: 未提供公开代码链接。
-  overview: 概要
-  problem: 问题
-  contribution: 我的贡献
-  outcome: 结果与验证
   facts: 关键数据
   contents: 本页内容
-  deep_dive: 深入
+  deep_dive: 技术细节
   related: 相关案例
   all_projects: 全部项目
+
 
 background:
   title: 背景

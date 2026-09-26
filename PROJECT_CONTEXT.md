@@ -1,6 +1,6 @@
 # Portfolio Project Context
 
-**Last reviewed:** 2026-09-25 · **Phase:** build (discovery gate cleared 2026-09-24)
+**Last reviewed:** 2026-09-26 · **Phase:** build (discovery gate cleared 2026-09-24)
 
 ## Purpose
 
@@ -80,18 +80,17 @@ machine translation of the other (ADR-005).
 Public pages use display names only. Working names and repository names stay internal. Final wording is settled in
 the build phase.
 
-| Display name | Primary capability | Also | Home page |
+| Display name | Primary capability | Also | Home page (ADR-017) |
 |---|---|---|---|
-| KK Knock | Planning & Delivery | Backend & Cloud | Selected 1 |
-| FoodShelter: Food-Rescue Workflow System | Business modeling | — | Selected 2 |
-| Cloud-Native Web Application on AWS | Backend & Cloud | — | Selected 3 |
-| Personal Writing LoRA Platform | Planning & Delivery | Backend & Cloud, AI & Research | Selected 4 |
-| Distributed LLM Training on HPC | AI & Research | Backend & Cloud | More |
-| Equipment & Assignment Grading System | Backend & Cloud | Business modeling | More |
-| F1 Race Prediction with Hierarchical Bayesian Modeling | AI & Research | — | More |
-| SmartBuyer E-commerce | Backend & Cloud | — | Catalog |
+| KK Knock | Planning & Delivery | Backend & Cloud | Selected: large card |
+| Cloud-Native Web Application on AWS | Backend & Cloud | — | Selected: case study |
+| Distributed LLM Training on HPC | AI & Research | Backend & Cloud | Selected: case study |
+| Personal Writing LoRA Platform | Backend & Cloud | AI & Research, Planning & Delivery | More work: in-development card |
+| FoodShelter: Food-Rescue Workflow System | Business modeling | — | More work |
+| Equipment & Assignment Grading System | Backend & Cloud | Business modeling | More work |
+| F1 Race Prediction with Hierarchical Bayesian Modeling (includes the INFO 6105 methods) | AI & Research | — | More work |
 | Quant AI: Transformer Stock-Ranking Research Pipeline | AI & Research | — | Catalog |
-| Data Science Methods (coursework) | AI & Research | — | Catalog |
+| SmartBuyer E-commerce | Backend & Cloud | — | Catalog |
 
 ## Repository map
 
@@ -109,9 +108,10 @@ the build phase.
 - **Documentation foundation:** in place.
 - **Project discovery:** complete for the registered sources. The inventories live in `internal/`.
 - **Discovery gate:** cleared on 2026-09-24 (ADR-009).
-- **Site:** implemented as an Astro 7 static site (ADR-015), redesigned on 2026-09-25 around a résumé-companion home
-  page, four case studies and a filterable catalog (ADR-016). Ten project modules and all global pages exist in
-  English and Chinese; the build enforces language parity and scans its output before it succeeds.
+- **Site:** implemented as an Astro 7 static site (ADR-015), redesigned on 2026-09-25 (ADR-016) and revised on
+  2026-09-26 (ADR-017): a résumé summary first, then the selected projects, more work, capabilities and contact.
+  Nine project modules and all global pages exist in English and Chinese; the build enforces language parity and
+  scans its output before it succeeds.
   - Deployed by the owner on 2026-09-24, with the custom domain bound.
   - Remaining: rebuild with `SITE_URL` and redeploy; review the Chinese copy and the facts added in the build phase;
     finish the repository cleanup behind the pending code links; turn off Cloudflare Web Analytics injection for the

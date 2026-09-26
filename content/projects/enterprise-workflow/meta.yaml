@@ -1,17 +1,17 @@
 slug: enterprise-workflow
 title: { en: "FoodShelter: Food-Rescue Workflow System", zh: FoodShelter：食物救助多组织协作系统 }
 subtitle:
-  en: A desktop system that moves food donations through inspection, matching and delivery across several organizations
-  zh: 让食物捐赠在多个组织之间依次完成检验、匹配和配送的桌面系统
+  en: An object model for a food-rescue network, where a donation moves through inspection, matching and delivery across organizations
+  zh: 为食物救助网络设计的对象模型：一份捐赠在多个组织之间依次完成检验、匹配和配送
 summary:
-  en: In a team of three, we built a Java Swing system in which donors, inspectors, a shelter network, task managers and drivers each work in their own screen, and a donation moves between them as requests in shared work queues. I designed the domain model and the persistence layer.
-  zh: 我们三人团队用 Java Swing 开发了这个系统：捐赠方、检验员、救助网络、任务调度员和司机各有自己的工作界面，一份捐赠以请求的形式在共享工作队列之间流转。我负责设计领域模型和持久化层。
+  en: In a team of three, we built a Java Swing system in which donors, inspectors, a shelter network, task managers and drivers each work in their own screen, and a donation moves between them as requests in shared work queues. I designed the object model and its persistence.
+  zh: 我们三人团队用 Java Swing 开发了这个系统：捐赠方、检验员、救助网络、任务调度员和司机各有自己的工作界面，一份捐赠以请求的形式在共享工作队列之间流转。对象模型及其持久化由我设计。
 focus: { primary: business-modeling, also: [] }
 status: course-project
 team: { size: 3 }
 role:
-  en: Designed the domain model and the persistence layer; co-implemented the inspection, matching, task-manager and driver workflows
-  zh: 设计领域模型与持久化层；参与实现检验、匹配、任务调度和司机配送工作流
+  en: "Team of three. I designed the object model and the persistence around it, and wrote the application shell and the role-based login. We built the workflow screens together; the metrics dashboard and the PDF reports were a teammate's work."
+  zh: 三人团队。我设计了对象模型和围绕它的持久化，编写了应用主框架和按角色分派的登录。各个工作流界面由我们共同实现；数据看板和 PDF 报表由队友完成。
 context: { en: "Course project, INFO 5100 Application Engineering & Development", zh: 课程项目，INFO 5100 应用工程与开发 }
 period: { start: "2025-03", end: "2025-04" }
 stack: [Java 18, Swing, Maven, db4o, JFreeChart, iText, Datafaker]
@@ -20,49 +20,10 @@ links:
     url: https://github.com/5100GroupWork/FoodShelter
     label: { en: Source on GitHub, zh: GitHub 源码 }
 highlights: []
-# Section ids retired in the 2026-09 redesign.
-anchor_aliases: { system: scenario, ownership: contribution, lessons: limits }
-related: cloud-native
-
-overview:
-  problem:
-    en: A food donation has to pass through several independent organizations — the donor, an inspection team, a shelter network, a volunteer dispatch team — and each person should see only the work that is theirs to do.
-    zh: 一份食物捐赠要经过多个彼此独立的组织：捐赠方、检验团队、救助网络、志愿者调度团队；每个人只应看到属于自己的工作。
-  contributions:
-    - en: Designed the object model — network, enterprise, organization, account, role, work queue and the request types — and the db4o persistence around it.
-      zh: 设计对象模型（网络、企业、组织、账号、角色、工作队列和各类请求），以及围绕它的 db4o 持久化。
-    - en: Wrote the application shell and the role-based login, and co-implemented the inspection, matching, task-manager and driver screens with my teammates.
-      zh: 编写应用主框架与按角色分派的登录；与队友共同实现检验、匹配、任务调度和司机界面。
-  outcome:
-    en: A completed course project that runs a donation end to end on seeded demo data. It has no automated tests, and several state rules are enforced only by which screen a user is given.
-    zh: 已完成的课程项目，可以在预置演示数据上跑通一份捐赠的完整流程。项目没有自动化测试，部分状态规则只靠"用户能进入哪个界面"来保证。
-
-card:
-  question:
-    en: How does one donation pass through five roles in separate organizations without the screens knowing about each other?
-    zh: 一份捐赠如何经过分属不同组织的五种角色，而各个界面彼此互不依赖？
-  contribution:
-    en: Designed the domain model and persistence; co-implemented the workflow screens (team of three).
-    zh: 设计领域模型与持久化；参与实现各工作流界面（三人团队）。
-  tech: [Java, Swing, db4o]
-  cta: { en: Explore the domain model, zh: 查看领域模型 }
-  anchor: domain-model
-  steps:
-    label: CURRENT
-    items:
-      - { title: { en: Food provider donates, zh: 食品提供方提交捐赠 }, detail: "Pending" }
-      - { title: { en: Fresh checker approves, zh: 检验员批准 }, detail: "accepted · stored" }
-      - { title: { en: Shelter helper matches a request, zh: 救助站助理匹配需求 }, detail: "UnPick" }
-      - { title: { en: Task manager assigns a driver, zh: 任务调度员指派司机 }, detail: "Waiting to be picked up" }
-      - { title: { en: Driver delivers, zh: 司机完成配送 }, detail: "Delivered" }
-    note: { en: Status values as the code writes them, zh: 状态值即代码中写入的字符串 }
-
-facts:
-  model_classes:
-    value: { en: 41 of 44, zh: 44 个中的 41 个 }
-    label: { en: domain-model classes I created, zh: 由我创建的领域模型类 }
-    condition: { en: "Counted by the author of each file's first commit", zh: 按每个文件首次提交的作者统计 }
-    claim: FS-01
+lead: domain-model
+# Section ids retired in earlier redesigns, and where they land now.
+anchor_aliases: { system: scenario, ownership: domain-model, contribution: domain-model, lessons: limits }
+related: equipment-assignment
 
 figures:
   - kind: diagram

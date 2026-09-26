@@ -87,11 +87,11 @@ const thumbs = meta.thumbnails.map((th) => {
           {thumbs.map(({ project, figure }) => (
             <li>
               <a href={localePath(locale, `/projects/${project.meta.slug}/#fig-${figure.id}`)}>
-                {figure.kind !== 'screens' && figure.svg && (
+                {(figure.kind === 'diagram' || figure.kind === 'image') && figure.svg && (
                   <img src={figure.svg.url} width={figure.svg.width} height={figure.svg.height} alt={figure.alt[locale]} loading="lazy" decoding="async" />
                 )}
                 <span>
-                  {figure.kind !== 'screens' && figure.label && <span class={`asset-label label-${figure.label}`}>{figure.label}</span>} {project.meta.title[locale]}
+                  {(figure.kind === 'diagram' || figure.kind === 'image') && figure.label && <span class={`asset-label label-${figure.label}`}>{figure.label}</span>} {project.meta.title[locale]}
                 </span>
               </a>
             </li>

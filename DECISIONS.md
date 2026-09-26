@@ -313,3 +313,42 @@ Architecture decision records for the portfolio repository.
   - Re-ranking or featuring a project still touches one registry file.
   - The site now ships one small script; the no-inline-code rule and the CSP are unchanged.
   - `_redirects` is Cloudflare-specific, like `_headers`; on another host the redirects must be re-created.
+
+## ADR-017 — Home page as a résumé companion that leads into the work; case studies by their own story
+
+- **Status:** Accepted · **Date:** 2026-09-26 · **Amends:** ADR-016 (home order, featured projects, case-study
+  template)
+- **Context:**
+  - The owner's content brief (2026-09-26): the home page explained capabilities before showing any work; the copy
+    read like an engineering review; role, status and contribution repeated across the page; the home-page schematics
+    were text-heavy; every project used the same template; the AI-collaboration notes were defensive; some statuses
+    were unclear or contradicted each other.
+  - In the same session the owner asked for the first screen to be a short résumé — who they are, education and
+    experience — with projects and capabilities below, and not to be framed only as KK Knock's solo developer.
+  - The owner chose, project by project, what each should show (recorded in the internal content strategy).
+- **Decision:**
+  - **Home:** a résumé summary (headline, one short paragraph, education, experience, résumé and profile links) →
+    selected projects (KK Knock as the large card with product screens; Cloud-Native AWS and Distributed LLM as the
+    main case studies) → more work (Personal Writing LoRA as an in-development card; FoodShelter, Equipment, F1) →
+    capabilities, derived from each project's `focus` → contact through LinkedIn and GitHub. The "Start from a
+    capability" block is removed; capability filters stay on the catalog.
+  - **Registry:** `catalog.yaml` declares `home: { flagship, cases, exploring, more }` instead of `featured`, `more`
+    and `entries`.
+  - **Cards:** a natural introduction with my part, one engineering highlight, a short status, at most three
+    technologies, one case-study link and at most one outside link. The "My part / Key question" fields are removed.
+  - **Case studies:** one status line, one role statement (`role`, which also states the AI-assistant split), the
+    period and context, then a lead visual (`lead`) and a few facts with their conditions. The three-part overview is
+    removed; each narrative is organized around its own story, with a "what has been verified" section before the
+    deep dive. Internal phase codes move to details.
+  - **Charts:** a new figure kind, drawn as inline SVG from values in `meta.yaml`; each panel cites its ledger claim
+    and every printed value is a project fact.
+  - **Links:** `product` (product introduction page), `demo` (only for something that runs), `video`, and `code`,
+    grouped under one "Source" label.
+  - **Statuses:** a new label "In development / 开发中" (Personal Writing LoRA).
+  - **INFO 6105 coursework** becomes the "methods behind it" section of the F1 page; its old URL redirects there.
+- **Consequences:**
+  - The first screen shows the résumé summary and the start of the selected projects at common desktop sizes; on
+    phones the flagship's screens sit right under its title, in a sideways-scrolling row.
+  - Numbers still enter only through facts; card text is checked for bare measurements like narratives.
+  - Owner-reported facts added in this revision are recorded as owner-attested in the internal ledgers and published
+    without numbers.

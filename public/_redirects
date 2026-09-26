@@ -18,3 +18,8 @@
 /zh/tracks/cloud-llm/   /zh/projects/?focus=backend-cloud   301
 /zh/tracks/ds-finance   /zh/projects/?focus=ai-research     301
 /zh/tracks/ds-finance/  /zh/projects/?focus=ai-research     301
+# INFO 6105 coursework became a section of the F1 page (ADR-017).
+/projects/info6105-methods     /projects/f1-bayesian/#foundations      301
+/projects/info6105-methods/    /projects/f1-bayesian/#foundations      301
+/zh/projects/info6105-methods  /zh/projects/f1-bayesian/#foundations   301
+/zh/projects/info6105-methods/ /zh/projects/f1-bayesian/#foundations   301

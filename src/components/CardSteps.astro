@@ -1,6 +1,6 @@
 ---
-// A featured card's schematic: the implemented path in a few steps, as real text instead of a shrunken
-// diagram. Labeled CURRENT / PROPOSED like any diagram (ADR-008); the full figures live on the case study.
+// A card's flow schematic: the implemented path in three to five stages, as real text instead of a shrunken
+// diagram. Labeled CURRENT / PROPOSED like any diagram (ADR-008); configuration details stay on the case study.
 import type { Locale } from '../lib/i18n';
 import type { ProjectMeta } from '../lib/content/schema';
 import { t, termText } from '../lib/content/load';
@@ -13,12 +13,12 @@ interface Props {
 const { steps, locale, label } = Astro.props;
 ---
 
-<figure class="card-figure card-steps">
+<figure class="card-figure card-flow">
   <ol aria-label={label}>
     {steps.items.map((s) => (
       <li>
-        <span class="step-title">{s.title[locale]}</span>
-        <code class="step-detail">{termText(s.detail, locale)}</code>
+        <span class="flow-title">{s.title[locale]}</span>
+        {s.detail && <span class="flow-detail">{termText(s.detail, locale)}</span>}
       </li>
     ))}
   </ol>

@@ -1,8 +1,8 @@
 slug: quant-ai
 title: { en: "Quant AI: Transformer Stock-Ranking Research Pipeline", zh: Quant AI：基于 Transformer 的股票排序研究管线 }
 subtitle:
-  en: A modular PyTorch pipeline for cross-sectional stock ranking — presented by its engineering, not its returns
-  zh: 模块化的 PyTorch 截面选股研究管线：介绍其工程实现，而不是收益
+  en: A modular PyTorch pipeline for cross-sectional stock ranking, with attention over time and across stocks
+  zh: 模块化的 PyTorch 截面选股研究管线，同时在时间维度和股票之间做注意力
 summary:
   en: A Transformer that attends over time and across stocks ranks US equities by their predicted short-horizon residual return, evaluated with walk-forward folds and a cost-aware long/short backtest. It is a research prototype; this page covers how it is built, not how it performed.
   zh: 一个同时在时间维度和股票截面上做注意力的 Transformer，按预测的短期残差收益给美股排序，并用滚动前推折和计入交易成本的多空回测来评估。它是研究原型；本页介绍它如何构建，而不是表现如何。
@@ -10,15 +10,17 @@ focus: { primary: ai-research, also: [] }
 status: research-prototype
 team: { size: 1 }
 role:
-  en: Built it alone, with AI coding assistance
-  zh: 独立完成，借助 AI 编码辅助
+  en: Solo, written with AI coding assistance. The design draws on published models of temporal and cross-sectional attention.
+  zh: 独立完成，借助 AI 编码辅助编写。设计参考了已发表的时间维与截面注意力模型。
 context:
   en: Personal research, developed alongside CSYE 7380 Generative AI and Deep Learning for Finance
   zh: 个人研究项目，与 CSYE 7380 金融生成式 AI 与深度学习课程同期开发
 period: { start: "2026-04", end: "2026-04" }
 stack: [Python, PyTorch, Transformer, Time2Vec, NumPy, pandas, SciPy, yfinance, Slurm, fp16 mixed precision]
 links: []
-highlights: [folds, model_sizes, epoch_time]
+highlights: []
+# Section ids retired in earlier redesigns, and where they land now.
+anchor_aliases: { process: engineering, ownership: pipeline, limits: scope }
 
 facts:
   folds:

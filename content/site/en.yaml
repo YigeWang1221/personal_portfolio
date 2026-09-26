@@ -17,8 +17,9 @@ nav:
   language_switch_title: Read this page in English
 
 footer:
-  note: A static site with no trackers and no third-party requests. Every number on it states its conditions and traces to a repository, a log or a design document.
-  label: Profiles and pages
+  note: No trackers, no third-party requests.
+  label: Site pages
+  contact_label: Profiles
 
 common:
   present: present
@@ -34,6 +35,7 @@ team:
 
 status:
   self-hosted-pilot: Self-hosted pilot
+  in-development: In development
   implemented-not-deployed: Implemented, not deployed
   course-project: Course project
   course-benchmark: Course benchmark
@@ -42,6 +44,7 @@ status:
   archived: Archived
 
 figure:
+  screens: Product screenshots
   full_size: Full-size image
 
 labels:
@@ -56,56 +59,49 @@ roadmap:
 
 home:
   title: Yige Wang · Software Engineer — Backend & Systems
-  description: "Yige Wang, software engineer (backend and systems). Case studies on business modeling, backend and cloud delivery, and system planning, in English and Chinese."
-  intro: I turn business workflows into software systems, with a focus on object-oriented design, backend development and cloud delivery.
-  background_line: Northeastern University · MS in Software Engineering Systems · Expected Dec 2026
-  cta_work: Explore selected work
+  description: "Yige Wang, software engineer (backend and systems): a voice-capture Android app with a self-hosted backend, an AWS delivery pipeline, distributed LLM training and more, in English and Chinese."
+  intro: I'm a software engineer focused on backend services and cloud delivery. My projects range from REST APIs and infrastructure as code on AWS to distributed model training on a GPU cluster and products with AI features, each taken from requirements to something that runs.
+  cta_work: See projects
   cta_resume: View résumé
   links_label: Profiles
-  entries_title: Start from a capability
-  selected: Selected work
-  selected_note: Four case studies, each showing a different part of the job. Each card says what I did and which question the case answers.
-  tech: Key technologies
-  steps: "How {title} works, step by step"
-  kind: Case study
-  my_part: My part
-  question: Key question
-  more: More to explore
+  selected: Selected projects
+  education: Education
+  experience: Experience
+  capabilities: What I work on
+  more: More work
   all_projects: All projects
-  background_title: Background
-  background_body: I'm finishing a Master of Science in Software Engineering Systems at Northeastern University in Boston, after a Bachelor of Engineering in Computer Science and Technology at Zhejiang Gongshang University. I interned as a backend developer at Vendream and as a software tester at the Industrial and Commercial Bank of China's Software Development Center. Right now I'm building KK Knock, a voice-capture app whose backend I host on my own hardware.
-  background_link: More about my background
+  tech: Key technologies
+  steps: "How {title} works, stage by stage"
+  read_case: Read the case study
+  background_link: Full background
+  contact_title: Contact
+  contact_body: I'm looking for full-time roles in backend, cloud platform and AI infrastructure engineering. LinkedIn is the best way to reach me.
+  contact_linkedin: Message me on LinkedIn
+  contact_github: GitHub profile
+
 
 projects:
   title: Projects
-  description: "All of Yige Wang's projects: case studies and supporting work, filterable by capability — business modeling, backend and cloud, planning and delivery, AI and research."
-  lede: Selected case studies first, then supporting work. Filter by the capability you want to see; a project can show more than one.
+  description: "All of Yige Wang's projects, filterable by capability: business modeling, backend and cloud, planning and delivery, AI and research."
+  lede: Selected projects first, then the rest. Filter by capability; a project can show more than one.
   filter_label: Filter by capability
   all: All
   count: "{n} projects"
   count_one: 1 project
-  featured: Selected case study
+  featured: Selected project
   role: My part
+
 
 project:
   role: My role
-  team: Team
-  period: Period
-  context: Context
   stack: Full stack
-  links: Links
   source: Source
-  demo: Demo
-  no_public_code: No public code link.
-  overview: Overview
-  problem: Problem
-  contribution: My contribution
-  outcome: Outcome and validation
   facts: Key facts
   contents: On this page
   deep_dive: Deep dive
   related: Related case study
   all_projects: All projects
+
 
 background:
   title: Background

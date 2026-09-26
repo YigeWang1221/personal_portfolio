@@ -1,87 +1,127 @@
 ---
-// Home: who I am → pick a capability or a case study → background. Every case study is one click away,
-// and each capability entry opens the section of a case study that shows it.
+// Home (ADR-017, revised 2026-09-26 by the owner): the first screen is a short résumé — who I am, what I work
+// on, education and experience, and the ways in. Scrolling down leads into the selected projects (one large
+// card, then the main case studies, then more work), the capabilities they show, and contact.
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import FeaturedProject from '../../components/FeaturedProject.astro';
 import StatusBadge from '../../components/StatusBadge.astro';
 import { localePath, localePaths, type Locale } from '../../lib/i18n';
 import { getContent, t } from '../../lib/content/load';
+import { formatPeriod } from '../../lib/format';
 
 export function getStaticPaths() {
   return localePaths();
 }
 
 const { locale } = Astro.props as { locale: Locale };
-const { featured, more, entries, focus, profile } = getContent();
-const focusTitle = (id: string) => focus.find((f) => f.id === id)!.title[locale];
-const caseHref = (l: { project: string; anchor: string }) => localePath(locale, `/projects/${l.project}/#${l.anchor}`);
+const { home, profile, focus, catalog } = getContent();
+const linkedin = profile.links.find((l) => /linkedin\.com/.test(l.url));
+const github = profile.links.find((l) => /github\.com/.test(l.url));
+// Capabilities: membership comes from each project's meta.yaml (focus), order from the catalog.
+const capabilities = focus.map((f) => ({ ...f, projects: catalog.filter((p) => p.focusIds.includes(f.id)) }));
 ---
 
 <BaseLayout locale={locale} path="/" title={t(locale, 'home.title')} description={t(locale, 'home.description')}>
   <div class="container">
-    <section class="hero" aria-labelledby="hero-name">
-      <h1 id="hero-name">{profile.name[locale]}</h1>
-      <p class="hero-role">{profile.headline[locale]}</p>
-      <p class="hero-intro">{t(locale, 'home.intro')}</p>
-      <p class="hero-background">{t(locale, 'home.background_line')}</p>
-      <div class="cta-row">
-        <a class="button primary" href="#selected-work">{t(locale, 'home.cta_work')}</a>
-        <a class="button" href={localePath(locale, '/resume/')}>{t(locale, 'home.cta_resume')}</a>
+    <section class="intro" aria-labelledby="hero-name">
+      <div class="intro-text">
+        <h1 id="hero-name">{profile.name[locale]}</h1>
+        <p class="hero-role">{profile.headline[locale]}</p>
+        <p class="hero-intro">{t(locale, 'home.intro')}</p>
+        <div class="cta-row">
+          <a class="button primary" href="#work">{t(locale, 'home.cta_work')}</a>
+          <a class="button" href={localePath(locale, '/resume/')}>{t(locale, 'home.cta_resume')}</a>
+          <ul class="hero-links" aria-label={t(locale, 'home.links_label')}>
+            {profile.links.map((l) => <li><a href={l.url}>{l.label[locale]}</a></li>)}
+          </ul>
+        </div>
       </div>
-      <ul class="hero-links" aria-label={t(locale, 'home.links_label')}>
-        {profile.links.map((l) => <li><a href={l.url}>{l.label[locale]}</a></li>)}
-      </ul>
+      <div class="cv-card">
+        <h2 class="section-label">{t(locale, 'home.education')}</h2>
+        <ol class="cv-mini" role="list">
+          {profile.education.map((e) => (
+            <li>
+              <p class="cv-mini-title">{e.school[locale]}</p>
+              <p class="cv-mini-sub">{e.degree[locale]}</p>
+              <p class="cv-mini-when">{formatPeriod(e.period, locale)}</p>
+            </li>
+          ))}
+        </ol>
+        <h2 class="section-label">{t(locale, 'home.experience')}</h2>
+        <ol class="cv-mini" role="list">
+          {profile.experience.map((x) => (
+            <li>
+              <p class="cv-mini-title">{x.role[locale]} · {x.org[locale]}</p>
+              <p class="cv-mini-when">{formatPeriod(x.period, locale)}</p>
+            </li>
+          ))}
+        </ol>
+        <p class="cv-card-link"><a href={localePath(locale, '/background/')}>{t(locale, 'home.background_link')}<span aria-hidden="true"> →</span></a></p>
+      </div>
     </section>
 
-    <section class="entries" aria-labelledby="entries-title">
-      <h2 id="entries-title" class="section-label">{t(locale, 'home.entries_title')}</h2>
-      <ul class="entry-list">
-        {entries.map((e) => (
+    <section class="block" id="work" aria-labelledby="work-title">
+      <h2 id="work-title">{t(locale, 'home.selected')}</h2>
+      <div class="flagship">
+        <FeaturedProject project={home.flagship} locale={locale} variant="flagship" />
+      </div>
+      <div class="case-grid">
+        {home.cases.map((p) => <FeaturedProject project={p} locale={locale} variant="case" />)}
+      </div>
+    </section>
+
+    {(home.exploring.length > 0 || home.more.length > 0) && (
+      <section class="block" aria-labelledby="more-title">
+        <div class="block-head">
+          <h2 id="more-title">{t(locale, 'home.more')}</h2>
+          <a href={localePath(locale, '/projects/')}>{t(locale, 'home.all_projects')}<span aria-hidden="true"> →</span></a>
+        </div>
+        <div class="more-grid">
+          {home.exploring.map((p) => <FeaturedProject project={p} locale={locale} variant="exploring" />)}
+          {home.more.length > 0 && (
+            <ul class="more-list" role="list">
+              {home.more.map((p) => (
+                <li>
+                  <h3><a href={localePath(locale, `/projects/${p.meta.slug}/`)}>{p.meta.title[locale]}</a></h3>
+                  <p class="purpose">{p.meta.subtitle[locale]}</p>
+                  <StatusBadge status={p.meta.status} team={p.meta.team} locale={locale} />
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      </section>
+    )}
+
+    <section class="block" id="capabilities" aria-labelledby="capabilities-title">
+      <h2 id="capabilities-title">{t(locale, 'home.capabilities')}</h2>
+      <ul class="capability-grid" role="list">
+        {capabilities.map((c) => (
           <li>
-            <h3>{e.title[locale]}</h3>
-            <p>{e.body[locale]}</p>
-            <p class="entry-links">
-              <a href={caseHref(e.link)}>{e.link.label[locale]}<span aria-hidden="true"> →</span></a>
-              {e.also && <a class="entry-also" href={caseHref(e.also)}>{e.also.label[locale]}</a>}
+            <h3><a href={`${localePath(locale, '/projects/')}?focus=${c.id}`}>{c.title[locale]}</a></h3>
+            <p>{c.description[locale]}</p>
+            <p class="capability-projects">
+              {c.projects.map((p, i) => (
+                <>
+                  {i > 0 && <span class="sep" aria-hidden="true"> · </span>}
+                  <a href={localePath(locale, `/projects/${p.meta.slug}/`)}>{p.meta.title[locale]}</a>
+                </>
+              ))}
             </p>
           </li>
         ))}
       </ul>
     </section>
 
-    <section class="block" id="selected-work" aria-labelledby="selected-title">
-      <div class="block-head">
-        <h2 id="selected-title">{t(locale, 'home.selected')}</h2>
-        <p class="muted small">{t(locale, 'home.selected_note')}</p>
+    <section class="block contact" id="contact" aria-labelledby="contact-title">
+      <div>
+        <h2 id="contact-title">{t(locale, 'home.contact_title')}</h2>
+        <p>{t(locale, 'home.contact_body')}</p>
       </div>
-      <div class="featured-list">
-        {featured.map((p, i) => <FeaturedProject project={p} locale={locale} eager={i === 0} />)}
+      <div class="cta-row">
+        {linkedin && <a class="button primary" href={linkedin.url}>{t(locale, 'home.contact_linkedin')}</a>}
+        {github && <a class="button" href={github.url}>{t(locale, 'home.contact_github')}</a>}
       </div>
-    </section>
-
-    {more.length > 0 && (
-      <section class="block" aria-labelledby="more-title">
-        <div class="block-head">
-          <h2 id="more-title">{t(locale, 'home.more')}</h2>
-          <a href={localePath(locale, '/projects/')}>{t(locale, 'home.all_projects')}<span aria-hidden="true"> →</span></a>
-        </div>
-        <ul class="more-list">
-          {more.map((p) => (
-            <li>
-              <p class="capability">{focusTitle(p.meta.focus.primary)}</p>
-              <h3><a href={localePath(locale, `/projects/${p.meta.slug}/`)}>{p.meta.title[locale]}</a></h3>
-              <p class="purpose">{p.meta.subtitle[locale]}</p>
-              <StatusBadge status={p.meta.status} team={p.meta.team} locale={locale} />
-            </li>
-          ))}
-        </ul>
-      </section>
-    )}
-
-    <section class="block background-summary" aria-labelledby="background-title">
-      <h2 id="background-title">{t(locale, 'home.background_title')}</h2>
-      <p>{t(locale, 'home.background_body')}</p>
-      <p><a href={localePath(locale, '/background/')}>{t(locale, 'home.background_link')}<span aria-hidden="true"> →</span></a></p>
     </section>
   </div>
 </BaseLayout>

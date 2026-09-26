@@ -1,0 +1,69 @@
+---
+// A small result chart drawn as inline SVG (ADR-017). Geometry comes from meta.yaml; every printed value is a
+// project fact or a baseline text, resolved by the loader. Panel titles stay in HTML so they wrap and scale with
+// the page; the SVG only carries short axis labels. No inline styles: colours come from global.css classes.
+import type { Locale } from '../lib/i18n';
+import type { ResolvedFigure } from '../lib/content/load';
+import { termText } from '../lib/content/load';
+
+type Chart = Extract<ResolvedFigure, { kind: 'chart' }>;
+
+interface Props {
+  chart: Chart;
+  locale: Locale;
+  /** Card use: no caption, the title stays. */
+  compact?: boolean;
+}
+const { chart, locale, compact = false } = Astro.props;
+
+// Coordinates in SVG units. The viewBox is narrow enough that text never renders below ~11px in a card.
+const W = 244;
+const LABEL_W = 50;
+const BAR_X = LABEL_W + 4;
+const BAR_W = 112;
+const ROW = 30;
+const BAR_H = 14;
+const TOP = 20;
+const scale = (v: number, max: number) => (v / max) * BAR_W;
+const f1 = (n: number) => Math.round(n * 10) / 10;
+const headingId = `${chart.id}-${compact ? 'card' : 'page'}-title`;
+---
+
+<div class={`chart${compact ? ' chart-compact' : ''}`} role="group" aria-labelledby={headingId}>
+  <p class="chart-title" id={headingId}>{chart.title[locale]}</p>
+  <div class="chart-panels">
+    {chart.panels.map((panel) => {
+      const height = TOP + panel.bars.length * ROW + 4;
+      return (
+        <div class="chart-panel">
+          <p class="chart-panel-title">
+            {panel.title[locale]}
+            {panel.note && <span class="chart-panel-note">{panel.note[locale]}</span>}
+          </p>
+          <svg viewBox={`0 0 ${W} ${height}`} width={W} height={height} aria-hidden="true" focusable="false">
+            {panel.reference && (
+              <g class="chart-ref">
+                <line x1={f1(BAR_X + scale(panel.reference.value, panel.max))} x2={f1(BAR_X + scale(panel.reference.value, panel.max))} y1={TOP - 4} y2={height - 2} />
+                <text x={f1(BAR_X + scale(panel.reference.value, panel.max))} y={TOP - 7} text-anchor="middle">{panel.reference.label[locale]}</text>
+              </g>
+            )}
+            {panel.bars.map((bar, i) => {
+              const y = TOP + i * ROW + (ROW - BAR_H) / 2;
+              const w = Math.max(2, scale(bar.value, panel.max));
+              const wHigh = bar.high !== undefined ? scale(bar.high, panel.max) : w;
+              return (
+                <g>
+                  <text class="chart-x" x={LABEL_W} y={f1(y + BAR_H / 2 + 4)} text-anchor="end">{termText(bar.x, locale)}</text>
+                  {bar.high !== undefined && <rect class="chart-range" x={BAR_X} y={y} width={f1(wHigh)} height={BAR_H} rx="2" />}
+                  <rect class={`chart-bar${bar.text ? ' chart-bar-base' : ''}`} x={BAR_X} y={y} width={f1(w)} height={BAR_H} rx="2" />
+                  <text class="chart-value" x={f1(BAR_X + wHigh + 5)} y={f1(y + BAR_H / 2 + 4)}>{termText(bar.display, locale)}</text>
+                </g>
+              );
+            })}
+          </svg>
+        </div>
+      );
+    })}
+  </div>
+  <p class="visually-hidden">{chart.alt[locale]}</p>
+</div>

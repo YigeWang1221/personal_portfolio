@@ -12,12 +12,11 @@ a Chinese gloss on first use.
 | Backend & Cloud | 后端与云 | — | Capability |
 | Planning & Delivery | 规划与交付 | — | Capability |
 | AI & Research | AI 与研究 | — | Capability |
-| Selected work | 精选案例 | — | Home section with the four featured case studies |
-| Featured project | 精选项目 | — | |
-| Key question | 关键问题 | — | Card field |
-| My contribution / My part | 我的贡献 / 我的部分 | — | Overview and card fields |
-| Outcome and validation | 结果与验证 | — | Overview field |
-| Source / Demo | 源码 / 演示 | — | Link kinds; the case study itself is always the site's own page |
+| Selected projects | 精选项目 | — | Home section and catalog flag (ADR-017) |
+| More work | 更多项目 | — | Home section after the selected projects |
+| My role | 我的角色 | — | The one responsibility statement on a project page |
+| Product introduction page | 产品介绍页 | — | Link kind `product` |
+| Source / Demo / Demo video | 源码 / 演示 / 演示视频 | — | Link kinds: Demo only for something that runs; the case study itself is always the site's own page |
 | Case study | 项目详解 | — | Avoid "案例研究" on project pages |
 | Decision record | 决策记录 | — | Pattern: Context → Options → Decision → Trade-off |
 | Roadmap / milestones | 路线图 / 里程碑 | — | |
@@ -35,6 +34,7 @@ a Chinese gloss on first use.
 | English | 中文 |
 |---|---|
 | Self-hosted pilot | 自托管试运行 |
+| In development | 开发中 |
 | Implemented, not deployed | 已实现，未部署 |
 | Course project (team of N) | 课程项目（N 人团队） |
 | Course project (solo) | 课程项目（个人） |

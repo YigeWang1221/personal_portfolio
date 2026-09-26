@@ -24,6 +24,7 @@ export type FocusId = z.infer<typeof focusId>;
 /** Status labels from docs/style/GLOSSARY.md. */
 export const STATUS_KEYS = [
   'self-hosted-pilot',
+  'in-development',
   'implemented-not-deployed',
   'course-project',
   'course-benchmark',
@@ -95,17 +96,62 @@ export const screensFigure = z.strictObject({
         /** One file per language, e.g. localized app screenshots. */
         file: localized,
         alt: localized,
+        /** Short caption under the screen, e.g. "1 · Speak". */
+        label: localized.optional(),
       }),
     )
     .min(1),
 });
 
-export const figure = z.discriminatedUnion('kind', [diagramFigure, imageFigure, screensFigure]);
+/**
+ * A small bar chart drawn as inline SVG from measured values. Bar geometry comes from the ledger row named in
+ * `claim`; every printed number is a fact of the project (`fact`) or a plain baseline text (`text`), so the chart
+ * cannot show a value that the page does not state with its conditions.
+ */
+export const chartFigure = z.strictObject({
+  ...figureCommon,
+  kind: z.literal('chart'),
+  title: localized,
+  alt: localized,
+  panels: z
+    .array(
+      z.strictObject({
+        title: localized,
+        /** e.g. "higher is better". */
+        note: localized.optional(),
+        claim: z.string().regex(/^[A-Z0-9]+-\d{2}$/, 'ledger claim ID such as HPC-05'),
+        /** Right end of the axis. */
+        max: z.number().positive(),
+        reference: z.strictObject({ value: z.number().positive(), label: localized }).optional(),
+        bars: z
+          .array(
+            z.strictObject({
+              x: term,
+              value: z.number().nonnegative(),
+              /** Upper end when the value is a range. */
+              high: z.number().positive().optional(),
+              fact: z.string().regex(/^[a-z0-9_]+$/).optional(),
+              text: term.optional(),
+            }),
+          )
+          .min(1)
+          .max(6),
+      }),
+    )
+    .min(1)
+    .max(2),
+});
+
+export const figure = z.discriminatedUnion('kind', [diagramFigure, imageFigure, screensFigure, chartFigure]);
 export type Figure = z.infer<typeof figure>;
+export type ChartFigure = z.infer<typeof chartFigure>;
 
 export const link = z.strictObject({
-  /** code → "Source", product / demo → "Demo". Case studies are always the site's own project page. */
-  kind: z.enum(['code', 'product', 'demo']),
+  /**
+   * product → a product introduction page; demo → something that runs; video → a recorded demo; code → a source
+   * repository (grouped under "Source"). Case studies are always the site's own project page.
+   */
+  kind: z.enum(['code', 'product', 'demo', 'video']),
   url: z.url({ protocol: /^https$/ }),
   label: localized,
 });
@@ -127,34 +173,27 @@ export const roadmap = z.strictObject({
 });
 export type Roadmap = z.infer<typeof roadmap>;
 
-/** The three-part overview at the top of a case study (brief: Problem / My contribution / Outcome). */
-export const overview = z.strictObject({
-  problem: localized,
-  /** One to three concrete contributions; team projects separate own and shared work. */
-  contributions: z.array(localized).min(1).max(3),
-  /** What exists, how it was validated, and where it stops. */
-  outcome: localized,
-});
-
-/** Editor-written card copy for the home page and the catalog. Nothing here is derived automatically. */
+/** Editor-written card copy for the home page. Nothing here is derived automatically. */
 export const card = z.strictObject({
-  /** The one design question the case study answers. */
-  question: localized,
-  /** One line on what I did. */
-  contribution: localized,
+  /** One or two natural sentences: what it does for someone, then what I did. */
+  intro: localized,
+  /** One engineering point worth opening the case study for. No bare measurements. */
+  highlight: localized.optional(),
+  /** Short status for the card, when the page's status note is too long for it. */
+  status: localized.optional(),
   /** At most three technologies, chosen by the editor (not the first items of `stack`). */
   tech: z.array(z.string().min(1)).min(1).max(3),
-  /** Label of the main link into the case study, e.g. "Explore the domain model". */
+  /** Label of the main link into the case study. */
   cta: localized.optional(),
   /** Section or sub-heading of the case study the main link opens. */
   anchor: slug.optional(),
-  /** Figure of the page shown next to a featured card… */
+  /** Figure of the page shown next to the card… */
   figure: slug.optional(),
-  /** …or a short step list drawn as HTML (a schematic of the implementation, labeled like a diagram). */
+  /** …or a short flow drawn as HTML (a schematic of the implementation, labeled like a diagram). */
   steps: z
     .strictObject({
       label: assetLabel,
-      items: z.array(z.strictObject({ title: localized, detail: term })).min(3).max(6),
+      items: z.array(z.strictObject({ title: localized, detail: term.optional() })).min(3).max(5),
       note: localized.optional(),
     })
     .optional(),
@@ -165,7 +204,7 @@ export const projectMeta = z.strictObject({
   title: localized,
   /** One line on what the project does. */
   subtitle: localized,
-  /** Two or three sentences for the catalog and the page description. */
+  /** Two or three sentences for the page description (search results, link previews). */
   summary: localized,
   /** Capability membership (ADR-016). Order lives in content/catalog.yaml. */
   focus: z.strictObject({ primary: focusId, also: z.array(focusId).default([]) }),
@@ -174,14 +213,16 @@ export const projectMeta = z.strictObject({
   status_note: localized.optional(),
   /** size = people on the team; mixed = coursework done partly alone and partly in pairs. */
   team: z.strictObject({ size: z.number().int().min(1), mixed: z.boolean().optional() }),
+  /** The one statement of my responsibility on the page: what I owned, what was shared, how AI tools were used. */
   role: localized,
   context: localized,
   period,
   stack: z.array(z.string().min(1)).min(1),
   links: z.array(link).default([]),
-  /** Fact keys shown under the overview. */
+  /** Fact keys shown near the top of the case study. */
   highlights: z.array(z.string()).max(4).default([]),
-  overview: overview.optional(),
+  /** Figure shown right under the page header (product screens, a key chart or an architecture preview). */
+  lead: slug.optional(),
   card: card.optional(),
   /** One related case study, linked at the end of the page. */
   related: slug.optional(),
@@ -195,33 +236,24 @@ export const projectMeta = z.strictObject({
 });
 export type ProjectMeta = z.infer<typeof projectMeta>;
 
-/** A link into a section of a case study. */
-const caseLink = z.strictObject({ project: slug, anchor: slug, label: localized });
-
 export const catalogFile = z.strictObject({
   /** Filters of the project catalog, in display order. */
   focus: z
     .array(z.strictObject({ id: focusId, title: localized, description: localized }))
     .length(FOCUS_IDS.length),
-  /** Home page: the selected case studies, in order. */
-  featured: z.array(slug).min(1).max(4),
-  /** Home page: the compact "More to explore" list. */
-  more: z.array(slug).max(4).default([]),
+  /** Home page, in reading order (ADR-017). */
+  home: z.strictObject({
+    /** The one project the home page leads with. */
+    flagship: slug,
+    /** The main case studies right after it. */
+    cases: z.array(slug).min(1).max(3),
+    /** Smaller cards for work in progress or exploration. */
+    exploring: z.array(slug).max(2).default([]),
+    /** A compact list of further projects. */
+    more: z.array(slug).max(4).default([]),
+  }),
   /** Catalog order of every published project; the only place ordering lives (ADR-006, ADR-016). */
   order: z.array(slug).min(1),
-  /** Home page capability entries: each opens a section of a case study in one click. */
-  entries: z
-    .array(
-      z.strictObject({
-        id: slug,
-        title: localized,
-        body: localized,
-        link: caseLink,
-        also: caseLink.optional(),
-      }),
-    )
-    .min(1)
-    .max(3),
 });
 export type CatalogFile = z.infer<typeof catalogFile>;
 

@@ -47,13 +47,13 @@ experience:
       - en: Tested the loan-approval workflow on Linux and reported slow APIs. Wrote Shell scripts that validate REST APIs and SQL data consistency in the loan modules, cutting manual testing time by 21%.
         zh: 在 Linux 环境下对贷款审批流程做功能测试并定位慢接口；编写 Shell 脚本校验贷款模块的 REST API 与 SQL 数据一致性，人工测试时间降低 21%。
 
-# 3–5 verified outcomes, each a fact of a project page.
+# 3–5 verified outcomes, each a fact of a project page. Measured changes first; counts of tests or records are not outcomes.
 highlights:
-  - { project: kk-knock, fact: tests }
-  - { project: kk-knock, fact: adrs }
+  - { project: kk-knock, fact: asr_speedup }
   - { project: distributed-llm, fact: ddp_scaling }
-  - { project: f1-bayesian, fact: podium }
   - { project: cloud-native, fact: deploy_median }
+  - { project: distributed-llm, fact: tokenize_mp }
+  - { project: f1-bayesian, fact: podium }
 
 skills:
   # Skill names stay in English in both languages (industry-standard terms); group headings are translated.
@@ -98,9 +98,9 @@ skills:
       - { name: "LLM APIs (DeepSeek, Gemini)", evidence: [kk-knock] }
   - group: { en: Data science, zh: 数据科学 }
     items:
-      - { name: PyMC / NUTS / ArviZ, evidence: [f1-bayesian, info6105-methods] }
-      - { name: Hierarchical Bayesian modeling, evidence: [f1-bayesian, info6105-methods] }
-      - { name: Monte Carlo simulation, evidence: [f1-bayesian, info6105-methods] }
+      - { name: PyMC / NUTS / ArviZ, evidence: [f1-bayesian] }
+      - { name: Hierarchical Bayesian modeling, evidence: [f1-bayesian] }
+      - { name: Monte Carlo simulation, evidence: [f1-bayesian] }
       - { name: Walk-forward validation / backtesting, evidence: [quant-ai] }
       - { name: pandas / NumPy, evidence: [f1-bayesian, quant-ai, distributed-llm] }
   - group: { en: Engineering practice, zh: 工程实践 }
