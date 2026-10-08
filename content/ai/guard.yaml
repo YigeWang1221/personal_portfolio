@@ -36,6 +36,13 @@ rules:
       - '(系统|开发者|初始)(提示词|提示|指令|消息)'
       - '(角色扮演|越狱|开发者模式|你现在是|从现在开始你|假装你)'
       - '(输出|告诉我|显示|重复).{0,8}(你的)?(提示词|指令|规则|设定)'
+      # Claims of the owner's or an admin's authority (red-team test, 2026-10-08). "I'm a recruiter" still passes.
+      - '\b(i am|i''m|im)\s+(yige|wang yige|yige wang|the (site |website |portfolio )?owner|the developer|your (creator|developer|admin|owner))\b'
+      - '\b(the )?(site |website |portfolio )?owner (says|said|allows|allowed|authori[sz]es|wants you)\b'
+      - '\b(i|we) authori[sz]e you\b|\bnew (task|instructions?) from\b'
+      - '我(就)?是(王一格|一格|yige)(本人)?'
+      - '(站长|网站主人|网站所有者|管理员|开发者|作者).{0,6}(说|允许|授权|让你)'
+      - '授权你'
 
   - id: task
     reply: off_topic
@@ -52,6 +59,23 @@ rules:
       - '(讲|说)(个|一个)(笑话|故事)'
       - '翻译(一下|成|为)'
       - '(帮我|请)(润色|改写|总结这段|翻译)'
+      # Tasks inside the sentence (red-team test, 2026-10-08). A verb only counts after a clause start or an imperative
+      # cue, so "Did Yige write the code himself?" passes.
+      - '(^|[,.;:!?，。；：！？]\s*|\b(so|then|please|pls|now|just|can you|could you|would you|you)\s+)(write|show me|give me|generate|create|produce|draft)\b.{0,40}\b(code|snippet|function|script|program|query|sql|regex|dockerfile|terraform|config file)\b'
+      - '\b(python|java|kotlin|javascript|typescript|go|rust|c\+\+|sql|bash)\s+(example|snippet|sample)\b'
+      - '\b(write|compose|draft|rewrite|turn|make)\b.{0,40}\b(cover letter|poem|haiku|rap|song|essay|limerick|story)\b'
+      - '(帮我|给我|替我|为我)(写|生成|编写|改写|翻译|润色|设计|画)'
+      - '用.{0,16}(写|作|编)(一首|首|一篇|篇|一段|段|一个|个)?(诗|歌|故事|文章|作文|rap|段子|笑话)'
+
+  - id: judging
+    reply: off_topic
+    strike: true
+    patterns:
+      # Judging the owner against other people is not something a portfolio can answer.
+      - '\bcompare\b.{0,50}\b(other|another|the other)\s+(candidates?|applicants?|people|engineers)\b'
+      - '\b(who is|who''s) (better|stronger|the best)\b|\bbetter than (other|the other) (candidates?|applicants?)\b'
+      - '(和|与|跟).{0,10}(其他|别的)(候选人|应聘者|人|工程师).{0,6}(比|比较|对比)'
+      - '谁更(好|强|优秀|合适)'
 
   - id: personal
     reply: personal
