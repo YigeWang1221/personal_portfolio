@@ -681,14 +681,26 @@ event: error    data: {"code":"UPSTREAM_INTERRUPTED|OUTPUT_LIMIT|UNAVAILABLE|BLO
 
 ## 10. 发布与运维
 
-### 10.1 发布步骤（单人本地流程）
+### 10.1 发布步骤（v2.1 修订：GitHub 自动构建，所有者决定 O-10）
+
+**当前流程**（Workers Builds 已连接本仓库）：
+- **push 到 `main` 就是生产发布**：Cloudflare 执行 `npm run build`，再执行 `npx wrangler deploy`。其他分支和 PR 只生成预览版本。
+- **聊天窗的开关**：Cloudflare 的构建变量 `PUBLIC_CHAT_ENABLED=true` 打开聊天窗。如果缺少这个变量，每次 Git 构建都会去掉聊天窗（2026-10-08 实际发生过一次）。
+- **只改网站**：直接 push。
+- **改了内容**（`content/`，包括 `content/ai/`）：先在 Mac mini 上 `npm run build`，再 `up -d --build --no-deps portfolio-api` 更新后端，最后 push。顺序错了也不会出错，只是用旧资料作答，并在 409 后重置对话。
+- **改 plan**：只重建后端容器，不需要 push。
+- **本地备用**：`npm run deploy`（带聊天窗）/ `npm run deploy:no-chat`。
+
+以下是原稿的单人本地流程，保留作参考：
 1. 后端：执行 `docker buildx build --platform linux/arm64` 构建镜像，记录镜像 digest，然后在 Mac mini 的栈目录中用全部 compose 文件（包括 portfolio 覆盖文件）执行 `docker compose … up -d portfolio-api`（只点名这一个服务），并确认 `/api/health` 返回 available。
 2. 前端：执行 `npm run deploy`。只要 `wrangler.jsonc` 中有 `main`，这一步就会同时部署 Worker。
 3. 先用 `PUBLIC_CHAT_ENABLED=false` 发布一次，验证静态站点没有回归；再改为开启并重新发布。
 4. 内容更新时：同一个 commit 中重新构建前端和后端镜像，**先部署后端，再部署前端**。在两者部署之间的窗口期，旧页面回传旧的 knowledgeVersion，会收到 409，前端自动重置对话，不会继续使用旧知识。
 
 ### 10.2 回滚
-- 最快方式：执行 `PUBLIC_CHAT_ENABLED=false npm run deploy`，或者直接 `docker compose stop portfolio-api`。两者都不影响静态站点。
+- **最快方式**：执行 `docker compose … stop portfolio-api`。聊天窗会显示不可用，静态站点不受影响。
+- **要去掉聊天窗**：删除 Cloudflare 构建变量 `PUBLIC_CHAT_ENABLED`，然后重新构建；或在本地执行 `npm run deploy:no-chat`。下一次 push 会重新应用构建变量。
+- **网站回滚**：在 Cloudflare 的 Deployments 中回到上一个版本，或者 revert 对应的 commit 再 push。
 - 后端回滚：切回上一个镜像 digest。**如果上一版的世界书里含有已撤回的内容，不得回滚**，保持聊天关闭，直到修复完成。
 
 ### 10.3 监控

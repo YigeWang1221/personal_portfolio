@@ -72,7 +72,9 @@ machine translation of the other (ADR-005).
 - Production domain: `wangyige1221.website`. DNS is managed on Cloudflare.
 - **Technology route:** Astro (ADR-014), hosted as Cloudflare Workers static assets (ADR-015). English is the default
   language.
-- **Rollout:** the owner deploys to workers.dev first, then binds a custom subdomain. The public URL is passed to the
+- **Release path (since 2026-10-08):** a push to `main` deploys production through Cloudflare Workers Builds. The
+  build variable `PUBLIC_CHAT_ENABLED=true` keeps the AI assistant in the build. See README, "Deploy".
+- **Original rollout:** the owner deployed to workers.dev first, then bound a custom subdomain. The public URL is passed to the
   build as `SITE_URL`; it is not hard-coded, and workers.dev is never the canonical URL.
 - **Live since 2026-09-24** at `https://portfolio.wangyige1221.website` (Worker `portfolio`). The live build does not
   set `SITE_URL` yet, so it has no canonical URLs and stays `noindex`.

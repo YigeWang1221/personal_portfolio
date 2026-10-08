@@ -337,3 +337,34 @@ SDD-AICHAT-001（`AI_CHAT_DESIGN.md`）的实施记录。每完成一个功能�
 - 所有改动都还没有 commit。
 - 建议用 VoiceOver 手动走一遍读屏流程。
 - **ADR-022 状态**：所有者确认后，于 2026-10-08 由 Proposed 改为 Accepted（`DECISIONS.md`），设计文档的状态栏和上线清单同步更新。
+
+---
+
+## 2026-10-08 · 聊天窗被一次不带开关的部署覆盖：已恢复，并把开关改为部署默认值
+
+- **现象**：所有者提交了 `057bcbc chatbot`，随后用 `npm run deploy` 部署（22:50，版本 `a6098f59`）。这次部署覆盖了 22:45 带聊天窗的版本：线上没有浮窗，`/js/chat.js` 返回 404，后端仍然正常。
+- **原因**：`npm run deploy` 原来等于 `npm run build && wrangler deploy`，构建时不带 `PUBLIC_CHAT_ENABLED`。
+- **修复**：
+  - `npm run deploy` 改为 `PUBLIC_CHAT_ENABLED=true npm run build && wrangler deploy`；
+  - 新增 `npm run deploy:no-chat`，用于不带聊天窗的发布；
+  - `npm run build`（以及 CI）保持不带开关，所以 T-STATIC-02 的含义不变；
+  - `README.md` 写明了这一点，并提醒：如果改用 Git 自动构建（Workers Builds），要在构建变量中设置 `PUBLIC_CHAT_ENABLED=true`。
+- 随后用新的 `npm run deploy` 重新部署。
+
+---
+
+## 2026-10-08 · 文档改为按 GitHub 自动发布的流程（O-10）
+
+- **背景**：所有者说明，网站是 GitHub push 后由 Cloudflare 自动构建部署的。push 到 `main` 发布生产版本，PR 和其他分支只生成预览。
+- **`README.md` 的 Deploy 一节重写**：
+  - 发布路径；
+  - Cloudflare 上的一次性设置：构建变量 `PUBLIC_CHAT_ENABLED=true`，运行时 secret `ORIGIN_URL` 和 `ORIGIN_KEY`；
+  - 三类改动的发布顺序：只改网站、改内容（先更新后端，再 push）、改 plan（只重建后端容器）；
+  - 本地备用命令，以及如何关闭聊天窗。
+- **同步修改**：
+  - `AI_CHAT_DESIGN.md`：§10.1 发布流程、§10.2 回滚；
+  - `deployment-contract.md`：新增 O-10；
+  - `ARCHITECTURE.md`：CI 与发布；
+  - `PROJECT_CONTEXT.md`：发布路径；
+  - `AGENTS.md`：注明 push 到 `main` 就是生产发布。
+- **待所有者处理**：在 Cloudflare 构建变量中加入 `PUBLIC_CHAT_ENABLED=true`，然后 commit 并 push 本批文档和 `package.json` 的改动。
