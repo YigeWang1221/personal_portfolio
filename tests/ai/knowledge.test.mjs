@@ -84,3 +84,22 @@ test('every entry has both languages and a source link into a built page', () =>
   assert.deepEqual([...sections('en')].sort(), [...sections('zh')].sort());
   for (const e of base.worldbook.entries) assert.match(e.sourcePath, /^\/(zh\/)?[a-z0-9/#-]*$/);
 });
+
+// Guard against stale résumé data surviving through the actual projection/prompt pipeline.
+test('public knowledge preserves personal ownership and completed LoRA deployment without old tool disclosures', () => {
+  const entries = base.worldbook.entries.filter((e) => e.scope === 'personal-writing-lora');
+  const text = JSON.stringify(entries);
+  assert.match(text, /Deployed on AWS/);
+  assert.match(text, /resources removed afterwards/);
+  assert.match(text, /已部署至 AWS/);
+  assert.match(text, /销毁资源/);
+  assert.match(text, /TFLint/);
+  assert.match(text, /Trivy/);
+  assert.doesNotMatch(text, /never deployed|从未部署/i);
+  assert.match(text, /Personal project/);
+  assert.match(text, /个人项目/);
+  const publicText = JSON.stringify(base.worldbook.entries) + JSON.stringify(base.bundle);
+  assert.doesNotMatch(publicText, /AI coding assistants|AI-assisted code|AI-assistance wording|AI 编码助手|大部分代码由|大量代码由|AI 辅助代码/i);
+  // Team projects retain their shared attribution; presentation changes must not make them solo projects.
+  assert.match(JSON.stringify(base.worldbook.entries.filter((e) => e.scope === 'distributed-llm')), /Team of 2/);
+});

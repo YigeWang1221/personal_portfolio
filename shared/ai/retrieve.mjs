@@ -138,7 +138,17 @@ export function search(index, q) {
     if (score > 0 && pageScope && d.entry.scope === pageScope) score *= PAGE_BOOST;
     if (score > 0) scored.push({ entry: d.entry, score, matched });
   }
-  scored.sort((a, b) => b.score - a.score || a.entry.id.localeCompare(b.entry.id));
+  // A question about "it / this project" refers to the page being read. A fixed score multiplier
+  // alone lets unrelated projects win when their copy happens to repeat the query terms more often.
+  // Explicit project names (including an established previous topic) and list questions keep normal ranking.
+  const preferPage = pageScope && named.size === 0 && !listQuestion && /\b(it|this|that)\b|这个|这项|该项目/iu.test(question);
+  scored.sort((a, b) => {
+    if (preferPage) {
+      const contextOrder = Number(b.entry.scope === pageScope) - Number(a.entry.scope === pageScope);
+      if (contextOrder) return contextOrder;
+    }
+    return b.score - a.score || a.entry.id.localeCompare(b.entry.id);
+  });
   const topScore = scored[0]?.score ?? 0;
 
   const { coverage, vocabulary } = relevance(index, question, scored.slice(0, COVERAGE_HITS));
