@@ -81,7 +81,7 @@ Source priority for technical facts, highest first:
   - student IDs;
   - third-party copyrighted files.
 - **Owner-only actions:** pushing, repository visibility, GitHub Pages, DNS, editing resumes, and any change to an
-  external project. Do these only when the owner explicitly asks in the current task.
+  external project. A push to `main` deploys production (Cloudflare Workers Builds). Do these only when the owner explicitly asks in the current task.
 - **Discovery gate (ADR-009, ADR-011):** no site code, no page text and no facts files until
   `internal/CURRENT_STATE.md` shows the gate cleared.
   - Before the gate, `content/` holds only the skeleton, meaning `ASSETS.md` manifests and reviewed, labeled assets.

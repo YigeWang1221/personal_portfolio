@@ -66,49 +66,66 @@ editing a `.mmd` file.
 ## Deploy (Cloudflare Workers static assets)
 
 The Worker serves `dist/`. Its one script, [`edge/api-proxy.ts`](edge/api-proxy.ts), runs only for `/api` and
-`/api/*` (the AI assistant, ADR-022); until its secrets are set, those paths answer 503 and nothing else changes.
-Configuration: [`wrangler.jsonc`](wrangler.jsonc), response headers: [`public/_headers`](public/_headers).
+`/api/*` (the AI assistant, ADR-022). Configuration: [`wrangler.jsonc`](wrangler.jsonc), response headers:
+[`public/_headers`](public/_headers).
 
-1. **First deployment (preview).** Build without `SITE_URL`, then deploy:
+### How a release happens: Git-connected builds (Workers Builds)
+
+The Worker `portfolio` is connected to this GitHub repository.
+- **A push to `main` is a production release.** Cloudflare runs the build command `npm run build` and the deploy
+  command `npx wrangler deploy`. A push is therefore owner-only (AGENTS.md).
+- **Other branches and pull requests** get preview versions that do not change the live site.
+- The GitHub workflow (`.github/workflows/ci.yml`) only builds and tests. It never deploys.
+
+**Settings in the Cloudflare dashboard** (Workers & Pages → `portfolio` → Settings), set once:
+
+| Where | Name | Value |
+|---|---|---|
+| Build → Variables and secrets | `PUBLIC_CHAT_ENABLED` | `true`. Without it, every Git build drops the chat window. |
+| Build → Variables and secrets | `SITE_URL`, `SITE_INDEXING` | Later: the custom domain, then `true` once indexing is wanted |
+| Variables and Secrets (runtime) | `ORIGIN_URL` (secret) | `https://` plus the backend's tunnel hostname |
+| Variables and Secrets (runtime) | `ORIGIN_KEY` (secret) | Same value as `PORTFOLIO_ORIGIN_KEY` in `backend/.env` |
+
+Runtime secrets are set with `npx wrangler secret put <NAME>` or in the dashboard. They survive every deployment.
+Until both are set, `/api/*` answers 503 and the rest of the site is unaffected.
+
+### Releasing a change
+
+1. **Site-only change** (styles, components, anything outside the content model): push to `main`.
+2. **Content change** (`content/`, including `content/ai/` prompts and guard rules): **update the backend first**,
+   because its image carries the knowledge snapshot. Then push.
+   In this repository:
    ```bash
    npm run build
-   npx wrangler login
-   npx wrangler deploy
    ```
-   The site answers on `<worker-name>.<account>.workers.dev`. Without `SITE_URL` it has no absolute canonical or
-   `hreflang` URLs and stays `noindex`.
-2. **Custom domain.** In the Cloudflare dashboard, open the Worker → Settings → Domains & Routes → add the custom
-   domain.
-3. **Canonical URL.** Rebuild with the custom domain and deploy again:
+   Then in the Mac mini stack folder (its compose files plus `docker-compose.portfolio.yml`):
    ```bash
-   SITE_URL=https://<your-domain> npm run build
-   npx wrangler deploy
+   docker compose -f docker-compose.yml -f docker-compose.gemini.yml -f docker-compose.gemini-bridge.yml -f docker-compose.portfolio.yml up -d --build --no-deps portfolio-api
    ```
-   `SITE_URL` must be an `https` origin; `workers.dev` and `pages.dev` addresses are rejected.
-4. **Indexing.** After the content review, add `SITE_INDEXING=true` to the build to allow search engines and emit the
-   sitemap reference in `robots.txt`.
-5. **Git-connected builds (optional).** With Workers Builds, use build command `npm run build` and deploy command
-   `npx wrangler deploy`, and set `SITE_URL` (and later `SITE_INDEXING`) as build variables.
-6. **Keep analytics off.** Make sure Cloudflare Web Analytics does not inject its script into this hostname; the site
-   ships no analytics, and its Content-Security-Policy would block the beacon anyway.
-7. **AI assistant (ADR-022).** Deploy the backend first, then the site. Full procedure:
-   `docs/AI_Chat/AI_CHAT_DESIGN.md` §10.
-   - Backend: build the image after `npm run build` (see Develop), then start `portfolio-api` in the Mac mini stack.
-   - Worker settings, set once by the owner: two values, `ORIGIN_URL` (`https://` plus the backend's tunnel
-     hostname) and `ORIGIN_KEY` (the same value as `PORTFOLIO_ORIGIN_KEY` in `backend/.env`):
-     ```bash
-     npx wrangler secret put ORIGIN_URL
-     ```
-     ```bash
-     npx wrangler secret put ORIGIN_KEY
-     ```
-   - Release the site once without the assistant (the default), then with it:
-     ```bash
-     PUBLIC_CHAT_ENABLED=true npm run build && npx wrangler deploy
-     ```
-   - To turn it off again, build and deploy without the flag.
-   - For local testing, `wrangler dev` with `--var` values pointing at `npm run api:dev` runs the whole chain with
-     mock providers.
+   If the order slips, nothing breaks: the backend answers 409, and the chat resets and keeps answering from the
+   snapshot it has until it is rebuilt.
+3. **Model plans** (`backend/.env`): run the `up -d --no-deps portfolio-api` command above, without `--build`. No
+   push is needed. `docker restart` does not reread the env file.
+
+### Without Git (fallback)
+
+- `npm run deploy` builds with the chat window (`PUBLIC_CHAT_ENABLED=true`) and deploys from this machine.
+- `npm run deploy:no-chat` deploys without it.
+- The next push to `main` replaces either one.
+- A plain `npm run build`, as in CI, is always without the chat window.
+
+### Other notes
+
+- **Canonical URL and indexing:** `SITE_URL` must be an `https` origin; `workers.dev` and `pages.dev` are rejected.
+  Without it, the site has no canonical or `hreflang` URLs and stays `noindex`. Add `SITE_INDEXING=true` only
+  after the content review.
+- **Keep analytics off:** make sure Cloudflare Web Analytics does not inject its script into this hostname. The site
+  ships no analytics, and its Content-Security-Policy would block the beacon anyway.
+- **Turning the assistant off:** remove the `PUBLIC_CHAT_ENABLED` build variable (or set it to anything but
+  `true`), then push or retry the build. To stop it at once, stop the backend container: the chat window says it is
+  unavailable, and the site keeps working.
+- **Local end-to-end test:** `wrangler dev` with `--var ORIGIN_URL:http://127.0.0.1:<port> --var ORIGIN_KEY:…`
+  pointing at `npm run api:dev` runs the whole chain with mock providers.
 
 ## Documentation map
 

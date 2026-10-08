@@ -13,11 +13,12 @@
     "preview": "astro preview",
     "diagrams": "node scripts/render-diagrams.mjs",
     "check:dist": "node scripts/check-dist.mjs",
-    "deploy": "npm run build && wrangler deploy",
+    "deploy": "PUBLIC_CHAT_ENABLED=true npm run build && wrangler deploy",
     "check:ai": "node scripts/check-ai-artifacts.mjs",
     "chat:preview": "node --env-file-if-exists=backend/.env scripts/preview-prompt.mjs",
     "test": "node --experimental-strip-types --no-warnings=ExperimentalWarning --test 'tests/ai/*.test.mjs' 'tests/edge/*.test.mjs' 'backend/tests/*.test.mjs'",
-    "api:dev": "npm --prefix backend run dev"
+    "api:dev": "npm --prefix backend run dev",
+    "deploy:no-chat": "npm run build && wrangler deploy"
   },
   "dependencies": {
     "astro": "7.3.5",

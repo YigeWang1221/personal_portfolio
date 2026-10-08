@@ -19,6 +19,7 @@
 | O-5 | 模型的服务和种类由所有者选定。env 中只保留 `# plan A/B/C` 三组空变量：`API_URL_PLAN_x`、`MODEL_PLAN_x`、`KEY_PLAN_x` | 代码中去掉所有默认模型名和服务专用参数（例如 DeepSeek 的 thinking 开关）；协议由 URL 判断。H10、H11 的结果保留，供选型参考 |
 | O-6 | 只回答简历和资料中的相关内容，其他一律拒绝；防止对话窗被当作通用聊天工具使用 | 新增三层请求拦截（`content/ai/guard.yaml`、`shared/ai/guard.mjs`）和滥用封禁；BR-06 收紧 |
 | O-7 | 确认把 compose 项目改名为 `ai_web`（2026-10-08 执行） | 见 §5 T-4 和 CHANGELOG |
+| O-10 | 网站通过 GitHub 自动发布：push 到 `main` 由 Cloudflare Workers Builds 执行 `npm run build` 和 `wrangler deploy`；PR 和其他分支只生成预览 | 必须在 Cloudflare 的构建变量中设置 `PUBLIC_CHAT_ENABLED=true`。后端不随 push 更新：内容有变化时，先手动重建后端，再 push |
 | O-9 | 精简配置：Worker 只需要 `ORIGIN_URL` 和 `ORIGIN_KEY`；不使用 Cloudflare Access 的 Service Token；去掉 `CLIENT_ID_SALT` | 代码中 Access 两项改为可选（两项都设置了才发送）；访客匿名 ID 改用 `ORIGIN_KEY` 计算 |
 | O-8 | 后端读取作品集项目自己文件夹下的 env，不读栈的 `.env`；三个 API plan 也都放在这里 | 配置文件为 `backend/.env`（git-ignored，权限 600），由栈侧覆盖文件通过 `env_file` 读取；plan A 的网关 URL 也写在这个文件里 |
 

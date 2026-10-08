@@ -161,7 +161,14 @@ YAML parsed with `yaml`, validated with Zod, Markdown rendered with `marked`. Im
   with `wrangler dev`).
 - Until the Worker secrets are set, `/api/*` answers JSON 503 and the site is unaffected.
 
-**CI.** `.github/workflows/ci.yml` runs `npm ci`, `npm run build` and `npm test` on every push and pull request.
+**CI and release.**
+- `.github/workflows/ci.yml` runs `npm ci`, `npm run build` and `npm test` on every push and pull request. It never
+  deploys.
+- Releases are Cloudflare Workers Builds connected to the repository: a push to `main` builds and deploys
+  production; other branches get preview versions.
+- The build variable `PUBLIC_CHAT_ENABLED=true` keeps the chat window in those builds.
+- The backend is not part of this pipeline: it is rebuilt on the Mac mini when the content changes (README,
+  "Releasing a change").
 
 ## CURRENT: AI assistant knowledge build (ADR-022)
 
