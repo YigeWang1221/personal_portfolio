@@ -75,7 +75,7 @@ content/
   highlight, an optional short status, at most three technologies, the section the main link opens). The flagship and
   the cases also need a visual: a page figure or a short flow list. Card text may not contain bare measurements.
   Every `#anchor` a card points to must exist.
-- **One role statement per project** (`role`): what I owned, what was shared, how AI assistants were used. The page
+- **One role statement per project** (`role`): what I owned, what was shared, the responsibilities I managed. The page
   header shows it once; narratives do not repeat it.
 - **Charts** (`kind: chart`) are drawn as inline SVG from values in `meta.yaml`. Each panel cites its ledger claim,
   and every printed value is a project fact or a baseline text.

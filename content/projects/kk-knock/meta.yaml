@@ -5,8 +5,8 @@ subtitle:
   en: An Android app that turns a spoken sentence into a todo or a researched note
   zh: 说一句话，就整理成待办或查资料写成笔记的 Android App
 summary:
-  en: "I started KK Knock to capture fleeting ideas without stopping to type. I developed the idea into requirements and development documents, interaction prototypes, technology choices and coding guidelines, then planned milestones and built the Android app, backend and admin console with AI coding assistance. Spoken input becomes a todo or a researched note to act on later."
-  zh: "我从“不方便打字时，怎样留住一闪而过的想法”出发，提出 KK Knock，编写需求分析与开发文档、设计交互原型、确定技术选型和代码规范，再安排阶段计划，借助 AI 编码助手推进客户端、后端与管理端的实现，让语音输入成为之后可以执行的待办或继续思考的研究笔记。"
+  en: "I started KK Knock to capture fleeting ideas without stopping to type. I developed the idea into requirements and development documents, interaction prototypes, technology choices and coding guidelines, then planned milestones and built the Android app, backend and admin console. Spoken input becomes a todo or a researched note to act on later."
+  zh: "我从“不方便打字时，怎样留住一闪而过的想法”出发，提出 KK Knock，编写需求分析与开发文档、设计交互原型、确定技术选型和代码规范，再安排阶段计划，推进客户端、后端与管理端的实现，让语音输入成为之后可以执行的待办或继续思考的研究笔记。"
 focus: { primary: planning-delivery, also: [backend-cloud] }
 status: self-hosted-pilot
 status_note:
@@ -14,8 +14,8 @@ status_note:
   zh: 已完成自托管部署，并在 Android 手机上日常使用
 team: { size: 1 }
 role:
-  en: "From idea to implementation. I own requirements analysis and development documentation, interaction prototyping, technology selection, coding guidelines, system design and milestone scheduling. I coordinate implementation across the Android app, backend and admin console through self-hosted deployment. AI coding assistants produce much of the code from my specifications; I review and integrate it."
-  zh: "从想法到实现由我推进。我负责需求分析与开发文档、交互原型、技术选型、代码规范、系统设计和阶段日程管理，统筹 Android 客户端、后端与管理端开发直至自托管部署。大量代码由 AI 编码助手按我的规格生成，由我审查与集成。"
+  en: "Personal project, from idea to implementation. I own requirements analysis and development documentation, interaction prototyping, technology selection, coding guidelines, system design and milestone scheduling. I coordinate implementation across the Android app, backend and admin console through self-hosted deployment."
+  zh: "个人项目，从想法到实现由我推进。我负责需求分析与开发文档、交互原型、技术选型、代码规范、系统设计和阶段日程管理，统筹 Android 客户端、后端与管理端开发直至自托管部署。"
 context: { en: "Voice capture and information organization", zh: "语音采集与信息整理" }
 period: { start: "2026-08", end: null }
 stack:

@@ -91,6 +91,6 @@ A free consumer app that calls LLMs needs hard limits. Every provider call is me
 
 ## Development plan {#planning}
 
-Every repository carries instructions for AI coding agents, and a shared project memory — context, architecture, current state and a decision log — keeps me and the agents working from the same facts. The decision log reached {{fact:adrs}} records in about four weeks. Each record states its context, the decision and its consequences, and a superseded decision says so; the queue iteration above is two such records.
+I maintain repository development guidelines and shared project records covering context, architecture, current state and decisions to keep implementation and integration consistent. The decision log reached {{fact:adrs}} records in about four weeks. Each record states its context, the decision and its consequences, and a superseded decision says so; the queue iteration above is two such records.
 
 Work is cut into phases, each with its own document. The phase names below are the plain ones; the project documents use codes, shown in brackets. A feature audit in September 2026 reviewed the scope and set the backlog for the next phases.

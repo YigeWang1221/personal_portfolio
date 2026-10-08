@@ -5,17 +5,17 @@ subtitle:
   en: "A personal writing project spanning training, model serving and cloud infrastructure"
   zh: "覆盖训练、模型推理与云基础设施的个人写作项目"
 summary:
-  en: "I designed the component boundaries, API and training contracts, data model and Terraform infrastructure for a personal writing LoRA platform. I planned implementation milestones, reviewed AI-assisted code, and integrated the queue, GPU training worker and vLLM serving path in an AWS run."
-  zh: "我为个人写作 LoRA 平台设计组件边界、API 与训练契约、数据模型及 Terraform 基础设施，制定分阶段实施计划并审查 AI 辅助代码，随后在 AWS 运行中联通任务队列、GPU 训练 worker 与 vLLM 推理链路。"
+  en: "I designed the component boundaries, API and training contracts, data model and Terraform infrastructure for a personal writing LoRA platform. I planned implementation milestones and integrated the queue, GPU training worker and vLLM serving path in an AWS run."
+  zh: "我为个人写作 LoRA 平台设计组件边界、API 与训练契约、数据模型及 Terraform 基础设施，制定分阶段实施计划，随后在 AWS 运行中联通任务队列、GPU 训练 worker 与 vLLM 推理链路。"
 focus: { primary: backend-cloud, also: [ai-research, planning-delivery] }
 status: in-development
 status_note:
-  en: Completed an end-to-end GPU training and serving run on AWS
-  zh: 已在 AWS 上完成 GPU 训练与模型推理的端到端运行
+  en: Deployed on AWS for end-to-end GPU training and serving validation; resources removed afterwards
+  zh: 已部署至 AWS，完成 GPU 训练与推理验证后销毁资源
 team: { size: 1 }
 role:
-  en: Solo. I designed every layer — product, API contract, data model, component boundaries, IAM rules and the AWS platform in Terraform — wrote the milestone plans, and ran the AWS training and serving runs. AI coding assistants (Codex, Claude Code) implemented most of the code from my specifications; I reviewed it.
-  zh: 独立完成。我设计了所有层次：产品、API 契约、数据模型、组件边界、IAM 规则和用 Terraform 定义的 AWS 平台；编写里程碑计划，并在 AWS 上完成训练和推理运行。大部分代码由 AI 编码助手（Codex、Claude Code）按我的规格实现，由我审查。
+  en: Personal project. I owned the product design, API and training contracts, data model, component integration, IAM policies and Terraform infrastructure. I planned delivery milestones, deployed the platform on AWS, and validated the GPU training and vLLM serving workflow.
+  zh: 个人项目。我负责产品设计、API 与训练契约、数据模型、组件集成、IAM 策略和 Terraform 基础设施，制定交付里程碑，部署至 AWS，并验证 GPU 训练与 vLLM 推理流程。
 context: { en: "AI training and serving infrastructure", zh: "AI 训练与推理基础设施" }
 period: { start: "2026-06", end: null }
 stack:
@@ -54,8 +54,8 @@ related: kk-knock
 
 card:
   intro:
-    en: "I designed the component boundaries, training and serving contracts, and Terraform infrastructure, then planned milestones and reviewed the AI-assisted implementation."
-    zh: "我设计组件边界、训练与推理契约及 Terraform 基础设施，制定里程碑计划并审查 AI 辅助实现。"
+    en: "I designed the component boundaries, training and serving contracts, and Terraform infrastructure, planned delivery milestones, and validated the training and serving workflow on AWS."
+    zh: "我设计组件边界、训练与推理契约及 Terraform 基础设施，制定交付里程碑，并在 AWS 上验证训练与推理流程。"
   highlight:
     en: "I integrated SQS job dispatch, GPU training, S3 adapter storage and vLLM serving on AWS, connecting the component contracts into a working training-to-inference workflow."
     zh: "我在 AWS 上联通 SQS 任务分发、GPU 训练、S3 适配器存储和 vLLM 推理，将组件接口设计落实为从训练到推理的完整流程。"
@@ -65,10 +65,10 @@ card:
 
 facts:
   tf_resources:
-    value: "117"
-    label: { en: Terraform resource blocks for the AWS platform, zh: 定义 AWS 平台的 Terraform 资源块 }
-    condition: { en: "Checked with mock-provider tests, then applied for the AWS training and serving runs and destroyed afterwards", zh: 先通过 mock provider 测试，再为 AWS 上的训练与推理运行实际 apply，之后已销毁 }
-    claim: LORA-09
+    value: "123"
+    label: { en: Terraform resource blocks across the platform and state bootstrap, zh: AWS 平台与状态引导的 Terraform 资源块 }
+    condition: { en: "Validated with configuration checks, mock-provider tests, TFLint and Trivy, then applied for the AWS training and serving runs and destroyed afterwards", zh: 先通过配置校验、mock provider 测试、TFLint 和 Trivy 扫描，再为 AWS 上的训练与推理运行实际 apply，之后已销毁 }
+    claim: LORA-21
   tests:
     value: { en: "~314", zh: 约 314 }
     label: { en: automated test functions, zh: 自动化测试函数 }

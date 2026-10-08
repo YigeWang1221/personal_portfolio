@@ -43,3 +43,9 @@ test('a follow-up question keeps the topic of the previous one', { skip: !exists
   const result = search(index, { question: 'How was it tested?', previous: 'Tell me about the F1 race prediction project' });
   assert.equal(result.hits[0].entry.scope, 'f1-bayesian');
 });
+
+test('an explicitly named project overrides the current page for a validation question', () => {
+  const index = buildIndex(JSON.parse(readFileSync(WORLDBOOK, 'utf8')));
+  const result = search(index, { question: 'How was Personal Writing LoRA validated?', pagePath: '/projects/kk-knock/' });
+  assert.equal(result.hits[0].entry.scope, 'personal-writing-lora');
+});

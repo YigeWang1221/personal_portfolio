@@ -20,7 +20,7 @@ content/
 
 - **`meta.yaml`** holds every language-neutral fact: capabilities (`focus`), status label and note, team, period,
   stack, links, facts, figures and the roadmap.
-- **`role`** is the one statement of my responsibility on the page (owned / shared / AI assistance). Narratives do
+- **`role`** is the one statement of my responsibility on the page (owned / shared). Narratives do
   not repeat it. **`lead`** names the figure shown under the page header.
 - **Home-page projects** also carry `card`: a short `intro` (my responsibilities and concrete work, with brief project context), one contribution-focused `highlight` or optional `bullets` for distinct responsibilities, an
   optional short `status`, at most three editor-chosen technologies, the `#anchor` the main link opens, and — for

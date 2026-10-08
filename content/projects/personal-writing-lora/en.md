@@ -1,6 +1,6 @@
 ## Design scope and integration work {#problem}
 
-The goal is a platform for training and serving a LoRA from personal writing. I designed the API, data model, component contracts and cloud infrastructure, then organized implementation into milestones and reviewed the AI-assisted code. The engineering challenge was making the training queue, GPU worker and serving layer independently testable before integrating them.
+The goal is a platform for training and serving a LoRA from personal writing. I designed the API, data model, component contracts and cloud infrastructure, then organized implementation into milestones and deployed the platform on AWS for training and serving validation. The engineering challenge was making the training queue, GPU worker and serving layer independently testable before integrating them.
 
 ## Component boundaries and contracts {#planning}
 
@@ -39,7 +39,7 @@ An earlier architecture sketch survives in my design notes; the confirmed design
 | Design: wireframes, data model, API contract, architecture, IAM rules | Done |
 | Contracts, with valid and invalid examples | Written before the components |
 | Product, dataset builder, training worker, adapter manager | Implemented; {{fact:tests}} automated test functions, all against local fakes |
-| AWS platform in Terraform | Applied for the runs below, then destroyed |
+| AWS platform in Terraform | Deployed for training and serving validation, then destroyed |
 | Training on real writing | Ran on a GPU on AWS, with my own writing |
 | Scale-from-zero training | The training group scaled up from zero on queued work |
 | vLLM serving a trained adapter | Ran on one GPU on AWS |
@@ -90,7 +90,7 @@ Serving has run with one trained adapter on one GPU. Loading many users' adapter
 
 ## Terraform validation and IAM {#infrastructure}
 
-The AWS platform is written in Terraform — {{fact:tf_resources}} resource blocks with input validation rules and cross-checks — tested with mock-provider runs before it was applied.
+The AWS platform is written in Terraform — {{fact:tf_resources}} resource blocks with input validation rules and cross-checks — validated with formatting and configuration checks, mock-provider tests, TFLint and Trivy configuration scans before the AWS deployment.
 
 - **Network.** Public, private-application and private-database subnets in two Availability Zones, one NAT gateway, an S3 gateway endpoint and a private Route 53 zone. Security groups reference each other.
 - **Compute.** Launch templates enforce IMDSv2 and encrypted disks. There is no SSH (SSM instead) and no public IP on any instance. The backend group follows the launch template's default version, so a release only has to change the image.

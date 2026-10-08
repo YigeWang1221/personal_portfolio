@@ -4,9 +4,9 @@
 - **Real use decides what is finished.** On KK Knock, using the app every day showed that the background queue worked but nobody could see it, and that became the next iteration. See [that iteration](/projects/kk-knock/#iteration).
 - **Numbers with their conditions.** A benchmark on one phone or one GPU node is reported as exactly that. See [the HPC experiments](/projects/distributed-llm/#results).
 
-## Working with AI coding assistants {#ai}
+## From design to delivery {#ai}
 
-I build with AI coding assistants, mostly Codex and Claude Code. I own the product definition, the specifications, the architecture decisions, the review of every change and the testing; the assistants write much of the implementation from those specifications. Each project page states the split in its role line.
+I take personal projects from product definition and architecture through component integration, testing and deployment. I use API contracts, development guidelines and milestone plans to manage the work, then validate the system in its target environment. On team projects, each project page identifies my responsibilities and the work we shared.
 
 ## How the site is built {#site}
 

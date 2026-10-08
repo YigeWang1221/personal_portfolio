@@ -449,3 +449,11 @@ Owner-requested homepage tabs group projects into SDE, Cloud, and Finance & Data
 - **Decision:** The address in `content/profile.yaml` had a typo in its domain (`northeatsern`). On 2026-10-08 the
   owner confirmed the corrected address. `content/profile.yaml` and the allowlist in `scripts/check-dist.mjs` now
   use the corrected address. ADR-019's rule is unchanged: only the one owner-confirmed address passes the output scan.
+
+## ADR-024 — Personal projects presented through ownership and engineering work
+
+- **Status:** Accepted · **Date:** 2026-10-08 · **Amends:** ADR-018 (presentation), ADR-022 (assistant attribution wording)
+- **Decision:** At the owner's request, present personal projects as their personal projects, with concrete development, design, integration, testing and deployment responsibilities. Remove coding-tool disclosures and code-generation proportions from public project metadata and narratives, including Background. Tool use does not change personal-project ownership.
+- **Boundaries:** Preserve team size and shared responsibilities for team projects, measured conditions, and deployment status. Do not invent line-by-line authorship or code-generation percentages.
+- **Assistant:** Its knowledge follows the same public content. Prompts preserve personal/team ownership and concrete responsibilities without requiring coding-tool disclosures. Missing authorship details are not inferred.
+- **LoRA:** Describe the completed AWS deployment and GPU training/serving validation, followed by resource teardown; ongoing development does not mean it was never deployed. Local Terraform records support validation checks; the completed AWS runs remain owner-confirmed rather than independently reverified runtime evidence.

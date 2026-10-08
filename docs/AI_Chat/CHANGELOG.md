@@ -393,3 +393,28 @@ SDD-AICHAT-001（`AI_CHAT_DESIGN.md`）的实施记录。每完成一个功能�
 2. 模型层拒绝的请求不计入滥用次数。一个人可以一直发这类问题消耗调用，上限是限流（每分钟 6 次、每小时 30 次）和每日上限。可以改为：模型回答恰好是 `off_topic` 固定话术时，也记一次滥用。
 
 本次测试共 22 次真实调用（计入当日上限），测试用的访客 ID 被封禁了 10 分钟，对真实访客没有影响。
+
+---
+
+## 2026-10-08 · 个人项目展示与 LoRA 部署数据同步（ADR-024）
+
+**所有者要求**：个人项目直接按本人项目呈现，删除公开的 AI 编码分工和占比声明；LoRA 已部署至 AWS，完成训练与推理验证后销毁资源。
+
+**修改**
+- `content/projects/{personal-writing-lora,kk-knock,quant-ai}/meta.yaml`、LoRA 与 KK 中英文正文、Background 中英文页：统一个人项目归属和具体技术职责，移除编码工具披露。团队项目归属保持原数据。
+- LoRA 状态说明明确 AWS 部署、GPU 训练与 vLLM 推理验证、验证后资源销毁；补充 Terraform 配置校验、mock tests、TFLint 与 Trivy 的验证经历。静态计数更新为主平台与状态引导共 123 个 resource blocks（115 + 8），不表示部署资源数量。
+- `content/ai/prompts/{00-main,50-post-history}.md`：取消 AI 编码披露要求，保留个人/团队归属和事实条件；不推断代码作者或工具使用占比。重新生成公共投影、世界书和 prompt bundle。
+- 文档同步：`DECISIONS.md` 新增 ADR-024；`content/README.md`、`ARCHITECTURE.md`、`AI_CHAT_DESIGN.md` 更新职责描述规则。内部项目台账、来源登记、内容策略和状态日志同步；外部 LoRA 项目只读。
+- 检索回归：LoRA 文案更新后，当前 KK 页面上的 “How was it validated?” 被 LoRA 抢占第一名。`shared/ai/retrieve.mjs` 对没有点名项目、不是项目列表、且带 it/this/that 或中文指代的提问，优先当前页面的有效匹配；明确点名或上一轮确立的话题继续按原排序。原回归在修复前失败，修复后通过；新增明确点名 LoRA 的跨页测试。
+- `tests/ai/knowledge.test.mjs`：通过实际构建流水线验证新部署状态、验证经历、个人归属及旧声明消失，同时检查 HPC 团队归属仍保留。
+
+**实际验证**
+- `npm run build`：通过，30 页、1042 个链接，知识与产物扫描通过。
+- `PUBLIC_CHAT_ENABLED=true npm run build`：通过，30 页、1102 个链接，173 个知识条目。
+- `npm test`：85/85 通过，无跳过。首次沙箱执行因本机回环监听权限失败，允许监听后完成 mock 测试；没有真实 provider 调用。
+- `git diff --check`：通过。
+- 本地浏览器：中文 LoRA 首屏可见个人项目归属、AWS 部署与销毁说明；英文页同样显示 Personal project 和 Deployed on AWS，无旧编码声明、无横向溢出。
+
+**边界**
+- Terraform 本轮只检查代码和已有验证记录，没有在外部项目运行测试或调用 AWS；AWS 运行与销毁仍为所有者确认事实，没有独立重新验证云端。
+- 未 commit、push、部署，也未修改 Mac mini。线上聊天后端仍使用原镜像内的知识快照；发布时须先重新构建并更新后端，再发布网站。
