@@ -1,3 +1,11 @@
+tracks:
+  - id: sde
+    title: { en: SDE, zh: SDE · 软件开发 }
+  - id: cloud
+    title: { en: Cloud, zh: Cloud · 云计算 }
+  - id: finance-data
+    title: { en: Finance & Data Science, zh: 金融与数据科学 }
+
 # Catalog registry (ADR-006, ADR-016): the only place where ordering lives.
 # - Re-rank: reorder `order`. Hide: remove a slug from `order` (the module can stay).
 # - Capability membership lives in each project's meta.yaml (focus.primary / focus.also).

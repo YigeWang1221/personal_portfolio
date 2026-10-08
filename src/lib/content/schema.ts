@@ -210,6 +210,7 @@ export const projectMeta = z.strictObject({
   summary: localized,
   /** Capability membership (ADR-016). Order lives in content/catalog.yaml. */
   focus: z.strictObject({ primary: focusId, also: z.array(focusId).default([]) }),
+  track: z.enum(['sde', 'cloud', 'finance-data']),
   status: statusKey,
   /** Plain-language qualifier shown next to the status, e.g. what has not been validated. */
   status_note: localized.optional(),
@@ -239,6 +240,7 @@ export const projectMeta = z.strictObject({
 export type ProjectMeta = z.infer<typeof projectMeta>;
 
 export const catalogFile = z.strictObject({
+  tracks: z.array(z.strictObject({ id: z.enum(['sde', 'cloud', 'finance-data']), title: localized })).length(3),
   /** Filters of the project catalog, in display order. */
   focus: z
     .array(z.strictObject({ id: focusId, title: localized, description: localized }))

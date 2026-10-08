@@ -59,6 +59,7 @@ roadmap:
   planned: 计划中
 
 home:
+  project_tracks: 项目方向
   skills: 技术与能力
   title: 王一格 · 软件工程师（后端与系统）
   description: 王一格，软件工程师（后端与系统方向）。项目包括带自托管后端的语音速记 Android App、AWS 交付流水线、分布式大模型训练等，中英双语。

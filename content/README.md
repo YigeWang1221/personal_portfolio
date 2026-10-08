@@ -75,3 +75,5 @@ Screenshots and result plots show shipped UI or published results; they carry no
 | `f1-bayesian` | AI & Research | Two CURRENT diagrams, two result plots |
 | `smartbuyer` | Backend & Cloud | — |
 | `quant-ai` | AI & Research | One CURRENT diagram |
+
+Home project tabs use `track` on each project (`sde`, `cloud`, `finance-data`); labels and tab order are in `catalog.yaml.tracks`. Project order follows `catalog.yaml.order`.

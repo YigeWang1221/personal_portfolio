@@ -15,7 +15,7 @@ export function getStaticPaths() {
 }
 
 const { locale } = Astro.props as { locale: Locale };
-const { home, profile, focus, catalog } = getContent();
+const { home, profile, focus, catalog, tracks } = getContent();
 const linkedin = profile.links.find((l) => /linkedin\.com/.test(l.url));
 const github = profile.links.find((l) => /github\.com/.test(l.url));
 // Capabilities: membership comes from each project's meta.yaml (focus), order from the catalog.
@@ -75,36 +75,31 @@ const capabilities = focus.map((f) => ({ ...f, projects: catalog.filter((p) => p
 
     <section class="block" id="work" aria-labelledby="work-title">
       <h2 id="work-title">{t(locale, 'home.selected')}</h2>
-      <div class="flagship">
-        <FeaturedProject project={home.flagship} locale={locale} variant="flagship" />
-      </div>
-      <div class="case-grid">
-        {home.cases.map((p) => <FeaturedProject project={p} locale={locale} variant="case" />)}
+      <div data-project-tracks>
+        <nav class="track-tabs" aria-label={t(locale, 'home.project_tracks')}>
+          {tracks.map((track) => <a id={`tab-${track.id}`} href={`#track-${track.id}`} data-track={track.id}>{track.title[locale]}</a>)}
+        </nav>
+        {tracks.map((track) => (
+          <section id={`track-${track.id}`} class="track-panel" data-track-panel={track.id} aria-labelledby={`tab-${track.id}`}>
+            <h3 class="track-fallback-title">{track.title[locale]}</h3>
+            {track.id === 'sde' && <div class="flagship"><FeaturedProject project={home.flagship} locale={locale} variant="flagship" /></div>}
+            <div class={track.id === 'cloud' ? 'case-grid track-project-grid' : 'track-project-grid'}>
+              {catalog.filter((p) => p.meta.track === track.id && p !== home.flagship).map((p) => p.meta.card ? (
+                <FeaturedProject project={p} locale={locale} variant={track.id === 'cloud' && home.cases.includes(p) ? 'case' : 'exploring'} />
+              ) : (
+                <article class="track-summary">
+                  <h3><a href={localePath(locale, `/projects/${p.meta.slug}/`)}>{p.meta.title[locale]}</a></h3>
+                  <p>{p.meta.summary[locale]}</p>
+                  <p>{p.meta.role[locale]}</p>
+                  <p class="tech">{p.meta.stack.map((item) => termText(item, locale)).join(' · ')}</p>
+                  <a class="case-link" href={localePath(locale, `/projects/${p.meta.slug}/`)}>{t(locale, 'home.read_case')} →</a>
+                </article>
+              ))}
+            </div>
+          </section>
+        ))}
       </div>
     </section>
-
-    {(home.exploring.length > 0 || home.more.length > 0) && (
-      <section class="block" aria-labelledby="more-title">
-        <div class="block-head">
-          <h2 id="more-title">{t(locale, 'home.more')}</h2>
-          <a href={localePath(locale, '/projects/')}>{t(locale, 'home.all_projects')}<span aria-hidden="true"> →</span></a>
-        </div>
-        <div class="more-grid">
-          {home.exploring.map((p) => <FeaturedProject project={p} locale={locale} variant="exploring" />)}
-          {home.more.length > 0 && (
-            <ul class="more-list" role="list">
-              {home.more.map((p) => (
-                <li>
-                  <h3><a href={localePath(locale, `/projects/${p.meta.slug}/`)}>{p.meta.title[locale]}</a></h3>
-                  <p class="purpose">{p.meta.role[locale]}</p>
-                  <StatusBadge status={p.meta.status} team={p.meta.team} locale={locale} />
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-      </section>
-    )}
 
     <section class="block" id="capabilities" aria-labelledby="capabilities-title">
       <h2 id="capabilities-title">{t(locale, 'home.capabilities')}</h2>

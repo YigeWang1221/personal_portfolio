@@ -108,8 +108,55 @@
     update();
   }
 
+  function initTracks() {
+    var host = document.querySelector('[data-project-tracks]');
+    if (!host) return;
+    var tabs = Array.from(host.querySelectorAll('[data-track]'));
+    var panels = Array.from(host.querySelectorAll('[data-track-panel]'));
+    host.classList.add('tracks-ready');
+    host.querySelector('.track-tabs').setAttribute('role', 'tablist');
+    tabs.forEach(function (tab) {
+      tab.setAttribute('role', 'tab');
+      tab.setAttribute('aria-controls', 'track-' + tab.dataset.track);
+    });
+    panels.forEach(function (panel) { panel.setAttribute('role', 'tabpanel'); panel.tabIndex = 0; });
+    function apply() {
+      var selected = tabs.find(function (tab) { return tab.hash === location.hash; }) || tabs[0];
+      tabs.forEach(function (tab) {
+        var active = tab === selected;
+        tab.setAttribute('aria-selected', String(active));
+        tab.tabIndex = active ? 0 : -1;
+      });
+      panels.forEach(function (panel) { panel.hidden = panel.id !== selected.getAttribute('aria-controls'); });
+    }
+    function select(tab) {
+      history.pushState(null, '', tab.hash);
+      apply();
+      window.dispatchEvent(new Event('hashchange'));
+    }
+    tabs.forEach(function (tab, index) {
+      tab.addEventListener('click', function (event) {
+        if (event.button || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+        event.preventDefault(); select(tab);
+      });
+      tab.addEventListener('keydown', function (event) {
+        if (event.key === ' ') { event.preventDefault(); select(tab); return; }
+        var target;
+        if (event.key === 'ArrowRight') target = tabs[(index + 1) % tabs.length];
+        if (event.key === 'ArrowLeft') target = tabs[(index + tabs.length - 1) % tabs.length];
+        if (event.key === 'Home') target = tabs[0];
+        if (event.key === 'End') target = tabs[tabs.length - 1];
+        if (target) { event.preventDefault(); select(target); target.focus(); }
+      });
+    });
+    window.addEventListener('hashchange', apply);
+    window.addEventListener('popstate', apply);
+    apply();
+  }
+
   function init() {
     initMenu();
+    initTracks();
     initFilter();
     initLanguageSwitch();
   }
