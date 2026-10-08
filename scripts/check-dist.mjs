@@ -1,27 +1,34 @@
 // Post-build gate (ARCHITECTURE.md "Content safety", ADR-015). Fails the build when dist/ contains:
 //   - private data: local paths, private IPv4 ranges, AWS account IDs or keys, private keys, email addresses,
 //     internal ledger claim IDs, internal/ references, private working names, workers.dev / pages.dev URLs;
-//   - inline code: <style>, style="…" or on*="…" attributes, and any <script> other than the one first-party
-//     enhancement file /js/site.js (ADR-016; the CSP has no 'unsafe-inline');
+//   - inline code: <style>, style="…" or on*="…" attributes, and any <script> other than the first-party files
+//     /js/site.js (ADR-016) and, when the AI assistant is enabled, /js/chat.js (ADR-022); the CSP has no
+//     'unsafe-inline'. Without the assistant, its files must not be in the output at all;
 //   - resources loaded from third-party origins;
 //   - broken internal links or #anchors, a wrong <html lang>, a missing CSP <meta>, missing 404 pages;
 //   - _redirects entries whose target does not exist, or that point at another redirect (a chain).
 // Usage: node scripts/check-dist.mjs [--dir dist]
 import { readdirSync, readFileSync, statSync, existsSync } from 'node:fs';
 import { join, relative, extname, sep } from 'node:path';
+import { siteConfig } from '../src/lib/site-config.mjs';
+import { leakedSecretNames, localSecretValues } from './local-secrets.mjs';
 
 const argDir = process.argv.indexOf('--dir');
 const DIST = argDir > -1 ? process.argv[argDir + 1] : 'dist';
 /** Exact public contact address explicitly confirmed by the owner (ADR-019). */
-const ALLOWED_EMAILS = new Set(['wang.yige@northeatsern.edu']);
+const ALLOWED_EMAILS = new Set(['wang.yige@northeastern.edu']);
 /** Internal names that must never appear on the site. */
 const PRIVATE_NAMES = [/KK Boost/i, /KKnock-Boost/i, /KKKnockBoost/i, /codex_dev/, /cursor_dev/, /AI_prompts_Recording/, /ObsidianWorkSpace/];
 const CLAIM_ID = /\b(?:KK|HPC|CN|LORA|F1|QA|EQ|FS|SB|DS|PSA)-\d{2}\b/;
-/** The only script the site ships (ADR-016): progressive enhancement, loaded from its own origin. */
+/** First-party scripts (ADR-016, ADR-022): progressive enhancement, loaded from the site's own origin. */
 const SITE_SCRIPT = '/js/site.js';
+const CHAT_SCRIPT = '/js/chat.js';
+const ALLOWED_SCRIPTS = new Set(siteConfig.chatEnabled ? [SITE_SCRIPT, CHAT_SCRIPT] : [SITE_SCRIPT]);
 
 const problems = [];
 const report = (file, msg) => problems.push(`${file}: ${msg}`);
+/** Values of the git-ignored backend/.env; none may ever be published (ADR-022). */
+const LOCAL_SECRETS = localSecretValues();
 
 function walk(dir) {
   const out = [];
@@ -51,6 +58,8 @@ for (const f of files) {
   const r = rel(f);
   const text = readFileSync(f, 'utf8');
   const isMarkup = ext === '.html' || ext === '.xml' || ext === '.txt';
+  // JSON is scanned like markup (ADR-022): a data file in the output must not carry claim IDs or internal references.
+  const isPublicText = isMarkup || ext === '.json' || ext === '.webmanifest';
   const checks = [
     [/\/Users\/|\/home\/[a-z_][\w-]*\/|[A-Z]:\\Users\\/, 'local file path'],
     [/(^|[^\d.])(10\.\d{1,3}|192\.168|172\.(1[6-9]|2\d|3[01]))\.\d{1,3}\.\d{1,3}(?![\d.])/, 'private IPv4 address'],
@@ -60,7 +69,7 @@ for (const f of files) {
     [/key-[0-9a-f]{32}/, 'API key pattern'],
   ];
   if (ext !== '.svg' && ext !== '.css') checks.push([/(?<![\d.])\d{12}(?![\d.])/, '12-digit number (AWS account ID?)']);
-  if (isMarkup) {
+  if (isPublicText) {
     checks.push([CLAIM_ID, 'internal ledger claim ID']);
     checks.push([/\binternal\//, 'reference to internal/']);
     checks.push([/workers\.dev|pages\.dev/, 'workers.dev / pages.dev URL']);
@@ -70,10 +79,11 @@ for (const f of files) {
     const m = re.exec(text);
     if (m) report(r, `${what}: "${text.slice(Math.max(0, m.index - 25), m.index + m[0].length + 25).replace(/\s+/g, ' ')}"`);
   }
+  for (const name of leakedSecretNames(text, LOCAL_SECRETS)) report(r, `contains the value of ${name} from backend/.env`);
   for (const m of text.matchAll(/[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,}/g)) {
     if (!ALLOWED_EMAILS.has(m[0].toLowerCase())) report(r, `email address: ${m[0]}`);
   }
-  if ((ext === '.js' || ext === '.mjs') && '/' + r !== SITE_SCRIPT) report(r, `JavaScript file in the output (only ${SITE_SCRIPT} is allowed)`);
+  if ((ext === '.js' || ext === '.mjs') && !ALLOWED_SCRIPTS.has('/' + r)) report(r, `JavaScript file in the output (allowed: ${[...ALLOWED_SCRIPTS].join(', ')})`);
   if (ext === '.css' && /url\(\s*["']?(https?:)?\/\//i.test(text)) report(r, 'CSS loads a remote URL');
 }
 
@@ -101,7 +111,7 @@ for (const [r, html] of htmlCache) {
     if (a.id) ids.add(a.id);
     if ('style' in a) report(r, `style="" attribute on <${tag}>`);
     for (const name of Object.keys(a)) if (/^on[a-z]+$/.test(name)) report(r, `inline event handler ${name} on <${tag}>`);
-    if (tag === 'script' && (a.src ?? '').split('?')[0] !== SITE_SCRIPT) report(r, `<script> element${a.src ? ` (src=${a.src})` : ' (inline)'}`);
+    if (tag === 'script' && !ALLOWED_SCRIPTS.has((a.src ?? '').split('?')[0])) report(r, `<script> element${a.src ? ` (src=${a.src})` : ' (inline)'}`);
     if (tag === 'html') htmlLang = a.lang ?? null;
     if (tag === 'meta' && (a['http-equiv'] ?? '').toLowerCase() === 'content-security-policy') sawCspMeta = true;
     const resource = [];
@@ -179,8 +189,13 @@ if (existsSync(redirectsFile)) {
 }
 
 // 5. Required files ------------------------------------------------------------------------------------
-for (const required of ['404.html', 'zh/404.html', 'index.html', 'zh/index.html', '_headers', '_redirects', 'robots.txt', 'js/site.js']) {
+const chatFiles = ['js/chat.js', 'css/chat.css'];
+for (const required of ['404.html', 'zh/404.html', 'index.html', 'zh/index.html', '_headers', '_redirects', 'robots.txt', 'js/site.js', ...(siteConfig.chatEnabled ? chatFiles : [])]) {
   if (!existsSync(join(DIST, required))) report(required, 'required file is missing');
+}
+if (!siteConfig.chatEnabled) {
+  for (const f of chatFiles) if (existsSync(join(DIST, f))) report(f, 'AI assistant file in a build without PUBLIC_CHAT_ENABLED=true');
+  for (const [r, html] of htmlCache) if (/data-pfchat/.test(html)) report(r, 'AI assistant widget in a build without PUBLIC_CHAT_ENABLED=true');
 }
 
 if (problems.length) {

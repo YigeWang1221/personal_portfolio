@@ -26,16 +26,36 @@ Requires Node.js 22.12 or later.
 ```bash
 npm ci
 npm run dev        # local dev server at http://localhost:4321
-npm run build      # content checks → astro build → post-build safety scan
+npm run build      # content checks → astro build → AI knowledge build → post-build safety scans
+npm test           # node --test suites (AI knowledge and prompt build; no network, no model calls)
 npm run preview    # serve the built site
+npm run chat:preview -- --q "Which projects show backend work?"   # print the AI assistant's assembled prompt
+npm run chat:preview -- --q "…" --provider mock                     # …and stream a mock answer (no network)
+npm run api:dev    # AI backend with mock providers on http://localhost:3000 (X-Origin-Key: dev-origin-key)
 ```
+
+**Environment variables.**
+- [`.env.example`](.env.example) lists the build switches and the Edge Worker secrets.
+- The AI backend's settings, the origin key and the three model plans, go in `backend/.env`. That file is
+  git-ignored; its template is [`backend/.env.example`](backend/.env.example).
+- The Mac mini stack loads `backend/.env` into the container.
+- The build fails if any value from it ever appears in the site output or the knowledge snapshot.
+
+**AI assistant backend** (`backend/`, ADR-022). The backend has no dependencies to install. Its configuration is
+listed in [`backend/.env.example`](backend/.env.example). To build the image, run this after `npm run build`:
+`docker buildx build --platform linux/arm64 -f backend/Dockerfile -t portfolio-api:<version> .`
+Deployment to the Mac mini is described in `docs/AI_Chat/AI_CHAT_DESIGN.md` §5.7 and §10.1.
 
 `npm run build` fails when:
 - a page, UI string, section or fact exists in one language but not the other;
 - a measurement appears in a narrative outside a `{{fact:…}}` reference;
 - `dist/` contains private data (local paths, private IPs, keys, emails, internal claim IDs), inline scripts or
   styles, any script other than `/js/site.js`, third-party resources, broken internal links and anchors, or a
-  redirect in `_redirects` whose target is missing.
+  redirect in `_redirects` whose target is missing;
+- the AI assistant's knowledge or prompts (`generated/ai/`, never published) contain claim-like IDs, unrendered
+  facts, internal references, keys or unapproved emails, or point to a page or anchor that does not exist.
+  Prompt files that contain fact values, unknown variables or an over-budget block also fail the build
+  (see `content/README.md`, "AI assistant").
 
 **Diagrams.** Mermaid sources (`content/**/assets/*.mmd`) are rendered to SVG by `npm run diagrams`, using the locally
 installed Chrome; the rendered SVGs are committed, so the hosted build never needs a browser. Re-run it after
@@ -45,8 +65,9 @@ editing a `.mmd` file.
 
 ## Deploy (Cloudflare Workers static assets)
 
-The Worker only serves `dist/`; there is no Worker script. Configuration: [`wrangler.jsonc`](wrangler.jsonc),
-response headers: [`public/_headers`](public/_headers).
+The Worker serves `dist/`. Its one script, [`edge/api-proxy.ts`](edge/api-proxy.ts), runs only for `/api` and
+`/api/*` (the AI assistant, ADR-022); until its secrets are set, those paths answer 503 and nothing else changes.
+Configuration: [`wrangler.jsonc`](wrangler.jsonc), response headers: [`public/_headers`](public/_headers).
 
 1. **First deployment (preview).** Build without `SITE_URL`, then deploy:
    ```bash
@@ -70,6 +91,24 @@ response headers: [`public/_headers`](public/_headers).
    `npx wrangler deploy`, and set `SITE_URL` (and later `SITE_INDEXING`) as build variables.
 6. **Keep analytics off.** Make sure Cloudflare Web Analytics does not inject its script into this hostname; the site
    ships no analytics, and its Content-Security-Policy would block the beacon anyway.
+7. **AI assistant (ADR-022).** Deploy the backend first, then the site. Full procedure:
+   `docs/AI_Chat/AI_CHAT_DESIGN.md` §10.
+   - Backend: build the image after `npm run build` (see Develop), then start `portfolio-api` in the Mac mini stack.
+   - Worker settings, set once by the owner: two values, `ORIGIN_URL` (`https://` plus the backend's tunnel
+     hostname) and `ORIGIN_KEY` (the same value as `PORTFOLIO_ORIGIN_KEY` in `backend/.env`):
+     ```bash
+     npx wrangler secret put ORIGIN_URL
+     ```
+     ```bash
+     npx wrangler secret put ORIGIN_KEY
+     ```
+   - Release the site once without the assistant (the default), then with it:
+     ```bash
+     PUBLIC_CHAT_ENABLED=true npm run build && npx wrangler deploy
+     ```
+   - To turn it off again, build and deploy without the flag.
+   - For local testing, `wrangler dev` with `--var` values pointing at `npm run api:dev` runs the whole chain with
+     mock providers.
 
 ## Documentation map
 
@@ -82,7 +121,10 @@ response headers: [`public/_headers`](public/_headers).
 | [`DECISIONS.md`](DECISIONS.md) | Architecture decision records |
 | [`docs/style/BILINGUAL_STYLE.md`](docs/style/BILINGUAL_STYLE.md) | Writing rules for English and Chinese content |
 | [`docs/style/GLOSSARY.md`](docs/style/GLOSSARY.md) | English ↔ Chinese terminology |
-| [`content/README.md`](content/README.md) | Content model, authoring rules and staged assets |
+| [`content/README.md`](content/README.md) | Content model, authoring rules and staged assets, AI assistant prompts |
+| [`docs/AI_Chat/AI_CHAT_DESIGN.md`](docs/AI_Chat/AI_CHAT_DESIGN.md) | AI assistant design (SDD-AICHAT-001, ADR-022) |
+| [`docs/AI_Chat/deployment-contract.md`](docs/AI_Chat/deployment-contract.md) | AI assistant: verified facts and the runtime contract |
+| [`docs/AI_Chat/CHANGELOG.md`](docs/AI_Chat/CHANGELOG.md) | AI assistant implementation log |
 
 ## Internal documents
 

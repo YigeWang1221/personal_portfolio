@@ -138,6 +138,45 @@ Source priority for technical facts, highest first:
 - Security findings go to the owner in chat and into the owner-only notes in `internal/`. Never put them in a tracked
   file.
 
+## AI chat work (ADR-022, SDD-AICHAT-001)
+
+- **Documents:**
+  - Spec: `docs/AI_Chat/AI_CHAT_DESIGN.md`.
+  - Pre-implementation checks and the runtime contract: `docs/AI_Chat/deployment-contract.md`.
+  - Implementation log: `docs/AI_Chat/CHANGELOG.md`. Add an entry for every completed feature or phase: files
+    changed, commands run, checks skipped and why, open risks.
+- **Tests:** `npm test` (after `npm run build`) must pass before any commit that touches `backend/`, `shared/`,
+  `scripts/` or `content/ai/`. Tests use mock providers only.
+- **Hooks:** resolve every 【LOCAL-CHECK】 / 【WEB-CHECK】 before relying on it.
+  - Web lookups use official docs only (Cloudflare, DeepSeek, Google AI, Astro, Docker). Record the URL and the date.
+  - When a doc contradicts the spec, fix the spec first, then the code.
+- **Secrets:**
+  - Never print environment variables, secret files or `docker inspect` Env.
+  - Backend settings, the keys and the three model plans, live in the git-ignored `backend/.env`, which the owner
+    fills in. Never read its values into output.
+  - The repository holds placeholders only (`backend/.env.example`, `.env.example`,
+    `deploy/compose.portfolio.yaml`).
+  - Never write the stack's internal service names, hostnames or network names into tracked files. Use the
+    contract's placeholders. The owner-approved exception is plan A's gateway URL in the git-ignored
+    `backend/.env`.
+- **Prompts:**
+  - They live in `content/ai/prompts/`, in the order set by `prompt-order.yaml`. Never hardcode prompt text in backend
+    code.
+  - Check prompt changes with `npm run chat:preview`, which calls no model.
+- **Scope (owner decision, 2026-10-08):** the assistant answers only about the résumé and portfolio.
+  - Rules for what is refused before any model call live in `content/ai/guard.yaml`.
+  - Never weaken a rule without adding the case to `tests/ai/guard.test.mjs`.
+  - Models are the owner's choice: never hardcode a provider or model name. Plans are
+    `API_URL_PLAN_x` / `MODEL_PLAN_x` / `KEY_PLAN_x`.
+- **Knowledge:** artifacts come only from the public projection. `fact.claim`, chart claims and `internal/` never
+  reach code, artifacts, tests or PR text.
+- **Ask the owner before:**
+  - commit or push;
+  - `wrangler deploy` or `wrangler secret`;
+  - Tunnel, Access or DNS changes;
+  - real provider calls;
+  - any change to the Mac mini stack (renaming the project, recreating containers).
+
 ## Before any commit
 
 Commits and pushes happen only when the owner asks. `npm run build` must pass, and each of these checks must print

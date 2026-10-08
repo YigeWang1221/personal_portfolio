@@ -1,0 +1,20 @@
+# Fixed replies (SDD-AICHAT-001 §5.3.1). Referenced from prompts as {{canned.<key>}}; the backend uses "blocked"
+# when a provider refuses a request. {{owner_name}} and {{owner_contact}} are filled in at build time.
+personal:
+  en: "That is something to confirm with {{owner_name}} directly: {{owner_contact}}"
+  zh: "这需要直接与{{owner_name}}确认：{{owner_contact}}"
+off_topic:
+  en: "I can only help with questions about {{owner_name}}'s portfolio, such as the projects, skills, education and experience shown on this site."
+  zh: "我只能回答与{{owner_name}}作品集相关的问题，比如本站展示的项目、技能、教育和经历。"
+insufficient:
+  en: "The public portfolio does not mention that. You can ask {{owner_name}} directly: {{owner_contact}}"
+  zh: "公开资料中没有提到这一点。可以直接联系{{owner_name}}：{{owner_contact}}"
+blocked:
+  en: "I can't help with that request. Feel free to ask about the projects, skills or experience on this site."
+  zh: "这个请求我无法回答。欢迎询问本站中的项目、技能或经历。"
+greeting:
+  en: "Hello! I can answer questions about {{owner_name}}'s projects, skills, education and experience. What would you like to know?"
+  zh: "你好！我可以回答关于{{owner_name}}的项目、技能、教育和经历的问题。想了解什么？"
+low_confidence:
+  en: "Note: the material below may not answer this question. If it does not, say so plainly and suggest contacting {{owner_name}}."
+  zh: "注意：下面的资料可能无法回答这个问题。如果确实无法回答，请直接说明，并建议联系{{owner_name}}。"

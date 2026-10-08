@@ -3,6 +3,7 @@
 import '../styles/global.css';
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
+import ChatWidget from '../components/ChatWidget.astro';
 import type { NavKey } from '../components/SiteHeader.astro';
 import { HTML_LANG, OG_LOCALE, absoluteUrl, otherLocale, type Locale } from '../lib/i18n';
 import { siteConfig } from '../lib/site-config.mjs';
@@ -40,6 +41,13 @@ const alternates = notFound
 const indexable = siteConfig.indexable && !notFound;
 // The script is served from public/ without a content hash; a version query makes each release fetch it anew.
 const scriptVersion = createHash('sha256').update(readFileSync('public/js/site.js')).digest('hex').slice(0, 10);
+// AI assistant (ADR-022): its script and stylesheet live in src/client/ and are copied into dist/ by postbuild.mjs only
+// when the flag is on, so a build without the assistant is unchanged. The widget sits on the footer's line below for
+// the same reason: a separate line (or a template comment) would add whitespace to every page.
+const chat = siteConfig.chatEnabled;
+const version = (file: string) => createHash('sha256').update(readFileSync(file)).digest('hex').slice(0, 10);
+const chatScriptVersion = chat ? version('src/client/chat.js') : '';
+const chatStyleVersion = chat ? version('src/client/chat.css') : '';
 const fullTitle = path === '/' ? title : `${title} · ${t(locale, 'site.name')}`;
 ---
 
@@ -66,6 +74,8 @@ const fullTitle = path === '/' ? title : `${title} · ${t(locale, 'site.name')}`
     {/* Progressive enhancement only (ADR-016): the mobile menu and the project filter. Every page works without it.
         is:inline keeps Astro from bundling it; the file is served as is from public/. */}
     <script is:inline src={`/js/site.js?v=${scriptVersion}`} defer></script>
+    {chat && <link rel="stylesheet" href={`/css/chat.css?v=${chatStyleVersion}`} />}
+    {chat && <script is:inline src={`/js/chat.js?v=${chatScriptVersion}`} defer></script>}
   </head>
   <body>
     <a class="skip-link" href="#main">{t(locale, 'nav.skip')}</a>
@@ -73,6 +83,6 @@ const fullTitle = path === '/' ? title : `${title} · ${t(locale, 'site.name')}`
     <main id="main">
       <slot />
     </main>
-    <SiteFooter locale={locale} />
+    <SiteFooter locale={locale} />{chat && <ChatWidget locale={locale} path={path} />}
   </body>
 </html>

@@ -1,4 +1,5 @@
-# CI: build the site with every gate (content parity, safety scan, internal links). No secrets, no deploy.
+# CI: build the site with every gate (content parity, safety scan, internal links, AI artifact scan) and run the
+# tests (node --test, mock providers only). No secrets, no deploy.
 name: CI
 
 on:
@@ -19,3 +20,4 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build
+      - run: npm test

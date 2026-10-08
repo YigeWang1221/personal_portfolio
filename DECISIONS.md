@@ -386,3 +386,66 @@ Architecture decision records for the portfolio repository.
 ## ADR-021 — Home project tracks (2026-09-26)
 
 Owner-requested homepage tabs group projects into SDE, Cloud, and Finance & Data Science. Track membership is stored on project metadata; labels and order remain in the catalog. Capability filters remain available in the full project catalog. Tab selection uses shareable fragment identifiers, keyboard navigation, and progressive enhancement; without JavaScript every group is visible.
+
+## ADR-022 — Portfolio AI assistant (floating chat)
+
+- **Status:** Accepted (by the owner, 2026-10-08, after going live) · **Date:** 2026-10-08 · **Amends:** ADR-015 (no Worker script), ADR-016 (one first-party
+  script)
+- **Context:**
+  - The owner wants recruiters to be able to ask questions about the portfolio in a floating, bilingual chat window.
+  - The design is `docs/AI_Chat/AI_CHAT_DESIGN.md` (SDD-AICHAT-001 v2.1). Its pre-implementation checks are recorded
+    in `docs/AI_Chat/deployment-contract.md`, and the implementation log is `docs/AI_Chat/CHANGELOG.md`.
+- **Decision:**
+  - **Knowledge:** answers come only from a build-time snapshot of the public projection of `content/`.
+    - Only catalog-visible items are included.
+    - The projection uses a field whitelist. `fact.claim`, chart `panels[].claim` and `internal/` never reach it.
+    - A separate scan (`scripts/check-ai-artifacts.mjs`) fails the build on claim IDs, unrendered fact references,
+      local paths or key-like strings.
+  - **Prompts:** layered files under `content/ai/prompts/`, ordered by `prompt-order.yaml` and compiled at build time.
+    - Prompt files say how to answer, never which facts. A fact value or claim ID in a prompt fails the build.
+    - A git-ignored `local/` overlay is opt-in (`PROMPT_LOCAL_OVERRIDES=1`) and marks the build dirty.
+  - **Client:** a second first-party script and a stylesheet, `/js/chat.js` and `/css/chat.css`, rendered only when
+    `PUBLIC_CHAT_ENABLED=true`.
+    - Their sources live in `src/client/`, and `postbuild.mjs` copies them only when the flag is on.
+    - With the flag off, the output is byte-identical to a build without the assistant, and `check-dist` fails if any
+      assistant file appears.
+    - The CSP is unchanged, because the API is same-origin.
+  - **Edge:** a Worker script (`edge/api-proxy.ts`) handles only `/api` and `/api/*` (`run_worker_first`). Every
+    other request goes to the static assets as before.
+  - **Backend:** `portfolio-api` runs on the owner's Mac mini, inside the owner's existing self-hosted AI compose
+    project, which is renamed to `ai_web`.
+    - It is reached through Cloudflare Tunnel and accepts only requests that carry the shared origin key, which the
+      Worker adds. Cloudflare Access with a service token is optional (simplified setup, owner decision 2026-10-08).
+    - Runtime: Node 22 with `node:http` and no runtime dependencies.
+    - Its settings, including the keys, are in the portfolio's own git-ignored `backend/.env`, which the owner
+      fills in and the stack loads with `env_file`. The stack's `.env` is not used.
+    - Nothing secret is tracked in this repository, and the output gates fail if a value from that file is ever
+      published.
+  - **Providers:** three model plans, A → B → C, chosen entirely by the owner (owner decision, 2026-10-08).
+    - Each plan is three environment variables: `API_URL_PLAN_x`, `MODEL_PLAN_x`, `KEY_PLAN_x`. The code names no
+      provider and no model. The protocol follows the URL: the Gemini API address uses Gemini, anything else is
+      OpenAI-compatible.
+    - Each plan is tried once. The answer switches to the next plan only before the first visible text.
+  - **Scope:** only questions about the owner's résumé and portfolio are answered (owner decision, 2026-10-08).
+    - A server-side guard refuses everything else before any model is called. Rules live in
+      `content/ai/guard.yaml`: prompt injection, using the window as a tool, personal and private matters,
+      unrelated questions.
+    - Answers that start writing code or repeating the instructions are replaced.
+    - Repeated misuse blocks the visitor for a while.
+    - The prompt rules are the last line of defence.
+  - **No server-side chat storage.** Completed turns live in the tab's `sessionStorage`.
+- **Consequences:**
+  - The static site never depends on the backend. When the backend is down, the chat says so and the pages work as
+    before.
+  - The assistant keeps the site's attribution and condition wording (ADR-003, ADR-012, ADR-013), which acceptance
+    tests check.
+  - If a plan uses the stack's gateway, it rides on the owner's personal account session, not a paid API project.
+    The owner accepts that terms-of-service risk; a dedicated project key makes it easy to disable the plan.
+  - Removing the chat means building with the flag off.
+
+## ADR-023 — Contact email correction
+
+- **Status:** Accepted · **Date:** 2026-10-08 · **Amends:** ADR-019 (the approved address)
+- **Decision:** The address in `content/profile.yaml` had a typo in its domain (`northeatsern`). On 2026-10-08 the
+  owner confirmed the corrected address. `content/profile.yaml` and the allowlist in `scripts/check-dist.mjs` now
+  use the corrected address. ADR-019's rule is unchanged: only the one owner-confirmed address passes the output scan.

@@ -1,0 +1,66 @@
+---
+// AI assistant widget (ADR-022, SDD-AICHAT-001 §5.4). Rendered only when PUBLIC_CHAT_ENABLED=true (BaseLayout).
+// Markup only: behaviour is in /js/chat.js (src/client/chat.js), styles in /css/chat.css (src/client/chat.css).
+// Everything starts hidden; chat.js reveals the launcher, so without JavaScript the page is exactly as before.
+import { parse as parseYaml } from 'yaml';
+import startersSource from '../../content/ai/prompts/70-starters.yaml?raw';
+import { getContent, t } from '../lib/content/load';
+import type { Locale } from '../lib/i18n';
+import { localePath } from '../lib/i18n';
+
+interface Props {
+  locale: Locale;
+  /** Language-neutral path of the page, e.g. "/projects/kk-knock/". */
+  path: string;
+}
+const { locale, path } = Astro.props;
+const { profile } = getContent();
+const starters: string[] = parseYaml(startersSource)?.[locale] ?? [];
+const linkedin = profile.links.find((l) => /linkedin\.com/.test(l.url));
+const keys = ['thinking', 'switching', 'partial', 'stopped', 'unavailable', 'limited', 'reset', 'sources', 'regenerate', 'you', 'assistant', 'started', 'finished'];
+const strings = JSON.stringify(Object.fromEntries(keys.map((k) => [k, t(locale, `chat.${k}`)])));
+---
+
+<div class="pfchat" data-pfchat data-locale={locale} data-page-path={localePath(locale, path)} data-api="/api/chat" data-strings={strings}>
+  <button type="button" class="pfchat-launcher" data-pfchat-launcher hidden aria-expanded="false" aria-controls="pfchat-panel">
+    <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3h11A2.5 2.5 0 0 1 20 5.5v8a2.5 2.5 0 0 1-2.5 2.5H10l-4.2 3.6c-.5.4-1.3.1-1.3-.6V16A2.5 2.5 0 0 1 4 13.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"></path></svg>
+    <span>{t(locale, 'chat.launcher')}</span>
+  </button>
+  <section id="pfchat-panel" class="pfchat-panel" role="dialog" aria-modal="false" aria-labelledby="pfchat-title" hidden data-pfchat-panel>
+    <header class="pfchat-head">
+      <div>
+        <h2 id="pfchat-title">{t(locale, 'chat.title')}</h2>
+        <p class="pfchat-subtitle">{t(locale, 'chat.subtitle')}</p>
+      </div>
+      <button type="button" class="pfchat-text-button" data-pfchat-clear aria-label={t(locale, 'chat.clear_label')}>{t(locale, 'chat.clear')}</button>
+      <button type="button" class="pfchat-icon-button" data-pfchat-close aria-label={t(locale, 'chat.close')}>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path></svg>
+      </button>
+    </header>
+    <details class="pfchat-privacy">
+      <summary>{t(locale, 'chat.privacy_short')}</summary>
+      <p>{t(locale, 'chat.privacy_long')}</p>
+    </details>
+    <div class="pfchat-log" data-pfchat-log role="log" aria-label={t(locale, 'chat.log_label')}>
+      <div class="pfchat-starters" data-pfchat-starters>
+        <p>{t(locale, 'chat.starters_title')}</p>
+        <ul role="list">
+          {starters.map((q) => <li><button type="button" data-pfchat-starter>{q}</button></li>)}
+        </ul>
+      </div>
+    </div>
+    <p class="pfchat-status" data-pfchat-status hidden></p>
+    <form class="pfchat-form" data-pfchat-form>
+      <label class="visually-hidden" for="pfchat-input">{t(locale, 'chat.input_label')}</label>
+      <textarea id="pfchat-input" rows="1" maxlength="1000" placeholder={t(locale, 'chat.placeholder')} data-pfchat-input></textarea>
+      <button type="submit" class="pfchat-send" data-pfchat-send>{t(locale, 'chat.send')}</button>
+      <button type="button" class="pfchat-send pfchat-stop" data-pfchat-stop hidden>{t(locale, 'chat.stop')}</button>
+    </form>
+    <p class="pfchat-contact">
+      {t(locale, 'chat.contact')}
+      <a href={`mailto:${profile.contact.email}`}>{profile.contact.email}</a>
+      {linkedin && <><span aria-hidden="true"> · </span><a href={linkedin.url}>LinkedIn</a></>}
+    </p>
+    <div class="visually-hidden" aria-live="polite" data-pfchat-live></div>
+  </section>
+</div>

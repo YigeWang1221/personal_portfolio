@@ -1,0 +1,181 @@
+{
+  "note": "T-RET (SDD-AICHAT-001 §9): recruiter questions in English and Chinese, plus unrelated ones. 'expect' lists scopes (or scope|section) of which at least one must be among the sources sent to the model; 'relevant: false' must stay below the confidence threshold. The first 20 are the spec's set (10 per language, 4 unrelated); the rest were added during calibration on 2026-10-08. Cases marked 'starter' are the suggested questions of content/ai/prompts/70-starters.yaml: they must also be confident.",
+  "cases": [
+    {
+      "q": "What is KK Knock?",
+      "expect": [
+        "kk-knock"
+      ]
+    },
+    {
+      "q": "Was the Cloud-Native project a team project? What was Yige's part?",
+      "expect": [
+        "cloud-native|@overview"
+      ]
+    },
+    {
+      "q": "How was the distributed LLM training measured?",
+      "expect": [
+        "distributed-llm"
+      ]
+    },
+    {
+      "q": "Which projects show backend and cloud work?",
+      "expect": [
+        "catalog",
+        "cloud-native"
+      ]
+    },
+    {
+      "q": "What are Yige's education and internships?",
+      "expect": [
+        "profile"
+      ]
+    },
+    {
+      "q": "How does the F1 race prediction model work?",
+      "expect": [
+        "f1-bayesian"
+      ]
+    },
+    {
+      "q": "How does the LoRA platform scale from zero?",
+      "expect": [
+        "personal-writing-lora",
+        "plan|lora-scale-from-zero"
+      ]
+    },
+    {
+      "q": "What workflow does FoodShelter model?",
+      "expect": [
+        "enterprise-workflow"
+      ]
+    },
+    {
+      "q": "What's the weather in Boston today?",
+      "relevant": false
+    },
+    {
+      "q": "Write me a Python function that sorts a list.",
+      "relevant": false
+    },
+    {
+      "q": "KK Knock 是做什么的？",
+      "expect": [
+        "kk-knock"
+      ]
+    },
+    {
+      "q": "他做过哪些后端项目？",
+      "expect": [
+        "catalog",
+        "cloud-native"
+      ]
+    },
+    {
+      "q": "AWS 云原生项目是团队完成的吗？他负责哪部分？",
+      "expect": [
+        "cloud-native|@overview"
+      ]
+    },
+    {
+      "q": "分布式大模型训练用了哪些技术？",
+      "expect": [
+        "distributed-llm"
+      ]
+    },
+    {
+      "q": "Yige 的教育背景和实习经历是什么？",
+      "expect": [
+        "profile"
+      ]
+    },
+    {
+      "q": "F1 比赛预测用了什么方法？",
+      "expect": [
+        "f1-bayesian"
+      ]
+    },
+    {
+      "q": "设备借用与作业批改平台的架构是怎样的？",
+      "expect": [
+        "equipment-assignment"
+      ]
+    },
+    {
+      "q": "量化股票排序项目是怎么实现的？",
+      "expect": [
+        "quant-ai"
+      ]
+    },
+    {
+      "q": "今天波士顿的天气怎么样？",
+      "relevant": false
+    },
+    {
+      "q": "帮我写一个快速排序算法。",
+      "relevant": false
+    },
+    {
+      "q": "Does Yige know Python?",
+      "expect": [
+        "profile|skills"
+      ]
+    },
+    {
+      "q": "What is the best pizza topping?",
+      "relevant": false
+    },
+    {
+      "q": "推荐一部好看的电影",
+      "relevant": false
+    },
+    {
+      "q": "他的期望薪资是多少？",
+      "relevant": false
+    },
+    {
+      "q": "What is Yige's main tech stack?",
+      "expect": [
+        "profile|skills"
+      ],
+      "starter": true
+    },
+    {
+      "q": "Which projects were team projects, and what was Yige's part?",
+      "expect": [
+        "catalog"
+      ],
+      "starter": true
+    },
+    {
+      "q": "What are Yige's education and internship experience?",
+      "expect": [
+        "profile"
+      ],
+      "starter": true
+    },
+    {
+      "q": "Yige 主要使用哪些技术栈？",
+      "expect": [
+        "profile|skills"
+      ],
+      "starter": true
+    },
+    {
+      "q": "哪些项目体现了后端和云方面的能力？",
+      "expect": [
+        "catalog",
+        "cloud-native"
+      ],
+      "starter": true
+    },
+    {
+      "q": "哪些是团队项目？Yige 负责了哪些部分？",
+      "expect": [
+        "catalog"
+      ],
+      "starter": true
+    }
+  ]
+}

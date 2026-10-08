@@ -1,0 +1,18 @@
+# Prompt assembly order for the AI assistant (ADR-022, SDD-AICHAT-001 §5.3.3). The only place that defines order.
+# Every request gets one system text (the system blocks below, in this order), then the history, then the visitor's
+# message with the post-history reminder in front of it (v2.1 §5.3.5: the same shape for every provider).
+version: 1
+total_budget_tokens: 8000
+order:
+  - { block: main, position: system }
+  - { block: character, position: system }
+  - { block: owner-persona, position: system }
+  - { block: owner-profile, position: system, generated: true }
+  - { block: examples, position: system, droppable: true }
+  - { block: world-info, position: system }
+  - { slot: history }
+  - { block: post-history, position: after-history }
+  - { slot: user-message }
+# When the budget is exceeded: drop the examples first, then the oldest history turns. main and post-history are
+# never dropped.
+drop_order: [examples, history-oldest]

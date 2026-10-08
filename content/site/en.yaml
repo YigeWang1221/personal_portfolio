@@ -148,3 +148,34 @@ notfound:
 contact:
   email_label: Job inquiries
   attachments: "Attachments must total {mb} MB or less."
+
+# AI assistant (ADR-022). Rendered only when the site is built with PUBLIC_CHAT_ENABLED=true.
+chat:
+  launcher: Ask about my work
+  title: Portfolio assistant
+  subtitle: Answers come from the pages of this site.
+  close: Close the assistant
+  clear: Clear
+  clear_label: Clear the conversation
+  privacy_short: Your questions are sent to third-party AI services.
+  privacy_long: "Questions and the conversation so far are processed by third-party AI services to write an answer. Nothing is stored on this site's server; the conversation stays in this browser tab until you close it. Please don't enter personal or sensitive information."
+  starters_title: "Try asking:"
+  input_label: Your question
+  placeholder: Ask a question…
+  send: Send
+  stop: Stop
+  regenerate: Regenerate
+  thinking: Thinking…
+  switching: Connecting to a backup service…
+  partial: The answer was interrupted; the text below is incomplete.
+  stopped: Stopped. The text below is incomplete.
+  unavailable: The assistant is unavailable right now. The portfolio itself works as usual.
+  limited: Too many questions in a short time. Please try again in a minute.
+  reset: The assistant's information was updated, so the conversation was reset.
+  sources: Sources
+  you: You
+  assistant: Assistant
+  started: Answer started.
+  finished: Answer finished.
+  contact: "Need a direct answer? Contact Yige:"
+  log_label: Conversation

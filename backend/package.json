@@ -1,0 +1,15 @@
+{
+  "name": "portfolio-api",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Backend of the portfolio AI assistant (ADR-022). Node built-ins only; no dependencies.",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "start": "node src/server.mjs",
+    "dev": "PROVIDER_MODE=mock PORTFOLIO_ORIGIN_KEY=dev-origin-key node src/server.mjs",
+    "test": "node --test 'tests/*.test.mjs'"
+  }
+}

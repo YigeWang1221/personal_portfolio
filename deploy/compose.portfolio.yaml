@@ -1,0 +1,42 @@
+# portfolio-api in the owner's Mac mini AI stack (ADR-022, SDD-AICHAT-001 §5.7). TEMPLATE: placeholders only.
+# P4 copies it into the stack folder as an extra compose file, next to the stack's own files, which share the project
+# name below. Use it only with an explicitly named service, e.g.:
+#   docker compose -f <stack files…> -f docker-compose.portfolio.yml up -d portfolio-api
+# Real values live in the portfolio's own backend/.env (git-ignored; template backend/.env.example), loaded with env_file;
+# nothing is taken from the stack's .env.
+name: ai_web
+
+services:
+  portfolio-api:
+    image: ${PORTFOLIO_API_IMAGE:?pin the image by digest}
+    # container_name: set in the stack copy, following the stack's own prefix
+    restart: unless-stopped
+    init: true
+    user: "10001:10001"
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    mem_limit: 384m
+    pids_limit: 128
+    env_file:
+      # The portfolio repository's backend/.env, relative to the stack folder.
+      - path: ${PORTFOLIO_REPO:?set PORTFOLIO_REPO to the portfolio repository path}/backend/.env
+        required: true
+    volumes:
+      - portfolio_api_state:/app/state
+    tmpfs: ["/tmp:size=16m,noexec,nosuid"]
+    expose: ["3000"]
+    networks: [stack]
+    logging:
+      driver: json-file
+      options: { max-size: 5m, max-file: "3" }
+    # No ports: reachable only from the stack network (the tunnel client), never from the Mac or the LAN.
+
+networks:
+  stack:
+    external: true
+    name: ${STACK_NETWORK:?set STACK_NETWORK to the stack network name}
+
+volumes:
+  portfolio_api_state:
+    name: portfolio_api_state

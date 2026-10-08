@@ -1,0 +1,70 @@
+# Request guard for the AI assistant (ADR-022, SDD-AICHAT-001 §5.6 "请求拦截"). Checked on the server BEFORE any model
+# is called, so a refused request costs nothing and never reaches a provider.
+#
+# The assistant answers only about my résumé and portfolio. Rules run in order; the first match wins:
+#   reply   the fixed reply sent instead (a key of prompts/60-canned.yaml)
+#   strike  counts toward a temporary block of that visitor (misuse: prompt injection, using the window as a tool)
+# Patterns are JavaScript regular expressions, matched case-insensitively against the visitor's message.
+# Keep them narrow: every pattern also has to let real recruiter questions through. tests/ai/guard.test.mjs lists
+# questions that must pass and must be refused; add to both lists when you change a rule.
+#
+# A message that matches no rule is still refused when it has nothing to do with the portfolio: it names no project,
+# uses no reviewed term from aliases.yaml, does not mention me (owner_names below, or he / she / 他 / 她), and the
+# retrieval finds no confident match.
+version: 1
+
+owner_names: [yige, wang yige, yige wang, 王一格, 一格]
+
+rules:
+  - id: greeting
+    reply: greeting
+    patterns:
+      # A greeting or a thank-you on its own gets a friendly pointer, and is never counted as misuse.
+      - '^\s*(hi|hello|hey|hiya|thanks|thank you|thx|ok|okay|cool|great|good (morning|afternoon|evening)|bye|goodbye)( there)?[\s!.,~]*$'
+      - '^\s*(你好|您好|嗨|哈喽|谢谢|多谢|感谢|好的|好|再见|早上好|下午好|晚上好)[\s!。！，~]*$'
+
+  - id: injection
+    reply: off_topic
+    strike: true
+    patterns:
+      - '\b(ignore|disregard|forget|override)\b.{0,40}\b(instructions?|rules?|prompts?|guidelines|everything above|previous)\b'
+      - '\b(system|developer|hidden|initial)\s+(prompt|message|instructions?)\b'
+      - '^\s*(you are now|from now on,? you|act as|pretend (to be|you))\b'
+      - '\b(jailbreak|developer mode|prompt injection)\b'
+      - '\b(reveal|print|show|repeat|output)\b.{0,30}\b(your|the)\s+(instructions|rules|prompt|configuration)\b'
+      - '(忽略|无视|忘记|忘掉|覆盖).{0,10}(之前|以上|上面|前面|所有|你的).{0,6}(指令|规则|提示|设定|要求)'
+      - '(系统|开发者|初始)(提示词|提示|指令|消息)'
+      - '(角色扮演|越狱|开发者模式|你现在是|从现在开始你|假装你)'
+      - '(输出|告诉我|显示|重复).{0,8}(你的)?(提示词|指令|规则|设定)'
+
+  - id: task
+    reply: off_topic
+    strike: true
+    patterns:
+      # Requests that use the window as a general tool. Anchored at the start, so a question such as "Did Yige write
+      # the code himself?" still passes.
+      - '^\s*(please\s+|pls\s+)?((can|could|would|will) you\s+(please\s+)?|help me\s+(to\s+)?|i (need|want) you to\s+)?(write|generate|create|draft|compose|fix|debug|refactor|implement|code|build|make)\b.{0,40}\b(code|function|script|program|class|sql|query|regex|essay|poem|story|email|letter|article|song|joke|algorithm|app|website|game)\b'
+      - '^\s*(tell|give) me\s+(a\s+)?(joke|story|poem|riddle|recipe)\b'
+      - '\btranslate\b.{0,30}\b(into|to)\s+(english|chinese|french|spanish|japanese|german|korean)\b'
+      - '^\s*(please\s+)?(translate|paraphrase|proofread|summari[sz]e)\s+(this|the following|my)\b'
+      - '```'
+      - '^\s*(请|麻烦|能不能|可以|你能|你可以)?\s*(帮我|给我|替我|为我)?\s*(写|生成|编写|修改|优化|调试|实现|做)\s*(一个|一段|一篇|一首|个|段|篇|首)?.{0,12}(代码|程序|函数|脚本|算法|sql|正则|作文|文章|诗|故事|邮件|求职信|歌|笑话|网页|游戏)'
+      - '(讲|说)(个|一个)(笑话|故事)'
+      - '翻译(一下|成|为)'
+      - '(帮我|请)(润色|改写|总结这段|翻译)'
+
+  - id: personal
+    reply: personal
+    patterns:
+      - '\b(salary|compensation|wages?|expected pay|pay range|visa|sponsorship|sponsor|h-?1b|green card|work authori[sz]ation|work permit|citizenship|start date|notice period|available to start|relocat(e|ion))\b'
+      - '\bwhen (can|could|would) (he|she|they|yige)\s+(start|join)\b'
+      - '\b(job offers?|other offers?|competing offers?|other interviews?|interviewing (elsewhere|with))\b'
+      - '(薪资|薪水|工资|待遇|期望薪|年薪|月薪|签证|工签|绿卡|担保|工作许可|移民身份|到岗|入职时间|何时入职|什么时候入职|搬迁|其他公司|面试进展|别的面试)'
+      - '(拿到|收到|有没有|几个|其他|别的).{0,4}offer'
+      - '(什么时候|何时|多久|哪天).{0,4}(入职|到岗|上班|开始工作|能来)'
+
+  - id: private
+    reply: off_topic
+    patterns:
+      - '\b(girlfriend|boyfriend|wife|husband|married|dating|religion|religious|political views?|politics|home address|phone number|how old|birthday|date of birth|ethnicity|nationality|health condition)\b'
+      - '(女朋友|男朋友|老婆|老公|结婚|恋爱|宗教|信仰|政治|住址|家庭住址|家住|电话号码|手机号|年龄|多大了|生日|出生日期|民族|国籍|健康状况)'

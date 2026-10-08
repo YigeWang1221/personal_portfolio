@@ -148,3 +148,34 @@ notfound:
 contact:
   email_label: 求职联系邮箱
   attachments: "附件总大小不超过 {mb} MB。"
+
+# AI 助手（ADR-022）。只有以 PUBLIC_CHAT_ENABLED=true 构建时才会渲染。
+chat:
+  launcher: 问问我的经历
+  title: 作品集助理
+  subtitle: 回答依据本站页面内容。
+  close: 关闭助理
+  clear: 清空
+  clear_label: 清空对话
+  privacy_short: 你的问题会交给第三方 AI 服务处理。
+  privacy_long: "为了生成回答，问题和本次对话内容会交给第三方 AI 服务处理。本站服务器不保存任何对话；对话只保存在当前浏览器标签页中，关闭标签页后清除。请勿输入个人信息或敏感信息。"
+  starters_title: 可以这样问：
+  input_label: 你的问题
+  placeholder: 输入你的问题……
+  send: 发送
+  stop: 停止
+  regenerate: 重新生成
+  thinking: 正在思考……
+  switching: 正在连接备用服务……
+  partial: 回答中断，以下内容未完成。
+  stopped: 已停止，以下内容未完成。
+  unavailable: AI 助理暂时不可用，作品集内容仍可正常浏览。
+  limited: 短时间内提问太多，请稍后再试。
+  reset: 助理资料已更新，对话已重置。
+  sources: 来源
+  you: 你
+  assistant: 助理
+  started: 开始回答。
+  finished: 回答完成。
+  contact: 需要直接确认？联系 Yige：
+  log_label: 对话记录

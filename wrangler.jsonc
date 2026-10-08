@@ -1,13 +1,24 @@
-// Cloudflare Workers static assets (ADR-015). No Worker script: the Worker only serves ./dist.
+// Cloudflare Workers static assets (ADR-015) plus the AI assistant's API proxy (ADR-022).
+// The Worker script (edge/api-proxy.ts) runs only for /api and /api/*; every other request goes straight to ./dist.
 // Deploy: `npm run build` then `npx wrangler deploy`. Custom domains are bound in the Cloudflare dashboard.
+// Two settings are set with `npx wrangler secret put <NAME>` and never written here: ORIGIN_URL (https:// + the backend's
+// tunnel hostname) and ORIGIN_KEY (same as PORTFOLIO_ORIGIN_KEY in backend/.env). Optional: ACCESS_CLIENT_ID and
+// ACCESS_CLIENT_SECRET, only if the tunnel hostname is behind Cloudflare Access. Until the two are set, /api/* answers
+// 503 and the site is unaffected.
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "portfolio",
+  "main": "edge/api-proxy.ts",
   "compatibility_date": "2026-09-24",
+  // H7: lets request.signal abort the origin fetch when the visitor disconnects.
+  "compatibility_flags": ["enable_request_signal"],
   "assets": {
     "directory": "./dist/",
+    "binding": "ASSETS",
     // Serve the nearest 404.html with status 404 (/zh/404.html for missing /zh/* paths).
     "not_found_handling": "404-page",
-    "html_handling": "auto-trailing-slash"
+    "html_handling": "auto-trailing-slash",
+    // H6: both patterns, because the docs do not say whether "/api/*" matches the bare "/api".
+    "run_worker_first": ["/api", "/api/*"]
   }
 }

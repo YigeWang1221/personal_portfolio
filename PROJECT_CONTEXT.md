@@ -1,6 +1,6 @@
 # Portfolio Project Context
 
-**Last reviewed:** 2026-09-26 · **Phase:** build (discovery gate cleared 2026-09-24)
+**Last reviewed:** 2026-10-08 · **Phase:** build (discovery gate cleared 2026-09-24); AI assistant in implementation (ADR-022)
 
 ## Purpose
 
@@ -104,6 +104,9 @@ the build phase.
 | `internal/` | Source registry, project inventories, evidence ledgers, resume cross-check, content strategy, estimate, current state | **no** (git-ignored) |
 | `content/` | Content model: catalog registry, résumé data, UI strings, one module per project, reviewed assets and their manifests (ADR-011, ADR-015) | yes |
 | `src/`, `public/`, `scripts/`, `astro.config.mjs`, `wrangler.jsonc` | Astro site source, static files, build gates, hosting configuration | yes |
+| `docs/AI_Chat/` | AI assistant design, deployment contract and implementation log (ADR-022) | yes |
+| `content/ai/`, `shared/ai/`, `tests/ai/` | AI assistant prompts and aliases, code shared by build and backend, tests | yes |
+| `generated/` | AI assistant build output (projection, world book, prompt bundle, manifest) | **no** (git-ignored) |
 
 ## Current maturity
 
@@ -115,6 +118,19 @@ the build phase.
   Nine project modules and all global pages exist in English and Chinese; the build enforces language parity and
   scans its output before it succeeds.
   - Deployed by the owner on 2026-09-24, with the custom domain bound.
+  - AI assistant (ADR-022, `docs/AI_Chat/`):
+    - Done on 2026-10-08, implemented but not deployed:
+      - discovery and pre-implementation checks (P0);
+      - the knowledge and prompt build (P1);
+      - the backend, tested with mock providers (P2);
+      - the chat window and Edge Worker, tested end to end with `wrangler dev` (P3).
+    - P4 has started: the Mac mini compose project was renamed to `ai_web` on 2026-10-08. Still to do: the Tunnel
+      hostname, Access, the model plans (the owner chooses the models) and the Worker secrets.
+    - Scope: the assistant answers only about the résumé and portfolio, and refuses everything else before any
+      model is called.
+    - **Live since 2026-10-08**: the backend runs on the Mac mini, and the site is deployed with
+      `PUBLIC_CHAT_ENABLED=true`. Builds without the flag still produce the site without the assistant.
+    - The live site is unchanged; the build output is byte-identical.
   - Remaining: rebuild with `SITE_URL` and redeploy; review the Chinese copy and the facts added in the build phase;
     finish the repository cleanup behind the pending code links; turn off Cloudflare Web Analytics injection for the
     site's hostname; then enable indexing.

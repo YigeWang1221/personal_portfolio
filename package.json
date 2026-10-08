@@ -9,11 +9,15 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build && node scripts/postbuild.mjs && node scripts/check-dist.mjs",
+    "build": "astro build && node scripts/postbuild.mjs && node scripts/build-ai.mjs && node scripts/check-dist.mjs && node scripts/check-ai-artifacts.mjs",
     "preview": "astro preview",
     "diagrams": "node scripts/render-diagrams.mjs",
     "check:dist": "node scripts/check-dist.mjs",
-    "deploy": "npm run build && wrangler deploy"
+    "deploy": "npm run build && wrangler deploy",
+    "check:ai": "node scripts/check-ai-artifacts.mjs",
+    "chat:preview": "node --env-file-if-exists=backend/.env scripts/preview-prompt.mjs",
+    "test": "node --experimental-strip-types --no-warnings=ExperimentalWarning --test 'tests/ai/*.test.mjs' 'tests/edge/*.test.mjs' 'backend/tests/*.test.mjs'",
+    "api:dev": "npm --prefix backend run dev"
   },
   "dependencies": {
     "astro": "7.3.5",

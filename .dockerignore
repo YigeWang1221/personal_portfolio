@@ -1,0 +1,6 @@
+# Only the backend image is built from this repository (backend/Dockerfile). Send nothing else to the builder.
+*
+!backend/package.json
+!backend/src/
+!shared/ai/
+!generated/ai/

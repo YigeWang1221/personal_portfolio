@@ -4,6 +4,8 @@
 //                Unset: no absolute canonical / hreflang / sitemap URLs, and the site is noindex.
 //                workers.dev and pages.dev URLs are rejected: they must never become the canonical URL.
 // SITE_INDEXING  "true" lets search engines index the site. Only allowed together with SITE_URL.
+// PUBLIC_CHAT_ENABLED  "true" renders the AI assistant (ADR-022): the chat widget, /js/chat.js and /css/chat.css.
+//                Unset: the build output is the same as without the assistant.
 
 const REJECTED_HOSTS = /(^|\.)(workers\.dev|pages\.dev)$/i;
 
@@ -40,6 +42,8 @@ if (indexingRequested && !siteUrl) {
 export const siteConfig = Object.freeze({
   /** Public origin without a trailing slash, or null when unset. */
   siteUrl,
+  /** Whether the AI assistant is part of the build (ADR-022). */
+  chatEnabled: (process.env.PUBLIC_CHAT_ENABLED ?? '').trim().toLowerCase() === 'true',
   /** Whether pages may be indexed by search engines. */
   indexable: Boolean(siteUrl && indexingRequested),
 });

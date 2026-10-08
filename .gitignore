@@ -156,3 +156,11 @@ vite.config.ts.timestamp-*
 
 # Local Claude Code tooling (launch configs, local settings)
 .claude/
+
+# AI assistant (ADR-022): build artifacts, local Worker secrets, private prompt overlay, backend env
+/generated/
+.dev.vars
+.dev.vars.*
+content/ai/prompts/local/
+backend/.env
+backend/state/
