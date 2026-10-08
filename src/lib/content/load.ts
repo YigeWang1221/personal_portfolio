@@ -99,6 +99,7 @@ export interface Page {
 }
 
 export interface Content {
+  tracks: CatalogFile['tracks'];
   focus: Focus[];
   /** Every published project, in catalog order. */
   catalog: Project[];
@@ -462,6 +463,7 @@ function buildContent(): Content {
     throw new Error(`Content validation failed (${errors.length}):\n- ${errors.join('\n- ')}`);
   }
   return {
+    tracks: registry!.tracks,
     focus,
     catalog,
     home: { flagship: flagship!, cases, exploring, more },

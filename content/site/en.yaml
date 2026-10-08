@@ -59,6 +59,7 @@ roadmap:
   planned: planned
 
 home:
+  project_tracks: Project areas
   skills: Technical skills
   title: Yige Wang · Software Engineer — Backend & Systems
   description: "Yige Wang, software engineer (backend and systems): a voice-capture Android app with a self-hosted backend, an AWS delivery pipeline, distributed LLM training and more, in English and Chinese."

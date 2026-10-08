@@ -382,3 +382,7 @@ Architecture decision records for the portfolio repository.
 - **Status:** Accepted · **Date:** 2026-09-26
 - **Decision:** Public project cards, headers and résumé entries use project descriptions, responsibilities, team size and runtime status rather than course-versus-personal categories. Existing internal status keys remain compatible; their visible labels are Project / 项目. Educational provenance remains in evidence records and relevant methodological background.
 - **Content:** AWS summaries name the actual resources and the owner's API, infrastructure, CI/CD, serverless email and domain work. Concision must not remove the technical evidence needed to assess the work.
+
+## ADR-021 — Home project tracks (2026-09-26)
+
+Owner-requested homepage tabs group projects into SDE, Cloud, and Finance & Data Science. Track membership is stored on project metadata; labels and order remain in the catalog. Capability filters remain available in the full project catalog. Tab selection uses shareable fragment identifiers, keyboard navigation, and progressive enhancement; without JavaScript every group is visible.
