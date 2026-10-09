@@ -1,6 +1,6 @@
 # Portfolio Project Context
 
-**Last reviewed:** 2026-10-08 · **Phase:** build (discovery gate cleared 2026-09-24); AI assistant in implementation (ADR-022)
+**Last reviewed:** 2026-10-09 · **Phase:** build (discovery gate cleared 2026-09-24); AI assistant in implementation (ADR-022)
 
 ## Purpose
 
@@ -78,6 +78,18 @@ machine translation of the other (ADR-005).
   build as `SITE_URL`; it is not hard-coded, and workers.dev is never the canonical URL.
 - **Live since 2026-09-24** at `https://portfolio.wangyige1221.website` (Worker `portfolio`). The live build does not
   set `SITE_URL` yet, so it has no canonical URLs and stays `noindex`.
+
+## Latest local revision — 2026-10-09
+
+- Homepage tracks now read Cloud, SDE, Finance & Data Science; project order prioritizes recent work and concrete
+  technical responsibility.
+- The assistant resolves reviewed project references and bounded spelling errors, clarifies close candidates, and
+  combines overview with relevant technical evidence. Answers can explain documented choices and tradeoffs for
+  recruiter and technical questions. These revisions are local and not yet deployed.
+- KK Knock Android is publicly released, with an APK in the official Introduction GitHub Releases. The owner
+  confirms that development is on MacBook Air and the backend runs on Mac mini through Cloudflare. Specific
+  migration/cache state is not inferred from that general deployment confirmation. Historical development docs
+  must not reintroduce “not released” as the current state.
 
 ## Naming
 

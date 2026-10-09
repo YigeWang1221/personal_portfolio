@@ -35,6 +35,7 @@ export interface ProjectedSection {
 
 export interface ProjectedProject {
   slug: string;
+  aliases: string[];
   title: Localized;
   subtitle: Localized;
   summary: Localized;
@@ -140,6 +141,7 @@ function projectProject(p: Project): ProjectedProject {
   const pagePath = `/projects/${m.slug}/`;
   return {
     slug: m.slug,
+    aliases: [...m.aliases],
     title: localized(m.title),
     subtitle: localized(m.subtitle),
     summary: localized(m.summary),
@@ -162,7 +164,17 @@ function projectProject(p: Project): ProjectedProject {
       : undefined,
     facts,
     path: perLocale((l) => localePath(l, pagePath)),
-    sections: perLocale((l) => sections(p.sections[l], l, pagePath, facts)),
+    sections: perLocale((l) => sections(p.sections[l], l, pagePath, facts).map((section) => {
+      const roadmap = m.roadmap?.section === section.id ? m.roadmap : null;
+      if (roadmap) section.text += `\n\n${roadmap.title[l]}\n` + roadmap.phases.map((phase) =>
+        `${phase.name[l]}: ${l === 'zh' ? ({done: '已完成', 'in-progress': '进行中', planned: '计划中'}[phase.status]) : phase.status}${phase.detail ? ` — ${phase.detail[l]}` : ''}${phase.when ? ` (${termText(phase.when, l)})` : ''}`
+      ).join('\n');
+      for (const figure of p.figures.filter((f) => f.section === section.id)) {
+        const label = 'label' in figure ? figure.label : undefined;
+        if (figure.caption[l]) section.text += `\n\n${label ? `${label}: ` : ''}${figure.caption[l]}`;
+      }
+      return section;
+    })),
   };
 }
 

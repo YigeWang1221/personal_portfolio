@@ -67,7 +67,7 @@
 | plan A 连通性 | 已从栈网络上的临时容器验证：网关健康，`/v1/models` 不带 key 返回 401 |
 | 栈侧覆盖文件 | 在栈目录中，单独使用：四个 compose 文件 + `up -d --no-deps portfolio-api`；不在栈的日常命令里。通过 `env_file` 读取 `../personal_portfolio/backend/.env`，不使用任何 `${…}` 插值（经 `config` 校验：容器只得到 11 个作品集变量，不含栈的任何密钥）。直接引用栈网络，并带 build 上下文（`backend/Dockerfile`） |
 | 未填完整 | 三个值缺一个，该 plan 就禁用（不报错）；启动日志只列出启用的 plan id |
-| 请求拦截（O-6） | 规则在 `content/ai/guard.yaml`（构建进 prompt bundle）。滥用封禁：`GUARD_STRIKE_LIMIT=3`、`GUARD_STRIKE_WINDOW_MS=600000`、`GUARD_BLOCK_MS=600000`；`MAX_OUTPUT_TOKENS=600` |
+| 请求拦截（O-6） | 规则在 `content/ai/guard.yaml`（构建进 prompt bundle）。滥用封禁：`GUARD_STRIKE_LIMIT=3`、`GUARD_STRIKE_WINDOW_MS=600000`、`GUARD_BLOCK_MS=600000`；`MAX_OUTPUT_TOKENS=1400`（2026-10-09 本地修订；现有 env 的显式覆盖仍优先） |
 | Worker 配置 | 必需：`ORIGIN_URL`（`https://<PORTFOLIO_API_HOSTNAME>`）和 `ORIGIN_KEY`（与 `PORTFOLIO_ORIGIN_KEY` 相同），都用 `wrangler secret put` 设置，所有者执行。可选：`ACCESS_CLIENT_ID` 和 `ACCESS_CLIENT_SECRET` |
 | 基础镜像 | `node:22-alpine@sha256:0a7108bf6c7bf5de370ffb1a3ed6be93d405b43ff159f681a8d18c0e2bc2e402`（多架构 index，含 arm64；2026-10-08 用 `docker buildx imagetools inspect` 查得） |
 | 镜像运行形态 | uid 10001；只读根文件系统；`/app/state` 为可写 volume（每日计数）；知识快照位于 `/app/knowledge`；HEALTHCHECK 调用 `/api/health` |

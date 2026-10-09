@@ -121,3 +121,5 @@ a Chinese gloss on first use.
 | English | 中文 |
 |---|---|
 | cutting-edge, revolutionary, seamless, world-class, blazing-fast | 赋能、打造、闭环、抓手、颠覆、极致 |
+
+Released on Android / Android 已发布 (`released`): a publicly downloadable Android release; this label does not assert store publication or broad device acceptance.

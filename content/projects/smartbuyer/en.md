@@ -9,6 +9,8 @@ SmartBuyer is an online store. Shoppers browse by category, search, keep a cart,
 - **APIs.** User registration with bcrypt-hashed passwords and session login; administration of categories and products with up to five images each; product search over several fields with sorting, both paginated; saved payment methods; and the admin refund review, page and endpoint.
 - **Uploads and seed data.** Multer handles image uploads and accepts only JPEG, PNG and GIF files; a seed script resets the collections and fills them with demo data.
 
+After login, the server stores user identity in the session and the browser continues with its session cookie; logout destroys the session. Separating route binding from request handling keeps user, product and order endpoints maintainable in their own files. This is a controller/route split, without a full service/repository layer.
+
 ## Scope {#scope}
 
 The application ran locally and was never deployed. A production version would need proper configuration management, automated tests and a deployment pipeline.

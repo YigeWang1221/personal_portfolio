@@ -208,7 +208,8 @@ export function buildWorldbook(projection, aliasGroups = []) {
     if (seen.has(e.id)) throw new Error(`build-worldbook: duplicate entry id ${e.id}`);
     seen.add(e.id);
   }
-  const worldbook = { schemaVersion: 1, aliases: aliasGroups, pages, entries };
+  const projectNames = projection.projects.map((p) => ({scope: p.slug, title: p.title, aliases: p.aliases ?? []}));
+  const worldbook = { schemaVersion: 1, aliases: aliasGroups, projectNames, pages, entries };
   const knowledgeVersion = hash(JSON.stringify(worldbook));
   return { worldbook: { ...worldbook, knowledgeVersion }, knowledgeVersion };
 }

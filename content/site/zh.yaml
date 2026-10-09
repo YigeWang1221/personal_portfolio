@@ -34,6 +34,7 @@ team:
   suffix_mixed: （个人与两人合作）
 
 status:
+  released: Android 已发布
   self-hosted-pilot: 自托管试运行
   in-development: 开发中
   implemented-not-deployed: 已实现，未部署

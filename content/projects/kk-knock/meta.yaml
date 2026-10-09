@@ -1,5 +1,6 @@
 track: sde
 slug: kk-knock
+aliases: ["KK Knock", "KKKnock", "语音待办项目", "语音笔记项目", "speech to todo", "voice notes app"]
 title: { en: KK Knock, zh: KK Knock }
 subtitle:
   en: An Android app that turns a spoken sentence into a todo or a researched note
@@ -8,10 +9,10 @@ summary:
   en: "I started KK Knock to capture fleeting ideas without stopping to type. I developed the idea into requirements and development documents, interaction prototypes, technology choices and coding guidelines, then planned milestones and built the Android app, backend and admin console. Spoken input becomes a todo or a researched note to act on later."
   zh: "我从“不方便打字时，怎样留住一闪而过的想法”出发，提出 KK Knock，编写需求分析与开发文档、设计交互原型、确定技术选型和代码规范，再安排阶段计划，推进客户端、后端与管理端的实现，让语音输入成为之后可以执行的待办或继续思考的研究笔记。"
 focus: { primary: planning-delivery, also: [backend-cloud] }
-status: self-hosted-pilot
+status: released
 status_note:
-  en: Self-hosted pilot in daily use on my Android phone
-  zh: 已完成自托管部署，并在 Android 手机上日常使用
+  en: Android available from GitHub Releases; backend hosted on Mac mini behind Cloudflare
+  zh: Android 已正式发布并提供下载；后端部署在 Mac mini，通过 Cloudflare 提供访问
 team: { size: 1 }
 role:
   en: "Personal project, from idea to implementation. I own requirements analysis and development documentation, interaction prototyping, technology selection, coding guidelines, system design and milestone scheduling. I coordinate implementation across the Android app, backend and admin console through self-hosted deployment."
@@ -32,6 +33,9 @@ stack:
   - GitHub Actions
 links:
   - kind: product
+    url: https://github.com/KKnock-Boost/Introduction/releases
+    label: { en: Download Android, zh: 下载 Android 版 }
+  - kind: product
     url: https://introductionkk.wangyige1221.website
     label: { en: Product introduction page, zh: 产品介绍页 }
 highlights: [asr_speedup, cancel_speedup, idempotency_window]
@@ -48,7 +52,7 @@ card:
   highlight:
     en: "I connected on-device transcription, intent classification and research into a voice workflow: a spoken reminder becomes a todo with a due time, while an idea becomes a note with sources. The goal is to reduce typing and manual organizing so everyday thoughts can turn into useful next steps at work or in life."
     zh: "我把端侧转写、意图识别和资料研究接成语音工作流：随口说出的安排变成带截止时间的待办，零碎想法则整理成附来源的研究笔记。希望减少打字和手动整理，让生活、工作中的念头更容易变成下一步行动。"
-  status: { en: Self-hosted · in daily use on Android, zh: 自托管试运行 · Android 日常使用 }
+  status: { en: Android released · Mac mini backend, zh: Android 已发布 · Mac mini 后端 }
   tech: [Kotlin Multiplatform, FastAPI, whisper.cpp]
   figure: screens
 
@@ -156,8 +160,8 @@ figures:
     source: assets/architecture.mmd
     label: CURRENT
     alt:
-      en: "Architecture: the Android app records, transcribes on device and queues captures; the self-hosted backend classifies text through DeepSeek and researches thoughts through Gemini; results return to the phone."
-      zh: 架构图：Android 客户端负责录音、端侧转写和采集排队；自托管后端通过 DeepSeek 分类文字、通过 Gemini 研究想法；结果回到手机。
+      en: "Architecture: the Android app records, transcribes on device and queues captures; Cloudflare connects to the self-hosted backend, which classifies text and researches thoughts through configured models; results return to the phone."
+      zh: 架构图：Android 客户端负责录音、端侧转写和采集排队；Cloudflare 连接自托管后端，后端通过可配置模型分类文字并研究想法；结果回到手机。
     caption:
       en: Data ownership is the main boundary. The phone keeps the notes; the backend owns accounts, usage and prompts, plus a short-lived cache of responses used only to replay retries.
       zh: 数据归属是最主要的边界：笔记保存在手机上；后端负责账号、用量和提示词，另有一个只用于重放重试的短期响应缓存。
@@ -202,9 +206,9 @@ roadmap:
     - name: { en: Interface foundation and usability fixes, zh: 界面基础与易用性修正 }
       detail: { en: "Search, filters, collections, the note editor, density settings (P6.1–P6.2)", zh: 搜索、筛选、收藏夹、笔记编辑器、界面密度设置（P6.1—P6.2） }
       status: done
-    - name: { en: Pre-release experience check, zh: 发布前体验验证 }
-      detail: { en: "The visible background queue is accepted on the test phone; the other pre-release checks continue", zh: 可见的后台队列已在测试手机上验收；其余发布前检查仍在进行 }
-      status: in-progress
-    - name: { en: "Next — public HTTPS, a public release, iOS", zh: 下一步 — 公网 HTTPS、公开发布、iOS }
-      detail: { en: "Tunnel acceptance, a downloadable Android release, iOS recording and sign-in, store billing", zh: 隧道验收、可下载的 Android 版本、iOS 录音与登录、应用商店计费 }
+    - name: { en: Android release and self-hosted backend, zh: Android 发布与后端自托管 }
+      detail: { en: "Android download on GitHub Releases; Mac mini backend accessed through Cloudflare", zh: GitHub Releases 提供 Android 下载；Mac mini 后端通过 Cloudflare 提供访问 }
+      status: done
+    - name: { en: "Next — measurement and iOS", zh: 下一步 — 运行测量与 iOS }
+      detail: { en: "Latency and cost measurement, iOS recording and sign-in, store billing", zh: 延迟与成本测量、iOS 录音与登录、应用商店计费 }
       status: planned

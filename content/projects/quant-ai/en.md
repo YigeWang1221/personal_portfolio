@@ -8,6 +8,8 @@ I built a research prototype covering feature engineering, model training and ba
 
 The research notebooks became a modular package with written module contracts: the tensor shapes and file schemas passed between stages.
 
+Training targets and backtest returns are kept separate. IC evaluates the ranking relationship with transformed labels; the economic backtest prefers raw stock returns, so standardized targets are not treated as portfolio returns.
+
 ## Model {#model}
 
 Each batch is one or more whole trading days, so the model sees every stock of a day together.

@@ -1,5 +1,6 @@
 track: finance-data
 slug: quant-ai
+aliases: ["Quant AI", "QuantAI", "股票排序项目", "量化研究项目", "stock ranking"]
 title: { en: "Quant AI: Transformer Stock-Ranking Research Pipeline", zh: Quant AI：基于 Transformer 的股票排序研究管线 }
 subtitle:
   en: A modular PyTorch pipeline for cross-sectional stock ranking, with attention over time and across stocks

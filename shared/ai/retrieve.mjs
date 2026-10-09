@@ -9,6 +9,7 @@
 //     project or uses a reviewed alias ("backend", "后端", "education"…). "What's the weather in Boston?" matches
 //     "Boston" in the education entry, but uses no portfolio vocabulary, so it stays below the threshold.
 //     Calibrated with the T-RET set (backend/tests/retrieval.test.mjs).
+import { projectReferences, resolveProjects } from './projects.mjs';
 import { compileAliases, estimateTokens, hasCjk, tokenize } from './tokenize.mjs';
 
 const K1 = 1.2;
@@ -33,7 +34,7 @@ const ZH_QUESTION_WORDS = ['体现', '方面', '主要', '使用', '哪些', '�
 const CJK_RUN = /[\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff]+/g;
 /** Title words that name no project in particular. */
 const GENERIC_TITLE_TOKENS = new Set(
-  ['application', 'app', 'system', 'platform', 'project', 'web', 'research', 'pipeline', 'overview', 'with', 'using', 'based', 'modeling', 'model', 'training', 'learning', 'on', 'for', 'and'].concat(
+  ['personal', 'writing', 'cloud', 'native', 'application', 'app', 'system', 'platform', 'project', 'web', 'research', 'pipeline', 'overview', 'with', 'using', 'based', 'modeling', 'model', 'training', 'learning', 'on', 'for', 'and'].concat(
     ['系统', '平台', '项目', '应用', '网站', '研究', '概览', '模型', '训练', '流程'],
   ),
 );
@@ -73,7 +74,7 @@ export function buildIndex(worldbook) {
     }
   }
   const names = new Map([...scopesOf].filter(([, scopes]) => scopes.size === 1).map(([t, scopes]) => [t, [...scopes][0]]));
-  return { aliases, docs, df, avgLen, n: docs.length, pages: worldbook.pages ?? {}, names };
+  return { aliases, docs, df, avgLen, n: docs.length, pages: worldbook.pages ?? {}, names, projects: projectReferences(worldbook) };
 }
 
 function idf(index, token) {
@@ -102,6 +103,8 @@ export function questionLocale(question, fallback = 'en') {
 
 /** Projects the question names (by distinctive title words or slug). */
 export function namedScopes(index, question) {
+  const resolved = resolveProjects(index.projects, question);
+  if (resolved.named.length || resolved.candidates.length) return new Set(resolved.named);
   const scopes = new Set();
   for (const t of tokenize(question)) if (index.names.has(t)) scopes.add(index.names.get(t));
   return scopes;
@@ -120,6 +123,7 @@ export function search(index, q) {
   const locale = questionLocale(question, q.locale);
   const weights = queryWeights(index, question, previous);
   const pageScope = pagePath && index.pages[pagePath] ? index.pages[pagePath].scope : null;
+  const resolution = resolveProjects(index.projects, question);
   const named = namedScopes(index, question);
   const listQuestion = LIST_QUESTION.some((re) => re.test(question));
   if (named.size === 0 && previous) for (const s of namedScopes(index, previous)) named.add(s);
@@ -173,7 +177,7 @@ export function search(index, q) {
     used += cost;
   }
   const confident = coverage >= threshold.coverage && (vocabulary || namedScopes(index, question).size > 0);
-  return { hits, topScore, coverage, confident, vocabulary, locale, named: [...namedScopes(index, question)] };
+  return { hits, topScore, coverage, confident, vocabulary, locale, named: [...namedScopes(index, question)], candidates: resolution.candidates, topic: [...named], pageScope, question, topK, budgetTokens };
 }
 
 /**
@@ -224,6 +228,44 @@ function relevance(index, question, top) {
  * @param {ReturnType<typeof search>} result
  */
 export function selectSources(index, result) {
+  const scopes = result.topic?.length ? result.topic :
+    result.pageScope && /\b(it|this|that)\b|这个|这项|该项目/iu.test(result.question ?? '') ? [result.pageScope] : [];
+  if (scopes.length === 1) {
+    const quantitative = /\b(metrics?|latency|performance|speed|budget|cost|tests?)\b|how (many|much)|多少|数量|性能|延迟|预算|成本|耗时|测试|费用|价格/iu.test(result.question ?? '');
+    const entries = index.docs.map((d) => d.entry).filter((e) => e.scope === scopes[0] && e.locale === result.locale).map((e) =>
+      e.sectionId === '@overview' && !quantitative ? {...e, text: e.text.split(/\n(?:Facts \(always|事实（)/u)[0]} : e
+    );
+    const question = result.question ?? '';
+    const why = /\b(why|tradeoffs?|decisions?|choose|chosen)\b|为什么|为何|取舍|选择|原因|原则/iu.test(question);
+    const topics = [
+      [/sqs|queue|outbox|队列|消息|发件箱/iu, /job-handoff|reliability|scale-from-zero|workflow/],
+      [/vllm|adapter|lora.*(推理|服务)|适配器|缓存|cache/iu, /serving|architecture|reliability/],
+      [/terraform|iam|云|cloud|aws|权限/iu, /infrastructure|boundaries|delivery/],
+      [/test|validat|测|验证/iu, /validation|results|limits/],
+      [/network|retry|failure|idempot|网络|重试|失败|幂等/iu, /reliability|job-handoff|operations/],
+      [/whisper|transcri|on.device|语音|转写|端侧/iu, /asr|product|architecture/],
+      [/redis|lock|锁|协同/iu, /editing|maintenance|reliability/],
+      [/bayes|贝叶斯|模拟|simulation/iu, /model|simulation|approach/],
+      [/fsdp|ddp|distributed|分布式/iu, /fsdp|transport|pipeline|results/],
+    ].filter(([pattern]) => pattern.test(question));
+    const ranked = new Map(result.hits.map((h, i) => [h.entry.id, result.hits.length - i]));
+    const score = (e) => (ranked.get(e.id) ?? 0) +
+      (e.sectionId === '@overview' ? 100 : 0) +
+      (why && /decisions|tradeoffs|boundaries|planning/.test(e.sectionId) ? 20 : 0) +
+      topics.reduce((n, [,section]) => n + (section.test(e.sectionId) ? 30 : 0), 0);
+    entries.sort((a,b) => score(b)-score(a)||a.id.localeCompare(b.id));
+    const chosen=[];
+    let used=0;
+    const sections = new Set();
+    for(const e of entries) {
+      if (sections.has(e.sectionId)) continue;
+      const cost=estimateTokens(e.text);
+      if(chosen.length >= (result.topK ?? 6)) break;
+      if(used+cost > (result.budgetTokens ?? 3000)) continue;
+      chosen.push(e); used+=cost; sections.add(e.sectionId);
+    }
+    return chosen;
+  }
   if (result.confident) return result.hits.map((h) => h.entry);
   const overview = index.docs.map((d) => d.entry).filter((e) => e.kind === 'profile' && e.sectionId === 'overview' && e.locale === result.locale);
   const extra = result.hits.map((h) => h.entry).filter((e) => !overview.includes(e)).slice(0, FALLBACK_HITS);

@@ -1,5 +1,6 @@
 track: sde
 slug: equipment-assignment
+aliases: ["Equipment Assignment", "设备作业平台", "设备与作业系统", "设备借用项目", "equipment borrowing"]
 title: { en: Equipment & Assignment Grading System, zh: 设备借用与作业批改平台 }
 subtitle:
   en: A full-stack teaching platform that runs an IoT course end to end — equipment loans, group homework, grading, exports and media

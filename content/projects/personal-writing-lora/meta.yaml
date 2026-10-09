@@ -1,5 +1,6 @@
 track: cloud
 slug: personal-writing-lora
+aliases: ["Personal Writing LoRA", "writing LoRA", "个人写作风格", "个人风格化写作", "个性化写作", "个人写作 LoRA", "写作微调项目", "personalized writing", "personal writing style"]
 title: { en: Personal Writing LoRA Platform, zh: 个人写作风格 LoRA 平台 }
 subtitle:
   en: "A personal writing project spanning training, model serving and cloud infrastructure"

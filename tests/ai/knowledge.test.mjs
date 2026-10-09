@@ -3,6 +3,7 @@
 import { after, before, test } from 'node:test';
 import assert from 'node:assert/strict';
 import { existsSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
 import { join } from 'node:path';
 import { CLAIM_LIKE } from '../../scripts/build-prompts.mjs';
 import { buildAll, tempRepo } from './helpers.mjs';
@@ -102,4 +103,44 @@ test('public knowledge preserves personal ownership and completed LoRA deploymen
   assert.doesNotMatch(publicText, /AI coding assistants|AI-assisted code|AI-assistance wording|AI 编码助手|大部分代码由|大量代码由|AI 辅助代码/i);
   // Team projects retain their shared attribution; presentation changes must not make them solo projects.
   assert.match(JSON.stringify(base.worldbook.entries.filter((e) => e.scope === 'distributed-llm')), /Team of 2/);
+});
+
+
+test('reviewed names and visible roadmap explanations survive the public projection', () => {
+  const p = base.worldbook.projectNames.find((p) => p.scope === 'personal-writing-lora');
+  assert.ok(p.aliases.includes('个性化写作'));
+  assert.ok(!base.worldbook.projectNames.some((p) => p.scope === 'psa-ticketing'));
+  const text = base.worldbook.entries.filter((e) => e.scope === 'personal-writing-lora').map((e) => e.text).join('\n');
+  assert.match(text, /已完成|done/);
+  const projection = JSON.parse(repo.read('generated/raw/projection.json'));
+  for (const p of projection.projects) for (const loc of ['en','zh']) for (const section of p.sections[loc]) {
+    const chunks = base.worldbook.entries.filter((e) => e.scope === p.slug && e.locale === loc && e.sectionId === section.id);
+    assert.ok(chunks.length, `${p.slug}:${loc}:${section.id}`);
+    // Check prose beyond metadata actually survives through the pipeline.
+    assert.ok(chunks.some((e) => e.text.includes(section.text.slice(0, 60))));
+  }
+});
+
+
+test('KK release status and download URL replace the historical non-release state', () => {
+  const text = JSON.stringify(base.worldbook.entries.filter((e) => e.scope === 'kk-knock'));
+  assert.match(text, /Released on Android/);
+  assert.match(text, /Android 已发布/);
+  assert.match(text, /Cloudflare/);
+  assert.match(text, /github.com\/KKnock-Boost\/Introduction\/releases/);
+  assert.doesNotMatch(text, /not in a public release yet|publish the first Android release|它还没有进入公开发布|公网 HTTPS、公开发布/);
+});
+
+test('output scan allows only the exact public Android release URL', () => {
+  const original = repo.read('dist/index.html');
+  const run = () => execFileSync(process.execPath, ['scripts/check-dist.mjs'], {cwd:repo.dir, encoding:'utf8', stdio:['ignore','pipe','pipe']});
+  assert.match(run(), /check-dist: OK/);
+  try {
+    for (const value of ['KKnock-Boost', 'https://github.com/KKnock-Boost/Introduction/releases-unknown', 'https://github.com/KKnock-Boost/backend']) {
+      repo.write('dist/index.html', original.replace('</body>', `<p>${value}</p></body>`));
+      assert.throws(run, /private working name/);
+    }
+  } finally {
+    repo.write('dist/index.html', original);
+  }
 });

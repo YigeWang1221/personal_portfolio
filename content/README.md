@@ -121,3 +121,15 @@ content/ai/
 - **Local overlay.** A file in `prompts/local/` replaces the public file of the same name, whole. It goes to the
   same third-party models, so it may not contain anything unpublished. A build that uses it is marked dirty.
 
+
+### Project references and technical answers (2026-10-09)
+
+Each project's `meta.yaml` may supply `aliases`: reviewed public names, short names and descriptive references.
+They are projected explicitly for project resolution. Use specific names rather than generic words such as
+“personal” or “cloud”. Ordering still belongs only to `catalog.yaml`.
+
+The assistant may explain project implementation, documented development principles, choices, tradeoffs and
+validation, adapting depth to recruiter and technical questions. Personal-project answers focus on the owner's
+technical responsibilities and outputs without unsolicited coding-tool disclosures. Recorded reasons are facts;
+derived engineering explanations are identified as interpretation. Team ownership and measurement conditions
+remain intact. Local development documents are read-only evidence, not a second runtime knowledge source.

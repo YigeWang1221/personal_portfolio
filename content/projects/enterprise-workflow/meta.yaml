@@ -1,5 +1,6 @@
 track: sde
 slug: enterprise-workflow
+aliases: ["FoodShelter", "food rescue", "食物救助项目", "食物救助工作流", "food rescue workflow"]
 title: { en: "FoodShelter: Food-Rescue Workflow System", zh: FoodShelter：食物救助多组织协作系统 }
 subtitle:
   en: "Domain modeling and shared workflow implementation for food rescue"

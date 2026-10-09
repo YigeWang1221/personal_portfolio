@@ -1,5 +1,6 @@
 track: finance-data
 slug: f1-bayesian
+aliases: ["F1", "F1 Bayesian", "F1 贝叶斯预测", "赛车预测项目", "Bayesian race prediction"]
 title: { en: F1 Race Prediction with Hierarchical Bayesian Modeling, zh: 基于分层贝叶斯模型的 F1 比赛预测 }
 subtitle:
   en: Team and driver strength in a PyMC model, turned into full simulated finishing orders for each race
