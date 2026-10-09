@@ -474,3 +474,14 @@ Owner-requested homepage tabs group projects into SDE, Cloud, and Finance & Data
 - **Limits:** Default output budget is 1400 tokens, configurable. General code/writing tasks, private information,
   prompt injection and commitments on the owner's behalf remain outside scope. Real-model quality must be assessed
   separately from offline/mock verification.
+
+
+## ADR-026 — One cloud project per visual row
+
+- **Status:** Accepted · **Date:** 2026-10-09 · **Amends:** ADR-017 (home card presentation)
+- **Decision:** Each Cloud homepage project has one enclosing article with a full-width project heading. Desktop
+  puts that project's visual on the left and its explanation on the right. Text-only projects occupy their own
+  full-width row. On smaller screens, each project reads heading, visual, explanation before the next project.
+- **Reason:** Mixing one-row text cards with two-row subgrid cards after reordering produced an ambiguous visual
+  association between one project's diagram and another project's text. An enclosing row makes ownership explicit.
+- **Boundaries:** Existing project facts, catalog order, track membership and SDE/finance card layouts are retained.

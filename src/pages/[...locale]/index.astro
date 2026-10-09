@@ -83,9 +83,9 @@ const capabilities = focus.map((f) => ({ ...f, projects: catalog.filter((p) => p
           <section id={`track-${track.id}`} class="track-panel" data-track-panel={track.id} aria-labelledby={`tab-${track.id}`}>
             <h3 class="track-fallback-title">{track.title[locale]}</h3>
             {track.id === 'sde' && <div class="flagship"><FeaturedProject project={home.flagship} locale={locale} variant="flagship" /></div>}
-            <div class={track.id === 'cloud' ? 'case-grid track-project-grid' : 'track-project-grid'}>
+            <div class={`track-project-grid${track.id === 'cloud' ? ' track-project-rows' : ''}`}>
               {catalog.filter((p) => p.meta.track === track.id && p !== home.flagship).map((p) => p.meta.card ? (
-                <FeaturedProject project={p} locale={locale} variant={track.id === 'cloud' && home.cases.includes(p) ? 'case' : 'exploring'} />
+                <FeaturedProject project={p} locale={locale} variant={track.id === 'cloud' ? 'row' : 'exploring'} />
               ) : (
                 <article class="track-summary">
                   <h3><a href={localePath(locale, `/projects/${p.meta.slug}/`)}>{p.meta.title[locale]}</a></h3>
