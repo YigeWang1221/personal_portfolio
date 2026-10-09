@@ -67,7 +67,7 @@ export function loadConfig(env = process.env) {
     providers,
     // Short answers: a portfolio question needs a few sentences, and a low ceiling makes the window useless for
     // long free-form writing.
-    maxOutputTokens: int(env.MAX_OUTPUT_TOKENS, 600, 64),
+    maxOutputTokens: int(env.MAX_OUTPUT_TOKENS, 1400, 64),
     limits: {
       perMinute: int(env.RATE_PER_MINUTE, 6, 1),
       perHour: int(env.RATE_PER_HOUR, 30, 1),

@@ -1,5 +1,6 @@
 track: sde
 slug: smartbuyer
+aliases: ["SmartBuyer", "电商项目", "网上商城项目", "ecommerce project"]
 title: { en: SmartBuyer E-commerce, zh: SmartBuyer 电商平台 }
 subtitle:
   en: A five-person React, Express and MongoDB web store

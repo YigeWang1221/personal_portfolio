@@ -209,6 +209,12 @@ export async function handleChat({ input, res, clientId, clientSignal, ctx }) {
     log({ event: 'chat', requestId, outcome: 'refused', reason: decision.id, attempts: 0, totalMs: Date.now() - startedAt });
     return;
   }
+  if (firstResult.candidates?.length) {
+    const titles = firstResult.candidates.map((p) => p.title[replyLocale]).join(replyLocale === 'zh' ? '、' : ' or ');
+    refuse(res, knowledge, requestId, replyLocale === 'zh' ? `你指的是${titles}中的哪一个项目？` : `Which project do you mean: ${titles}?`);
+    log({ event: 'chat', requestId, outcome: 'refused', reason: 'clarification', attempts: 0, totalMs: Date.now() - startedAt });
+    return;
+  }
   const history = decision.history;
 
   const release = limits.acquire();
@@ -226,7 +232,7 @@ export async function handleChat({ input, res, clientId, clientSignal, ctx }) {
       history,
       sources,
       pageTitle: pagePath ? index.pages[pagePath].title : undefined,
-      lowConfidence: !result.confident,
+      lowConfidence: !result.confident && !result.topic?.length,
     });
 
     res.writeHead(200, {

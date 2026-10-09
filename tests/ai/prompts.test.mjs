@@ -50,7 +50,7 @@ test('T-PROMPT-01: {{sources}} outside world-info fails', (t) => {
 });
 
 test('T-PROMPT-01: a block over its budget fails', (t) => {
-  const { errors } = build(t, (d) => d.edit('prompts/50-post-history.md', (s) => s.replace('max_tokens: 200', 'max_tokens: 20')));
+  const { errors } = build(t, (d) => d.edit('prompts/50-post-history.md', (s) => s.replace(/max_tokens: \d+/, 'max_tokens: 20')));
   assert.ok(errors.some((e) => /50-post-history\.md:\d+: "## (en|zh)" is about \d+ tokens, over max_tokens 20/.test(e)), errors.join('\n'));
 });
 

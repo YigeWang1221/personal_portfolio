@@ -216,3 +216,15 @@ test('grouped citations such as "[S1, S3]" (seen in a real answer) map to every 
   assert.deepEqual(citedSources('Solo [S1]. Reviewed by Yige [S1, S3]，见 [S2，S9].', sent).map((x) => x.id), ['S1', 'S3', 'S2']);
 });
 
+
+
+test('ambiguous project names ask for clarification without calling a provider', { skip }, () =>
+  withServer({ providers: [{ id: 'A', async *stream() { assert.fail('clarification must not call a provider'); } }] }, async (s) => {
+    s.ctx.knowledge.index.projects = [
+      {scope:'alpha', title:{en:'Alpha',zh:'甲项目'},names:['writerone']},
+      {scope:'beta', title:{en:'Beta',zh:'乙项目'},names:['writerane']},
+    ];
+    const events=await readEvents(await s.chat({message:'WriterIne',locale:'en'}));
+    assert.match(events.filter((e)=>e.name==='delta').map((e)=>e.payload.text).join(''), /Which project.*Alpha.*Beta/);
+    assert.equal(events.find((e)=>e.name==='done').payload.finishReason,'refused');
+  }));

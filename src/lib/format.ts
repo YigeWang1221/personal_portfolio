@@ -71,6 +71,7 @@ export function statusLabel(status: StatusKey, team: Team, locale: Locale): stri
 /** Visual family of a status badge. */
 export function statusTone(status: StatusKey): 'live' | 'built' | 'course' | 'research' | 'archived' {
   switch (status) {
+    case 'released':
     case 'self-hosted-pilot':
       return 'live';
     case 'implemented-not-deployed':

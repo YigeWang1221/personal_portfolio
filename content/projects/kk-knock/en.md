@@ -27,7 +27,7 @@ It is deliberately not a chatbot, a project-management suite or a document edito
 - One Recent Captures page lists failed, running and recently finished captures, with Retry, Play and Delete on each. It is reachable from a permanent icon, which I added after I could not find the list myself when no jobs were active.
 - Every result other than success becomes a visible failure. Retries always go out as retries, which is safe because the capture ID makes them idempotent. Jobs whose lease expired are re-queued, and back-off wake-ups get their own work name so WorkManager no longer drops them.
 
-**Where it stands.** New tests cover a network retry, an unfinished submission, an expired lease and failures staying in the list. I accepted the change on my phone and use it every day; it is not in a public release yet. One gap stays open on purpose, described in the next section.
+**Where it stands.** New tests cover a network retry, an unfinished submission, an expired lease and failures staying in the list. I accepted the change on my phone and use it every day; Android is now publicly released and available to download. One gap stays open on purpose, described in the next section.
 
 ## Failure recovery and idempotency {#reliability}
 
@@ -58,11 +58,12 @@ The patch is applied at build time as an overlay that checks its anchor before p
 ## What has been verified {#validation}
 
 - **On the phone.** The app is accepted on one Android phone (OnePlus, Android 16), and I use it daily, including the visible queue. It has not been tried on a second device.
+- **Release and deployment.** Android is publicly available through GitHub Releases. Development happens on MacBook Air; the backend runs on Mac mini behind Cloudflare.
 - **The backend.** The self-hosted deployment was accepted in September 2026: ARM64 build, health checks, admin routes, the unauthenticated boundary, container recreation with data kept, and a backup. The response cache for retries is in the backend code and running on another server; I have not yet confirmed it on the self-hosted machine.
 - **Tests.** {{fact:tests}} automated test cases across the backend (with PostgreSQL integration suites), the Android app (unit, host and instrumented tests) and the admin console, including the capture pipeline's retry paths.
-- **Not done yet.** Public HTTPS through the tunnel, a public release, iOS (a scaffold only), a second test device, and measured latency and cost per capture.
+- **Not done yet.** iOS (a scaffold only), a second test device, and measured latency and cost per capture.
 
-**Next:** measure latency from stop to transcript and from transcript to result, measure the cost per capture, publish the first Android release with a short demo video, and close the in-flight duplicate gap.
+**Next:** measure latency from stop to transcript and from transcript to result, measure the cost per capture, improve the released Android app and add a short demo video, and close the in-flight duplicate gap.
 
 ## Architecture {#architecture}
 
@@ -70,7 +71,7 @@ The system has two halves with a strict data-ownership line between them.
 
 - **The Android app** (Kotlin Multiplatform, Jetpack Compose) owns the notes. One foreground service is the only component allowed to record. whisper.cpp, compiled with the NDK, transcribes on the device. Captures move through a job queue in Room driven by WorkManager; results are written to Room and shown in home-screen widgets.
 - **The backend** (FastAPI, async SQLAlchemy, PostgreSQL 16) owns accounts, profiles, prompts, usage metering and announcements. It has no notes table; its one capture-related table is the response cache described above.
-- **The LLM layer** is provider-neutral. A DeepSeek model, called through an OpenAI-compatible API, is the judge that files a capture as TODO, THOUGHT or IGNORED. Gemini with Google Search grounding researches thoughts. Each slot picks its protocol from the configured URL.
+- **Model processing has separate stages.** Classification first decides whether input is a todo, a thought or nothing to retain. Complex todos receive a further decomposition step; thoughts go through research and synthesis. Simple todos skip that extra detail call. Classification, todo detail and research use configurable model slots, with protocol chosen from the URL.
 - **A React admin console** (TypeScript, Vite) manages users, usage, announcements and system settings, behind its own admin authentication.
 
 ## LLM cost controls {#cost}
@@ -83,7 +84,7 @@ A free consumer app that calls LLMs needs hard limits. Every provider call is me
 
 ## Self-hosting and the AWS fallback {#operations}
 
-**Self-hosted pilot.** The backend runs on an owned Mac mini with Docker Compose. PostgreSQL keeps its data on an external volume; the FastAPI service runs as a non-root container with a health check; Nginx serves the admin console, reverse-proxies the API and is the only published port. A first-run initializer only touches an empty database, and backups are written with restricted file permissions.
+**Current deployment.** The backend runs on an owned Mac mini with Docker Compose, accessed publicly through Cloudflare Tunnel. PostgreSQL keeps its data on an external volume; the FastAPI service runs as a non-root container with a health check; Nginx serves the admin console, reverse-proxies the API and is the only published port. A first-run initializer only touches an empty database, and backups are written with restricted file permissions.
 
 **The same backend on AWS.** Before settling on self-hosting, I built a disposable AWS path. Terraform creates a small VPC and one EC2 instance managed through SSM Session Manager instead of SSH. A CI pipeline tests the backend, packages a deterministic artifact, verifies its digest and bakes a Packer AMI through GitHub's OIDC federation, with no static AWS keys. Both ran in August 2026, including one full apply, test and destroy cycle; the path is kept as a fallback.
 

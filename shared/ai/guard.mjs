@@ -39,7 +39,7 @@ export function mentionsOwner(compiled, message) {
 
 /** Is the message about the portfolio, judged from retrieval signals and the owner reference? */
 export function inScope(compiled, message, result) {
-  return result.confident || result.vocabulary || result.named.length > 0 || mentionsOwner(compiled, message);
+  return result.candidates?.length > 0 || result.confident || result.vocabulary || result.named.length > 0 || mentionsOwner(compiled, message);
 }
 
 /**

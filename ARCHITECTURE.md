@@ -188,7 +188,7 @@ flowchart LR
 ```
 
 - **Projection** (`src/lib/ai/public-projection.ts`): fields are picked one by one from the schema.
-  - Never included: `fact.claim`, chart `panels[].claim`, `track`, figures, roadmaps and anchor aliases.
+  - Never included: `fact.claim`, chart `panels[].claim`, `track`, raw figures, raw roadmaps and anchor aliases. Public roadmap labels/status/detail and figure captions are appended to their visible sections; project aliases are explicitly projected.
   - Narratives come from the loader's rendered sections, so facts are already substituted, then converted to plain
     text.
 - **World book** (`scripts/build-worldbook.mjs`):
@@ -206,7 +206,9 @@ flowchart LR
   English/Chinese section sets, a size over 2 MiB or a hash mismatch with the manifest. `check-dist.mjs` also scans
   `.json` output for claim IDs and internal references.
 - **Shared runtime code** (`shared/ai/`): the tokenizer (English stems, Chinese bigrams, aliases), BM25 retrieval and
-  prompt assembly. The backend uses the same files, and `npm run chat:preview` prints exactly what a model would
+  prompt assembly. Reviewed project names support bounded typo matching with ambiguous-candidate clarification.
+  Project-specific evidence includes overview and complementary technical/design/validation sections within the
+  context budget. The assistant explains documented choices and labels derived engineering interpretation. The backend uses the same files, and `npm run chat:preview` prints exactly what a model would
   receive.
 
 ## CURRENT (live since 2026-10-08): AI assistant backend (ADR-022)

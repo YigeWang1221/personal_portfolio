@@ -1,8 +1,8 @@
 tracks:
-  - id: sde
-    title: { en: SDE, zh: SDE · 软件开发 }
   - id: cloud
     title: { en: Cloud, zh: Cloud · 云计算 }
+  - id: sde
+    title: { en: SDE, zh: SDE · 软件开发 }
   - id: finance-data
     title: { en: Finance & Data Science, zh: 金融与数据科学 }
 
@@ -33,22 +33,22 @@ focus:
       en: Training, modeling and measurement, with their conditions stated.
       zh: 训练、建模与测量，并写明各自的条件。
 
-# Home page (ADR-017), in reading order: the flagship, the main case studies, smaller cards for exploratory
-# work, then a compact list. The order serves the "Backend & Systems" position of the home page.
+# Home card variants (ADR-017). The track and project reading order comes from tracks and order below.
 home:
   flagship: kk-knock
   cases: [cloud-native, distributed-llm]
   exploring: [personal-writing-lora]
   more: [enterprise-workflow, equipment-assignment, f1-bayesian]
 
-# Catalog order: the home page's projects first, then the others. INFO 6105 coursework is part of the F1 page.
+# Reading order: recent work first, with responsibility and technical depth guiding projects from the same period.
+# Each home track filters this order. INFO 6105 coursework is part of the F1 page.
 order:
   - kk-knock
-  - cloud-native
-  - distributed-llm
   - personal-writing-lora
+  - distributed-llm
+  - quant-ai
+  - f1-bayesian
+  - cloud-native
+  - smartbuyer
   - enterprise-workflow
   - equipment-assignment
-  - f1-bayesian
-  - quant-ai
-  - smartbuyer

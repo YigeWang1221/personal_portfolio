@@ -4,6 +4,28 @@ SDD-AICHAT-001（`AI_CHAT_DESIGN.md`）的实施记录。每完成一个功能�
 
 所有者决定 O-4：实施期间只改文件，不 commit、不 push、不部署，提交时机由所有者决定。
 
+## 2026-10-09 · 首页排序与回答质量排查计划
+
+- `content/catalog.yaml`：首页板块改为 Cloud → SDE → Finance & Data Science；项目优先近期工作，结合职责与技术深度排列。Cloud 为 LoRA → Distributed LLM → Cloud-Native；SDE 为 KK Knock → SmartBuyer → FoodShelter → Equipment；Finance 为 Quant AI → F1。目录页复用同一项目顺序。
+- `docs/AI_Chat/ANSWER_QUALITY_PLAN.md`：记录公共投影、世界书、检索与 prompt 的代码排查和离线实验，提出项目识别、证据覆盖、公共语料审查及回答口径的后续计划。没有修改 AI runtime、prompt、schema 或模型配置。
+- 验证：`npm run build` 通过（30 页、1042 链接、173 知识条目）；对生成的 EN/ZH 首页 HTML 检查板块和每个板块的项目顺序，全部符合预期。`npm test` 首次因沙箱禁止回环监听而失败，允许本机监听后 85/85 通过，无跳过；仅 mock providers。`git diff --check` 通过。
+- 未执行：浏览器视觉与交互复查、真实模型调用、线上版本检查、commit、push、部署和 Mac mini 操作。浏览器交互逻辑没有改动；无 hash 时默认选择第一个板块 Cloud，已有项目板块 hash 继续由原逻辑处理。
+- 排序改变目录知识条目的排列与知识版本；后续发布按先后端、后网站的既有流程处理。
+
+## 2026-10-09 · 项目技术问答、名称容错与 KK 发布状态
+
+**本地完成，尚未部署。**
+
+- 设计与口径：`AI_CHAT_DESIGN.md` 先补回答质量契约；ADR-025、prompt 的 main/character/owner-persona/examples/post-history、内容规则与架构文档同步。回答聚焦个人技术职责、实现和产出，不主动讲编码工具或生成比例；允许解释项目技术选择和取舍，区分文档记录与工程分析。一般问题简短，深入问题按需展开。默认输出预算改为 1400 tokens，已有环境变量覆盖仍优先。
+- 项目识别：九个项目 metadata 新增公开 aliases，经严格 schema 和字段白名单进入世界书。`shared/ai/projects.mjs` 做完整别名与有限错字匹配，接近候选由后端直接澄清，不调用模型、不计滥用。
+- 资料组合：`shared/ai/retrieve.mjs` 分开项目身份与词汇覆盖率；已识别项目使用概览和互补的技术节，避免非指标问题被全量统计信息挤占预算。同节去重、资料预算和原有范围拦截保留；公开路线图状态与图示 caption 随所在节进入投影。
+- 资料审查：九个项目的本地文档与实现作选择性只读核对。Quant 的训练标签/回测收益区别、SmartBuyer 的 Session 和接口分层补入 EN/ZH 正文。没有将外部文件、内部台账、开发指令或敏感配置直接接入运行时语料。
+- KK：官方 GitHub API 确认正式 Release 与 APK；Mac mini/Cloudflare 部署由所有者当前确认。新增 released 状态、正式下载链接，修正旧“未发布”和固定服务商描述；架构 Mermaid 加入 Cloudflare 并重新渲染。开发机与部署机状态分别处理，不推断未检查的缓存迁移。旧 /download 页面仍为 Coming soon，本站改用官方 Releases。输出扫描仅豁免该精确公共 URL，私有 repo 和名称仍拒绝。
+- 涉及文件：九个项目的 meta；KK、Quant、SmartBuyer 双语正文；公共投影/schema/format；世界书构建、输出扫描；shared 检索/guard；backend chat/config 与 env example；prompt、回归测试、设计/部署/实施文档。内部证据记录单独更新，外部项目未改动。
+- 验证：关闭聊天的构建通过（30 页、1044 链接）；开启聊天的构建通过（30 页、1104 链接）；世界书 176 条，输出与知识安全扫描通过。`npm test` 最终 96/96 通过，无跳过，只用 mock providers。新增用例覆盖九项目中英文描述、错字、跨页与追问、技术证据节、歧义澄清、资料预算、KK 发布状态及精确 URL 白名单的正反例。原错字资料降级、SQS 缺少交接节和泛词误认用例在修改前失败。`npm run diagrams` 使用本机 Chrome，未下载浏览器；保留无关图原字节。`git diff --check` 通过。
+- 本地浏览器：Cloud 默认选中，板块及项目顺序正确，SDE 切换正常；中英文首页 390px 无横向溢出；KK 发布状态、正式下载链接和 Cloudflare 架构图渲染正常。未发起聊天模型调用。
+- 未执行与风险：真实模型自然度、复杂回答事实完整性与新版 Mac mini 镜像尚未实测；未 commit、push、部署、安装/验签 APK 或操作 Mac mini。没有独立静态类型检查命令。发布须先更新后端代码和知识快照，再发布网站；同时检查现有 MAX_OUTPUT_TOKENS 的显式覆盖。
+
 ---
 
 ## 2026-10-08 · P0 现场确认与文档整理

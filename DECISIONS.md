@@ -457,3 +457,20 @@ Owner-requested homepage tabs group projects into SDE, Cloud, and Finance & Data
 - **Boundaries:** Preserve team size and shared responsibilities for team projects, measured conditions, and deployment status. Do not invent line-by-line authorship or code-generation percentages.
 - **Assistant:** Its knowledge follows the same public content. Prompts preserve personal/team ownership and concrete responsibilities without requiring coding-tool disclosures. Missing authorship details are not inferred.
 - **LoRA:** Describe the completed AWS deployment and GPU training/serving validation, followed by resource teardown; ongoing development does not mean it was never deployed. Local Terraform records support validation checks; the completed AWS runs remain owner-confirmed rather than independently reverified runtime evidence.
+
+
+## ADR-025 — Project-aware retrieval and technical interview explanations
+
+- **Status:** Accepted · **Date:** 2026-10-09 · **Amends:** ADR-022 (retrieval and answer depth), ADR-024 (presentation)
+- **Decision:** At the owner's request, the assistant explains simple and complex technical questions about the
+  portfolio, including documented choices, principles, tradeoffs and validation. Personal projects are presented
+  through the owner's technical work and outputs without unsolicited coding-tool disclosures. Team attribution
+  stays accurate; derived engineering interpretation is distinguished from recorded project decisions.
+- **Retrieval:** Reviewed names live in each project's `aliases`; bounded fuzzy matching tolerates spelling errors.
+  Close candidates prompt clarification. Project identity is separate from lexical coverage; selected evidence
+  combines overview with relevant implementation/design sections within the existing context budget.
+- **Knowledge:** Public narratives remain the source. Visible roadmap explanations and figure captions follow their
+  section into the projection; internal ledgers and external development files are not ingested.
+- **Limits:** Default output budget is 1400 tokens, configurable. General code/writing tasks, private information,
+  prompt injection and commitments on the owner's behalf remain outside scope. Real-model quality must be assessed
+  separately from offline/mock verification.

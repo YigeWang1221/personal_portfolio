@@ -23,6 +23,7 @@ export type FocusId = z.infer<typeof focusId>;
 
 /** Status labels from docs/style/GLOSSARY.md. */
 export const STATUS_KEYS = [
+  'released',
   'self-hosted-pilot',
   'in-development',
   'implemented-not-deployed',
@@ -204,6 +205,8 @@ export const card = z.strictObject({
 export const projectMeta = z.strictObject({
   slug,
   title: localized,
+  /** Reviewed public names and descriptive references for assistant retrieval. */
+  aliases: z.array(z.string().min(2).max(100)).max(20).default([]),
   /** One line on what the project does. */
   subtitle: localized,
   /** Two or three sentences for the page description (search results, link previews). */

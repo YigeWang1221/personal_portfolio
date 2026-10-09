@@ -1,5 +1,6 @@
 track: cloud
 slug: distributed-llm
+aliases: ["Distributed LLM", "distributed training", "分布式大模型训练", "分布式训练项目", "HPC 训练", "nanoGPT", "distributed LLM training"]
 title: { en: Distributed LLM Training on HPC, zh: HPC 集群上的分布式大模型训练 }
 subtitle:
   en: "Parallel data preparation and distributed-training experiments on an HPC cluster"

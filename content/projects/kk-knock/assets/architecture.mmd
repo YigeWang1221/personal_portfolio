@@ -1,5 +1,4 @@
-%% CURRENT — KK Knock as documented in September 2026: the Android app and the self-hosted backend.
-%% A Cloudflare Tunnel in front of the host is configured but its public acceptance is pending, so it is not drawn.
+%% CURRENT — Android publicly released; Mac mini / Cloudflare deployment owner-confirmed October 2026.
 flowchart TB
   subgraph Phone["Android app · Kotlin Multiplatform — owns all content, audio never leaves"]
     direction LR
@@ -11,7 +10,9 @@ flowchart TB
   end
   subgraph LLM["LLM providers — receive text only"]
     direction LR
-    JUDGE["DeepSeek judge<br/>TODO / THOUGHT / IGNORED"] ~~~ GEM["Gemini research<br/>Google Search grounding"]
+    JUDGE["Configured classification model<br/>TODO / THOUGHT / IGNORED"] ~~~ GEM["Configured research model<br/>Google Search grounding"]
   end
-  Phone -- "transcript text + client capture ID" --> Host
+  TUNNEL["Cloudflare Tunnel<br/>public HTTPS"]
+  Phone -- "transcript text + client capture ID" --> TUNNEL
+  TUNNEL --> EDGE
   Host -- "classify, then research a THOUGHT" --> LLM

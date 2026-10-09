@@ -34,6 +34,7 @@ team:
   suffix_mixed: " (solo and pair work)"
 
 status:
+  released: Released on Android
   self-hosted-pilot: Self-hosted pilot
   in-development: In development
   implemented-not-deployed: Implemented, not deployed

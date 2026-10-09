@@ -14,6 +14,18 @@
 
 ---
 
+## 2026-10-09 回答质量契约（本地实施修订）
+
+- 助理以第三人称介绍所有者的个人技术工作与产出，不主动讨论编码工具或生成比例；团队归属保持准确。
+- 可以代为解释作品集项目的技术实现、原则、方案选择、取舍和验证，支持招聘方概览及深入技术问答。
+- 已记录的设计理由作为项目事实；依据实现作出的工程解释明确为分析，不虚构所有者动机或不存在的比较实验。
+- 先回答有依据的部分，再说明缺失信息。一般问题简短，技术问题按需要展开，不再统一限制为约 200 字。
+- 项目别名与有限错字匹配独立于正文词汇覆盖率；多个接近候选先澄清，不强行猜测。
+- 确定项目后提供概览及互补的技术、设计、验证片段，资料预算保持 3000 tokens；默认输出上限改为 1400 tokens，可由配置覆盖。
+- 世界书仍仅来自公开投影。开发文档和原则仅用于只读核对、形成允许公开的说明，不直接接入内部文件。
+- 公开路线图的状态和说明纳入所在正文节；图示的公开文字说明纳入对应节，排除路径、台账 ID 和图表底层数据。
+- 禁止代写代码、通用任务、泄露指令或代为承诺，原有拒答边界保持；作品集技术解释和有依据的岗位能力分析属于允许范围。
+
 ## 1. 引言
 
 ### 1.1 目的
@@ -193,7 +205,7 @@ astro build && node scripts/postbuild.mjs && node scripts/build-ai.mjs && node s
 | 来源 | 输出字段 | 丢弃字段 |
 |---|---|---|
 | `catalog.yaml` | `order` 中可见的 slug 及其顺序，focus 的 `id/title/description` | 未列入 `order` 的项目整体 |
-| `projectMeta` | `slug, title, subtitle, summary, focus, status`（转换为站点显示文案）`, status_note, team, role, context, period, stack, links(url,label), card.intro, card.highlight, card.status` | `track, lead, figures, roadmap, anchor_aliases, deep_dive_from, related, highlights`（键名） |
+| `projectMeta` | `slug, title, aliases, subtitle, summary, focus, status`（转换为站点显示文案）`, status_note, team, role, context, period, stack, links(url,label), card.intro, card.highlight, card.status` | `track, lead, figures, roadmap, anchor_aliases, deep_dive_from, related, highlights`（键名） |
 | `fact` | `value, label, condition` | **`claim`**（必须丢弃）；chart 图 `panels[].claim` 同样丢弃（图本身不输出） |
 | `en.md / zh.md` | 渲染后（已替换 `{{fact:key}}`）的 section 标题与正文，以及 section id | 任何未渲染的占位符 |
 | `profileFile` | `name, headline, contact.email, links, education, experience, highlights, skills` | `updated`、`attachment_limit_mb`；YAML 注释（解析后天然不存在） |
@@ -457,9 +469,9 @@ v2.1：在"限流"之后、"每日上限预占"之前插入请求拦截（见下
 | 历史 | 调用模型前 | 客户端回传的历史中有任何一条 user 消息匹配 `injection` | 丢弃整段历史后再处理 |
 | 3 回答 | 流式过程中 | 已输出的文字中出现代码围栏 ```` ``` ````、`<instructions>` / `<material>` 标签，或原样复述指令块中 ≥30 字符的一行 | 中止模型，发送 `replace`（`off_topic`）和 `done{finishReason:"refused"}` |
 | 滥用封禁 | 每次记滥用时 | 同一访客伪名在 10 分钟内累计 3 次（`GUARD_STRIKE_*` 可配置） | 封禁 10 分钟，期间所有请求返回 429。问候和个人事项不计入 |
-| prompt | 模型内 | `00-main.md` 第 2、6、7 条：只谈作品集；其他一律用固定话术；不写代码和长文；约 120 词 / 200 字以内 | 最后一道防线 |
+| prompt | 模型内 | `00-main.md` 第 2、6、7 条：只谈作品集；其他一律用固定话术；不写可执行代码和通用代写；简单问题简短，深入技术问题按需展开 | 最后一道防线 |
 
-另外：`MAX_OUTPUT_TOKENS` 默认降为 600，进一步限制把对话窗用于长文生成。被拒绝的回答以 `finishReason:"refused"` 结束，客户端只显示、不存储，所以离题内容不会成为下一问的上下文。T-POLICY 的离线部分见 `tests/ai/guard.test.mjs`（必须拒绝和必须放行两组）。
+另外：`MAX_OUTPUT_TOKENS` 默认为 1400，支持深入项目技术解释；通用代写仍由范围规则拒绝。被拒绝的回答以 `finishReason:"refused"` 结束，客户端只显示、不存储，所以离题内容不会成为下一问的上下文。T-POLICY 的离线部分见 `tests/ai/guard.test.mjs`（必须拒绝和必须放行两组）。
 
 **请求体（严格 schema，拒绝未知字段）：**
 ```json
@@ -474,7 +486,8 @@ v2.1：在"限流"之后、"每日上限预占"之前插入请求拦截（见下
   - 覆盖率 ≥ 0.75：前 3 条命中覆盖了问题中的大部分词。英文每个词计 1，中文每个字计 0.5，"的、做、哪些"等虚字不计。
   - 问题点名了项目，或用到了 `aliases.yaml` 中审核过的词汇。
   原稿用"最高分低于阈值"来判断。实测中，"波士顿天气"会因为命中教育条目里的 Boston 而拿到高分，而中文问题因为虚字 bigram 覆盖率偏低，所以单靠分数无法区分。
-- **低于阈值时**：放入 profile 概览，**另加 2 条最佳命中**，并在 prompt 中注明"资料可能无法回答"。原稿只放 profile 概览，会让"Does Yige know Python?"这类字面上弱、但确实相关的问题丢掉真正的来源（技能条目）。
+- **项目已定位时（2026-10-09 修订）**：概览与互补技术节优先按提问需要组合，保持预算；不因词汇覆盖率低而丢弃项目技术资料。有限错字匹配候选接近时先澄清。
+- **未定位项目且低于阈值时**：放入 profile 概览，**另加 2 条最佳命中**，并在 prompt 中注明"资料可能无法回答"。原稿只放 profile 概览，会让"Does Yige know Python?"这类字面上弱、但确实相关的问题丢掉真正的来源（技能条目）。
 - 标定结果见 `backend/tests/fixtures/retrieval-cases.json` 和 CHANGELOG：相关问题命中 21/21，无关问题 7/7 落在阈值以下。
 
 **Provider adapter 接口：**
