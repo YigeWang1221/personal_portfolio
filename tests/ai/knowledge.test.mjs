@@ -144,3 +144,22 @@ test('output scan allows only the exact public Android release URL', () => {
     repo.write('dist/index.html', original);
   }
 });
+
+test('home cloud visuals and explanations share one project boundary in both languages', () => {
+  for (const path of ['dist/index.html', 'dist/zh/index.html']) {
+    const html = repo.read(path);
+    const rows = [...html.matchAll(/<article class="work work-row[^\"]*"[^>]*>([\s\S]*?)<\/article>/g)].map((m) => m[1]);
+    assert.equal(rows.length, 3, path);
+    for (const [i, slug] of ['personal-writing-lora', 'distributed-llm', 'cloud-native'].entries()) {
+      assert.ok(rows[i].includes(`id="work-${slug}"`), `${path}: ${slug}`);
+      assert.ok(rows[i].includes('class="work-heading"'));
+      assert.ok(rows[i].includes('class="work-text"'));
+    }
+    for (const row of rows.slice(1)) {
+      assert.ok(row.indexOf('</header>') < row.indexOf('<figure'));
+      assert.ok(row.indexOf('<figure') < row.indexOf('class="work-text"'));
+    }
+    assert.ok(!rows[1].includes('Packer'), 'AWS flow must not appear in the HPC project');
+    assert.ok(rows[2].includes('Packer'), 'AWS flow belongs to the AWS row');
+  }
+});

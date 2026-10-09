@@ -75,6 +75,9 @@ content/
   highlight, an optional short status, at most three technologies, the section the main link opens). The flagship and
   the cases also need a visual: a page figure or a short flow list. Card text may not contain bare measurements.
   Every `#anchor` a card points to must exist.
+- **Cloud homepage rows (ADR-026):** one article encloses the project heading, its visual and its explanation.
+  Desktop reads visual left / text right; mobile reads heading / visual / text. Text-only projects have their own
+  full-width row, so grid placement cannot visually associate different projects.
 - **One role statement per project** (`role`): what I owned, what was shared, the responsibilities I managed. The page
   header shows it once; narratives do not repeat it.
 - **Charts** (`kind: chart`) are drawn as inline SVG from values in `meta.yaml`. Each panel cites its ledger claim,

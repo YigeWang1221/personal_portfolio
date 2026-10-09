@@ -13,7 +13,7 @@ import { t, type Project } from '../lib/content/load';
 interface Props {
   project: Project;
   locale: Locale;
-  variant: 'flagship' | 'case' | 'exploring';
+  variant: 'flagship' | 'case' | 'exploring' | 'row';
   eager?: boolean;
 }
 const { project, locale, variant, eager = false } = Astro.props;
@@ -24,12 +24,25 @@ const figure = project.cardFigure;
 const headingId = `work-${m.slug}`;
 const status = card.status ?? m.status_note;
 const showVisual = variant !== 'exploring';
+const isRow = variant === 'row';
+const hasVisual = Boolean(card.steps || figure);
 ---
 
-<article class={`work work-${variant}`} aria-labelledby={headingId}>
-  <div class="work-text">
+<article class={`work work-${variant}${isRow && !hasVisual ? ' work-row-text-only' : ''}`} aria-labelledby={headingId}>
+  {isRow && <header class="work-heading">
     <h3 id={headingId}><a href={localePath(locale, `/projects/${m.slug}/`)}>{m.title[locale]}</a></h3>
     <p class="purpose">{m.subtitle[locale]}</p>
+  </header>}
+  {isRow && (card.steps ? (
+    <CardSteps steps={card.steps} locale={locale} label={t(locale, 'home.steps', { title: m.title[locale] })} />
+  ) : (
+    figure && <CardFigure figure={figure} locale={locale} eager={eager} />
+  ))}
+  <div class="work-text">
+    {!isRow && <>
+      <h3 id={headingId}><a href={localePath(locale, `/projects/${m.slug}/`)}>{m.title[locale]}</a></h3>
+      <p class="purpose">{m.subtitle[locale]}</p>
+    </>}
     <p class="work-intro">{card.intro[locale]}</p>
     {card.bullets && <ul class="work-contributions">{card.bullets.map((item) => <li>{item[locale]}</li>)}</ul>}
     {card.highlight && <p class="work-highlight">{card.highlight[locale]}</p>}
@@ -43,7 +56,7 @@ const showVisual = variant !== 'exploring';
       <ProjectLinks links={m.links.filter((l) => l.kind !== 'code')} locale={locale} limit={1} buttons={variant === 'flagship'} />
     </div>
   </div>
-  {showVisual && (card.steps ? (
+  {!isRow && showVisual && (card.steps ? (
     <CardSteps steps={card.steps} locale={locale} label={t(locale, 'home.steps', { title: m.title[locale] })} />
   ) : (
     figure && <CardFigure figure={figure} locale={locale} eager={eager} />

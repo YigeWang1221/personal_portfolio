@@ -681,6 +681,19 @@ main { display: block; padding-bottom: 4rem; }
 .track-panel[hidden] { display: none; }
 .tracks-ready .track-fallback-title { display: none; }
 .track-project-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2rem; }
+/* Each cloud project owns one complete row: heading, visual on the left, explanation on the right. */
+.track-project-rows { grid-template-columns: minmax(0, 1fr); }
+.work-row { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 3fr); grid-template-areas: "heading heading" "visual text"; gap: 1.25rem 2rem; background: var(--white); border: 1px solid var(--hairline-strong); border-radius: var(--radius); padding: clamp(1.25rem, 3vw, 2rem); }
+.work-row > .work-heading { grid-area: heading; border-bottom: 1px solid var(--hairline); padding-bottom: 1rem; min-width: 0; }
+.work-row h3 { font-size: clamp(1.35rem, 2.2vw, 1.75rem); margin-bottom: 0.35rem; }
+.work-row .purpose { margin-bottom: 0; }
+.work-row > .card-figure { grid-area: visual; align-self: start; }
+.work-row > .work-text { grid-area: text; min-width: 0; }
+.work-row-text-only { grid-template-columns: minmax(0, 1fr); grid-template-areas: "heading" "text"; }
+@media (max-width: 900px) {
+  .work-row { grid-template-columns: minmax(0, 1fr); grid-template-areas: "heading" "visual" "text"; gap: 1rem; }
+  .work-row-text-only { grid-template-areas: "heading" "text"; }
+}
 .track-summary { background: var(--white); border: 1px solid var(--hairline); border-radius: var(--radius); padding: 1.5rem; display: flex; flex-direction: column; }
 .track-summary h3 a { color: var(--ink); text-decoration: none; }
 .track-summary .case-link { margin-top: auto; }
