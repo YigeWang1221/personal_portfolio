@@ -99,7 +99,8 @@ projects:
 project:
   role: My role
   stack: Full stack
-  source: Source
+  source: Source on GitHub
+  github: GitHub
   facts: Key facts
   contents: On this page
   deep_dive: Deep dive

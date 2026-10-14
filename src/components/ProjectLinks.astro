@@ -1,6 +1,7 @@
 ---
 // Outside links of a project, named by what they open (ADR-017): a product page, a demo, a demo video, and the
 // source repositories grouped under one "Source" label. The case study itself is the site's own page.
+// Cards (home and catalog) use `compactCode`: the repositories collapse into one "GitHub" link (ADR-027).
 import type { Locale } from '../lib/i18n';
 import type { ProjectMeta } from '../lib/content/schema';
 import { t } from '../lib/content/load';
@@ -8,24 +9,36 @@ import { t } from '../lib/content/load';
 interface Props {
   links: ProjectMeta['links'];
   locale: Locale;
-  /** Cards show at most one outside link. */
+  /** Cards show at most this many product, demo or video links. */
   limit?: number;
   /** Show product, demo and video links as buttons (the flagship card and the page header). */
   buttons?: boolean;
+  /** Show the source repositories as one "GitHub" link instead of the labeled list. */
+  compactCode?: boolean;
 }
-const { links, locale, limit, buttons = false } = Astro.props;
+const { links, locale, limit, buttons = false, compactCode = false } = Astro.props;
 const rank = { product: 0, demo: 1, video: 2, code: 3 } as const;
-const ordered = [...links].sort((a, b) => rank[a.kind] - rank[b.kind]).slice(0, limit ?? links.length);
-const other = ordered.filter((l) => l.kind !== 'code');
+const ordered = [...links].sort((a, b) => rank[a.kind] - rank[b.kind]);
+const other = ordered.filter((l) => l.kind !== 'code').slice(0, limit ?? links.length);
 const code = ordered.filter((l) => l.kind === 'code');
+
+// One repository → that repository. Several under the same GitHub owner → the owner's page, which lists them all.
+function githubHref(repos: typeof code): string {
+  if (repos.length === 1) return repos[0].url;
+  const owners = new Set(repos.map((l) => new URL(l.url).pathname.split('/')[1]));
+  const sameHost = repos.every((l) => new URL(l.url).hostname === 'github.com');
+  return sameHost && owners.size === 1 ? `https://github.com/${[...owners][0]}` : repos[0].url;
+}
 ---
 
-{ordered.length > 0 && (
+{(other.length > 0 || code.length > 0) && (
   <ul class="project-links">
     {other.map((l) => (
       <li><a class={buttons ? 'button small' : undefined} href={l.url}>{l.label[locale]}<span aria-hidden="true"> ↗</span></a></li>
     ))}
-    {code.length > 0 && (
+    {code.length > 0 && (compactCode ? (
+      <li class="code-links"><a href={githubHref(code)}>{t(locale, 'project.github')}<span aria-hidden="true"> ↗</span></a></li>
+    ) : (
       <li class="code-links">
         <span class="link-kind">{t(locale, 'project.source')}</span>
         {code.map((l, i) => (
@@ -35,6 +48,6 @@ const code = ordered.filter((l) => l.kind === 'code');
           </>
         ))}
       </li>
-    )}
+    ))}
   </ul>
 )}

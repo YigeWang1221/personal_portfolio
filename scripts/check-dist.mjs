@@ -73,8 +73,9 @@ for (const f of files) {
     checks.push([CLAIM_ID, 'internal ledger claim ID']);
     checks.push([/\binternal\//, 'reference to internal/']);
     checks.push([/workers\.dev|pages\.dev/, 'workers.dev / pages.dev URL']);
-    // The owner-approved public APK repository is an exact URL exception, not permission to expose private repos.
-    const namesText = text.replace(/https:\/\/github\.com\/KKnock-Boost\/Introduction\/releases(?=["'<>\s]|$)/g, '<PUBLIC_ANDROID_RELEASE>');
+    // The owner-approved public introduction repository (its root and its APK releases) is an exact URL exception
+    // (ADR-027), not permission to expose private repos.
+    const namesText = text.replace(/https:\/\/github\.com\/KKnock-Boost\/Introduction(?:\/releases)?(?=["'<>\s]|$)/g, '<PUBLIC_KK_INTRODUCTION>');
     for (const re of PRIVATE_NAMES) {
       const m = re.exec(namesText);
       if (m) report(r, `private working name (${re.source}): "${namesText.slice(Math.max(0, m.index - 25), m.index + m[0].length + 25).replace(/\s+/g, ' ')}"`);

@@ -99,7 +99,8 @@ projects:
 project:
   role: 我的角色
   stack: 完整技术栈
-  source: 源码
+  source: GitHub 源码
+  github: GitHub
   facts: 关键数据
   contents: 本页内容
   deep_dive: 技术细节

@@ -131,12 +131,16 @@ test('KK release status and download URL replace the historical non-release stat
   assert.doesNotMatch(text, /not in a public release yet|publish the first Android release|它还没有进入公开发布|公网 HTTPS、公开发布/);
 });
 
-test('output scan allows only the exact public Android release URL', () => {
+test('output scan allows only the exact public introduction repository and its release URL', () => {
   const original = repo.read('dist/index.html');
   const run = () => execFileSync(process.execPath, ['scripts/check-dist.mjs'], {cwd:repo.dir, encoding:'utf8', stdio:['ignore','pipe','pipe']});
   assert.match(run(), /check-dist: OK/);
   try {
-    for (const value of ['KKnock-Boost', 'https://github.com/KKnock-Boost/Introduction/releases-unknown', 'https://github.com/KKnock-Boost/backend']) {
+    for (const value of ['https://github.com/KKnock-Boost/Introduction', 'https://github.com/KKnock-Boost/Introduction/releases']) {
+      repo.write('dist/index.html', original.replace('</body>', `<p>${value}</p></body>`));
+      assert.match(run(), /check-dist: OK/);
+    }
+    for (const value of ['KKnock-Boost', 'https://github.com/KKnock-Boost/Introduction/releases-unknown', 'https://github.com/KKnock-Boost/Introduction-x', 'https://github.com/KKnock-Boost/Introduction/tree/main', 'https://github.com/KKnock-Boost/backend']) {
       repo.write('dist/index.html', original.replace('</body>', `<p>${value}</p></body>`));
       assert.throws(run, /private working name/);
     }
