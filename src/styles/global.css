@@ -398,6 +398,17 @@ main { display: block; padding-bottom: 4rem; }
 .project-meta { display: flex; flex-wrap: wrap; gap: 0.2rem 0; font-size: 0.88rem; color: var(--muted); margin: 0 0 0.9rem; }
 .project-meta span + span::before { content: "·"; margin: 0 0.6rem; color: var(--hairline-strong); }
 .project-head .project-links { margin-top: 0.2rem; }
+/* GitHub link inside a project title (ADR-027): a capsule that scales with the title, kept between body and title size. */
+:is(h1, h3) > a.title-github {
+  display: inline-flex; align-items: center; gap: 0.4em; margin-left: 0.6em; vertical-align: middle;
+  position: relative; top: -0.08em;
+  font-family: var(--sans); font-size: clamp(0.82rem, 0.5em, 1.05rem); font-weight: 600; line-height: 1.2; letter-spacing: 0;
+  padding: 0.32em 0.85em; border: 1px solid #c3d6cb; border-radius: 999px;
+  background: var(--sage); color: var(--forest-deep); text-decoration: none; white-space: nowrap;
+  transition: background var(--speed), color var(--speed), border-color var(--speed);
+}
+:is(h1, h3) > a.title-github:hover { background: var(--forest); border-color: var(--forest); color: var(--white); text-decoration: none; }
+.title-github-mark { width: 1.05em; height: 1.05em; flex: none; }
 
 .project-lead { border-top: 1px solid var(--hairline); padding-top: 1.5rem; }
 .project-lead .figure { margin: 0 0 1.5rem; }

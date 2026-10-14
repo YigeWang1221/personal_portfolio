@@ -2,12 +2,13 @@
 // A home-page project card (ADR-017). Three weights: the flagship (large, product screens), the main case
 // studies (a flow or a chart) and smaller "exploring" cards (text only). Every card reads as a short
 // introduction: what it does → what I did → one engineering point → status and a few technologies → one link
-// into the case study, plus at most one outside link and a GitHub link when the code is public (ADR-027).
-// The title and the main link open the case study.
+// into the case study, plus at most one outside link. The title and the main link open the case study; a GitHub link sits
+// inside the title when the code is public (ADR-027).
 import StatusBadge from './StatusBadge.astro';
 import ProjectLinks from './ProjectLinks.astro';
 import CardFigure from './CardFigure.astro';
 import CardSteps from './CardSteps.astro';
+import TitleGitHub from './TitleGitHub.astro';
 import { localePath, type Locale } from '../lib/i18n';
 import { t, type Project } from '../lib/content/load';
 
@@ -31,7 +32,7 @@ const hasVisual = Boolean(card.steps || figure);
 
 <article class={`work work-${variant}${isRow && !hasVisual ? ' work-row-text-only' : ''}`} aria-labelledby={headingId}>
   {isRow && <header class="work-heading">
-    <h3 id={headingId}><a href={localePath(locale, `/projects/${m.slug}/`)}>{m.title[locale]}</a></h3>
+    <h3 id={headingId}><a href={localePath(locale, `/projects/${m.slug}/`)}>{m.title[locale]}</a><TitleGitHub links={m.links} /></h3>
     <p class="purpose">{m.subtitle[locale]}</p>
   </header>}
   {isRow && (card.steps ? (
@@ -41,7 +42,7 @@ const hasVisual = Boolean(card.steps || figure);
   ))}
   <div class="work-text">
     {!isRow && <>
-      <h3 id={headingId}><a href={localePath(locale, `/projects/${m.slug}/`)}>{m.title[locale]}</a></h3>
+      <h3 id={headingId}><a href={localePath(locale, `/projects/${m.slug}/`)}>{m.title[locale]}</a><TitleGitHub links={m.links} /></h3>
       <p class="purpose">{m.subtitle[locale]}</p>
     </>}
     <p class="work-intro">{card.intro[locale]}</p>
@@ -54,7 +55,7 @@ const hasVisual = Boolean(card.steps || figure);
     <p class="tech"><span class="visually-hidden">{t(locale, 'home.tech')}: </span>{card.tech.join(' · ')}</p>
     <div class="card-actions">
       <a class="case-link" href={href}>{card.cta ? card.cta[locale] : t(locale, 'home.read_case')}<span aria-hidden="true"> →</span></a>
-      <ProjectLinks links={m.links} locale={locale} limit={1} buttons={variant === 'flagship'} compactCode />
+      <ProjectLinks links={m.links.filter((l) => l.kind !== 'code')} locale={locale} limit={1} buttons={variant === 'flagship'} />
     </div>
   </div>
   {!isRow && showVisual && (card.steps ? (

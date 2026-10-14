@@ -486,7 +486,7 @@ Owner-requested homepage tabs group projects into SDE, Cloud, and Finance & Data
   association between one project's diagram and another project's text. An enclosing row makes ownership explicit.
 - **Boundaries:** Existing project facts, catalog order, track membership and SDE/finance card layouts are retained.
 
-## ADR-027 — Explicit Home item and GitHub links on every card
+## ADR-027 — Explicit Home item and GitHub links in project titles
 
 - **Status:** Accepted · **Date:** 2026-10-13 · **Amends:** ADR-017 (card outside links)
 - **Context:** The owner found that a first-time visitor cannot tell that the name in the header leads back to the
@@ -494,11 +494,14 @@ Owner-requested homepage tabs group projects into SDE, Cloud, and Finance & Data
   each project to its public code.
 - **Decision:**
   - The header navigation starts with Home / 首页. The name keeps linking home as well.
-  - Home-page cards and catalog entries show one "GitHub" link when the project has public code. One repository
-    links to itself; several repositories under the same GitHub owner link to that owner's page. Case-study pages keep
-    the full labeled "Source" list.
-  - Cards still show at most one product, demo or video link besides the GitHub link.
-- **Repositories (2026-10-13):** taken from the owner's résumé files. Cloud-Native links its three public
+  - When a project has public code, a "GitHub ↗" capsule with the GitHub mark sits inside the project title on home
+    cards, catalog entries and the case-study page, scaled with the title (owner request, 2026-10-13: a link at the
+    bottom of a card was easy to miss, and plain text at full title size looked heavy). One repository links to itself; several repositories under the same
+    GitHub owner link to that owner's page. The case-study header keeps the labeled "Source on GitHub" list only when
+    it names several repositories.
+  - Cards still show at most one product, demo or video link.
+- **Repositories (2026-10-13):** taken from the owner's résumé files; the owner confirmed them safe to link
+  (ADR-004). Cloud-Native links its three public
   repositories. Equipment & Assignment links the surviving repository at the owner's request; it is shown as code,
   not as evidence for the features ADR-013 records as not preserved. SmartBuyer and Quant AI link their public
   repositories at the owner's request. KK Knock links only its public introduction repository (Releases and the

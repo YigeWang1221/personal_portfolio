@@ -10,6 +10,7 @@ import FactList from '../../../components/FactList.astro';
 import FigureView from '../../../components/FigureView.astro';
 import RoadmapView from '../../../components/RoadmapView.astro';
 import ProjectLinks from '../../../components/ProjectLinks.astro';
+import TitleGitHub from '../../../components/TitleGitHub.astro';
 import { LOCALES, localeParam, localePath, type Locale } from '../../../lib/i18n';
 import { getContent, t, type Project } from '../../../lib/content/load';
 import { formatPeriod } from '../../../lib/format';
@@ -27,6 +28,8 @@ export function getStaticPaths() {
 const { locale, project } = Astro.props as { locale: Locale; project: Project };
 const { projects, focus } = getContent();
 const m = project.meta;
+// The title carries the GitHub link; the labeled source list stays only when it names several repositories.
+const headerLinks = m.links.filter((l) => l.kind !== 'code' || m.links.filter((c) => c.kind === 'code').length > 1);
 const path = `/projects/${m.slug}/`;
 const sections = project.sections[locale];
 const highlights = m.highlights.map((key) => m.facts[key]);
@@ -48,7 +51,7 @@ const focusTitles = project.focusIds.map((id) => focus.find((f) => f.id === id)!
     </nav>
 
     <header class="project-head">
-      <h1>{m.title[locale]}</h1>
+      <h1>{m.title[locale]}<TitleGitHub links={m.links} /></h1>
       <p class="subtitle">{m.subtitle[locale]}</p>
       <p class="status-line">
         <StatusBadge status={m.status} team={m.team} locale={locale} />
@@ -60,7 +63,7 @@ const focusTitles = project.focusIds.map((id) => focus.find((f) => f.id === id)!
         <span>{m.context[locale]}</span>
         <span>{focusTitles.join(' · ')}</span>
       </p>
-      {m.links.length > 0 && <ProjectLinks links={m.links} locale={locale} buttons />}
+      {headerLinks.length > 0 && <ProjectLinks links={headerLinks} locale={locale} buttons />}
     </header>
 
     {lead && (
