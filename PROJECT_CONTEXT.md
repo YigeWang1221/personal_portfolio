@@ -146,5 +146,4 @@ the build phase.
       `PUBLIC_CHAT_ENABLED=true`. Builds without the flag still produce the site without the assistant.
     - The live site is unchanged; the build output is byte-identical.
   - Remaining: rebuild with `SITE_URL` and redeploy; review the Chinese copy and the facts added in the build phase;
-    finish the repository cleanup behind the pending code links; turn off Cloudflare Web Analytics injection for the
-    site's hostname; then enable indexing.
+    turn off Cloudflare Web Analytics injection for the site's hostname; then enable indexing.

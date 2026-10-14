@@ -100,8 +100,11 @@ Until both are set, `/api/*` answers 503 and the rest of the site is unaffected.
    ```
    Then in the Mac mini stack folder (its compose files plus `docker-compose.portfolio.yml`):
    ```bash
-   docker compose -f docker-compose.yml -f docker-compose.gemini.yml -f docker-compose.gemini-bridge.yml -f docker-compose.portfolio.yml up -d --build --no-deps portfolio-api
+   docker compose -f docker-compose.yml -f docker-compose.gemini.yml -f docker-compose.gemini-bridge.yml -f docker-compose.openai.yml -f docker-compose.portfolio.yml up -d --build --no-deps portfolio-api
    ```
+   Run it in the stack folder, not in this repository, and pass every compose file the running project uses
+   (`docker compose ls` lists them). Never add `--remove-orphans`: it deletes containers that belong to the project
+   but are defined elsewhere.
    If the order slips, nothing breaks: the backend answers 409, and the chat resets and keeps answering from the
    snapshot it has until it is rebuilt.
 3. **Model plans** (`backend/.env`): run the `up -d --no-deps portfolio-api` command above, without `--build`. No

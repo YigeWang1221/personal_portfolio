@@ -75,6 +75,10 @@ content/
   highlight, an optional short status, at most three technologies, the section the main link opens). The flagship and
   the cases also need a visual: a page figure or a short flow list. Card text may not contain bare measurements.
   Every `#anchor` a card points to must exist.
+- **GitHub links (ADR-027):** a project with `kind: code` links gets a "GitHub ↗" capsule inside its title on home
+  cards, catalog entries and the case-study header (`TitleGitHub.astro`; target chosen by `src/lib/links.ts`). One
+  repository links to itself; several under one GitHub owner link to the owner's page, and only then does the
+  case-study header also list the repositories under "Source on GitHub". Cards keep at most one other outside link.
 - **Cloud homepage rows (ADR-026):** one article encloses the project heading, its visual and its explanation.
   Desktop reads visual left / text right; mobile reads heading / visual / text. Text-only projects have their own
   full-width row, so grid placement cannot visually associate different projects.
@@ -95,7 +99,7 @@ content/
 ```mermaid
 %% CURRENT
 flowchart TD
-  LS["Header on every page<br/>Projects · Background · Résumé · EN (root) ⇄ 中文 (/zh/)"] --- H
+  LS["Header on every page<br/>Home · Projects · Background · Résumé · EN (root) ⇄ 中文 (/zh/)"] --- H
   H["Home<br/>résumé summary · selected projects · more work · capabilities · contact"] --> P["Case study<br/>header · lead visual · key decisions · validation → deep dive"]
   H --> C["Projects<br/>catalog with capability filter (?focus=)"]
   C --> P
@@ -105,8 +109,9 @@ flowchart TD
 ```
 
 **Case study layers**
-1. **First screen (30 s):** title, what it does, one status line, one role statement, period and context, outside
-   links (product page, demo, video, grouped source repositories), then the lead visual — product screens, a key
+1. **First screen (30 s):** title with its GitHub capsule, what it does, one status line, one role statement, period
+   and context, outside links (product page, demo, video, and the source repositories when there are several), then
+   the lead visual — product screens, a key
    chart or an architecture preview — and the few facts worth remembering, each with its conditions.
 2. **Engineering story (3 min):** the sections before the "Deep dive" marker — the situation, two or three key
    decisions told as problem → options → choice → cost → validation, and one section on what has been verified.
@@ -300,7 +305,6 @@ flowchart LR
 
 - **Résumé PDF download**, offered only after the PDF résumé matches the verified facts (the owner's pending resume
   decisions).
-- **Code links** for Cloud-Native, Equipment & Assignment and Quant AI, after their repository cleanup (ADR-004).
 - **Indexing**, after the owner reviews the Chinese copy and binds the custom domain.
 - **AI assistant deployment** (ADR-022, SDD-AICHAT-001 §5.7, §10, §11 P4–P5):
   - the backend joins the owner's Mac mini compose project (renamed to `ai_web` on 2026-10-08);

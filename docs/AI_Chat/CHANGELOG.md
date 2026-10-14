@@ -448,3 +448,14 @@ SDD-AICHAT-001（`AI_CHAT_DESIGN.md`）的实施记录。每完成一个功能�
 **边界**
 - Terraform 本轮只检查代码和已有验证记录，没有在外部项目运行测试或调用 AWS；AWS 运行与销毁仍为所有者确认事实，没有独立重新验证云端。
 - 未 commit、push、部署，也未修改 Mac mini。线上聊天后端仍使用原镜像内的知识快照；发布时须先重新构建并更新后端，再发布网站。
+
+## 2026-10-13 · 首页导航、项目 GitHub 链接与输出扫描豁免（ADR-027）
+
+- 导航：`SiteHeader.astro` 在「项目 / 背景 / 简历」前加入「首页 / Home」；姓名仍链接首页。手机端随菜单折叠。
+- GitHub 链接：所有者要求每个有公开代码的项目都能直接看到 GitHub。九个项目 metadata 现在都有 `kind: code` 链接；新增 Cloud-Native 三个仓库、Equipment & Assignment、SmartBuyer、Quant AI，以及 KK Knock 的公开介绍仓库（代码仓库仍为私有，不链接）。仓库地址来自所有者的简历文件和所有者在对话中给出的地址，用公开 GitHub API 核实均为 public。
+- 展示：新组件 `TitleGitHub.astro` 与 `src/lib/links.ts` 在首页卡片、项目目录和详情页标题内放一个带 GitHub 标志的胶囊链接，随标题字号缩放；单仓库指向仓库，同一 owner 的多个仓库指向 owner 主页。详情页只在多仓库时保留「GitHub 源码」列表；卡片底部的代码链接移除。UI 文案 `project.source` 改为「GitHub 源码 / Source on GitHub」。
+- 输出扫描：`scripts/check-dist.mjs` 的 `KKnock-Boost` 精确 URL 豁免从仅 Releases 扩大为该公开介绍仓库的根地址与 Releases；其他仓库、子路径和名称仍被拒绝。`tests/ai/knowledge.test.mjs` 同时覆盖允许与拒绝的例子。
+- 知识快照：链接进入世界书，知识版本变为 `638f090ac9f0c49e`。所有者已重建 Mac mini 上的 `portfolio-api`，容器 healthy，容器内版本与本地一致。之后的标题胶囊样式只改网站，不影响知识版本。
+- 验证：`npm run build` 通过（30 页、1118 链接，176 知识条目）；`npm test` 97/97 通过，只用 mock providers。本地 `wrangler dev` 浏览器检查中英文首页、目录、详情页，桌面与 375px 手机宽度无横向溢出。
+- ADR-004：所有者于 2026-10-13 确认这些仓库可以公开链接。
+- 未执行：未 commit、push 或部署。
