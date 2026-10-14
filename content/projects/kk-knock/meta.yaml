@@ -38,6 +38,9 @@ links:
   - kind: product
     url: https://introductionkk.wangyige1221.website
     label: { en: Product introduction page, zh: 产品介绍页 }
+  - kind: code
+    url: https://github.com/KKnock-Boost/Introduction
+    label: { en: Public introduction repository, zh: 公开介绍仓库 }
 highlights: [asr_speedup, cancel_speedup, idempotency_window]
 lead: screens
 deep_dive_from: architecture

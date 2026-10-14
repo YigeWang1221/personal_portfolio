@@ -19,7 +19,10 @@ context:
   zh: 量化研究管线
 period: { start: "2026-04", end: "2026-04" }
 stack: [Python, PyTorch, Transformer, Time2Vec, NumPy, pandas, SciPy, yfinance, Slurm, fp16 mixed precision]
-links: []
+links:
+  - kind: code
+    url: https://github.com/YigeWang1221/Quant_AI
+    label: { en: Code on GitHub, zh: GitHub 代码 }
 highlights: []
 # Section ids retired in earlier redesigns, and where they land now.
 anchor_aliases: { process: engineering, ownership: pipeline, limits: scope }

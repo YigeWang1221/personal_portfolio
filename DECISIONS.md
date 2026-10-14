@@ -485,3 +485,23 @@ Owner-requested homepage tabs group projects into SDE, Cloud, and Finance & Data
 - **Reason:** Mixing one-row text cards with two-row subgrid cards after reordering produced an ambiguous visual
   association between one project's diagram and another project's text. An enclosing row makes ownership explicit.
 - **Boundaries:** Existing project facts, catalog order, track membership and SDE/finance card layouts are retained.
+
+## ADR-027 — Explicit Home item and GitHub links on every card
+
+- **Status:** Accepted · **Date:** 2026-10-13 · **Amends:** ADR-017 (card outside links)
+- **Context:** The owner found that a first-time visitor cannot tell that the name in the header leads back to the
+  home page. The owner also puts portfolio links, not GitHub links, on the résumé, so a reader needs a visible way from
+  each project to its public code.
+- **Decision:**
+  - The header navigation starts with Home / 首页. The name keeps linking home as well.
+  - Home-page cards and catalog entries show one "GitHub" link when the project has public code. One repository
+    links to itself; several repositories under the same GitHub owner link to that owner's page. Case-study pages keep
+    the full labeled "Source" list.
+  - Cards still show at most one product, demo or video link besides the GitHub link.
+- **Repositories (2026-10-13):** taken from the owner's résumé files. Cloud-Native links its three public
+  repositories. Equipment & Assignment links the surviving repository at the owner's request; it is shown as code,
+  not as evidence for the features ADR-013 records as not preserved. SmartBuyer and Quant AI link their public
+  repositories at the owner's request. KK Knock links only its public introduction repository (Releases and the
+  product page); its code repositories are private.
+- **Boundaries:** Only repositories in a project's `links` with `kind: code` appear. Private repositories are never
+  linked.

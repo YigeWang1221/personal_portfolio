@@ -17,7 +17,10 @@ role:
 context: { en: "Full-stack teaching platform", zh: "全栈教学平台" }
 period: { start: "2023-02", end: "2024-04" }
 stack: [Java 17, Spring Boot 2.7, MyBatis-Plus, MySQL, MinIO, Apache POI, iText html2pdf, Vue 3, TypeScript, Element Plus]
-links: []
+links:
+  - kind: code
+    url: https://github.com/YigeWang1221/Equipments-Assignment
+    label: { en: Code on GitHub, zh: GitHub 代码 }
 highlights: [endpoints]
 deep_dive_from: maintenance
 # Section ids retired in earlier redesigns, and where they land now.

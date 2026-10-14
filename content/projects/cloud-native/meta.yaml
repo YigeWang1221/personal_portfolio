@@ -36,7 +36,16 @@ stack:
   - SNS → Lambda → Mailgun
   - Route 53 · HTTPS
   - CloudWatch
-links: []
+links:
+  - kind: code
+    url: https://github.com/csye6225YigeWang/webapp
+    label: { en: API code, zh: API 代码 }
+  - kind: code
+    url: https://github.com/csye6225YigeWang/tf-aws-infra
+    label: { en: Terraform code, zh: Terraform 代码 }
+  - kind: code
+    url: https://github.com/csye6225YigeWang/serverless
+    label: { en: Lambda code, zh: Lambda 代码 }
 highlights: [deploy_median, azs, kms_keys]
 lead: cicd
 deep_dive_from: observability

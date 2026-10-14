@@ -17,7 +17,10 @@ role:
 context: { en: "Full-stack web development", zh: "全栈 Web 开发" }
 period: { start: "2025-03", end: "2025-04" }
 stack: [Node.js, Express, MongoDB, Mongoose, bcrypt, express-session, Multer, React, Axios]
-links: []
+links:
+  - kind: code
+    url: https://github.com/6150WebDesignGroup/SmartBuyer
+    label: { en: Code on GitHub, zh: GitHub 代码 }
 highlights: [schemas]
 # Section ids retired in earlier redesigns, and where they land now.
 anchor_aliases: { ownership: backend }

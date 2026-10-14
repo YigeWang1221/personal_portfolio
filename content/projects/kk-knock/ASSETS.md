@@ -20,4 +20,5 @@ the live product page serves. Every screen shows invented showcase data; there a
 The home-page card and the page's lead figure show the product screens (recording → todo → researched note), with short step labels. The widget states stay in "The product" section, where they explain the interaction (ADR-017).
 
 Screenshots are not labeled CURRENT / PROPOSED / HISTORICAL because they show the shipped UI with demo data, not
-architecture. Code links are never added: the code repositories are private.
+architecture. The code repositories are private and are never linked; the only GitHub link is the public introduction
+repository (ADR-027).

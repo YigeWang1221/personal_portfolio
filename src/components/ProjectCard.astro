@@ -1,7 +1,8 @@
 ---
-// Catalog entry: what it does, my part, status and capabilities. data-focus drives the optional filter in
+// Catalog entry: what it does, my part, status, capabilities and a GitHub link when the code is public. data-focus drives the optional filter in
 // public/js/site.js; without the script every entry is shown.
 import StatusBadge from './StatusBadge.astro';
+import ProjectLinks from './ProjectLinks.astro';
 import { localePath, type Locale } from '../lib/i18n';
 import { getContent, t, type Project } from '../lib/content/load';
 import { formatPeriod, teamLabel } from '../lib/format';
@@ -31,5 +32,6 @@ const headingId = `item-${m.slug}`;
       <StatusBadge status={m.status} team={m.team} locale={locale} />
       <span>{m.context[locale]} · {teamLabel(m.team, locale)} · {formatPeriod(m.period, locale)}</span>
     </p>
+    <ProjectLinks links={m.links.filter((l) => l.kind === 'code')} locale={locale} compactCode />
   </article>
 </li>
