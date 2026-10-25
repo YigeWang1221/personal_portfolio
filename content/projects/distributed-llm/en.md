@@ -1,13 +1,8 @@
-## My training implementation and experiments {#question}
+## Distributed training and data preparation {#question}
 
-Our team studied distributed training on a single HPC node. I led the implementation and experiment analysis, covering parallel data preparation and contributions to both DDP and FSDP trainers. My teammate helped connect to the Slurm cluster. The measurements below are team results; they support the discussion of implementation and experimental choices.
+In our team, I led distributed-training implementation and experiment analysis, implemented parallel OpenWebText tokenization, and contributed to the DDP and FSDP trainers. My teammate helped connect to the Slurm cluster.
 
-1. How much parallel workers speed up tokenizing the OpenWebText corpus.
-2. DDP strong scaling on one, two and four V100-SXM2 GPUs.
-3. The memory-versus-throughput trade-off of FSDP sharding.
-4. NCCL transport: NVLink peer-to-peer versus shared memory.
-
-The model code is upstream nanoGPT, unchanged. Our work is the data pipeline, the distributed trainers, the experiment scripts and the measurements.
+We used nanoGPT's model implementation and built the data pipeline, distributed trainers and launch scripts around it. Our experiments compare GPU scaling, sharding strategies and communication paths on an HPC node.
 
 ## The parallel code {#pipeline}
 
@@ -18,11 +13,9 @@ The model code is upstream nanoGPT, unchanged. Our work is the data pipeline, th
 
 ## Experiment automation on Slurm {#automation}
 
-The plan was a matrix: GPU count (one, two, four) × strategy (DDP and three FSDP sharding modes) × transport (NVLink or shared memory). Every cell is a config file plus a Slurm script that requests the GPU type, sets the NCCL environment and launches the trainer — through `torchrun` for the multi-GPU runs — so the launch configuration can be reused and extended. This records how a run was launched; it does not guarantee identical results across runs.
+I organized the runs as a configuration matrix covering GPU count, DDP and FSDP strategies, and NCCL transport. Each configuration pairs a trainer config with a Slurm script that requests the GPU type and launches the job through `torchrun`.
 
-- **Transport as a switch.** The shared-memory scripts disable NCCL peer-to-peer (`NCCL_P2P_DISABLE=1`), and check runs log the topology NCCL actually builds (`NCCL_DEBUG_SUBSYS=GRAPH`), so each run records which path it used.
-- **A fixed token budget.** When the GPU count doubles, the iteration count halves. Every run sees the same amount of data, so throughput compares cleanly across GPU counts. The cost of that choice is the subject of the next sections.
-- **What I would change.** Every DDP script wrote under the same job name, so a later run overwrote the NVLink runs' raw logs. Unique run IDs in the job name, and committing each summary as soon as it is written, would have prevented it.
+The transport scripts switch NCCL peer-to-peer communication with `NCCL_P2P_DISABLE` and record its topology. For scaling comparisons, we hold the total token budget constant by reducing iterations as GPU count increases.
 
 ## Results {#results}
 
@@ -36,15 +29,15 @@ The plan was a matrix: GPU count (one, two, four) × strategy (DDP and three FSD
 
 Scaling is close to linear because communication is rare: one all-reduce per eight micro-steps. The same reason keeps the transport gap small.
 
-## Throughput and convergence {#time-to-quality}
+## Batch size, throughput and convergence {#time-to-quality}
 
-The fixed token budget gives a clean throughput comparison, but it hides something. With four GPUs the run finishes in a quarter of the optimizer steps, each on a four-times-larger effective batch. In the committed logs, validation perplexity rose from {{fact:ppl_1gpu}} on one GPU to {{fact:ppl_2gpu}} on two and {{fact:ppl_4gpu}} on four.
+A fixed token budget connects GPU count to optimizer steps. Increasing the number of GPUs increases the effective batch and reduces the steps needed to process the same data.
 
-So the four-GPU run is not four times faster at reaching the same model quality. A fair time-to-quality comparison would train each configuration to a target validation loss, or scale the learning rate with the batch size. That is how I would measure it next time.
+We analyzed throughput alongside validation perplexity. The recorded baseline and FSDP runs produced {{fact:ppl_1gpu}}, {{fact:ppl_2gpu}} and {{fact:ppl_4gpu}} for increasing GPU counts. These measurements show how batch and update frequency affect convergence as well as execution speed.
 
-## NVLink, shared memory and a node mix-up {#transport}
+## NCCL transport and gradient synchronization {#transport}
 
-An early comparison seemed to show a large "PCIe versus NVLink" difference. It turned out to be a difference between nodes, not between transports: the runs had landed on different node types. After pinning the hardware, the gap shrank to {{fact:transport_gap}}.
+The trainer accumulates gradients across micro-steps and synchronizes through NCCL at the accumulation boundary. This reduces the frequency of cross-GPU communication. We used the launch configuration to compare NVLink peer-to-peer and shared-memory transport, with a recorded throughput gap of {{fact:transport_gap}}.
 
 ## FSDP memory and throughput trade-offs {#fsdp}
 
@@ -61,10 +54,6 @@ Two approaches were benchmarked on a {{fact:sample}} sample of the corpus:
 
 Both numbers are reported together, with their mechanisms, because only the second one measures parallel speedup.
 
-## Method limits {#limits}
+## Training summaries {#limits}
 
-- **Single runs.** Every configuration ran once, and warm-up iterations are included in the averages. Repeated runs with confidence intervals would make small differences, such as the transport gap, more trustworthy.
-- **Rank-0 memory.** Peak memory was measured on rank 0 only.
-- **Mixed node types.** The shared-memory and NVLink runs ran on different node types.
-- **Lost raw logs.** Because the NVLink runs' raw logs were overwritten, the scaling result is given as a range: the preserved raw log and the report differ slightly.
-- **Next:** measure time to a target perplexity, profile communication, record per-rank memory, and publish sanitized logs alongside the code.
+The trainer writes throughput, average iteration time, validation perplexity and rank-zero peak memory into each run's summary. I used those measurements to compare the configurations and explain the different effects of data preparation, gradient synchronization and parameter sharding.

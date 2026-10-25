@@ -17,7 +17,7 @@ nav:
   language_switch_title: 阅读本页中文版
 
 footer:
-  note: 本站不使用追踪脚本，也不向第三方发起请求。
+  note: 以项目介绍我的设计与实现。
   label: 站内页面
   contact_label: 个人主页
 
@@ -64,7 +64,8 @@ home:
   skills: 技术与能力
   title: 王一格 · 软件工程师（后端与系统）
   description: 王一格，软件工程师（后端与系统方向）。项目包括带自托管后端的语音速记 Android App、AWS 交付流水线、分布式大模型训练等，中英双语。
-  intro: "我负责从需求分析、架构设计到开发部署的完整流程，主要方向是后端服务、云基础设施与 AI 应用。项目涵盖 Spring Boot 与 FastAPI 后端、AWS 基础设施与 CI/CD、GPU 分布式训练，以及从想法到落地的语音 Android 产品。求职方向是后端、云平台与 AI 基础设施。"
+  intro: "我负责从需求分析、架构设计到开发部署的完整流程，主要方向是后端服务、云基础设施与 AI 应用。项目涵盖 Spring Boot 与 FastAPI 后端、AWS 基础设施与 CI/CD、GPU
+    分布式训练，以及从想法到落地的语音 Android 产品。求职方向是后端、云平台与 AI 基础设施。"
   cta_work: 查看项目
   cta_resume: 查看简历
   links_label: 个人主页
@@ -83,7 +84,6 @@ home:
   contact_linkedin: 在 LinkedIn 上联系我
   contact_github: GitHub 主页
 
-
 projects:
   title: 项目
   description: 王一格的全部项目，可按能力筛选：业务建模、后端与云、规划与交付、AI 与研究。
@@ -95,7 +95,6 @@ projects:
   featured: 精选项目
   role: 我的职责
 
-
 project:
   role: 我的角色
   stack: 完整技术栈
@@ -105,7 +104,6 @@ project:
   deep_dive: 技术细节
   related: 相关案例
   all_projects: 全部项目
-
 
 background:
   title: 背景
@@ -121,26 +119,26 @@ resume:
   title: 简历
   description: 王一格的简历：教育、实习、项目与技能，每项技能都链接到能证明它的项目。
   eyebrow: 简历
-  updated: 最近核对：{date}
+  updated: 更新于 {date}
   highlights: 亮点
   education: 教育经历
   experience: 实习经历
   projects: 项目
   skills: 技能与对应项目
-  skills_note: 只列出本站有项目支撑的技能。
-  note: 实习经历按简历原文重述。项目事实来自各项目页，均注明条件。
+  skills_note: 点击项目查看相关实现。
+  note: 查看项目详解，了解设计与实现。
 
 plan:
   title: 我如何规划与设计
-  description: 来自王一格各个项目的路线图、决策记录与架构图，每一项都链接回所属项目。
+  description: 从项目中的具体需求出发，介绍组件设计、技术选择和系统架构。
   eyebrow: 规划与架构
-  lede: 这里汇集了本站各项目的路线图、决策记录与架构图，每一项都链接回所属项目。
+  lede: 从项目中的具体需求出发，介绍组件设计、技术选择和系统架构。
   roadmaps: 来自真实项目历史的路线图
   roadmaps_note: 实心点为已完成，空心点为进行中或计划中。
   records: 决策记录
-  records_note: 背景 → 备选方案 → 决策 → 取舍 → 证据
+  records_note: 需求、选择与实现方式
   architecture: 架构图
-  architecture_note: 每张图都依据实现绘制，并标注 CURRENT（当前）、PROPOSED（规划）或 HISTORICAL（早期草图）。
+  architecture_note: 查看组件之间的数据流与职责分工。
 
 notfound:
   title: 页面不存在

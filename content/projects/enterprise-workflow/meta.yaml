@@ -1,22 +1,25 @@
-track: sde
+tracks: [ sde ]
 slug: enterprise-workflow
-aliases: ["FoodShelter", "food rescue", "食物救助项目", "食物救助工作流", "food rescue workflow"]
+aliases: [ "FoodShelter", "food rescue", "食物救助项目", "食物救助工作流", "food rescue workflow" ]
 title: { en: "FoodShelter: Food-Rescue Workflow System", zh: FoodShelter：食物救助多组织协作系统 }
 subtitle:
   en: "Domain modeling and shared workflow implementation for food rescue"
   zh: "食物救助业务的领域建模与团队工作流实现"
 summary:
-  en: "In a team of three, I designed the domain model and db4o persistence, implemented the application shell and role-based login, and co-implemented workflow screens. The project shows how I translated organizational responsibilities into objects, work queues and role-specific interfaces."
+  en: "In a team of three, I designed the domain model and db4o persistence, implemented the application shell and
+    role-based login, and co-implemented workflow screens. The project shows how I translated organizational
+    responsibilities into objects, work queues and role-specific interfaces."
   zh: "在三人团队中，我设计领域模型与 db4o 持久化，实现应用主框架和按角色分派的登录，并参与工作流界面开发，将组织职责转化为对象、工作队列和各角色的操作界面。"
 focus: { primary: business-modeling, also: [] }
 status: course-project
 team: { size: 3 }
 role:
-  en: "In a team of three, I designed the domain model and persistence layer, implemented the application shell and role-based login, and co-developed the donation, inspection and delivery workflow screens."
+  en: "In a team of three, I designed the domain model and persistence layer, implemented the application shell and
+    role-based login, and co-developed the donation, inspection and delivery workflow screens."
   zh: 在三人团队中，我负责领域模型与持久化设计，实现应用主框架和角色登录，并共同开发捐赠、检验与配送工作流界面。
 context: { en: "Domain modeling and workflow implementation", zh: "领域建模与工作流实现" }
 period: { start: "2025-03", end: "2025-04" }
-stack: [Java 18, Swing, Maven, db4o, JFreeChart, iText, Datafaker]
+stack: [ Java 18, Swing, Maven, db4o, JFreeChart, iText, Datafaker ]
 links:
   - kind: code
     url: https://github.com/5100GroupWork/FoodShelter
@@ -35,11 +38,13 @@ figures:
     source: assets/donation-flow.mmd
     label: CURRENT
     alt:
-      en: "Flow of one donation: a food provider submits it into the network's inspection queue; an inspector approves it into the warehouse queue; a shelter helper pairs it with a pending shelter request and creates a delivery task; a task manager assigns an unassigned task to a driver; the driver marks it picked up and then delivered."
+      en: "Flow of one donation: a food provider submits it into the network's inspection queue; an inspector approves it into
+        the warehouse queue; a shelter helper pairs it with a pending shelter request and creates a delivery task; a
+        task manager assigns an unassigned task to a driver; the driver marks it picked up and then delivered."
       zh: 一份捐赠的流程：食品提供方把捐赠提交到网络的检验队列；检验员批准后移入仓库队列；救助站助理把它与一条待处理的收容请求配对，生成配送任务；任务调度员把未分配的任务派给司机；司机先标记已取货，再标记已送达。
     caption:
-      en: Traced from the screens' event handlers. Each arrow is a real handler; the labels are the status values the code sets.
-      zh: 依据各界面的事件处理代码梳理。每个箭头都对应真实存在的处理函数，标注的是代码实际写入的状态值。
+      en: Donation requests move between inspection, matching and delivery queues.
+      zh: 捐赠请求通过检验、匹配和配送队列传递。
   - kind: diagram
     id: domain-model
     section: domain-model
@@ -47,8 +52,26 @@ figures:
     source: assets/domain-model.mmd
     label: CURRENT
     alt:
-      en: "Class diagram of the objects on the donation path: a network owns an inspection queue, a warehouse queue, enterprises and user accounts; enterprises and organizations each own a work queue; a user account has one role, and each role builds its own work screen; the driver role keeps its own active and finished queues; work requests carry a sender, a receiver and a status, with food-item, delivery and needs requests as subclasses."
+      en: "Class diagram of the objects on the donation path: a network owns an inspection queue, a warehouse queue,
+        enterprises and user accounts; enterprises and organizations each own a work queue; a user account has one role,
+        and each role builds its own work screen; the driver role keeps its own active and finished queues; work
+        requests carry a sender, a receiver and a status, with food-item, delivery and needs requests as subclasses."
       zh: 捐赠路径上各对象的类图：网络拥有检验队列、仓库队列、企业和用户账号；企业和组织各自拥有工作队列；用户账号只有一个角色，每个角色构建自己的工作界面；司机角色另有进行中和已完成两个队列；工作请求带有发送方、接收方和状态，食品、配送和需求请求是它的子类。
     caption:
       en: A partial class diagram, redrawn from the model package. Only the objects on the donation path are shown.
       zh: 依据 model 包重新绘制的局部类图，只画出捐赠路径上的对象。
+card:
+  intro:
+    en: In a team of three, I designed the domain model and db4o persistence, implemented the application shell and
+      role-based login, and co-implemented workflow screens. The project shows how I translated organizational
+      responsibilities into objects, work queues and role-specific interfaces.
+    zh: 在三人团队中，我设计领域模型与 db4o 持久化，实现应用主框架和按角色分派的登录，并参与工作流界面开发，将组织职责转化为对象、工作队列和各角色的操作界面。
+  highlight:
+    en: Role classes construct their own workspaces; shared request objects connect inspection, matching and delivery
+      queues.
+    zh: 角色类创建各自的操作界面，共享请求对象连接检验、匹配与配送队列。
+  tech:
+    - Java
+    - Swing
+    - db4o
+  anchor: domain-model

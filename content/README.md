@@ -77,7 +77,7 @@ Screenshots and result plots show shipped UI or published results; they carry no
 | `smartbuyer` | Backend & Cloud | — |
 | `quant-ai` | AI & Research | One CURRENT diagram |
 
-Home project tabs use `track` on each project (`sde`, `cloud`, `finance-data`); labels and tab order are in `catalog.yaml.tracks`. Project order follows `catalog.yaml.order`.
+Home project tabs use the `tracks` array on each project (`ai-ml`, `cloud`, `sde`, `finance-data`); labels and tab order are in `catalog.yaml.tracks`. Project order follows `catalog.yaml.order`.
 
 ## AI assistant (`content/ai/`, ADR-022)
 
@@ -133,3 +133,8 @@ validation, adapting depth to recruiter and technical questions. Personal-projec
 technical responsibilities and outputs without unsolicited coding-tool disclosures. Recorded reasons are facts;
 derived engineering explanations are identified as interpretation. Team ownership and measurement conditions
 remain intact. Local development documents are read-only evidence, not a second runtime knowledge source.
+
+
+## Project presentation (ADR-028)
+
+Each module can belong to several homepage tracks. The registry orders four tracks: AI Agents & Machine Learning, Cloud, SDE, Finance & Data Science. JobApply has a bilingual module at `projects/job-apply-agent/`. Public pages show responsibilities, core mechanisms and design choices; status badges and progress roadmaps are not rendered or projected into assistant knowledge. Section IDs remain stable for existing links.

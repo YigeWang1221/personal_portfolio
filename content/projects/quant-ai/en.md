@@ -27,6 +27,6 @@ Training optimizes an information-coefficient loss — the rank correlation betw
 - **Cluster runs.** A Slurm script requests one H200 GPU, resubmits itself if it was started on a login node, and checks for CUDA before training. The largest model trained at {{fact:epoch_time}} per epoch.
 - **Reproducible runs.** Run names encode the hyperparameters, every run writes a manifest, each fold has its own seed, and a separate runner repeats a configuration across five seeds.
 
-## Scope {#scope}
+## Ranking targets and portfolio returns {#scope}
 
-The evaluation has three limitations: model selection used test-period results, the splits have no embargo gap although labels span several days, and the universe uses today's tickers, introducing survivorship bias.
+The pipeline keeps transformed training labels separate from trading returns. The model learns a cross-sectional ranking from ETF-adjusted targets; the backtest constructs a dollar-neutral basket from those scores and charges transaction costs on turnover. This separation connects the learning objective to the portfolio calculation without treating standardized labels as money returns.

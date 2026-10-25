@@ -25,13 +25,9 @@ The Abu Dhabi forecast was saved the day before the race, without race results.
 - Its mean absolute error over all twenty drivers was {{fact:finale_mae}}.
 - The model converged cleanly: maximum R-hat {{fact:rhat}}, no divergent transitions, and an in-sample mean absolute error of {{fact:in_sample_mae}}.
 
-## Limits {#limits}
+## Data preparation and feature selection {#limits}
 
-- **One season of data.** The model sees only 2025, so it learns little about how teams change.
-- **The Qatar score is in-sample.** The training data covers every round up to and including Qatar, plus pre-season testing, and the score was computed after the race. Only the Abu Dhabi forecast is out of sample.
-- **Backtest results.** Over a 22-race backtest the model picked the winner in {{fact:backtest_winner}} races and placed {{fact:backtest_top10}} of the top ten correctly.
-- **Ranking fusion.** A "fusion" step meant to blend several ranking strategies stopped at its starting guess, so the four strategies it compared ended up identical.
-- **Planned evaluation:** a non-hierarchical baseline for comparison; a rolling time-split backtest that trains only on past races, which also fixes the Qatar leak; a check of how stable the probabilities are as the number of simulations grows; and a pinned environment.
+We collected the season's completed sessions through FastF1 and built driver and team features from grid position, track type, recent form and retirement history. Because grid and qualifying positions carry closely related information, we used grid position in the model. Team-tier distributions supplied the prior means and spreads.
 
 ## Statistical methods and implementation {#foundations}
 

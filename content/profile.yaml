@@ -21,7 +21,8 @@ education:
     location: { en: "Boston, MA", zh: 美国波士顿 }
     period: { start: "2025-01", end: "2026-12", expected: true }
     details:
-      - en: "Coursework: Network Structures & Cloud Computing; High-Performance Computing; Data Science Engineering Methods; Application Engineering & Development."
+      - en: "Coursework: Network Structures & Cloud Computing; High-Performance Computing; Data Science Engineering Methods;
+          Application Engineering & Development."
         zh: 核心课程：网络架构与云计算、高性能并行计算、数据科学工程方法、应用工程与开发。
   - school: { en: Zhejiang Gongshang University, zh: 浙江工商大学 }
     degree: { en: Bachelor of Engineering in Computer Science and Technology, zh: 计算机科学与技术 学士 }
@@ -37,18 +38,22 @@ experience:
     location: { en: "Zhejiang, China", zh: 中国浙江 }
     period: { start: "2023-06", end: "2023-09" }
     bullets:
-      - en: Unified API versions for mobile and web clients across two Spring Cloud releases by mapping SaaS service dependencies; refactored controller and service layers and built CI/CD pipelines with GitLab and Jenkins.
+      - en: Unified API versions for mobile and web clients across two Spring Cloud releases by mapping SaaS service
+          dependencies; refactored controller and service layers and built CI/CD pipelines with GitLab and Jenkins.
         zh: 通过梳理 SaaS 服务依赖，在两个 Spring Cloud 版本中统一移动端与 Web 端的 API 版本；重构控制层与服务层，并基于 GitLab 与 Jenkins 搭建 CI/CD 流水线。
-      - en: Profiled end-to-end API latency with Cloud Trace, fixed inefficient loops and unindexed SQL queries in six APIs, and cut response time by 19%.
+      - en: Profiled end-to-end API latency with Cloud Trace, fixed inefficient loops and unindexed SQL queries in six APIs, and
+          cut response time by 19%.
         zh: 借助 Cloud Trace 定位端到端 API 耗时，修复 6 个接口中的低效循环与缺失索引的 SQL 查询，响应时间降低 19%。
-      - en: Contributed to an automated bidding bot for commodity auctions (regression-based price prediction, bidder-pattern analysis) that raised average sale prices by 4.6%.
+      - en: Contributed to an automated bidding bot for commodity auctions (regression-based price prediction, bidder-pattern
+          analysis) that raised average sale prices by 4.6%.
         zh: 参与大宗商品拍卖自动竞价系统的开发，结合回归价格预测与竞拍者行为分析制定出价策略，平均成交价提升 4.6%。
   - org: { en: "Industrial and Commercial Bank of China, Software Development Center", zh: 中国工商银行软件开发中心 }
     role: { en: Software Testing Intern, zh: 软件测试实习生 }
     location: { en: "Hangzhou, China", zh: 中国杭州 }
     period: { start: "2022-06", end: "2022-09" }
     bullets:
-      - en: Tested the loan-approval workflow on Linux and reported slow APIs. Wrote Shell scripts that validate REST APIs and SQL data consistency in the loan modules, cutting manual testing time by 21%.
+      - en: Tested the loan-approval workflow on Linux and reported slow APIs. Wrote Shell scripts that validate REST APIs and
+          SQL data consistency in the loan modules, cutting manual testing time by 21%.
         zh: 在 Linux 环境下对贷款审批流程做功能测试并定位慢接口；编写 Shell 脚本校验贷款模块的 REST API 与 SQL 数据一致性，人工测试时间降低 21%。
 
 # 3–5 verified outcomes, each a fact of a project page. Measured changes first; counts of tests or records are not outcomes.
@@ -60,58 +65,69 @@ highlights:
   - { project: f1-bayesian, fact: podium }
 
 skills:
-  # Technology names retain standard spelling; descriptive skills and headings are localized.
   - group: { en: Languages, zh: 编程语言 }
     items:
-      - { name: Java, evidence: [cloud-native, equipment-assignment, enterprise-workflow] }
-      - { name: Python, evidence: [kk-knock, personal-writing-lora, distributed-llm, f1-bayesian, quant-ai] }
-      - { name: Kotlin, evidence: [kk-knock] }
-      - { name: TypeScript, evidence: [personal-writing-lora, kk-knock, equipment-assignment] }
-      - { name: JavaScript, evidence: [smartbuyer] }
-      - { name: SQL, evidence: [kk-knock, personal-writing-lora, cloud-native] }
+      - { name: Java, evidence: [ cloud-native, equipment-assignment, enterprise-workflow, job-apply-agent ] }
+      - { name: Python, evidence: [ kk-knock, personal-writing-lora, distributed-llm, f1-bayesian, quant-ai ] }
+      - { name: Kotlin, evidence: [ kk-knock ] }
+      - { name: TypeScript, evidence: [ personal-writing-lora, kk-knock, equipment-assignment, job-apply-agent ] }
+      - { name: JavaScript, evidence: [ smartbuyer ] }
+      - { name: SQL, evidence: [ kk-knock, personal-writing-lora, cloud-native ] }
   - group: { en: Backend and data, zh: 后端与数据 }
     items:
-      - { name: FastAPI, evidence: [kk-knock, personal-writing-lora] }
-      - { name: Spring Boot, evidence: [cloud-native, equipment-assignment] }
-      - { name: Express / Mongoose, evidence: [smartbuyer] }
-      - { name: PostgreSQL, evidence: [kk-knock, personal-writing-lora] }
-      - { name: MySQL, evidence: [cloud-native, equipment-assignment] }
-      - { name: MongoDB, evidence: [smartbuyer] }
-      - { name: { en: Redis (maintenance branch), zh: Redis（维护分支） }, evidence: [equipment-assignment] }
-      - { name: MinIO, evidence: [equipment-assignment] }
-      - { name: Alembic / Flyway, evidence: [personal-writing-lora, cloud-native] }
+      - { name: FastAPI, evidence: [ kk-knock, personal-writing-lora ] }
+      - { name: Spring Boot, evidence: [ cloud-native, equipment-assignment, job-apply-agent ] }
+      - { name: Express / Mongoose, evidence: [ smartbuyer ] }
+      - { name: PostgreSQL, evidence: [ kk-knock, personal-writing-lora ] }
+      - { name: MySQL, evidence: [ cloud-native, equipment-assignment ] }
+      - { name: MongoDB, evidence: [ smartbuyer ] }
+      - { name: { en: Redis, zh: Redis }, evidence: [ equipment-assignment ] }
+      - { name: MinIO, evidence: [ equipment-assignment ] }
+      - { name: Alembic / Flyway, evidence: [ personal-writing-lora, cloud-native ] }
   - group: { en: Mobile and web, zh: 移动端与 Web }
     items:
-      - { name: Kotlin Multiplatform / Jetpack Compose, evidence: [kk-knock] }
-      - { name: Room / WorkManager, evidence: [kk-knock] }
-      - { name: React, evidence: [kk-knock, smartbuyer] }
-      - { name: Next.js, evidence: [personal-writing-lora] }
-      - { name: Vue 3, evidence: [equipment-assignment] }
+      - { name: Kotlin Multiplatform / Jetpack Compose, evidence: [ kk-knock ] }
+      - { name: Room / WorkManager, evidence: [ kk-knock ] }
+      - { name: React, evidence: [ kk-knock, smartbuyer, job-apply-agent ] }
+      - { name: Next.js, evidence: [ personal-writing-lora ] }
+      - { name: Vue 3, evidence: [ equipment-assignment ] }
   - group: { en: Cloud and DevOps, zh: 云与 DevOps }
     items:
-      - { name: "AWS (VPC, IAM, EC2, ALB, Auto Scaling, RDS, S3, KMS, Secrets Manager, SNS, Lambda, CloudWatch, Route 53)", evidence: [cloud-native, personal-writing-lora] }
-      - { name: Terraform, evidence: [cloud-native, personal-writing-lora, kk-knock] }
-      - { name: Packer, evidence: [cloud-native, kk-knock] }
-      - { name: GitHub Actions, evidence: [cloud-native, kk-knock] }
-      - { name: Docker Compose / Nginx, evidence: [kk-knock] }
+      - {
+          name: "AWS (VPC, IAM, EC2, ALB, Auto Scaling, RDS, S3, KMS, Secrets Manager, SNS, Lambda, CloudWatch, Route 53)",
+          evidence: [ cloud-native, personal-writing-lora ]
+        }
+      - { name: Terraform, evidence: [ cloud-native, personal-writing-lora, kk-knock ] }
+      - { name: Packer, evidence: [ cloud-native, kk-knock ] }
+      - { name: GitHub Actions, evidence: [ cloud-native, kk-knock ] }
+      - { name: Docker Compose / Nginx, evidence: [ kk-knock ] }
+  - group: { en: AI Agent development, zh: AI Agent 开发 }
+    items:
+      - { name: Spring AI, evidence: [ job-apply-agent ] }
+      - { name: { en: Agent harness / model–tool loops, zh: Agent Harness / 模型工具循环 }, evidence: [ job-apply-agent ] }
+      - { name: { en: Tool Calling / JSON Schema, zh: Tool Calling / JSON Schema }, evidence: [ job-apply-agent ] }
+      - { name: { en: MCP / Playwright browser automation, zh: MCP / Playwright 浏览器自动化 }, evidence: [ job-apply-agent ] }
+      - { name: { en: Context engineering / conversation persistence, zh: 上下文工程 / 对话持久化 }, evidence: [ job-apply-agent ] }
+      - { name: { en: Agent Skills / on-demand loading, zh: Agent Skills / 按需加载 }, evidence: [ job-apply-agent ] }
+      - { name: { en: Layered memory / runtime steering, zh: 分层记忆 / 运行时插话 }, evidence: [ job-apply-agent ] }
   - group: { en: ML and LLM, zh: 机器学习与大模型 }
     items:
-      - { name: "PyTorch (DDP, FSDP)", evidence: [distributed-llm, quant-ai] }
-      - { name: NCCL / Slurm, evidence: [distributed-llm, quant-ai] }
-      - { name: { en: whisper.cpp (on-device ASR), zh: whisper.cpp（端侧语音识别） }, evidence: [kk-knock] }
-      - { name: vLLM multi-LoRA / QLoRA, evidence: [personal-writing-lora] }
-      - { name: "LLM APIs (DeepSeek, Gemini)", evidence: [kk-knock] }
+      - { name: "PyTorch (DDP, FSDP)", evidence: [ distributed-llm, quant-ai ] }
+      - { name: NCCL / Slurm, evidence: [ distributed-llm, quant-ai ] }
+      - { name: { en: whisper.cpp (on-device ASR), zh: whisper.cpp（端侧语音识别） }, evidence: [ kk-knock ] }
+      - { name: vLLM multi-LoRA / QLoRA, evidence: [ personal-writing-lora ] }
+      - { name: "LLM APIs (DeepSeek, Gemini)", evidence: [ kk-knock ] }
   - group: { en: Data science, zh: 数据科学 }
     items:
-      - { name: PyMC / NUTS / ArviZ, evidence: [f1-bayesian] }
-      - { name: { en: Hierarchical Bayesian modeling, zh: 分层贝叶斯建模 }, evidence: [f1-bayesian] }
-      - { name: { en: Monte Carlo simulation, zh: 蒙特卡罗模拟 }, evidence: [f1-bayesian] }
-      - { name: { en: Walk-forward validation / backtesting, zh: 滚动验证与回测 }, evidence: [quant-ai] }
-      - { name: pandas / NumPy, evidence: [f1-bayesian, quant-ai, distributed-llm] }
+      - { name: PyMC / NUTS / ArviZ, evidence: [ f1-bayesian ] }
+      - { name: { en: Hierarchical Bayesian modeling, zh: 分层贝叶斯建模 }, evidence: [ f1-bayesian ] }
+      - { name: { en: Monte Carlo simulation, zh: 蒙特卡罗模拟 }, evidence: [ f1-bayesian ] }
+      - { name: { en: Walk-forward validation / backtesting, zh: 滚动验证与回测 }, evidence: [ quant-ai ] }
+      - { name: pandas / NumPy, evidence: [ f1-bayesian, quant-ai, distributed-llm ] }
   - group: { en: Engineering practice, zh: 工程实践 }
     items:
-      - { name: { en: Architecture Decision Records (ADR), zh: 架构决策记录（ADR） }, evidence: [kk-knock, personal-writing-lora] }
-      - { name: { en: Contract-first API design, zh: 接口契约设计 }, evidence: [personal-writing-lora] }
-      - { name: { en: Idempotency / offline-first design, zh: 幂等与离线优先设计 }, evidence: [kk-knock] }
-      - { name: pytest / JUnit / Vitest, evidence: [kk-knock, personal-writing-lora, cloud-native] }
-      - { name: { en: "Observability (structured logs, custom metrics)", zh: 可观测性（结构化日志、自定义指标） }, evidence: [cloud-native] }
+      - { name: { en: Architecture Decision Records (ADR), zh: 架构决策记录（ADR） }, evidence: [ kk-knock, personal-writing-lora ] }
+      - { name: { en: Contract-first API design, zh: 接口契约设计 }, evidence: [ personal-writing-lora ] }
+      - { name: { en: Idempotency / offline-first design, zh: 幂等与离线优先设计 }, evidence: [ kk-knock ] }
+      - { name: pytest / JUnit / Vitest, evidence: [ kk-knock, personal-writing-lora, cloud-native ] }
+      - { name: { en: "Observability (structured logs, custom metrics)", zh: 可观测性（结构化日志、自定义指标） }, evidence: [ cloud-native ] }

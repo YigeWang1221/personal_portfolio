@@ -854,3 +854,8 @@ event: error    data: {"code":"UPSTREAM_INTERRUPTED|OUTPUT_LIMIT|UNAVAILABLE|BLO
 | A 内部 Gemini 代理 → B DeepSeek → C Gemini，带默认模型名 | plan A/B/C，每个 plan 三个变量，由所有者选定服务和模型，代码中没有任何默认值；协议由 URL 判断 | 所有者决定 O-5（2026-10-08） |
 | 离题请求由模型礼貌拒绝 | 三层请求拦截（规则、范围、回答检查）加滥用封禁；被拒绝的请求不调用模型；输出上限降为 600 tokens | 所有者决定 O-6（2026-10-08），BR-06 收紧 |
 | Worker 需要 5 项配置（含 Access token 和 salt） | 必需 2 项：`ORIGIN_URL`、`ORIGIN_KEY`；Access 可选；匿名 ID 用 `ORIGIN_KEY` 计算 | 所有者决定 O-9（2026-10-08）：精简配置 |
+
+
+### 2026-10-24 展示口径更新（ADR-028）
+
+公开投影移除项目状态、状态说明、卡片状态和施工路线图。世界书仅使用页面中的项目介绍、技术机制、职责与图注；不追加已经从页面移除的验收或进度内容。保留事实引用与团队归属。新增 JobApply 与其他目录项目使用同一白名单流程。

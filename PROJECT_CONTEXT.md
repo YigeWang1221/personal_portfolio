@@ -81,7 +81,7 @@ machine translation of the other (ADR-005).
 
 ## Latest local revision — 2026-10-09
 
-- Homepage tracks now read Cloud, SDE, Finance & Data Science; project order prioritizes recent work and concrete
+- Homepage tracks now read AI Agents & Machine Learning, Cloud, SDE, Finance & Data Science; project order prioritizes recent work and concrete
   technical responsibility.
 - The assistant resolves reviewed project references and bounded spelling errors, clarifies close candidates, and
   combines overview with relevant technical evidence. Answers can explain documented choices and tradeoffs for
@@ -129,7 +129,7 @@ the build phase.
 - **Discovery gate:** cleared on 2026-09-24 (ADR-009).
 - **Site:** implemented as an Astro 7 static site (ADR-015), redesigned on 2026-09-25 (ADR-016) and revised on
   2026-09-26 (ADR-017): a résumé summary first, then the selected projects, more work, capabilities and contact.
-  Nine project modules and all global pages exist in English and Chinese; the build enforces language parity and
+  Ten project modules and all global pages exist in English and Chinese; the build enforces language parity and
   scans its output before it succeeds.
   - Deployed by the owner on 2026-09-24, with the custom domain bound.
   - AI assistant (ADR-022, `docs/AI_Chat/`):
@@ -147,3 +147,8 @@ the build phase.
     - The live site is unchanged; the build output is byte-identical.
   - Remaining: rebuild with `SITE_URL` and redeploy; review the Chinese copy and the facts added in the build phase;
     turn off Cloudflare Web Analytics injection for the site's hostname; then enable indexing.
+
+
+## Portfolio refresh — 2026-10-24
+
+JobApply adds a Java/Spring AI Agent runtime and React workspace. Home membership is a `tracks` array: JobApply appears in AI and SDE; Personal Writing LoRA and Distributed LLM Training appear in AI and Cloud. The catalog controls track and project order. Public introductions describe purpose, responsibilities, mechanisms and documented design choices. Status badges, progress roadmaps and acceptance-log prose have been removed (ADR-028).

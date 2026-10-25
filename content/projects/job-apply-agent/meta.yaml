@@ -1,0 +1,124 @@
+tracks: [ ai-ml, sde ]
+slug: job-apply-agent
+aliases: [ JobApply, Job Apply Agent, 求职 Agent, 求职投递智能体, job application agent ]
+title: { en: JobApply Agent, zh: JobApply 求职智能体 }
+subtitle:
+  en: Job research, browser form filling and application tracking in one workspace
+  zh: 将岗位调研、浏览器填表和申请跟进放在同一个工作区
+summary:
+  en: I built a job-search agent with Java and Spring AI. A shared model-and-tool loop drives research and
+    application filling, with reusable Skills, layered personal materials and saved conversations.
+  zh: 我用 Java 和 Spring AI 开发求职 Agent，以共用的模型与工具循环驱动岗位调研和申请填写，结合可复用的 Skills、分层个人资料和持久化对话组织求职过程。
+focus: { primary: ai-research, also: [ backend-cloud, business-modeling ] }
+status: in-development
+team: { size: 1 }
+role:
+  en: I designed and implemented the Agent runtime, context and memory handling, application scheduling, and
+    React workspace.
+  zh: 我设计并实现 Agent 运行时、上下文与记忆管理、申请任务调度，以及 React 工作区。
+context: { en: Agent runtime and full-stack application, zh: Agent 运行时与全栈应用 }
+period: { start: "2026-10", end: null }
+stack:
+  - Java
+  - Spring Boot
+  - Spring AI
+  - Tool Calling
+  - Agent Skills
+  - Context Engineering
+  - Persistent Memory
+  - Playwright MCP
+  - React
+  - TypeScript
+  - SSE
+links: []
+related: personal-writing-lora
+card:
+  intro:
+    en: I built a workspace where an Agent researches jobs, compares resumes and fills application forms in the
+      browser.
+    zh: 我开发了一个求职工作区，让 Agent 调研岗位、比较简历，并在浏览器中填写申请。
+  highlight:
+    en: Research and application tasks share a Java Agent loop. Each task supplies its own context and tools;
+      Skills and layered memory carry methods and personal materials between conversations.
+    zh: 调研与申请共用 Java Agent 循环，各自提供上下文和工具；Skills 与分层记忆让操作方法和个人资料在不同对话间复用。
+  tech: [ Spring AI, Playwright MCP, React ]
+  anchor: agent-loop
+  steps:
+    label: CURRENT
+    items:
+      - title: { en: Research jobs, zh: 调研岗位 }
+        detail: { en: Read descriptions and select materials, zh: 阅读岗位要求并选择材料 }
+      - title: { en: Run the Agent loop, zh: 执行 Agent 循环 }
+        detail: { en: Context → model → tools → feedback, zh: 上下文 → 模型 → 工具 → 反馈 }
+      - title: { en: Continue the application, zh: 继续申请 }
+        detail: { en: Save conversation and application records, zh: 保存对话与申请记录 }
+lead: architecture
+figures:
+  - kind: diagram
+    id: architecture
+    section: overview
+    file: assets/architecture.svg
+    source: assets/architecture.mmd
+    label: CURRENT
+    alt:
+      en: React and Spring Boot connect job research and application workers to a shared AgentLoop, Spring AI,
+        domain tools, Playwright MCP, local files and SSE events.
+      zh: React 与 Spring Boot 连接岗位调研和申请 Worker，共用 AgentLoop，并接入 Spring AI、领域工具、Playwright MCP、本地文件和 SSE 事件。
+    caption:
+      en: Research and application workers share the Agent loop. REST carries commands; SSE delivers runtime events
+        to the workspace.
+      zh: 调研与申请 Worker 共用 Agent 循环；REST 传递操作请求，SSE 将运行事件推送到工作区。
+  - kind: image
+    id: dashboard
+    section: workspace-design
+    file: assets/dashboard-demo.png
+    label: HISTORICAL
+    alt:
+      en: JobApply workspace design with a job-application funnel, upcoming interviews, follow-up reminders and a
+        stage board using fictional data.
+      zh: JobApply 工作区设计：投递漏斗、近期面试、跟进提醒与阶段看板，采用虚构数据。
+    caption:
+      en: "Workspace interface design: the funnel shows applications by stage, while upcoming interviews and
+        follow-ups stay beside it. Example data."
+      zh: 工作区界面设计：漏斗呈现申请所处阶段，面试安排与跟进事项放在同一视图中。图中为示例数据。
+  - kind: image
+    id: applications
+    section: workspace-design
+    file: assets/applications-demo.png
+    label: HISTORICAL
+    alt:
+      en: Application table design grouping fictional jobs by stage, with company, role, location, interview rounds
+        and next actions.
+      zh: 申请总表设计：按阶段分组展示虚构岗位，包含公司、职位、地点、面试轮次与后续事项。
+    caption:
+      en: "Application table design: each job keeps its own record across research conversations, with interview
+        rounds and next actions together. Example data."
+      zh: 申请总表设计：每个岗位跨调研对话保留独立记录，将面试轮次与后续事项集中展示。图中为示例数据。
+  - kind: diagram
+    id: agent-loop
+    section: agent-loop
+    file: assets/agent-loop.svg
+    source: assets/agent-loop.mmd
+    label: CURRENT
+    alt:
+      en: User messages enter task context; the model chooses tools, results return to the next call, and ask_user
+        or finish hands control to the user.
+      zh: 用户消息进入任务上下文；模型选择工具，执行结果返回下一轮；ask_user 或 finish 将控制交回用户。
+    caption:
+      en: The model chooses actions from tool feedback. Saved conversations and the message inbox let the user guide
+        the next round.
+      zh: 模型根据工具反馈选择动作；持久化对话与消息收件箱让用户可以继续回答或调整下一轮要求。
+  - kind: diagram
+    id: skills-memory
+    section: memory
+    file: assets/skills-memory.svg
+    source: assets/skills-memory.mmd
+    label: CURRENT
+    alt:
+      en: Personal facts resolve from current answers through Project overrides to base materials. A Skills index
+        enters context; read_skill loads a body and remember updates facts, experience or Skills.
+      zh: 个人事实按本次回答、Project 覆盖、父级覆盖与基础资料解析；Skills 索引进入上下文，read_skill 加载正文，remember 更新事实、经验或 Skill。
+    caption:
+      en: Personal materials resolve by precedence; reusable methods load through read_skill. Memory updates
+        preserve facts and methods for later applications.
+      zh: 个人资料按优先级解析，可复用的方法通过 read_skill 加载；记忆更新将事实与方法保留给后续申请。

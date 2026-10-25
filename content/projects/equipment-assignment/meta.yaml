@@ -1,27 +1,43 @@
-track: sde
+tracks: [ sde ]
 slug: equipment-assignment
-aliases: ["Equipment Assignment", "设备作业平台", "设备与作业系统", "设备借用项目", "equipment borrowing"]
+aliases: [ "Equipment Assignment", "设备作业平台", "设备与作业系统", "设备借用项目", "equipment borrowing" ]
 title: { en: Equipment & Assignment Grading System, zh: 设备借用与作业批改平台 }
 subtitle:
-  en: A full-stack teaching platform that runs an IoT course end to end — equipment loans, group homework, grading, exports and media
+  en: A full-stack teaching platform that runs an IoT course end to end — equipment loans, group homework, grading,
+    exports and media
   zh: 支撑一门物联网课程完整流程的全栈教学平台：设备借用、小组作业、作业批改、导出与媒体管理
 summary:
-  en: A Vue 3 and Spring Boot platform that runs an IoT course end to end — equipment borrowing with approval, classes and groups, homework that a group edits together, grading, PDF export, and course videos that play from object storage and can be scrubbed without downloading the whole file.
+  en: A Vue 3 and Spring Boot platform that runs an IoT course end to end — equipment borrowing with approval, classes and
+    groups, homework that a group edits together, grading, PDF export, and course videos that play from object storage
+    and can be scrubbed without downloading the whole file.
   zh: 一个基于 Vue 3 与 Spring Boot 的平台，覆盖一门物联网课程的完整流程：带审批的设备借用、班级与分组、小组协同编辑的作业、作业批改、PDF 导出，以及存放在对象存储中、无需完整下载即可拖动播放的课程视频。
-focus: { primary: backend-cloud, also: [business-modeling] }
+focus: { primary: backend-cloud, also: [ business-modeling ] }
 status: undergraduate-capstone
 team: { size: 1 }
 role:
-  en: I built the backend, the data model, the media handling and the application pages; the frontend starts from an open-source admin template.
+  en: I built the backend, the data model, the media handling and the application pages; the frontend starts from an
+    open-source admin template.
   zh: 独立完成。后端、数据模型、媒体处理和各个应用页面都由我实现；前端基于一个开源的管理后台模板起步。
 context: { en: "Full-stack teaching platform", zh: "全栈教学平台" }
 period: { start: "2023-02", end: "2024-04" }
-stack: [Java 17, Spring Boot 2.7, MyBatis-Plus, MySQL, MinIO, Apache POI, iText html2pdf, Vue 3, TypeScript, Element Plus]
+stack:
+  [
+    Java 17,
+    Spring Boot 2.7,
+    MyBatis-Plus,
+    MySQL,
+    MinIO,
+    Apache POI,
+    iText html2pdf,
+    Vue 3,
+    TypeScript,
+    Element Plus
+  ]
 links:
   - kind: code
     url: https://github.com/YigeWang1221/Equipments-Assignment
     label: { en: Code on GitHub, zh: GitHub 代码 }
-highlights: [endpoints]
+highlights: [ endpoints ]
 deep_dive_from: maintenance
 # Section ids retired in earlier redesigns, and where they land now.
 anchor_aliases: { ownership: platform }
@@ -42,8 +58,25 @@ figures:
     source: assets/architecture.mmd
     label: CURRENT
     alt:
-      en: "Architecture: teacher, student and guest views in a Vue 3 frontend call a Spring Boot backend with role interceptors and services for equipment, classes and groups, homework, the showcase and exports; data lives in MySQL, media in MinIO, and documents are produced with Apache POI and html2pdf."
-      zh: 架构图：Vue 3 前端的教师、学生和访客页面调用 Spring Boot 后端；后端有按角色划分的拦截器，以及设备、班级与分组、作业、作品展示和导出等服务；数据存于 MySQL，媒体存于 MinIO，文档由 Apache POI 和 html2pdf 生成。
+      en: "Architecture: teacher, student and guest views in a Vue 3 frontend call a Spring Boot backend with role
+        interceptors and services for equipment, classes and groups, homework, the showcase and exports; data lives in
+        MySQL, media in MinIO, and documents are produced with Apache POI and html2pdf."
+      zh: 架构图：Vue 3 前端的教师、学生和访客页面调用 Spring Boot 后端；后端有按角色划分的拦截器，以及设备、班级与分组、作业、作品展示和导出等服务；数据存于 MySQL，媒体存于 MinIO，文档由 Apache POI
+        和 html2pdf 生成。
     caption:
-      en: The capstone as built. The 2026 maintenance branch (Redis lock and cache) is not drawn because it is not merged yet.
-      zh: 毕业设计完成时的架构。2026 年维护分支（Redis 锁与缓存）尚未合并，因此没有画入图中。
+      en: Vue connects teaching workflows to Spring Boot APIs, MySQL records and MinIO media storage.
+      zh: Vue 将教学流程接入 Spring Boot API、MySQL 数据记录与 MinIO 媒体存储。
+card:
+  intro:
+    en: A Vue 3 and Spring Boot platform that runs an IoT course end to end — equipment borrowing with approval, classes and
+      groups, homework that a group edits together, grading, PDF export, and course videos that play from object storage
+      and can be scrubbed without downloading the whole file.
+    zh: 一个基于 Vue 3 与 Spring Boot 的平台，覆盖一门物联网课程的完整流程：带审批的设备借用、班级与分组、小组协同编辑的作业、作业批改、PDF 导出，以及存放在对象存储中、无需完整下载即可拖动播放的课程视频。
+  highlight:
+    en: I implemented group-aware homework access, document exports and HTTP Range video playback backed by object storage.
+    zh: 我实现按小组控制的作业访问、文档导出，以及基于对象存储的 HTTP Range 视频播放。
+  tech:
+    - Spring Boot
+    - Vue
+    - MinIO
+  anchor: media

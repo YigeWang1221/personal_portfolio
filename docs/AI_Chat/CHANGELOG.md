@@ -459,3 +459,12 @@ SDD-AICHAT-001（`AI_CHAT_DESIGN.md`）的实施记录。每完成一个功能�
 - 验证：`npm run build` 通过（30 页、1118 链接，176 知识条目）；`npm test` 97/97 通过，只用 mock providers。本地 `wrangler dev` 浏览器检查中英文首页、目录、详情页，桌面与 375px 手机宽度无横向溢出。
 - ADR-004：所有者于 2026-10-13 确认这些仓库可以公开链接。
 - 未执行：未 commit、push 或部署。
+
+## 2026-10-24 · JobApply、跨分类项目与项目介绍修订（ADR-028）
+
+- 新增 JobApply 中英文项目模块，介绍共用 AgentLoop、上下文、Skills、分层记忆、Worker 调度与 SSE。加入工作区和申请总表设计图，以及系统架构、模型工具循环、Skills/记忆图。首页和简历技术栈增加 AI Agent 开发分组。
+- `schema.ts`、首页组件和 catalog 支持四个分类及项目多分类；重复卡片使用独立标题 ID。全站项目介绍围绕目的、职责、机制与设计选择重写，移除项目状态徽章、进度路线图和验收记录式内容。
+- `public-projection.ts` 和 `build-worldbook.mjs` 同步公开页面内容，移除项目状态与路线图字段。`content/ai/aliases.yaml` 补充 auto scaling 检索同义词。知识回归更新项目内容断言与多分类检查；删除内容的测试使用结构化 YAML 清理技能引用，并清理被删段落的卡片锚点。
+- 图文组件为静态图片增加原图链接；资产均通过现有构建链输出。写作规范明确项目介绍规则。
+- 验证：`npm run diagrams` 通过（本机 Chrome，无浏览器下载）；`PUBLIC_CHAT_ENABLED=true npm run build` 通过，32 页、1314 个链接、186 个知识条目；`npm test` 98/98 通过，无跳过，仅 mock providers；`git diff --check` 通过。浏览器检查中文架构、界面图与 Skills/记忆图，图片正常载入，无页面横向溢出。
+- 本地修改尚未提交或部署。发布时需要更新网站和聊天后端的知识产物。

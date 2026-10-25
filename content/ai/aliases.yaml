@@ -8,7 +8,7 @@ groups:
   - [cloud, aws, amazon web services, 云, 云计算, 云服务, 云原生]
   - [capability, capabilities, strength, 能力, 能力方向, 擅长]
   - [kubernetes, k8s, 容器编排]
-  - [high availability, highly available, multi-az, failover, autoscaling, 高可用, 可用性, 容灾, 弹性伸缩]
+  - [high availability, highly available, multi-az, failover, autoscaling, auto scaling, 高可用, 可用性, 容灾, 弹性伸缩]
   - [docker, container, 容器]
   - [database, postgresql, postgres, mysql, 数据库]
   - [api, rest, 接口]

@@ -1,4 +1,6 @@
 tracks:
+  - id: ai-ml
+    title: { en: AI Agents & Machine Learning, zh: AI 智能体与机器学习 }
   - id: cloud
     title: { en: Cloud, zh: Cloud · 云计算 }
   - id: sde
@@ -25,24 +27,25 @@ focus:
   - id: planning-delivery
     title: { en: Planning & Delivery, zh: 规划与交付 }
     description:
-      en: Phased plans, written decisions, and fixing what real use exposed.
-      zh: 分阶段计划、书面决策，以及修正真实使用中暴露的问题。
+      en: Product requirements, component design and delivery workflows.
+      zh: 产品需求、组件设计与交付流程。
   - id: ai-research
     title: { en: AI & Research, zh: AI 与研究 }
     description:
-      en: Training, modeling and measurement, with their conditions stated.
-      zh: 训练、建模与测量，并写明各自的条件。
+      en: Agent runtimes, model training and statistical modeling.
+      zh: Agent 运行时、模型训练与统计建模。
 
 # Home card variants (ADR-017). The track and project reading order comes from tracks and order below.
 home:
   flagship: kk-knock
-  cases: [cloud-native, distributed-llm]
-  exploring: [personal-writing-lora]
-  more: [enterprise-workflow, equipment-assignment, f1-bayesian]
+  cases: [ cloud-native, distributed-llm ]
+  exploring: [ personal-writing-lora ]
+  more: [ enterprise-workflow, equipment-assignment, f1-bayesian ]
 
 # Reading order: recent work first, with responsibility and technical depth guiding projects from the same period.
 # Each home track filters this order. INFO 6105 coursework is part of the F1 page.
 order:
+  - job-apply-agent
   - kk-knock
   - personal-writing-lora
   - distributed-llm

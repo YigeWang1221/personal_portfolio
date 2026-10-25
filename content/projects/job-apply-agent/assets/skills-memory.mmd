@@ -1,0 +1,26 @@
+---
+config:
+  flowchart:
+    wrappingWidth: 260
+---
+flowchart TB
+    subgraph facts["Personal facts · highest priority first"]
+        direction LR
+        answer["Current answers"] --> project["Current Project overrides"]
+        project --> parent["Parent Project overrides"]
+        parent --> base["Base materials"]
+    end
+    facts --> resolver["ProfileResolver<br/>Resolve values · apply unset"]
+    resolver --> context["Task context"]
+    catalog["SkillCatalog<br/>Names + descriptions"] --> context
+    context --> model["Model"]
+    model -->|read_skill| skill["Load the requested Skill body"]
+    skill -->|Tool result| model
+    model -->|remember| writer["MemoryWriter<br/>Add · replace · remove"]
+    writer --> materials[("Personal facts + experience notes")]
+    writer -->|Replace a matching passage| methods[("Reusable Skills")]
+    methods --> catalog
+    classDef agent fill:#e9f3ec,stroke:#39734d,color:#193c26
+    classDef resource fill:#fcf2df,stroke:#a07a35,color:#614917
+    class resolver,context,model,writer agent
+    class catalog,skill,materials,methods resource

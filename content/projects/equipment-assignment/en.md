@@ -20,22 +20,16 @@ The platform runs an IoT course for teachers and students:
 
 Course videos are large. Uploads go to MinIO through the SDK with the file size known in advance, so large files are sent as multipart uploads. Playback goes through an endpoint that implements HTTP Range requests — `Range`, `If-Range` and `206 Partial Content` — so the player can jump to any point without downloading the whole file first.
 
-## Collaborative editing {#editing}
+## Group homework editing {#editing}
 
-Group members can edit the same homework. Saves and reads check that the user belongs to the group, and a lock serializes concurrent saves. In the original capstone that lock was a single read/write lock for the whole application: correct on one server, but it made every group wait for every other group, and it could not work across several instances.
+I connected group membership to homework access: reads and saves check the student's group before accessing its submission. A read/write lock serializes saves in the application, coordinating updates to the shared homework document.
 
-## 2026 maintenance branch (in progress) {#maintenance}
+## Homework locks and catalog caching {#maintenance}
 
-In 2026 I recovered the backend source from an archive and started a maintenance branch:
+I implemented a per-homework Redis lock using `SET NX PX`, with expiry and a Lua compare-and-delete operation for release. Lock ownership is scoped to the homework rather than shared across the whole application.
 
-- **A per-homework Redis lock** replaces the application-wide lock: `SET NX PX` with a time-to-live, released by a Lua compare-and-delete script. Locks are scoped to each homework and expire automatically. Cross-instance concurrency and operations that outlast the lease still need validation.
-- **A Redis cache** for the read-heavy equipment catalog and showcase, with eviction on every write path — including handlers that write through the mapper directly — and a fallback to MySQL when Redis is unavailable.
-- **Two bug fixes**, configuration moved to environment variables, and unit tests for the lock.
+I also implemented Redis caching for the equipment catalog and showcase. Write paths evict affected entries, and reads fall back to MySQL when Redis is unavailable.
 
-The branch has not been built or merged yet, so this page describes the capstone as built and lists the upgrade as work in progress.
+## Documents and teaching materials {#next}
 
-## Known limits and next steps {#next}
-
-- **Stock updates can race.** Borrowing reads the stock, then writes it back, so two concurrent requests could both succeed. An atomic conditional update would fix it.
-- **Live update notifications** need a message-broker configuration before editors see each other's changes in real time.
-- **Next:** finish and merge the maintenance branch, then add integration tests around borrowing and grading.
+Teachers manage classes and groups through the application. Apache POI handles spreadsheet import and export, and iText html2pdf converts homework content into PDF. MinIO stores images, videos and archives, connecting course administration with the materials used in teaching.

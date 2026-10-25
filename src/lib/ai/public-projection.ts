@@ -3,13 +3,13 @@
 // Turns the validated content model into a JSON-safe DTO that contains only what the site already shows.
 // Every field is picked explicitly from a whitelist; nothing is spread or serialized wholesale, so a new
 // schema field never reaches the assistant until it is added here on purpose.
-// Never output: fact.claim, chart panels[].claim (internal ledger IDs), track, figures, roadmap,
+// Never output: fact.claim, chart panels[].claim (internal ledger IDs), tracks, project status, figures, roadmap,
 // anchor_aliases, deep_dive_from, related, highlight keys, profile.updated, contact.attachment_limit_mb.
 import type { Content, Project } from '../content/load';
 import { termText } from '../content/load';
 import type { RenderedSection } from '../content/markdown';
 import type { Fact, Localized } from '../content/schema';
-import { formatPeriod, statusLabel, teamLabel } from '../format';
+import { formatPeriod, teamLabel } from '../format';
 import { LOCALES, localePath, type Locale } from '../i18n';
 
 export const PROJECTION_SCHEMA_VERSION = 1;
@@ -40,8 +40,6 @@ export interface ProjectedProject {
   subtitle: Localized;
   summary: Localized;
   focus: { primary: string; also: string[] };
-  status: PerLocale<string>;
-  statusNote?: Localized;
   team: PerLocale<string>;
   teamSize: number;
   role: Localized;
@@ -49,7 +47,7 @@ export interface ProjectedProject {
   period: PerLocale<string>;
   stack: string[];
   links: { kind: string; url: string; label: Localized }[];
-  card?: { intro: Localized; highlight?: Localized; status?: Localized };
+  card?: { intro: Localized; highlight?: Localized };
   facts: ProjectedFact[];
   path: PerLocale<string>;
   sections: PerLocale<ProjectedSection[]>;
@@ -146,8 +144,6 @@ function projectProject(p: Project): ProjectedProject {
     subtitle: localized(m.subtitle),
     summary: localized(m.summary),
     focus: { primary: m.focus.primary, also: [...m.focus.also] },
-    status: perLocale((l) => statusLabel(m.status, m.team, l)),
-    statusNote: m.status_note ? localized(m.status_note) : undefined,
     team: perLocale((l) => teamLabel(m.team, l)),
     teamSize: m.team.size,
     role: localized(m.role),
@@ -159,16 +155,11 @@ function projectProject(p: Project): ProjectedProject {
       ? {
           intro: localized(m.card.intro),
           highlight: m.card.highlight ? localized(m.card.highlight) : undefined,
-          status: m.card.status ? localized(m.card.status) : undefined,
         }
       : undefined,
     facts,
     path: perLocale((l) => localePath(l, pagePath)),
     sections: perLocale((l) => sections(p.sections[l], l, pagePath, facts).map((section) => {
-      const roadmap = m.roadmap?.section === section.id ? m.roadmap : null;
-      if (roadmap) section.text += `\n\n${roadmap.title[l]}\n` + roadmap.phases.map((phase) =>
-        `${phase.name[l]}: ${l === 'zh' ? ({done: '已完成', 'in-progress': '进行中', planned: '计划中'}[phase.status]) : phase.status}${phase.detail ? ` — ${phase.detail[l]}` : ''}${phase.when ? ` (${termText(phase.when, l)})` : ''}`
-      ).join('\n');
       for (const figure of p.figures.filter((f) => f.section === section.id)) {
         const label = 'label' in figure ? figure.label : undefined;
         if (figure.caption[l]) section.text += `\n\n${label ? `${label}: ` : ''}${figure.caption[l]}`;
