@@ -30,7 +30,10 @@ stack:
   - React
   - TypeScript
   - SSE
-links: []
+links:
+  - kind: code
+    url: "https://github.com/YigeWang1221/JobApply_agent"
+    label: { en: Code on GitHub, zh: GitHub 代码 }
 related: personal-writing-lora
 card:
   intro:
