@@ -1,0 +1,18 @@
+---
+config:
+  flowchart:
+    wrappingWidth: 260
+---
+flowchart TB
+    inbox["User message inbox<br/>New requirements and answers"] --> context
+    context["Assemble model messages<br/>Instructions + task context + history"] --> model
+    model["Model chooses the next action"] --> tools
+    tools["Execute tool calls<br/>Research · browser · plan · memory"] --> save
+    save["Save results with tool-call IDs<br/>Update latest page and conversation"] --> context
+    model -->|Text reply| handoff["Return to the user"]
+    tools -->|ask_user / finish| handoff
+    handoff -->|User replies| inbox
+    classDef core fill:#e9f3ec,stroke:#39734d,color:#193c26
+    classDef user fill:#eaf2fc,stroke:#416b96,color:#183955
+    class context,model,tools,save core
+    class inbox,handoff user

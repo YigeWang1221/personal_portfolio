@@ -2,7 +2,6 @@
 // Visual résumé (ADR-007): consistent with the PDF résumé, with every skill linked to its evidence.
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ContactEmail from '../../components/ContactEmail.astro';
-import StatusBadge from '../../components/StatusBadge.astro';
 import { localePath, localePaths, type Locale } from '../../lib/i18n';
 import { getContent, t, termText } from '../../lib/content/load';
 import { formatPeriod, teamLabel } from '../../lib/format';
@@ -90,7 +89,7 @@ const highlights = profile.highlights.map((h) => ({ project: projects.get(h.proj
               <h3><a href={localePath(locale, `/projects/${p.meta.slug}/`)}>{p.meta.title[locale]}</a></h3>
               <p class="cv-sub">{p.meta.subtitle[locale]} · {p.meta.context[locale]} · {teamLabel(p.meta.team, locale)}</p>
               <p>{p.meta.role[locale]}</p>
-              <StatusBadge status={p.meta.status} team={p.meta.team} locale={locale} />
+
             </div>
           </li>
         ))}

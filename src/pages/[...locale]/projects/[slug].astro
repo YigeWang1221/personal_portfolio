@@ -4,11 +4,9 @@
 // preview) and the few facts worth remembering. Then the project's own story with an "On this page"
 // navigation, the deep dive, the full stack, one related case study and the way back to the catalog.
 import BaseLayout from '../../../layouts/BaseLayout.astro';
-import StatusBadge from '../../../components/StatusBadge.astro';
 import StackChips from '../../../components/StackChips.astro';
 import FactList from '../../../components/FactList.astro';
 import FigureView from '../../../components/FigureView.astro';
-import RoadmapView from '../../../components/RoadmapView.astro';
 import ProjectLinks from '../../../components/ProjectLinks.astro';
 import TitleGitHub from '../../../components/TitleGitHub.astro';
 import { LOCALES, localeParam, localePath, type Locale } from '../../../lib/i18n';
@@ -53,10 +51,6 @@ const focusTitles = project.focusIds.map((id) => focus.find((f) => f.id === id)!
     <header class="project-head">
       <h1>{m.title[locale]}<TitleGitHub links={m.links} /></h1>
       <p class="subtitle">{m.subtitle[locale]}</p>
-      <p class="status-line">
-        <StatusBadge status={m.status} team={m.team} locale={locale} />
-        {m.status_note && <span class="status-note">{m.status_note[locale]}</span>}
-      </p>
       <p class="project-role"><span class="role-label">{t(locale, 'project.role')}</span> {m.role[locale]}</p>
       <p class="project-meta">
         <span>{formatPeriod(m.period, locale)}</span>
@@ -111,12 +105,6 @@ const focusTitles = project.focusIds.map((id) => focus.find((f) => f.id === id)!
               {aliasesFor(s.id).map((alias) => <span id={alias} class="anchor-alias"></span>)}
               <h2 id={`${s.id}-title`}>{s.title}</h2>
               <div class="prose" set:html={s.html} />
-              {m.roadmap && m.roadmap.section === s.id && (
-                <div class="figure">
-                  <h3>{m.roadmap.title[locale]}</h3>
-                  <RoadmapView roadmap={m.roadmap} locale={locale} />
-                </div>
-              )}
               {figuresFor(s.id).map((f) => <FigureView figure={f} locale={locale} />)}
             </section>
           </>

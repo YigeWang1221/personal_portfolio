@@ -1,21 +1,22 @@
-track: cloud
+tracks: [ cloud ]
 slug: cloud-native
-aliases: ["Cloud-Native", "AWS cloud application", "AWS 云原生项目", "AWS 项目", "云原生项目", "AWS web app"]
+aliases: [ "Cloud-Native", "AWS cloud application", "AWS 云原生项目", "AWS 项目", "云原生项目", "AWS web app" ]
 title: { en: Cloud-Native Web Application on AWS, zh: AWS 云原生 Web 应用 }
 subtitle:
   en: "A Spring Boot service with infrastructure and release automation on AWS"
   zh: "Spring Boot 后端与 AWS 基础设施、自动化交付"
 summary:
-  en: "I built a Spring Boot API and its AWS platform: Terraform-managed VPC, EC2 Auto Scaling, ALB, RDS, S3, IAM, KMS and Secrets Manager; Route 53 and HTTPS; GitHub Actions with Packer AMI delivery across accounts; and SNS-triggered Lambda verification emails through Mailgun."
-  zh: "我实现 Spring Boot API 及 AWS 平台：用 Terraform 配置 VPC、EC2 Auto Scaling、ALB、RDS、S3、IAM、KMS 和 Secrets Manager，配置 Route 53 与 HTTPS，设计 GitHub Actions/Packer 跨账号镜像交付，并实现 SNS 触发 Lambda、经 Mailgun 发送验证邮件。"
+  en: "I built a Spring Boot API and its AWS platform: Terraform-managed VPC, EC2 Auto Scaling, ALB, RDS, S3, IAM, KMS and
+    Secrets Manager; Route 53 and HTTPS; GitHub Actions with Packer AMI delivery across accounts; and SNS-triggered
+    Lambda verification emails through Mailgun."
+  zh: "我实现 Spring Boot API 及 AWS 平台：用 Terraform 配置 VPC、EC2 Auto Scaling、ALB、RDS、S3、IAM、KMS 和 Secrets Manager，配置 Route 53 与
+    HTTPS，设计 GitHub Actions/Packer 跨账号镜像交付，并实现 SNS 触发 Lambda、经 Mailgun 发送验证邮件。"
 focus: { primary: backend-cloud, also: [] }
 status: course-project
-status_note:
-  en: "Deployed on AWS with automated image builds and rolling releases"
-  zh: "已在 AWS 部署，完成自动镜像构建与多次滚动发布"
 team: { size: 1 }
 role:
-  en: "I implemented the API, Terraform infrastructure, domain and HTTPS configuration, Packer images and GitHub Actions CI/CD. I also built the SNS-triggered Lambda email-verification function and its release workflow."
+  en: "I implemented the API, Terraform infrastructure, domain and HTTPS configuration, Packer images and GitHub Actions
+    CI/CD. I also built the SNS-triggered Lambda email-verification function and its release workflow."
   zh: "我负责 API、Terraform 基础设施、域名与 HTTPS 配置、Packer 镜像和 GitHub Actions CI/CD，并实现 SNS 触发的 Lambda 邮件验证函数及其发布工作流。"
 context: { en: "Backend and cloud infrastructure", zh: "后端与云基础设施" }
 period: { start: "2025-09", end: "2025-11" }
@@ -46,7 +47,7 @@ links:
   - kind: code
     url: https://github.com/csye6225YigeWang/serverless
     label: { en: Lambda code, zh: Lambda 代码 }
-highlights: [deploy_median, azs, kms_keys]
+highlights: [ deploy_median, azs, kms_keys ]
 lead: cicd
 deep_dive_from: observability
 # Section ids retired in earlier redesigns, and where they land now.
@@ -55,18 +56,23 @@ related: distributed-llm
 
 card:
   intro:
-    en: "I built the Spring Boot user, product and image APIs and the AWS infrastructure and delivery workflows around them."
+    en: "I built the Spring Boot user, product and image APIs and the AWS infrastructure and delivery workflows around
+      them."
     zh: "我实现 Spring Boot 用户、商品与图片 API，并完成配套的 AWS 基础设施、权限配置和自动化交付。"
   bullets:
-    - en: "Infrastructure: Terraform provisions the VPC and subnets, EC2 launch templates and Auto Scaling behind an ALB, RDS MySQL and S3; CloudWatch CPU alarms drive scaling."
+    - en: "Infrastructure: Terraform provisions the VPC and subnets, EC2 launch templates and Auto Scaling behind an ALB, RDS
+        MySQL and S3; CloudWatch CPU alarms drive scaling."
       zh: "基础设施：用 Terraform 配置 VPC 与子网、EC2 启动模板和 Auto Scaling、ALB、RDS MySQL 与 S3，并用 CloudWatch CPU 告警触发扩缩容。"
-    - en: "Access and data protection: I configured EC2 and Lambda IAM roles, security groups between the application and database, KMS encryption and Secrets Manager credentials."
+    - en: "Access and data protection: I configured EC2 and Lambda IAM roles, security groups between the application and
+        database, KMS encryption and Secrets Manager credentials."
       zh: "权限与数据保护：配置 EC2 和 Lambda 的 IAM 角色、应用与数据库之间的安全组规则、KMS 加密和 Secrets Manager 凭据管理。"
-    - en: "CI/CD: I designed GitHub Actions for PR tests, Packer AMI builds, dev-to-demo image sharing and launch-template updates followed by instance refreshes."
+    - en: "CI/CD: I designed GitHub Actions for PR tests, Packer AMI builds, dev-to-demo image sharing and launch-template
+        updates followed by instance refreshes."
       zh: "CI/CD：设计 GitHub Actions 的 PR 测试、Packer AMI 构建、dev 到 demo 跨账号镜像共享，以及启动模板更新和实例刷新。"
-    - en: "Email and domains: I wrote the SNS-triggered Lambda that sends verification emails through Mailgun and automated its releases; I configured Route 53 application and email records and ALB HTTPS access."
+    - en: "Email and domains: I wrote the SNS-triggered Lambda that sends verification emails through Mailgun and automated
+        its releases; I configured Route 53 application and email records and ALB HTTPS access."
       zh: "邮件与域名：编写 SNS 触发、经 Mailgun 发送验证邮件的 Lambda 及自动发布流程；配置 Route 53 应用与邮件域名记录，以及 ALB HTTPS 访问。"
-  tech: [Spring Boot, Terraform, Packer · GitHub Actions]
+  tech: [ Spring Boot, Terraform, Packer · GitHub Actions ]
   cta: { en: My backend and delivery work, zh: 查看后端与交付工作 }
   anchor: overview
   steps:
@@ -74,30 +80,37 @@ card:
     items:
       - { title: { en: "Check — tests and template checks on every pull request", zh: 检查：每个 PR 运行测试并校验镜像模板 } }
       - { title: { en: "Build — bake a machine image in the dev account", zh: 构建：在 dev 账号构建机器镜像 }, detail: Packer }
-      - { title: { en: "Promote — share it with the demo account", zh: 发布：共享给 demo 账号 }, detail: { en: new launch-template version, zh: 新的启动模板版本 } }
-      - { title: { en: "Roll out — replace instances a few at a time", zh: 上线：分批替换实例 }, detail: { en: gated by the load balancer's health check, zh: 由负载均衡器的健康检查把关 } }
+      - {
+          title: { en: "Promote — share it with the demo account", zh: 发布：共享给 demo 账号 },
+          detail: { en: new launch-template version, zh: 新的启动模板版本 }
+        }
+      - {
+          title: { en: "Roll out — replace instances a few at a time", zh: 上线：分批替换实例 },
+          detail: { en: gated by the load balancer's health check, zh: 由负载均衡器的健康检查把关 }
+        }
 
 facts:
   deploy_median:
     value: { en: ≈10.5 min, zh: 约 10.5 分钟 }
     label: { en: "median automated deploy, from image build to a finished instance refresh", zh: 自动部署的中位耗时（从构建镜像到实例刷新完成） }
-    condition: { en: "32 successful runs in the GitHub Actions history (range 7–27 min); no earlier baseline exists", zh: GitHub Actions 历史中的 32 次成功运行（范围 7—27 分钟）；没有更早的基线可供比较 }
+    condition:
+      en: Build through completed instance refresh; successful GitHub Actions runs
+      zh: 从镜像构建到实例刷新完成；统计成功的 GitHub Actions 运行
     claim: CN-05
   azs:
     value: "3"
     label: { en: Availability Zones spanned by the application tier, zh: 应用层跨越的可用区数量 }
-    condition: { en: "A public and a private subnet in each; the database and the NAT gateway are single-AZ", zh: 每个可用区各有一个公有子网和一个私有子网；数据库与 NAT 网关为单可用区 }
+    condition:
+      {
+        en: "A public and a private subnet in each; the database and the NAT gateway are single-AZ",
+        zh: 每个可用区各有一个公有子网和一个私有子网；数据库与 NAT 网关为单可用区
+      }
     claim: CN-02
   kms_keys:
     value: "4"
     label: { en: "customer-managed KMS keys, one per service, rotated every 90 days", zh: 按服务划分的客户托管 KMS 密钥，每 90 天轮换 }
     condition: { en: "For S3, the instance disks, RDS and Secrets Manager", zh: 分别用于 S3、实例磁盘、RDS 和 Secrets Manager }
     claim: CN-11
-  ci_runs:
-    value: { en: "~434", zh: 约 434 }
-    label: { en: CI runs across the three repositories, zh: 三个仓库的 CI 运行次数 }
-    condition: { en: "GitHub Actions history as of Sep 2026; volume, not quality", zh: 截至 2026 年 9 月的 GitHub Actions 记录；只说明数量，不代表质量 }
-    claim: CN-12
 
 figures:
   - kind: diagram
@@ -107,10 +120,14 @@ figures:
     source: assets/aws-architecture.mmd
     label: CURRENT
     alt:
-      en: "AWS architecture: Route 53 and an HTTPS load balancer in public subnets across three Availability Zones; an Auto Scaling group of Spring Boot instances in private subnets; RDS MySQL, S3 and Secrets Manager with KMS keys; sign-ups published to SNS, which triggers a Lambda that sends email through Mailgun."
-      zh: AWS 架构图：Route 53 和 HTTPS 负载均衡器位于跨三个可用区的公有子网；运行 Spring Boot 的 Auto Scaling 组位于私有子网；RDS MySQL、S3 与 Secrets Manager 均使用 KMS 密钥；注册事件发布到 SNS，触发 Lambda 通过 Mailgun 发送邮件。
+      en: "AWS architecture: Route 53 and an HTTPS load balancer in public subnets across three Availability Zones; an Auto
+        Scaling group of Spring Boot instances in private subnets; RDS MySQL, S3 and Secrets Manager with KMS keys;
+        sign-ups published to SNS, which triggers a Lambda that sends email through Mailgun."
+      zh: AWS 架构图：Route 53 和 HTTPS 负载均衡器位于跨三个可用区的公有子网；运行 Spring Boot 的 Auto Scaling 组位于私有子网；RDS MySQL、S3 与 Secrets Manager 均使用
+        KMS 密钥；注册事件发布到 SNS，触发 Lambda 通过 Mailgun 发送邮件。
     caption:
-      en: Derived from the Terraform configuration. The application tier spans three Availability Zones; the database and the NAT gateway are single-AZ to keep cost down.
+      en: Derived from the Terraform configuration. The application tier spans three Availability Zones; the database and the
+        NAT gateway are single-AZ to keep cost down.
       zh: 依据 Terraform 配置绘制。应用层跨三个可用区；数据库和 NAT 网关为单可用区，以控制成本。
   - kind: diagram
     id: cicd
@@ -119,41 +136,11 @@ figures:
     source: assets/cicd.mmd
     label: CURRENT
     alt:
-      en: "Pipeline: pull requests run the test suite against a MySQL service container and validate the Packer template; a merge builds the jar and an AMI in the dev account, shares it with the demo account, creates a new launch-template version and starts an instance refresh."
+      en: "Pipeline: pull requests run the test suite against a MySQL service container and validate the Packer template; a
+        merge builds the jar and an AMI in the dev account, shares it with the demo account, creates a new
+        launch-template version and starts an instance refresh."
       zh: 流水线图：PR 阶段在 MySQL 服务容器上运行测试并校验 Packer 模板；合并后在 dev 账号构建 jar 和 AMI，共享到 demo 账号，创建新的启动模板版本并发起实例刷新。
     caption:
-      en: Drawn from the GitHub Actions workflows. Every release is a new machine image, promoted from the dev account to the demo account and rolled out by an instance refresh.
+      en: Drawn from the GitHub Actions workflows. Every release is a new machine image, promoted from the dev account to the
+        demo account and rolled out by an instance refresh.
       zh: 依据 GitHub Actions 工作流绘制。每次发布都是一个新的机器镜像：从 dev 账号发布到 demo 账号，再通过实例刷新滚动上线。
-
-roadmap:
-  section: planning
-  title: { en: From application development to AWS deployment, zh: 从应用开发到云端部署 }
-  phases:
-    - name: { en: Build the application and REST APIs, zh: 搭建应用与 REST API }
-      detail: { en: Resource endpoints with tests, zh: 资源接口及其测试 }
-      when: { en: Sep 2025, zh: 2025 年 9 月 }
-      status: done
-    - name: { en: Add authentication and continuous integration, zh: 接入认证与持续集成 }
-      detail: { en: "Positive, negative and edge-case integration tests; CI against MySQL; branch protection", zh: 正向、反向与边界集成测试；接入 MySQL 的 CI；分支保护 }
-      when: { en: Sep–Oct 2025, zh: 2025 年 9—10 月 }
-      status: done
-    - name: { en: Automate images and infrastructure, zh: 实现镜像构建与基础设施自动化 }
-      detail: { en: "Setup scripts, the Terraform repository, Packer AMIs with validate and build workflows, a systemd service", zh: 安装脚本、Terraform 仓库、带校验与构建流程的 Packer AMI、systemd 服务 }
-      when: { en: Oct 2025, zh: 2025 年 10 月 }
-      status: done
-    - name: { en: Connect cloud data services and IAM, zh: 接入云数据库与 IAM 权限 }
-      detail: { en: "Product APIs; RDS, its subnet group and the instance role in Terraform", zh: 商品接口；在 Terraform 中定义 RDS、其子网组与实例角色 }
-      when: { en: Oct 2025, zh: 2025 年 10 月 }
-      status: done
-    - name: { en: Add monitoring and domain routing, zh: 建立监控与域名访问 }
-      detail: { en: "StatsD metrics, the CloudWatch agent, controller AOP, Route 53", zh: StatsD 指标、CloudWatch agent、控制器 AOP、Route 53 }
-      when: { en: Oct 2025, zh: 2025 年 10 月 }
-      status: done
-    - name: { en: Configure load balancing and network security, zh: 配置负载均衡与网络安全 }
-      detail: { en: "Security groups, the load balancer, DNS and email records, S3 and clock-drift fixes", zh: 安全组、负载均衡器、DNS 与邮件记录，修复 S3 与时钟漂移问题 }
-      when: { en: Nov 2025, zh: 2025 年 11 月 }
-      status: done
-    - name: { en: "Integrate asynchronous email and function delivery", zh: 集成异步邮件与函数自动发布 }
-      detail: { en: "SNS publishing, Lambda with Mailgun, KMS keys, Lambda CI/CD from dev to demo", zh: SNS 发布、Lambda 与 Mailgun、KMS 密钥、从 dev 到 demo 的 Lambda CI/CD }
-      when: { en: Nov 2025, zh: 2025 年 11 月 }
-      status: done

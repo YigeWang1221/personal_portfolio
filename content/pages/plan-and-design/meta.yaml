@@ -1,11 +1,15 @@
 # "How I plan & design" (ARCHITECTURE.md site map). Records are sections of en.md / zh.md; each points to the project
 # section it summarizes. Numbers come from the projects' facts through {{fact:<slug>.<key>}}.
-roadmaps: [kk-knock, personal-writing-lora, cloud-native]
+roadmaps: []
 records:
   - { id: kk-self-hosting, project: kk-knock, anchor: operations }
   - { id: kk-idempotency, project: kk-knock, anchor: reliability }
   - { id: kk-cpu-asr, project: kk-knock, anchor: asr }
-  - { id: lora-scale-from-zero, project: personal-writing-lora, anchor: scale-from-zero }
+  - {
+      id: lora-scale-from-zero,
+      project: personal-writing-lora,
+      anchor: scale-from-zero
+    }
   - { id: lora-adapter-cache, project: personal-writing-lora, anchor: serving }
   - { id: cloud-immutable, project: cloud-native, anchor: delivery }
   - { id: hpc-token-budget, project: distributed-llm, anchor: time-to-quality }

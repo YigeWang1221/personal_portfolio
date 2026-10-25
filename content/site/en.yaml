@@ -17,7 +17,7 @@ nav:
   language_switch_title: Read this page in English
 
 footer:
-  note: No trackers, no third-party requests.
+  note: Design and implementation through my projects.
   label: Site pages
   contact_label: Profiles
 
@@ -63,8 +63,12 @@ home:
   project_tracks: Project areas
   skills: Technical skills
   title: Yige Wang · Software Engineer — Backend & Systems
-  description: "Yige Wang, software engineer (backend and systems): a voice-capture Android app with a self-hosted backend, an AWS delivery pipeline, distributed LLM training and more, in English and Chinese."
-  intro: "I develop backend services, cloud infrastructure and AI applications, taking projects from requirements and architecture through implementation and deployment. My work includes Spring Boot and FastAPI services, AWS infrastructure and CI/CD, distributed GPU training, and a voice-first Android product. I am seeking backend, cloud platform and AI infrastructure roles."
+  description: "Yige Wang, software engineer (backend and systems): a voice-capture Android app with a self-hosted
+    backend, an AWS delivery pipeline, distributed LLM training and more, in English and Chinese."
+  intro: "I develop backend services, cloud infrastructure and AI applications, taking projects from requirements and
+    architecture through implementation and deployment. My work includes Spring Boot and FastAPI services, AWS
+    infrastructure and CI/CD, distributed GPU training, and a voice-first Android product. I am seeking backend, cloud
+    platform and AI infrastructure roles."
   cta_work: See projects
   cta_resume: View résumé
   links_label: Profiles
@@ -79,14 +83,15 @@ home:
   read_case: Read the case study
   background_link: Education and experience
   contact_title: Contact
-  contact_body: I'm looking for full-time roles in backend, cloud platform and AI infrastructure engineering. Contact me by email or LinkedIn.
+  contact_body: I'm looking for full-time roles in backend, cloud platform and AI infrastructure engineering. Contact me
+    by email or LinkedIn.
   contact_linkedin: Message me on LinkedIn
   contact_github: GitHub profile
 
-
 projects:
   title: Projects
-  description: "All of Yige Wang's projects, filterable by capability: business modeling, backend and cloud, planning and delivery, AI and research."
+  description: "All of Yige Wang's projects, filterable by capability: business modeling, backend and cloud, planning and
+    delivery, AI and research."
   lede: Explore projects by engineering focus.
   filter_label: Filter by capability
   all: All
@@ -94,7 +99,6 @@ projects:
   count_one: 1 project
   featured: Selected project
   role: My contribution
-
 
 project:
   role: My role
@@ -106,12 +110,12 @@ project:
   related: Related case study
   all_projects: All projects
 
-
 background:
   title: Background
   description: Background of Yige Wang — education, experience and engineering approach.
   eyebrow: Background
-  lede: Software engineer focused on backend and systems work, finishing a master's degree at Northeastern University in December 2026.
+  lede: Software engineer focused on backend and systems work, finishing a master's degree at Northeastern University in
+    December 2026.
   education: Education
   experience: Experience
   contact: Contact
@@ -119,28 +123,29 @@ background:
 
 resume:
   title: Résumé
-  description: Résumé of Yige Wang — education, experience, projects and skills, with every skill linked to the project that shows it.
+  description: Résumé of Yige Wang — education, experience, projects and skills, with every skill linked to the project
+    that shows it.
   eyebrow: Résumé
-  updated: Last checked {date}
+  updated: Updated {date}
   highlights: Highlights
   education: Education
   experience: Experience
   projects: Projects
   skills: Skills and where they are shown
-  skills_note: Only skills backed by a project on this site are listed.
-  note: The experience entries restate my résumé. Project facts come from the project pages, which state their conditions.
+  skills_note: Follow each project to its implementation.
+  note: Explore the project pages for design and implementation details.
 
 plan:
   title: How I plan & design
-  description: Roadmaps, decision records and architecture diagrams drawn from Yige Wang's projects. Each item links back to the project it comes from.
+  description: Component design, technology choices and system architecture, explained through the projects.
   eyebrow: Planning and architecture
-  lede: Roadmaps, decision records and architecture diagrams taken from the projects on this site. Each item links back to the project it comes from.
+  lede: Component design, technology choices and system architecture, explained through the projects.
   roadmaps: Roadmaps from real project history
   roadmaps_note: Filled dots are done; open dots are in progress or planned.
   records: Decision records
-  records_note: Context → options → decision → trade-off → evidence
+  records_note: Needs, choices and implementation
   architecture: Architecture diagrams
-  architecture_note: Every diagram is derived from the implementation and labeled CURRENT, PROPOSED or HISTORICAL.
+  architecture_note: Explore data flow and component responsibilities.
 
 notfound:
   title: Page not found
@@ -159,7 +164,9 @@ chat:
   clear: Clear
   clear_label: Clear the conversation
   privacy_short: Your questions are sent to third-party AI services.
-  privacy_long: "Questions and the conversation so far are processed by third-party AI services to write an answer. Nothing is stored on this site's server; the conversation stays in this browser tab until you close it. Please don't enter personal or sensitive information."
+  privacy_long: "Questions and the conversation so far are processed by third-party AI services to write an answer.
+    Nothing is stored on this site's server; the conversation stays in this browser tab until you close it. Please don't
+    enter personal or sensitive information."
   starters_title: "Try asking:"
   input_label: Your question
   placeholder: Ask a question…

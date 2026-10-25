@@ -13,7 +13,7 @@
 3. **Mechanism over adjectives.** Say what the system does and why, not how impressive it is.
 4. **Honest scope.**
    - Say what you owned in team work.
-   - Put the status label next to the title.
+   - Describe the work directly; do not add project-status badges or progress notes.
 5. **Show the thinking.** Planning and architecture decisions are content, not background.
 
 ## Reading layers
@@ -22,9 +22,9 @@ Every project page serves three readers.
 
 | Layer | Reader | Content | Budget (EN / 中文) |
 |---|---|---|---|
-| Scan (30 s) | Recruiter | Title, one-line problem, role, status label, stack chips, 2–3 verified outcomes | ≤ 60 words / ≤ 120 字 |
-| Read (3 min) | Hiring manager | CURRENT architecture diagram, how the work was planned, 3–5 key decisions with trade-offs, what I owned | 300–500 words / 600–900 字 |
-| Deep dive | Engineer | Decision records, PROPOSED design and roadmap, failure analysis, testing and operations, next steps, code links | As needed |
+| Scan (30 s) | Recruiter | Title, purpose, role, core mechanism and relevant technologies | ≤ 60 words / ≤ 120 字 |
+| Read (3 min) | Hiring manager | Architecture and interface figures, key design choices, implementation and responsibilities | 300–500 words / 600–900 字 |
+| Deep dive | Engineer | Core mechanisms, actual design trade-offs and specific source references | As needed |
 
 ## Showing planning and architecture ability
 
@@ -37,11 +37,9 @@ Use this pattern for each key decision:
 | Decision | What was chosen? |
 | Trade-off | What did it cost, and what did it buy? |
 | Evidence | Where in the code, config or log does this show? |
-| Outcome / status | Did it work? Is it deployed? What is next? |
+| Effect | What behavior does the design produce? |
 
-- **Show planning with a phase or milestone timeline:**
-  - taken from the project's real history (e.g. phases, milestones, assignment iterations);
-  - include the unfinished phases, labeled as planned.
+- **Explain design through concrete choices:** show the problem, selected approach and implementation. Keep internal milestones and task lists out of project introductions.
 - **Show architecture as a CURRENT diagram**, and add a separately labeled PROPOSED diagram when a design goes
   further than the deployment.
 
@@ -89,21 +87,6 @@ Team course projects count fully toward experience and skills. Frame them so the
 - **School name:** 写"美国东北大学（Northeastern University）"，避免与沈阳的东北大学混淆。
 - **Keywords:** 高并发、高可用、微服务、分布式等关键词，只有在有证据支持时才使用。
 
-## Status labels
-
-The same label is used in both languages. Labels are defined in the glossary.
-
-| EN | 中文 | Use when |
-|---|---|---|
-| Self-hosted pilot | 自托管试运行 | Running on owned hardware for limited use |
-| Implemented, not deployed | 已实现，未部署 | Code exists and is tested but has never run in its target environment |
-| Course project (team of N) | 课程项目（N 人团队） | Coursework; state the team size |
-| Course project (solo) | 课程项目（个人） | Coursework done alone |
-| Undergraduate capstone (solo) | 本科毕业设计（个人） | The undergraduate capstone |
-| Course benchmark | 课程基准实验 | Measurement-focused coursework |
-| Research prototype | 研究原型 | Exploratory research code |
-| Archived | 已归档 | No longer maintained |
-
 ## Numbers and claims
 
 - Use only values from ledger rows marked `Public use: Use`, and carry their conditions.
@@ -121,3 +104,7 @@ The same label is used in both languages. Labels are defined in the glossary.
 - Screenshots come only from demo or showcase data. Never show real user data, private hosts or credentials.
 - Mask any privacy- or payment-related value that has to appear in text, a screenshot or a diagram (account names,
   emails, hostnames, billing details) as `*****`.
+
+## Project presentation — owner direction, 2026-10-24
+
+Explain purpose, functionality, core mechanisms, implementation and specific influences. Name the actor; keep each paragraph's perspective stable. Use declarative headings and concrete actions/results. Explain actual design choices through problem, choice and reason. Credit borrowed mechanisms with their sources. Remove abstract praise, repeated explanations, defensive caveats, acceptance logs, test inventories, progress boards and internal management language from public introductions. Do not display project status badges or status notes. Accuracy checks belong in internal records; public prose describes the work directly. Apply equally to English and Chinese.

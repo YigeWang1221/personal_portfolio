@@ -1,22 +1,32 @@
-track: cloud
+tracks: [ ai-ml, cloud ]
 slug: personal-writing-lora
-aliases: ["Personal Writing LoRA", "writing LoRA", "个人写作风格", "个人风格化写作", "个性化写作", "个人写作 LoRA", "写作微调项目", "personalized writing", "personal writing style"]
+aliases:
+  [
+    "Personal Writing LoRA",
+    "writing LoRA",
+    "个人写作风格",
+    "个人风格化写作",
+    "个性化写作",
+    "个人写作 LoRA",
+    "写作微调项目",
+    "personalized writing",
+    "personal writing style"
+  ]
 title: { en: Personal Writing LoRA Platform, zh: 个人写作风格 LoRA 平台 }
 subtitle:
   en: "A personal writing project spanning training, model serving and cloud infrastructure"
   zh: "覆盖训练、模型推理与云基础设施的个人写作项目"
 summary:
-  en: "I designed the component boundaries, API and training contracts, data model and Terraform infrastructure for a personal writing LoRA platform. I planned implementation milestones and integrated the queue, GPU training worker and vLLM serving path in an AWS run."
-  zh: "我为个人写作 LoRA 平台设计组件边界、API 与训练契约、数据模型及 Terraform 基础设施，制定分阶段实施计划，随后在 AWS 运行中联通任务队列、GPU 训练 worker 与 vLLM 推理链路。"
-focus: { primary: backend-cloud, also: [ai-research, planning-delivery] }
+  en: I designed and built a personal-writing LoRA platform, connecting the product API and data model to queued GPU
+    training, versioned adapters and vLLM serving on AWS.
+  zh: 我设计并开发个人写作 LoRA 平台，将产品 API 与数据模型连接到队列驱动的 GPU 训练、版本化适配器和 AWS 上的 vLLM 推理。
+focus: { primary: backend-cloud, also: [ ai-research, planning-delivery ] }
 status: in-development
-status_note:
-  en: Deployed on AWS for end-to-end GPU training and serving validation; resources removed afterwards
-  zh: 已部署至 AWS，完成 GPU 训练与推理验证后销毁资源
 team: { size: 1 }
 role:
-  en: Personal project. I owned the product design, API and training contracts, data model, component integration, IAM policies and Terraform infrastructure. I planned delivery milestones, deployed the platform on AWS, and validated the GPU training and vLLM serving workflow.
-  zh: 个人项目。我负责产品设计、API 与训练契约、数据模型、组件集成、IAM 策略和 Terraform 基础设施，制定交付里程碑，部署至 AWS，并验证 GPU 训练与 vLLM 推理流程。
+  en: Personal project. I designed the product, component contracts, data model and cloud infrastructure, and integrated
+    the training worker, adapter manager and chat workflow.
+  zh: 个人项目。我设计产品、组件契约、数据模型与云基础设施，并集成训练 worker、适配器管理服务和对话流程。
 context: { en: "AI training and serving infrastructure", zh: "AI 训练与推理基础设施" }
 period: { start: "2026-06", end: null }
 stack:
@@ -55,12 +65,13 @@ related: kk-knock
 
 card:
   intro:
-    en: "I designed the component boundaries, training and serving contracts, and Terraform infrastructure, planned delivery milestones, and validated the training and serving workflow on AWS."
-    zh: "我设计组件边界、训练与推理契约及 Terraform 基础设施，制定交付里程碑，并在 AWS 上验证训练与推理流程。"
+    en: I built a platform that trains LoRA adapters from personal writing and loads them through vLLM for chat generation.
+    zh: 我开发了一个用个人写作语料训练 LoRA、并通过 vLLM 加载适配器生成对话的平台。
   highlight:
-    en: "I integrated SQS job dispatch, GPU training, S3 adapter storage and vLLM serving on AWS, connecting the component contracts into a working training-to-inference workflow."
-    zh: "我在 AWS 上联通 SQS 任务分发、GPU 训练、S3 适配器存储和 vLLM 推理，将组件接口设计落实为从训练到推理的完整流程。"
-  tech: [vLLM, SQS · Auto Scaling, Terraform]
+    en: I connected transactional job dispatch, queue-driven GPU capacity and versioned adapter storage to a serving cache
+      that protects adapters in use.
+    zh: 我将事务内任务分发、队列驱动的 GPU 容量和版本化适配器存储，连接到保护使用中适配器的推理缓存。
+  tech: [ vLLM, SQS · Auto Scaling, Terraform ]
   cta: { en: My design and integration work, zh: 查看设计与集成工作 }
   anchor: planning
 
@@ -68,13 +79,10 @@ facts:
   tf_resources:
     value: "123"
     label: { en: Terraform resource blocks across the platform and state bootstrap, zh: AWS 平台与状态引导的 Terraform 资源块 }
-    condition: { en: "Validated with configuration checks, mock-provider tests, TFLint and Trivy, then applied for the AWS training and serving runs and destroyed afterwards", zh: 先通过配置校验、mock provider 测试、TFLint 和 Trivy 扫描，再为 AWS 上的训练与推理运行实际 apply，之后已销毁 }
+    condition:
+      en: Terraform resource definitions across the application and state-bootstrap configurations
+      zh: 应用配置与状态存储初始化配置中的 Terraform 资源定义
     claim: LORA-21
-  tests:
-    value: { en: "~314", zh: 约 314 }
-    label: { en: automated test functions, zh: 自动化测试函数 }
-    condition: { en: "Backend, training worker, dataset builder, adapter manager and contracts, all against local fakes; plus 26 Terraform mock-provider runs", zh: 覆盖后端、训练 worker、数据集构建器、适配器管理服务和接口契约，全部基于本地替身；另有 26 次 Terraform mock provider 测试 }
-    claim: LORA-11
   tables:
     value: "15"
     label: { en: PostgreSQL tables under Alembic migrations, zh: 由 Alembic 迁移管理的 PostgreSQL 表 }
@@ -88,7 +96,8 @@ figures:
     file: assets/wireframe-main-page.svg
     label: HISTORICAL
     alt:
-      en: "Early wireframe of the main workspace: a project and chat sidebar, a chat box, a Markdown answer area with a drafts panel, and a create-project dialog that picks a base model and a LoRA."
+      en: "Early wireframe of the main workspace: a project and chat sidebar, a chat box, a Markdown answer area with a drafts
+        panel, and a create-project dialog that picks a base model and a LoRA."
       zh: 主工作区的早期线框图：项目与对话侧栏、对话输入框、带草稿面板的 Markdown 回答区，以及选择基座模型和 LoRA 的新建项目对话框。
     caption:
       en: "Early wireframe, June 2026 (working name QVoice). The information architecture carried into the implemented pages."
@@ -99,10 +108,12 @@ figures:
     file: assets/wireframe-style-create.svg
     label: HISTORICAL
     alt:
-      en: "Early wireframe of the style pages: a style list with versions and status colours, a style detail view with re-train and delete, and the new-style flow."
+      en: "Early wireframe of the style pages: a style list with versions and status colours, a style detail view with
+        re-train and delete, and the new-style flow."
       zh: 风格页面的早期线框图：带版本与状态颜色的风格列表、可重新训练或删除的风格详情，以及新建风格流程。
     caption:
-      en: "Early wireframe, June 2026. Its note that training data would not be saved on the server predates the implementation: sources are stored temporarily for training and removed by a cleanup job afterwards."
+      en: "Early wireframe, June 2026. Its note that training data would not be saved on the server predates the
+        implementation: sources are stored temporarily for training and removed by a cleanup job afterwards."
       zh: 早期线框图，2026 年 6 月。图中"不在服务器保存训练数据"的批注早于实现：实际做法是训练期间临时保存源文件，训练结束后由清理任务删除。
   - kind: image
     id: er-sketch
@@ -110,10 +121,12 @@ figures:
     file: assets/er-sketch.svg
     label: HISTORICAL
     alt:
-      en: "Early entity-relationship sketch: user profiles, workspaces, chats, messages, models, LoRA sets, LoRAs, source-file lists, source files and training jobs."
+      en: "Early entity-relationship sketch: user profiles, workspaces, chats, messages, models, LoRA sets, LoRAs, source-file
+        lists, source files and training jobs."
       zh: 早期实体关系草图：用户资料、工作区、对话、消息、模型、LoRA 集合、LoRA、源文件列表、源文件和训练任务。
     caption:
-      en: "Early ER sketch, June 2026. Its entities map one to one onto the implemented tables; the implementation adds sessions, upload batches and two outbox tables."
+      en: "Early ER sketch, June 2026. Its entities map one to one onto the implemented tables; the implementation adds
+        sessions, upload batches and two outbox tables."
       zh: 早期 ER 草图，2026 年 6 月。其中的实体与最终实现的表一一对应；实现时又增加了会话、上传批次和两张发件箱表。
   - kind: diagram
     id: current-architecture
@@ -122,11 +135,12 @@ figures:
     source: assets/current-architecture.mmd
     label: CURRENT
     alt:
-      en: "Current architecture: a Next.js app and a FastAPI backend on PostgreSQL; training jobs go through an outbox to an SQS queue and a training worker that publishes adapters to S3; an adapter manager in front of vLLM serves them."
+      en: "Current architecture: a Next.js app and a FastAPI backend on PostgreSQL; training jobs go through an outbox to an
+        SQS queue and a training worker that publishes adapters to S3; an adapter manager in front of vLLM serves them."
       zh: 当前架构：Next.js 前端与基于 PostgreSQL 的 FastAPI 后端；训练任务经发件箱进入 SQS 队列，由训练 worker 处理并把适配器发布到 S3；vLLM 前的适配器管理服务负责加载和推理。
     caption:
-      en: As implemented. The automated tests run it locally against a real PostgreSQL and fake S3, SQS, GPU and vLLM services; the same components ran on AWS for the training and serving runs.
-      zh: 按实现绘制。自动化测试在本地运行，使用真实的 PostgreSQL 和替身形式的 S3、SQS、GPU 与 vLLM 服务；同样的组件也在 AWS 上完成了训练和推理运行。
+      en: The product backend dispatches training jobs; the worker publishes adapters for the serving layer.
+      zh: 产品后端分发训练任务，worker 发布适配器，推理层加载并提供对话服务。
   - kind: diagram
     id: worker-lifecycle
     section: job-handoff
@@ -134,11 +148,13 @@ figures:
     source: assets/training-worker-lifecycle.mmd
     label: CURRENT
     alt:
-      en: "Training worker sequence: receive one SQS message, claim the job with a conditional S3 write, protect the instance from scale-in, send lease heartbeats while training, publish the adapter and its manifest, call back the backend, delete the message and release protection."
+      en: "Training worker sequence: receive one SQS message, claim the job with a conditional S3 write, protect the instance
+        from scale-in, send lease heartbeats while training, publish the adapter and its manifest, call back the
+        backend, delete the message and release protection."
       zh: 训练 worker 时序图：接收一条 SQS 消息，用 S3 条件写入认领任务，开启缩容保护，训练期间发送租约心跳，发布适配器及其 manifest，回调后端，删除消息并解除保护。
     caption:
-      en: Implemented in the worker, tested against local fakes, and used in the AWS training runs.
-      zh: 已在 worker 中实现，基于本地替身测试，并在 AWS 上的训练运行中使用。
+      en: The worker coordinates the job lease, adapter publication and result callback.
+      zh: worker 协调任务租约、适配器发布与结果回调。
   - kind: diagram
     id: aws-platform
     section: infrastructure
@@ -146,34 +162,11 @@ figures:
     source: assets/aws-platform.mmd
     label: CURRENT
     alt:
-      en: "AWS topology: a load balancer and one NAT gateway in public subnets across two zones; a backend Auto Scaling group and one serving GPU instance in private subnets; RDS PostgreSQL, S3 and SQS encrypted with KMS; a GPU training Auto Scaling group that scales from zero on queue backlog."
-      zh: AWS 拓扑：负载均衡器和一个 NAT 网关位于跨两个可用区的公有子网；后端 Auto Scaling 组和一台推理 GPU 实例位于私有子网；RDS PostgreSQL、S3 和 SQS 均用 KMS 加密；GPU 训练 Auto Scaling 组根据队列积压从零扩容。
+      en: "AWS topology: a load balancer and one NAT gateway in public subnets across two zones; a backend Auto Scaling group
+        and one serving GPU instance in private subnets; RDS PostgreSQL, S3 and SQS encrypted with KMS; a GPU training
+        Auto Scaling group that scales from zero on queue backlog."
+      zh: AWS 拓扑：负载均衡器和一个 NAT 网关位于跨两个可用区的公有子网；后端 Auto Scaling 组和一台推理 GPU 实例位于私有子网；RDS PostgreSQL、S3 和 SQS 均用 KMS 加密；GPU 训练
+        Auto Scaling 组根据队列积压从零扩容。
     caption:
-      en: Drawn from the Terraform. Applied for the training and serving runs and destroyed afterwards, so no environment is running now.
-      zh: 依据 Terraform 绘制。为训练和推理运行实际 apply 过，之后已销毁，目前没有在运行的环境。
-
-roadmap:
-  section: planning
-  title: { en: Training (T) and serving (W) milestones, zh: 训练（T）与推理（W）里程碑 }
-  phases:
-    - name: { en: Contracts first, zh: 先定接口契约 }
-      detail: { en: "JSON Schema and OpenAPI, with valid and deliberately invalid examples (T0 / W0)", zh: JSON Schema 与 OpenAPI，附有效示例和刻意构造的无效示例（T0 / W0） }
-      status: done
-    - name: { en: "Dataset builder, local training worker and adapter manager", zh: 数据集构建器、本地训练 worker 与适配器管理服务 }
-      detail: { en: "Idempotency, checkpoints and callbacks, tested against local fakes (T1, T2, W1)", zh: 幂等、检查点与回调，基于本地替身测试（T1、T2、W1） }
-      status: done
-    - name: { en: "Real training on a GPU, loaded by vLLM", zh: 在 GPU 上真实训练，并由 vLLM 加载 }
-      detail: { en: "Trained on my own writing and served from one GPU on AWS (T3, W2)", zh: 用我自己的文字训练，并在 AWS 的一块 GPU 上提供推理（T3、W2） }
-      status: done
-    - name: { en: Training image and scale-from-zero, zh: 训练镜像与从零扩容 }
-      detail: { en: "The training group scaled up from zero on queued work (T4)", zh: 训练组根据排队任务从零扩容（T4） }
-      status: done
-    - name: { en: A style that sounds like its writer, zh: 生成的风格要像作者本人 }
-      detail: { en: "More and cleaner personal writing, and a before-and-after style check", zh: 更多、更干净的个人语料，以及训练前后的风格对比 }
-      status: in-progress
-    - name: { en: "Serving image, multi-user isolation benchmark, internal load balancer", zh: 推理镜像、多用户隔离基准测试、内部负载均衡 }
-      detail: { en: (W3–W5), zh: （W3—W5） }
-      status: planned
-    - name: { en: "Failure drills, observability, runbook", zh: 故障演练、可观测性、运维手册 }
-      detail: { en: (T5), zh: （T5） }
-      status: planned
+      en: Terraform connects the product, training and serving components through AWS networking, queues and storage.
+      zh: Terraform 通过 AWS 网络、队列与存储连接产品、训练和推理组件。

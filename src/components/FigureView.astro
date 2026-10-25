@@ -51,6 +51,7 @@ const leadClass = lead ? ' figure-lead' : '';
       {label && <span class={`asset-label label-${label}`} title={t(locale, `labels.${label}`)}>{label}</span>}
       {figure.caption[locale]}
       {figure.svg && <a class="full-size" href={figure.svg.url}>{t(locale, 'figure.full_size')}</a>}
+      {figure.raster && <a class="full-size" href={figure.raster.src}>{t(locale, 'figure.full_size')}</a>}
     </figcaption>
   </figure>
 )}

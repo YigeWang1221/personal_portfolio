@@ -508,3 +508,10 @@ Owner-requested homepage tabs group projects into SDE, Cloud, and Finance & Data
   product page); its code repositories are private.
 - **Boundaries:** Only repositories in a project's `links` with `kind: code` appear. Private repositories are never
   linked.
+
+
+## ADR-028 — Cross-listed project tracks and project-focused writing
+
+- **Status:** Accepted · **Date:** 2026-10-24 · **Amends:** ADR-017, ADR-021.
+- **Decision:** Home shows AI Agents & Machine Learning, Cloud, SDE, and Finance & Data Science, in that order. Each project's `tracks` array controls membership; the catalog controls labels and order. JobApply appears in AI and SDE; Personal Writing LoRA and Distributed LLM Training appear in AI and Cloud.
+- **Presentation:** Project pages explain purpose, personal or team work, core mechanisms, technology and documented design choices. Remove public status badges, progress boards, acceptance logs and defensive review language. Engineering records stay internal. Credit specific influences rather than listing names. Keep team attribution and numerical context accurate.

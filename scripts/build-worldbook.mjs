@@ -125,7 +125,6 @@ function projectOverview(p, projection, locale) {
   const lines = [
     `${t.project}: ${p.title[locale]} — ${p.subtitle[locale]}`,
     `${t.summary}: ${p.summary[locale]}`,
-    `${t.status}: ${p.status[locale]}${p.statusNote ? ` — ${p.statusNote[locale]}` : ''}`,
     `${t.team}: ${p.team[locale]}`,
     `${t.role}: ${p.role[locale]}`,
     `${t.context}: ${p.context[locale]} · ${t.period}: ${p.period[locale]}`,
@@ -168,7 +167,7 @@ function catalogEntry(projection, locale) {
   const t = L[locale];
   const path = locale === 'zh' ? '/zh/projects/' : '/projects/';
   const text = projection.projects
-    .map((p) => `- ${p.title[locale]}: ${p.subtitle[locale]} · ${p.status[locale]} · ${p.team[locale]} · ${t.capabilities}: ${[p.focus.primary, ...p.focus.also].map((id) => focusTitle(projection, id, locale)).join(', ')} · ${p.path[locale]}`)
+    .map((p) => `- ${p.title[locale]}: ${p.subtitle[locale]} · ${p.team[locale]} · ${t.capabilities}: ${[p.focus.primary, ...p.focus.also].map((id) => focusTitle(projection, id, locale)).join(', ')} · ${p.path[locale]}`)
     .join('\n');
   return makeEntry({ scope: 'catalog', kind: 'catalog', locale, sectionId: 'index', title: t.catalog, text, tags: ['catalog', 'projects'], sourcePath: path, pagePath: path });
 }

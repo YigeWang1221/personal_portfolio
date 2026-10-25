@@ -1,27 +1,29 @@
-track: sde
+tracks: [ sde ]
 slug: smartbuyer
-aliases: ["SmartBuyer", "电商项目", "网上商城项目", "ecommerce project"]
+aliases: [ "SmartBuyer", "电商项目", "网上商城项目", "ecommerce project" ]
 title: { en: SmartBuyer E-commerce, zh: SmartBuyer 电商平台 }
 subtitle:
   en: A five-person React, Express and MongoDB web store
   zh: 五人团队的 React / Express / MongoDB 网上商城
 summary:
-  en: In a team of five, we built an online store with category browsing, search, a cart, simulated checkout and refund review. I led the backend — the data models, the REST API and its restructuring into controller and route layers.
+  en: In a team of five, we built an online store with category browsing, search, a cart, simulated checkout and refund
+    review. I led the backend — the data models, the REST API and its restructuring into controller and route layers.
   zh: 我们五人团队开发了一个网上商城，支持分类浏览、搜索、购物车、模拟结账和退款审核。我主导后端开发，包括数据模型、REST API，以及把 API 重构为 controller 与 route 分层。
 focus: { primary: backend-cloud, also: [] }
 status: course-project
 team: { size: 5 }
 role:
-  en: Team of five. I led the backend — the scaffold, the data models, the REST API and its restructuring into controller and route layers — and wrote a large part of the React frontend with the team.
+  en: Team of five. I led the backend — the scaffold, the data models, the REST API and its restructuring into controller
+    and route layers — and wrote a large part of the React frontend with the team.
   zh: 五人团队。我主导了后端，包括项目骨架、数据模型、REST API，以及把 API 重构为 controller 与 route 分层；React 前端也有很大一部分由我和团队一起完成。
 context: { en: "Full-stack web development", zh: "全栈 Web 开发" }
 period: { start: "2025-03", end: "2025-04" }
-stack: [Node.js, Express, MongoDB, Mongoose, bcrypt, express-session, Multer, React, Axios]
+stack: [ Node.js, Express, MongoDB, Mongoose, bcrypt, express-session, Multer, React, Axios ]
 links:
   - kind: code
     url: https://github.com/6150WebDesignGroup/SmartBuyer
     label: { en: Code on GitHub, zh: GitHub 代码 }
-highlights: [schemas]
+highlights: [ schemas ]
 # Section ids retired in earlier redesigns, and where they land now.
 anchor_aliases: { ownership: backend }
 
@@ -31,3 +33,16 @@ facts:
     label: { en: Mongoose schemas I wrote, zh: 由我编写的 Mongoose 数据模型 }
     condition: { en: "Team of five; the order schema was later reworked by a teammate", zh: 五人团队；其中订单模型后来由队友重新修改 }
     claim: SB-01
+card:
+  intro:
+    en: In a team of five, we built an online store with category browsing, search, a cart, simulated checkout and refund
+      review. I led the backend — the data models, the REST API and its restructuring into controller and route layers.
+    zh: 我们五人团队开发了一个网上商城，支持分类浏览、搜索、购物车、模拟结账和退款审核。我主导后端开发，包括数据模型、REST API，以及把 API 重构为 controller 与 route 分层。
+  highlight:
+    en: I separated route binding from request handling and connected Mongoose models to catalog, cart and refund workflows.
+    zh: 我将路由绑定与请求处理分开，通过 Mongoose 模型连接商品目录、购物车与退款流程。
+  tech:
+    - Express
+    - MongoDB
+    - React
+  anchor: backend

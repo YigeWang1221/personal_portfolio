@@ -1,13 +1,13 @@
 ## How I work {#work}
 
-- **Contracts and milestones before code.** On the writing-style platform I wrote down the interfaces between the backend, the training worker and the serving layer before implementing any of them, so each could be built and tested alone. See [how that plan was built](/projects/personal-writing-lora/#planning).
-- **Real use decides what is finished.** On KK Knock, using the app every day showed that the background queue worked but nobody could see it, and that became the next iteration. See [that iteration](/projects/kk-knock/#iteration).
-- **Numbers with their conditions.** A benchmark on one phone or one GPU node is reported as exactly that. See [the HPC experiments](/projects/distributed-llm/#results).
+I connect product behavior to the components that implement it. For the writing-style platform, I designed the interfaces between the product backend, GPU worker and serving layer. For KK Knock, I connected recording, on-device transcription and background processing to a mobile interface. For JobApply, I built a shared Agent loop with task-specific context and tools.
 
-## From design to delivery {#ai}
+## From design to implementation {#ai}
 
-I take personal projects from product definition and architecture through component integration, testing and deployment. I use API contracts, development guidelines and milestone plans to manage the work, then validate the system in its target environment. On team projects, each project page identifies my responsibilities and the work we shared.
+My work spans API and data-model design, backend implementation, application interfaces and cloud infrastructure. I use diagrams and interface contracts to make component responsibilities concrete, then connect those components into the product workflow. The project pages explain my responsibilities and our shared work on team projects.
 
-## How the site is built {#site}
+## Building this portfolio {#site}
 
-A static Astro site with no trackers and no requests to third-party servers. One small script of its own adds the mobile menu and the project filter; every page works without it. English and Chinese pages come from the same data, and the build fails if a page, a string or a number exists in one language only. It is hosted on Cloudflare. Planning artifacts from several projects are collected on [How I plan & design](/plan-and-design/).
+I built this bilingual portfolio with Astro and host it on Cloudflare. Project metadata supplies the catalog, homepage categories and shared English/Chinese facts. A project can appear in several categories while keeping one detailed page.
+
+The portfolio assistant answers questions from the site's public content through a same-origin API. The static pages provide navigation, project filtering and language switching. [Design choices across the projects](/plan-and-design/) explain how I approached component boundaries, runtime behavior and infrastructure.

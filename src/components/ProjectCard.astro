@@ -2,7 +2,6 @@
 // Catalog entry: what it does, my part, status and capabilities; a GitHub link
 // inside the title when the code is public (ADR-027). data-focus drives the optional filter in
 // public/js/site.js; without the script every entry is shown.
-import StatusBadge from './StatusBadge.astro';
 import TitleGitHub from './TitleGitHub.astro';
 import { localePath, type Locale } from '../lib/i18n';
 import { getContent, t, type Project } from '../lib/content/load';
@@ -30,7 +29,7 @@ const headingId = `item-${m.slug}`;
     <p class="purpose">{m.subtitle[locale]}</p>
     <p class="index-role"><span class="index-label">{t(locale, 'projects.role')}:</span> {m.role[locale]}</p>
     <p class="index-meta">
-      <StatusBadge status={m.status} team={m.team} locale={locale} />
+
       <span>{m.context[locale]} · {teamLabel(m.team, locale)} · {formatPeriod(m.period, locale)}</span>
     </p>
   </article>

@@ -1,27 +1,39 @@
-track: cloud
+tracks: [ ai-ml, cloud ]
 slug: distributed-llm
-aliases: ["Distributed LLM", "distributed training", "分布式大模型训练", "分布式训练项目", "HPC 训练", "nanoGPT", "distributed LLM training"]
+aliases:
+  [
+    "Distributed LLM",
+    "distributed training",
+    "分布式大模型训练",
+    "分布式训练项目",
+    "HPC 训练",
+    "nanoGPT",
+    "distributed LLM training"
+  ]
 title: { en: Distributed LLM Training on HPC, zh: HPC 集群上的分布式大模型训练 }
 subtitle:
   en: "Parallel data preparation and distributed-training experiments on an HPC cluster"
   zh: "HPC 集群上的并行数据处理与分布式训练实验"
 summary:
-  en: "In a team of two, I led distributed-training implementation and experiment analysis: parallel OpenWebText tokenization, DDP and FSDP trainers, and GPU runs organized with Slurm and torchrun. My teammate helped connect to the cluster; we report the benchmark results as team work."
-  zh: "在两人团队中，我主导分布式训练实现与实验分析，工作覆盖 OpenWebText 并行分词、DDP 与 FSDP 训练器，以及使用 Slurm 和 torchrun 组织 GPU 实验。同学协助连接集群，基准实验结果作为团队成果展示。"
-focus: { primary: ai-research, also: [backend-cloud] }
+  en: "In a team of two, I led distributed-training implementation and experiment analysis, covering parallel OpenWebText
+    tokenization, DDP and FSDP trainers, and GPU jobs organized with Slurm and torchrun."
+  zh: "在两人团队中，我主导分布式训练实现与实验分析，工作覆盖 OpenWebText 并行分词、DDP 与 FSDP 训练器，以及使用 Slurm 和 torchrun 组织 GPU 作业。"
+focus: { primary: ai-research, also: [ backend-cloud ] }
 status: course-benchmark
 team: { size: 2 }
 role:
-  en: "Team of two. I led the distributed-training implementation and experiment analysis, implemented parallel tokenization, and contributed to both the DDP and FSDP trainers and their debugging. My teammate helped connect to the Slurm cluster. Benchmark results are reported as team work."
-  zh: "两人团队。我主导分布式训练实现与实验分析，编写并行分词，参与 DDP 和 FSDP 训练器的实现与调试；同学协助连接 Slurm 集群。基准实验结果作为团队成果展示。"
+  en: "Team of two. I led the distributed-training implementation and experiment analysis, implemented parallel
+    tokenization, and contributed to both the DDP and FSDP trainers and their debugging. My teammate helped connect to
+    the Slurm cluster."
+  zh: "两人团队。我主导分布式训练实现与实验分析，编写并行分词，参与 DDP 和 FSDP 训练器的实现与调试；同学协助连接 Slurm 集群。"
 context: { en: "Distributed training and performance analysis", zh: "分布式训练与性能分析" }
 period: { start: "2026-03", end: "2026-04" }
-stack: [PyTorch, DDP, FSDP, NCCL, torchrun, Slurm, tiktoken, Hugging Face datasets, NumPy memmap]
+stack: [ PyTorch, DDP, FSDP, NCCL, torchrun, Slurm, tiktoken, Hugging Face datasets, NumPy memmap ]
 links:
   - kind: code
     url: https://github.com/CSYE7105-nanoGPT-HPC/Nano-GPT-HPC
     label: { en: Code on GitHub, zh: GitHub 代码 }
-highlights: [ddp_scaling, tokenize_mp, tokenize_repeat]
+highlights: [ ddp_scaling, tokenize_mp, tokenize_repeat ]
 lead: pipeline
 deep_dive_from: transport
 # Section ids retired in earlier redesigns, and where they land now.
@@ -30,18 +42,23 @@ related: personal-writing-lora
 
 card:
   intro:
-    en: "In a team of two, I led the distributed-training implementation and experiment analysis. I implemented parallel OpenWebText tokenization and contributed to the DDP and FSDP trainers and their debugging."
+    en: "In a team of two, I led the distributed-training implementation and experiment analysis. I implemented parallel
+      OpenWebText tokenization and contributed to the DDP and FSDP trainers and their debugging."
     zh: "两人团队中，我主导分布式训练实现与实验分析，编写 OpenWebText 并行分词，并参与 DDP、FSDP 训练器的实现与调试。"
   bullets:
-    - en: "Parallel preprocessing: I implemented OpenWebText tokenization with Python multiprocessing and tiktoken, compared chunk sizes, and separated parallel speedup from cache reuse."
+    - en: "Parallel preprocessing: I implemented OpenWebText tokenization with Python multiprocessing and tiktoken, compared
+        chunk sizes, and separated parallel speedup from cache reuse."
       zh: "并行预处理：用 Python multiprocessing 与 tiktoken 实现 OpenWebText 分词，对比 chunk size，分析任务分块对吞吐的影响，并区分并行加速与缓存复用。"
-    - en: "DDP training: I contributed to the PyTorch DDP trainer, using torchrun and NCCL for multi-GPU execution, gradient accumulation with no_sync(), and validation aggregation with all_reduce."
+    - en: "DDP training: I contributed to the PyTorch DDP trainer, using torchrun and NCCL for multi-GPU execution, gradient
+        accumulation with no_sync(), and validation aggregation with all_reduce."
       zh: "DDP 训练：参与 PyTorch DDP 训练器实现，通过 torchrun 与 NCCL 组织多 GPU 训练，使用 no_sync() 做梯度累积，并用 all_reduce 汇总验证结果。"
-    - en: "FSDP sharding: I contributed to implementation and debugging across FULL_SHARD, SHARD_GRAD_OP and NO_SHARD, with per-block wrapping and mixed precision to compare memory and throughput."
+    - en: "FSDP sharding: I contributed to implementation and debugging across FULL_SHARD, SHARD_GRAD_OP and NO_SHARD, with
+        per-block wrapping and mixed precision to compare memory and throughput."
       zh: "FSDP 分片：参与 FULL_SHARD、SHARD_GRAD_OP 和 NO_SHARD 模式的实现与调试，结合 Transformer Block 自动包装和混合精度，对比显存占用与吞吐。"
-    - en: "Experiment design: I organized Slurm GPU jobs under a fixed token budget, compared NVLink and shared-memory communication, and analyzed tokens/s, iteration time, peak memory and validation perplexity."
+    - en: "Experiment design: I organized Slurm GPU jobs under a fixed token budget, compared NVLink and shared-memory
+        communication, and analyzed tokens/s, iteration time, peak memory and validation perplexity."
       zh: "实验设计：用 Slurm 调度 GPU 作业，在固定 token 预算下对比 NVLink 与共享内存通信，分析 tokens/s、迭代耗时、峰值显存和验证集困惑度。"
-  tech: [PyTorch DDP · FSDP, Python multiprocessing, Slurm · torchrun]
+  tech: [ PyTorch DDP · FSDP, Python multiprocessing, Slurm · torchrun ]
   cta: { en: My data and training work, zh: 查看数据与训练工作 }
   anchor: question
   steps:
@@ -58,12 +75,21 @@ facts:
   params:
     value: 51.5M
     label: { en: model parameters, zh: 模型参数量 }
-    condition: { en: "GPT-2 with 8 layers, 8 heads and 512-dimensional embeddings; context 1,024", zh: "GPT-2，8 层、8 头、512 维嵌入；上下文长度 1,024" }
+    condition:
+      {
+        en: "GPT-2 with 8 layers, 8 heads and 512-dimensional embeddings; context 1,024",
+        zh: "GPT-2，8 层、8 头、512 维嵌入；上下文长度 1,024"
+      }
     claim: HPC-02
   ddp_scaling:
     value: ≈3.8–4.0×
     label: { en: DDP throughput scaling from 1 to 4 V100 GPUs, zh: 1→4 块 V100 的 DDP 吞吐扩展倍数 }
-    condition: { en: "Same token budget, single runs: 3.83× in the preserved raw log (shared-memory transport), 3.97× in the report (NVLink run whose raw log was overwritten)", zh: "相同 token 预算，单次运行：保留下来的原始日志为 3.83×（共享内存通信），报告中为 3.97×（NVLink 运行，其原始日志已被覆盖）" }
+    condition:
+      {
+        en: "Same token budget, single runs: 3.83× in the preserved raw log (shared-memory transport), 3.97× in the report
+          (NVLink run whose raw log was overwritten)",
+        zh: "相同 token 预算，单次运行：保留下来的原始日志为 3.83×（共享内存通信），报告中为 3.97×（NVLink 运行，其原始日志已被覆盖）"
+      }
     claim: HPC-05
   transport_gap:
     value: 3–4%
@@ -73,7 +99,11 @@ facts:
   fsdp_memory:
     value: 6.4–7.8%
     label: { en: lower peak GPU memory with FSDP than with DDP (team result), zh: FSDP 相比 DDP 降低的峰值显存（团队成果） }
-    condition: { en: "51.5M parameters, where activations dominate memory; peak memory measured on rank 0", zh: 5150 万参数、激活值占显存大头的规模；峰值显存只在 rank 0 上测量 }
+    condition:
+      {
+        en: "51.5M parameters, where activations dominate memory; peak memory measured on rank 0",
+        zh: 5150 万参数、激活值占显存大头的规模；峰值显存只在 rank 0 上测量
+      }
     claim: HPC-08
   ppl_1gpu:
     value: "41.8"
@@ -83,22 +113,38 @@ facts:
   ppl_2gpu:
     value: "47.4"
     label: { en: validation perplexity on two GPUs, zh: 双卡的验证集 perplexity }
-    condition: { en: "Committed FSDP logs, same token budget (half of the optimizer steps), single runs", zh: 已提交的 FSDP 日志，相同 token 预算（优化步数为一半），单次运行 }
+    condition:
+      {
+        en: "Committed FSDP logs, same token budget (half of the optimizer steps), single runs",
+        zh: 已提交的 FSDP 日志，相同 token 预算（优化步数为一半），单次运行
+      }
     claim: HPC-15
   ppl_4gpu:
     value: "58.5"
     label: { en: validation perplexity on four GPUs, zh: 四卡的验证集 perplexity }
-    condition: { en: "Committed FSDP logs, same token budget (a quarter of the optimizer steps), single runs", zh: 已提交的 FSDP 日志，相同 token 预算（优化步数为四分之一），单次运行 }
+    condition:
+      {
+        en: "Committed FSDP logs, same token budget (a quarter of the optimizer steps), single runs",
+        zh: 已提交的 FSDP 日志，相同 token 预算（优化步数为四分之一），单次运行
+      }
     claim: HPC-15
   tokenize_repeat:
     value: 77×
     label: { en: faster OpenWebText tokenization on repeated runs, zh: 重复运行时 OpenWebText 分词的加速倍数 }
-    condition: { en: "970 s → 12.5 s on a 10% sample, combining multi-process sharding with reuse of cached tokenized shards", zh: "10% 样本上由 970 s 降至 12.5 s，来自多进程分片加上对已分词缓存的复用" }
+    condition:
+      {
+        en: "970 s → 12.5 s on a 10% sample, combining multi-process sharding with reuse of cached tokenized shards",
+        zh: "10% 样本上由 970 s 降至 12.5 s，来自多进程分片加上对已分词缓存的复用"
+      }
     claim: HPC-07
   tokenize_mp:
     value: ≈9×
     label: { en: speedup from multiprocessing alone, zh: 仅靠多进程带来的加速 }
-    condition: { en: "Pool.imap with 8 workers on the same 10% sample (970 s → 106 s)", zh: "同一 10% 样本上，8 个 worker 的 Pool.imap（970 s → 106 s）" }
+    condition:
+      {
+        en: "Pool.imap with 8 workers on the same 10% sample (970 s → 106 s)",
+        zh: "同一 10% 样本上，8 个 worker 的 Pool.imap（970 s → 106 s）"
+      }
     claim: HPC-07
   chunk_tuning:
     value: ~26%
@@ -127,11 +173,18 @@ figures:
     section: results
     title: { en: "Same token budget: throughput up, model quality down", zh: 相同 token 预算下：吞吐上升，模型质量下降 }
     alt:
-      en: "Two bar charts. Left: throughput relative to one GPU, 1× on one GPU and about 3.8 to 4.0× on four GPUs, close to the linear line at 4×. Right: validation perplexity, 41.8 on one GPU, 47.4 on two and 58.5 on four; lower is better."
+      en: "Two bar charts. Left: throughput relative to one GPU, 1× on one GPU and about 3.8 to 4.0× on four GPUs, close to
+        the linear line at 4×. Right: validation perplexity, 41.8 on one GPU, 47.4 on two and 58.5 on four; lower is
+        better."
       zh: 两张条形图。左图为相对单卡的吞吐：单卡为 1×，四卡约为 3.8—4.0×，接近 4× 的线性参考线。右图为验证集 perplexity：单卡 41.8，双卡 47.4，四卡 58.5，越低越好。
     caption:
-      en: "A 51.5M-parameter GPT-2 on one node with V100-SXM2 GPUs. Every configuration trains on the same number of tokens, so four GPUs take a quarter of the optimizer steps; each bar is a single run. The four-GPU throughput is a range because the preserved raw log (shared-memory transport) and the report (NVLink) differ. Perplexity comes from the committed logs: the single-GPU baseline and the FSDP runs."
-      zh: 5150 万参数的 GPT-2，在一个配备 V100-SXM2 的节点上训练。所有配置训练相同数量的 token，因此四卡只有四分之一的优化步数；每根柱子都是单次运行。四卡吞吐是一个区间，因为保留下来的原始日志（共享内存通信）和报告（NVLink）数值略有不同。Perplexity 取自已提交的日志：单卡基线和 FSDP 运行。
+      en: "A 51.5M-parameter GPT-2 on one node with V100-SXM2 GPUs. Every configuration trains on the same number of tokens,
+        so four GPUs take a quarter of the optimizer steps; each bar is a single run. The four-GPU throughput is a range
+        because the preserved raw log (shared-memory transport) and the report (NVLink) differ. Perplexity comes from
+        the committed logs: the single-GPU baseline and the FSDP runs."
+      zh: 5150 万参数的 GPT-2，在一个配备 V100-SXM2 的节点上训练。所有配置训练相同数量的
+        token，因此四卡只有四分之一的优化步数；每根柱子都是单次运行。四卡吞吐是一个区间，因为保留下来的原始日志（共享内存通信）和报告（NVLink）数值略有不同。Perplexity 取自已提交的日志：单卡基线和 FSDP
+        运行。
     panels:
       - title: { en: Throughput relative to one GPU, zh: 相对单卡的吞吐 }
         note: { en: higher is better, zh: 越高越好 }
@@ -156,29 +209,11 @@ figures:
     source: assets/pipeline.mmd
     label: CURRENT
     alt:
-      en: "Pipeline: OpenWebText is tokenized in parallel into binary files; Slurm jobs launch torchrun, which runs either the DDP or the FSDP trainer on one to four GPUs; rank 0 records throughput, iteration time, peak memory and validation perplexity."
-      zh: 管线图：OpenWebText 并行分词后写成二进制文件；Slurm 作业通过 torchrun 在 1 到 4 块 GPU 上运行 DDP 或 FSDP 训练器；rank 0 记录吞吐、迭代时间、峰值显存和验证集 perplexity。
+      en: "Pipeline: OpenWebText is tokenized in parallel into binary files; Slurm jobs launch torchrun, which runs either the
+        DDP or the FSDP trainer on one to four GPUs; rank 0 records throughput, iteration time, peak memory and
+        validation perplexity."
+      zh: 管线图：OpenWebText 并行分词后写成二进制文件；Slurm 作业通过 torchrun 在 1 到 4 块 GPU 上运行 DDP 或 FSDP 训练器；rank 0 记录吞吐、迭代时间、峰值显存和验证集
+        perplexity。
     caption:
-      en: One node, data parallelism only. Config files and Slurm scripts preserve launch settings for repeat runs; identical results are not guaranteed.
-      zh: 单节点，只做数据并行。配置文件和 Slurm 脚本保留启动设置，便于重复实验，但不保证结果完全一致。
-
-roadmap:
-  section: automation
-  title: { en: Project timeline, zh: 项目时间线 }
-  phases:
-    - name: { en: Proposal — three parallelization strategies, zh: 立项 — 三种并行策略 }
-      detail: { en: "Multiprocess tokenization, DDP and FSDP", zh: 多进程分词、DDP 与 FSDP }
-      when: { en: Mar 2026, zh: 2026 年 3 月 }
-      status: done
-    - name: { en: Tokenization benchmarks and the full corpus pass, zh: 分词基准测试与全量语料分词 }
-      status: done
-    - name: { en: Single-GPU baseline and DDP scaling runs, zh: 单卡基线与 DDP 扩展实验 }
-      status: done
-    - name: { en: FSDP sharding strategies and transport comparison, zh: FSDP 分片策略与通信方式对比 }
-      status: done
-    - name: { en: Report and slides, zh: 报告与答辩幻灯片 }
-      when: { en: Apr 2026, zh: 2026 年 4 月 }
-      status: done
-    - name: { en: Public README with the FSDP code and logs, zh: 公开 README，附 FSDP 代码与日志 }
-      when: { en: Apr 2026, zh: 2026 年 4 月 }
-      status: done
+      en: Configurations and Slurm scripts connect data preparation, distributed trainers and experiment summaries.
+      zh: 配置与 Slurm 脚本连接数据准备、分布式训练器和实验摘要。

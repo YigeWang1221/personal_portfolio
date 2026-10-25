@@ -202,6 +202,9 @@ export const card = z.strictObject({
     .optional(),
 });
 
+export const TRACK_IDS = ['ai-ml', 'cloud', 'sde', 'finance-data'] as const;
+export const trackId = z.enum(TRACK_IDS);
+
 export const projectMeta = z.strictObject({
   slug,
   title: localized,
@@ -213,7 +216,7 @@ export const projectMeta = z.strictObject({
   summary: localized,
   /** Capability membership (ADR-016). Order lives in content/catalog.yaml. */
   focus: z.strictObject({ primary: focusId, also: z.array(focusId).default([]) }),
-  track: z.enum(['sde', 'cloud', 'finance-data']),
+  tracks: z.array(trackId).min(1).refine((ids) => new Set(ids).size === ids.length, 'Duplicate track membership'),
   status: statusKey,
   /** Plain-language qualifier shown next to the status, e.g. what has not been validated. */
   status_note: localized.optional(),
@@ -243,7 +246,8 @@ export const projectMeta = z.strictObject({
 export type ProjectMeta = z.infer<typeof projectMeta>;
 
 export const catalogFile = z.strictObject({
-  tracks: z.array(z.strictObject({ id: z.enum(['sde', 'cloud', 'finance-data']), title: localized })).length(3),
+  tracks: z.array(z.strictObject({ id: trackId, title: localized })).length(TRACK_IDS.length)
+    .refine((items) => new Set(items.map((item) => item.id)).size === TRACK_IDS.length, 'Each track must appear once'),
   /** Filters of the project catalog, in display order. */
   focus: z
     .array(z.strictObject({ id: focusId, title: localized, description: localized }))
@@ -308,7 +312,7 @@ export type ProfileFile = z.infer<typeof profileFile>;
 
 export const planPageMeta = z.strictObject({
   /** Projects whose roadmap is shown side by side, in order. */
-  roadmaps: z.array(slug).min(1),
+  roadmaps: z.array(slug).default([]),
   /** Decision records: section id in the page narrative → the project section it summarizes. */
   records: z
     .array(z.strictObject({ id: slug, project: slug, anchor: slug }))

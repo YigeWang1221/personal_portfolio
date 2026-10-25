@@ -1,27 +1,31 @@
-track: finance-data
+tracks: [ finance-data ]
 slug: f1-bayesian
-aliases: ["F1", "F1 Bayesian", "F1 贝叶斯预测", "赛车预测项目", "Bayesian race prediction"]
+aliases: [ "F1", "F1 Bayesian", "F1 贝叶斯预测", "赛车预测项目", "Bayesian race prediction" ]
 title: { en: F1 Race Prediction with Hierarchical Bayesian Modeling, zh: 基于分层贝叶斯模型的 F1 比赛预测 }
 subtitle:
   en: Team and driver strength in a PyMC model, turned into full simulated finishing orders for each race
   zh: 用 PyMC 为车队与车手实力建模，再为每站比赛模拟完整的完赛名次
 summary:
-  en: In a team of two, we modeled the 2025 Formula 1 season with a hierarchical Bayesian model and simulated complete finishing orders from the posterior. A pre-race forecast of the season finale named all three podium finishers and the final championship order.
+  en: In a team of two, we modeled the 2025 Formula 1 season with a hierarchical Bayesian model and simulated complete
+    finishing orders from the posterior. A pre-race forecast of the season finale named all three podium finishers and
+    the final championship order.
   zh: 我们两人团队用分层贝叶斯模型为 2025 赛季 F1 建模，并从后验分布模拟完整的完赛名次。对赛季收官战的赛前预测命中了全部三位领奖台车手，以及最终的年度排名顺序。
 focus: { primary: ai-research, also: [] }
 status: course-project
 team: { size: 2 }
 role:
-  en: Team of two. I led the modeling and the implementation — the data pipeline, the model, the simulation and the evaluation — and later restructured the repository and wrote its README. The forecast and its results are our shared work.
+  en: Team of two. I led the modeling and the implementation — the data pipeline, the model, the simulation and the
+    evaluation — and later restructured the repository and wrote its README. The forecast and its results are our shared
+    work.
   zh: 两人团队。我主导了建模与实现，包括数据管线、模型、模拟和评估；之后又重新整理了仓库结构并撰写 README。预测及其结果是我们共同的成果。
 context: { en: "Bayesian modeling and prediction", zh: "贝叶斯建模与预测" }
 period: { start: "2025-11", end: "2025-12" }
-stack: [Python, PyMC, NUTS (MCMC), ArviZ, FastF1, pandas, NumPy, SciPy, joblib, matplotlib]
+stack: [ Python, PyMC, NUTS (MCMC), ArviZ, FastF1, pandas, NumPy, SciPy, joblib, matplotlib ]
 links:
   - kind: code
     url: https://github.com/dataSciF/6105DataSci
     label: { en: Code on GitHub, zh: GitHub 代码 }
-highlights: [podium, finale_mae, rhat]
+highlights: [ podium, finale_mae, rhat ]
 deep_dive_from: foundations
 lead: position-distribution
 # Section ids retired in earlier redesigns, and where they land now.
@@ -31,7 +35,11 @@ facts:
   podium:
     value: 3/3
     label: { en: podium finishers named in the pre-race forecast of the 2025 finale, zh: 2025 赛季收官战赛前预测命中的领奖台车手 }
-    condition: { en: "Forecast saved the day before the race, with no results in it; the championship order was also right", zh: 预测在比赛前一天保存，其中不含任何比赛结果；年度排名顺序也预测正确 }
+    condition:
+      {
+        en: "Forecast saved the day before the race, with no results in it; the championship order was also right",
+        zh: 预测在比赛前一天保存，其中不含任何比赛结果；年度排名顺序也预测正确
+      }
     claim: F1-07
   finale_mae:
     value: { en: 3.10 positions, zh: 3.10 个名次 }
@@ -72,7 +80,9 @@ figures:
     source: assets/model.mmd
     label: CURRENT
     alt:
-      en: "Model structure: a team-tier level feeds driver effects with a HalfNormal hyperprior; grid position, track type, recent form and DNF risk enter as covariates; together they set the expected finishing position under a Normal likelihood."
+      en: "Model structure: a team-tier level feeds driver effects with a HalfNormal hyperprior; grid position, track type,
+        recent form and DNF risk enter as covariates; together they set the expected finishing position under a Normal
+        likelihood."
       zh: 模型结构：车队层级之下是带 HalfNormal 超先验的车手效应；发车位、赛道类型、近期状态和退赛风险作为协变量；二者共同决定预期完赛名次，观测名次服从正态似然。
     caption:
       en: The final model structure. An earlier ordinal-logistic version was replaced by this Normal-likelihood model.
@@ -82,7 +92,8 @@ figures:
     section: model
     file: assets/team_tiers.png
     alt:
-      en: "Three histograms of average finishing position by team tier (top, mid, lower), each with a fitted normal curve and its mean and standard deviation."
+      en: "Three histograms of average finishing position by team tier (top, mid, lower), each with a fitted normal curve and
+        its mean and standard deviation."
       zh: 按车队层级（前、中、后）划分的平均完赛名次直方图，每张图都叠加了拟合的正态曲线及其均值和标准差。
     caption:
       en: Priors chosen from data. The team-tier distributions set the means and spreads of the tier-level priors.
@@ -92,7 +103,8 @@ figures:
     section: simulation
     file: assets/abu_dhabi_position_distribution.png
     alt:
-      en: "Predicted finishing-position distributions for every driver at the 2025 Abu Dhabi Grand Prix: a median marker with interquartile and full ranges per driver."
+      en: "Predicted finishing-position distributions for every driver at the 2025 Abu Dhabi Grand Prix: a median marker with
+        interquartile and full ranges per driver."
       zh: 2025 年阿布扎比大奖赛每位车手的预测完赛名次分布：每位车手都标出中位数、四分位区间和完整范围。
     caption:
       en: The pre-race distribution for the season finale, from the simulated finishing orders.
@@ -104,8 +116,24 @@ figures:
     source: assets/pipeline.mmd
     label: CURRENT
     alt:
-      en: "Pipeline: FastF1 data for the 2025 season becomes driver and team features; a PyMC model is sampled with NUTS; posterior draws are turned into simulated finishing orders, evaluated against results and backtested."
+      en: "Pipeline: FastF1 data for the 2025 season becomes driver and team features; a PyMC model is sampled with NUTS;
+        posterior draws are turned into simulated finishing orders, evaluated against results and backtested."
       zh: 管线图：2025 赛季的 FastF1 数据被整理成车手和车队特征；用 NUTS 对 PyMC 模型采样；后验样本被转化为模拟的完赛名次，再与实际结果比对并做回测。
     caption:
       en: From public timing data to evaluated forecasts, in notebooks that can be rerun end to end.
       zh: 从公开的计时数据到经过评估的预测，整个流程都在可从头重跑的 notebook 中完成。
+card:
+  intro:
+    en: In a team of two, we modeled the 2025 Formula 1 season with a hierarchical Bayesian model and simulated complete
+      finishing orders from the posterior. A pre-race forecast of the season finale named all three podium finishers and
+      the final championship order.
+    zh: 我们两人团队用分层贝叶斯模型为 2025 赛季 F1 建模，并从后验分布模拟完整的完赛名次。对赛季收官战的赛前预测命中了全部三位领奖台车手，以及最终的年度排名顺序。
+  highlight:
+    en: We modeled team and driver effects hierarchically, then ranked posterior samples to produce complete finishing
+      orders.
+    zh: 我们分层建模车队与车手效应，再对后验样本排序，生成完整的完赛名次。
+  tech:
+    - PyMC
+    - FastF1
+    - joblib
+  anchor: model

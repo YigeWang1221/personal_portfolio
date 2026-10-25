@@ -1,10 +1,9 @@
 ---
 // A home-page project card (ADR-017). Three weights: the flagship (large, product screens), the main case
 // studies (a flow or a chart) and smaller "exploring" cards (text only). Every card reads as a short
-// introduction: what it does → what I did → one engineering point → status and a few technologies → one link
+// introduction: what it does → what I did → one engineering point → a few technologies → one link
 // into the case study, plus at most one outside link. The title and the main link open the case study; a GitHub link sits
 // inside the title when the code is public (ADR-027).
-import StatusBadge from './StatusBadge.astro';
 import ProjectLinks from './ProjectLinks.astro';
 import CardFigure from './CardFigure.astro';
 import CardSteps from './CardSteps.astro';
@@ -17,14 +16,14 @@ interface Props {
   locale: Locale;
   variant: 'flagship' | 'case' | 'exploring' | 'row';
   eager?: boolean;
+  instance?: string;
 }
-const { project, locale, variant, eager = false } = Astro.props;
+const { project, locale, variant, eager = false, instance = 'home' } = Astro.props;
 const m = project.meta;
 const card = m.card!;
 const href = localePath(locale, `/projects/${m.slug}/${card.anchor ? `#${card.anchor}` : ''}`);
 const figure = project.cardFigure;
-const headingId = `work-${m.slug}`;
-const status = card.status ?? m.status_note;
+const headingId = `work-${instance}-${m.slug}`;
 const showVisual = variant !== 'exploring';
 const isRow = variant === 'row';
 const hasVisual = Boolean(card.steps || figure);
@@ -48,10 +47,6 @@ const hasVisual = Boolean(card.steps || figure);
     <p class="work-intro">{card.intro[locale]}</p>
     {card.bullets && <ul class="work-contributions">{card.bullets.map((item) => <li>{item[locale]}</li>)}</ul>}
     {card.highlight && <p class="work-highlight">{card.highlight[locale]}</p>}
-    <p class="work-meta">
-      <StatusBadge status={m.status} team={m.team} locale={locale} />
-      {status && <span class="status-note">{status[locale]}</span>}
-    </p>
     <p class="tech"><span class="visually-hidden">{t(locale, 'home.tech')}: </span>{card.tech.join(' · ')}</p>
     <div class="card-actions">
       <a class="case-link" href={href}>{card.cta ? card.cta[locale] : t(locale, 'home.read_case')}<span aria-hidden="true"> →</span></a>

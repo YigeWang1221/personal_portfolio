@@ -1,49 +1,30 @@
 ## Backend and AWS infrastructure {#overview}
 
-I implemented the user, product and image APIs, configured their AWS infrastructure, and automated image-based releases. The work connects application code to network permissions, data services and deployment checks.
+I built a Spring Boot service for users, products and images, and connected it to AWS compute, storage and email services. Terraform provisions the network and application resources; GitHub Actions and Packer turn each release into a machine image.
 
-- **Compute.** Spring Boot runs on a machine image built by Packer, in an Auto Scaling group of three to five instances in private subnets across {{fact:azs}} Availability Zones, behind an HTTPS Application Load Balancer and a Route 53 alias.
-- **Data.** RDS MySQL with Flyway migrations and Hibernate set to validate the schema; S3 for product images.
-- **Email.** I implemented registration events through SNS and a Lambda function that sends single-use verification links through Mailgun. A separate GitHub Actions workflow packages and releases the function to dev and demo.
-- **Domains and HTTPS.** I configured the Route 53 alias to the ALB, the HTTPS listener with an imported TLS certificate, and Mailgun DKIM, MX and TXT records for email delivery.
-- **Two AWS accounts.** Images are built in a dev account and promoted to a demo account.
+The application runs behind an HTTPS Application Load Balancer in private subnets across {{fact:azs}} Availability Zones. RDS MySQL stores application data, Flyway manages schema changes, and S3 stores product images. I configured Route 53 application and email records, the TLS listener, component IAM roles, KMS encryption and Secrets Manager access.
 
-Terraform defines all of it except the SNS topic and the TLS certificate, which were set up by hand. The sections below connect my implementation work to its deployment and validation evidence.
+Registration publishes an SNS event. A Lambda function sends the verification email through Mailgun, keeping email delivery outside the registration request.
 
-## CI/CD release pipeline {#delivery}
+## Image-based releases across AWS accounts {#delivery}
 
-A release is a new machine image, and the Auto Scaling group replaces its instances with it. No one logs in to a server, and nothing is patched in place.
+I designed the release pipeline around a versioned machine image. GitHub Actions builds the application in the dev account, and Packer packages it with its systemd service and CloudWatch agent. The workflow shares the image with the demo account, creates a launch-template version and starts an Auto Scaling instance refresh.
 
-1. **Check.** On every pull request, one workflow runs the test suite on JDK 21 against a MySQL service container, and another checks the Packer template with `fmt`, `init` and `validate`. These checks are the gate: the merge build does not run the tests again.
-2. **Build.** On merge, in the dev account, the workflow builds the jar and Packer bakes an image with the jar, a systemd service, a time-sync fix and the CloudWatch agent. The Packer manifest passes the image ID to the next job.
-3. **Promote.** The image is shared with the demo account, where the workflow creates a new launch-template version with it and makes that version the default.
-4. **Roll out.** An instance refresh then replaces the instances while keeping at least half of the capacity in service, running up to one and a half times the capacity during the swap, and giving each new instance a three-minute warm-up. The workflow polls until the refresh finishes.
-5. **Boot.** User data fetches the database password from Secrets Manager into an environment file with restricted permissions and starts the CloudWatch agent, so no secret is baked into the image.
+This makes the image and launch-template version the release unit. Instances start from the same artifact, and a previous version can be selected for rollback. The pipeline trades image-build time for a repeatable deployment path; the median successful build-to-refresh duration was {{fact:deploy_median}}.
 
-**What the health check guarantees.** The group relies on the load balancer's health check on `/actuator/health`, with a ten-minute grace period for new instances. The check counts any HTTP status from `200` to `499` as healthy. It therefore catches an instance that does not answer or answers with a server error — Spring's health endpoint returns `503` when it is down — but an instance that answers every request with a client error would still pass. Narrowing the matcher to `200` is a one-line change.
+At startup, each instance retrieves its database password from Secrets Manager and starts the application and monitoring agent. The image contains the application and runtime configuration, while the secret is supplied at boot.
 
-A successful run took {{fact:deploy_median}} at the median, from image build to a finished refresh.
+## Network and component permissions {#boundaries}
 
-**Why a new image per release.** Updating instances in place would be faster. Baking an image makes every release reproducible and easy to roll back — the previous launch-template version still exists — and keeps the dev account's mistakes out of the demo account. The cost is the image build on every merge.
+I divided the VPC into public and private subnets. The load balancer receives public traffic; application instances use private addresses, reach external services through a NAT gateway and connect to RDS through security-group references.
 
-## Network and access control {#boundaries}
+Component roles define access to S3, KMS, Secrets Manager and SNS. Terraform creates {{fact:kms_keys}} customer-managed KMS keys for object storage, instance disks, the database and secrets, and generates the database password into Secrets Manager.
 
-The second design question is the runtime boundary: which component may talk to which, and with what permissions.
+The application tier spans multiple Availability Zones. The database and NAT gateway use a single zone, reflecting the project's infrastructure cost choice.
 
-- **Network.** Each Availability Zone has a public and a private subnet. Only the load balancer is public. Instances have no public IP addresses and reach the internet through one NAT gateway. The SSH rule and the plain-HTTP listener were removed during development.
-- **Security groups by reference.** Groups reference each other instead of IP ranges: the load balancer accepts web traffic, the instances accept the application port only from the load balancer, and the database accepts MySQL only from the instances and the Lambda function.
-- **Scoped roles.** The instance role can reach one bucket, the four keys it needs, one secret and one SNS topic; the Lambda role can read its two secrets and keys. Logging and metrics permissions still use wildcards, and the key policies give the instance role administrative actions it does not need, so these roles are scoped rather than least-privilege.
-- **Keys and secrets.** {{fact:kms_keys}} customer-managed KMS keys, one each for S3, the instance disks, RDS and Secrets Manager, rotated automatically. Terraform generates the database password and stores it in Secrets Manager.
-- **Availability versus cost.** The application tier spans three zones, but the database and the NAT gateway are single-AZ. An outage in either zone takes the service down; in exchange, the fixed monthly cost stays within the project budget.
+## Application data and schema management {#validation}
 
-## Deployment validation {#validation}
-
-- **Ran.** The platform was deployed and released repeatedly through the pipeline above; the three repositories recorded {{fact:ci_runs}} CI runs. Whether any environment still runs today is unknown.
-- **Auto Scaling.** Scaling policies are configured; load testing remains a next step.
-- **Tests only on pull requests.** A change that bypassed the pull-request check would ship untested. Running the tests in the merge build fixes it.
-- **Thin test suite.** Three REST Assured classes cover a positive flow, a negative flow and edge cases, including a burst of concurrent requests. There are no unit tests and no coverage report.
-- **Flat Terraform.** One root module with local state, applied by hand. Next: reusable modules and remote state with locking.
-- **Long-lived CI keys.** The workflows use access keys stored as secrets. I would switch to GitHub's OIDC federation, as I later did in the KK Knock pipeline.
+The API separates user, product and image operations. MySQL holds the structured records, while S3 holds image objects. Flyway applies database migrations and Hibernate validates the resulting schema when the service starts.
 
 ## AOP metrics and application monitoring {#observability}
 
@@ -57,6 +38,6 @@ I designed and implemented an asynchronous verification flow using SNS, Lambda a
 
 The Lambda function runs inside the VPC and has a dedicated GitHub Actions workflow that releases to the dev account and then the demo account.
 
-## Cloud deployment plan {#planning}
+## Connecting application and infrastructure design {#planning}
 
-I developed the cloud deployment in stages: build and test the APIs, establish continuous integration, automate machine images and infrastructure, connect data services and IAM, then add monitoring, load balancing and asynchronous email. Each stage was integrated through pull requests.
+I connected the API's runtime needs to the infrastructure: database access determines security-group rules and secret retrieval; image storage determines S3 permissions; registration events determine the SNS and Lambda integration. The release workflow then packages these requirements into the image and startup configuration.

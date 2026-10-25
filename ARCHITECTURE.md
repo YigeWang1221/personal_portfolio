@@ -196,7 +196,7 @@ flowchart LR
 ```
 
 - **Projection** (`src/lib/ai/public-projection.ts`): fields are picked one by one from the schema.
-  - Never included: `fact.claim`, chart `panels[].claim`, `track`, raw figures, raw roadmaps and anchor aliases. Public roadmap labels/status/detail and figure captions are appended to their visible sections; project aliases are explicitly projected.
+  - Never included: `fact.claim`, chart `panels[].claim`, `tracks`, project status, raw figures, roadmaps and anchor aliases. Figure captions are appended to their visible sections; project aliases are explicitly projected.
   - Narratives come from the loader's rendered sections, so facts are already substituted, then converted to plain
     text.
 - **World book** (`scripts/build-worldbook.mjs`):
@@ -317,3 +317,8 @@ flowchart LR
 `default-src 'self'` CSP, and bilingual content.
 
 Public job contact data is defined in `content/profile.yaml` and rendered by `ContactEmail.astro` on Home, Background and Résumé. Only the owner-confirmed address is allowlisted by the output safety scan (ADR-019). The attachment limit is a sender instruction, not an upload feature.
+
+
+## Cross-listed homepage tracks (ADR-028)
+
+`catalog.yaml.tracks` contains four unique track IDs. Each project declares a nonempty, unique `tracks` array. Home filters by array membership and prefixes card heading IDs with the track ID so cross-listed cards have distinct accessibility targets. Four tabs become a two-column grid on narrow screens. Status and progress metadata is excluded from public presentation and assistant projection; shared content remains bilingual.

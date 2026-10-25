@@ -2,7 +2,6 @@
 // "How I plan & design" (ARCHITECTURE.md site map): roadmaps, decision records and architecture thumbnails
 // drawn from the projects. Every item links back to its project.
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import RoadmapView from '../../components/RoadmapView.astro';
 import { localePath, localePaths, type Locale } from '../../lib/i18n';
 import { getContent, t } from '../../lib/content/load';
 
@@ -21,7 +20,6 @@ const records = meta.records.map((r) => ({
   section: sections.find((s) => s.id === r.id)!,
   project: projects.get(r.project)!,
 }));
-const roadmaps = meta.roadmaps.map((slug) => projects.get(slug)!);
 const thumbs = meta.thumbnails.map((th) => {
   const project = projects.get(th.project)!;
   const figure = project.figures.find((f) => f.id === th.figure)!;
@@ -44,20 +42,6 @@ const thumbs = meta.thumbnails.map((th) => {
       </section>
     ))}
 
-    <section class="block" aria-labelledby="roadmaps">
-      <div class="block-head">
-        <h2 id="roadmaps">{t(locale, 'plan.roadmaps')}</h2>
-        <p class="muted small">{t(locale, 'plan.roadmaps_note')}</p>
-      </div>
-      <div class="roadmap-grid">
-        {roadmaps.map((p) => (
-          <article class="roadmap-card">
-            <h3><a href={localePath(locale, `/projects/${p.meta.slug}/#${p.meta.roadmap!.section}`)}>{p.meta.title[locale]}</a></h3>
-            <RoadmapView roadmap={p.meta.roadmap!} locale={locale} />
-          </article>
-        ))}
-      </div>
-    </section>
 
     <section class="block" aria-labelledby="records">
       <div class="block-head">

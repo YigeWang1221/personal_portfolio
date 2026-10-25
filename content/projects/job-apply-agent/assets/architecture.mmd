@@ -1,0 +1,30 @@
+---
+config:
+  flowchart:
+    wrappingWidth: 260
+---
+flowchart TB
+    ui["React workspace<br/>Projects · Sessions · Applications"]
+    api["Spring Boot API"]
+    ui -->|REST| api
+    subgraph runtime["Java Agent runtime"]
+        session["SessionRunner<br/>Job research and conversations"]
+        workers["ApplicationRunner<br/>Application worker pool"]
+        loop["AgentLoop<br/>Model + tool feedback"]
+        session --> loop
+        workers --> loop
+    end
+    api --> session
+    api --> workers
+    loop <--> model["Spring AI<br/>Messages + tool schemas"]
+    loop --> tools["Domain tools<br/>Search · resumes · Skills · memory"]
+    loop --> browser["Browser tools<br/>Playwright MCP → Chrome"]
+    tools <--> files[("Local files<br/>Materials · experience · conversations")]
+    session --> events["RuntimeEvents<br/>SSE to React · event replay"]
+    workers --> events
+    classDef interface fill:#eaf2fc,stroke:#416b96,color:#183955
+    classDef agent fill:#e9f3ec,stroke:#39734d,color:#193c26
+    classDef resource fill:#fcf2df,stroke:#a07a35,color:#614917
+    class ui,api,events interface
+    class session,workers,loop agent
+    class model,tools,browser,files resource
